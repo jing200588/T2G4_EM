@@ -1,3 +1,6 @@
+import java.awt.event.ActionEvent;
+
+import org.eclipse.jface.action.AbstractAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
@@ -8,15 +11,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 
 
 public class EmanagerGUIjface extends ApplicationWindow {
-
+	private Action exitaction;
+	private Action swtguiaction;
+	//private ExitAction exitAction;
 	/**
 	 * Create the application window.
 	 */
 	public EmanagerGUIjface() {
 		super(null);
+		//exitAction = new ExitAction(this);
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
@@ -38,6 +47,33 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	 */
 	private void createActions() {
 		// Create the actions
+		//exit action
+		{
+			exitaction = new Action("Exit") {					public void run() {
+						System.exit(0);
+					}
+			};
+			exitaction.setAccelerator(SWT.ALT | SWT.F4);
+			exitaction.addPropertyChangeListener(new IPropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					System.exit(0);
+				}
+			});
+		
+		}
+		{
+			new Action("New Action") {
+			};
+		}
+		//swtguiaction
+		{
+			swtguiaction = new Action("SWT") {				public void run() {
+					EmanagerGUI window = new EmanagerGUI();
+					window.open();
+				}
+			};
+			swtguiaction.setAccelerator(SWT.CTRL | SWT.F1);
+		}
 	}
 
 	/**
@@ -46,6 +82,12 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	 */
 	protected MenuManager createMenuManager() {
 		MenuManager menuManager = new MenuManager("menu");
+		{
+			MenuManager FileMenu = new MenuManager("File");
+			menuManager.add(FileMenu);
+			FileMenu.add(swtguiaction);
+			FileMenu.add(exitaction);
+		}
 		return menuManager;
 	}
 
@@ -88,14 +130,14 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	 */
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("New Application");
+		newShell.setText("E-Man");
 	}
 
 	/**
 	 * Return the initial size of the window.
 	 */
 	protected Point getInitialSize() {
-		return new Point(450, 300);
+		return new Point(1000, 800);
 	}
 
 }
