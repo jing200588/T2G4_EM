@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.util.Vector;
 
 import org.eclipse.jface.action.AbstractAction;
 import org.eclipse.jface.action.MenuManager;
@@ -12,7 +13,11 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -37,6 +42,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.swt.widgets.DateTime;
 
 
 public class EmanagerGUIjface extends ApplicationWindow {
@@ -45,22 +51,30 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private Composite maincomposite;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Composite c1;
-	private Table table;
-	private Table table_1;
+	private static Table table;
 	private Composite c2;
+	private static Vector<Eventitem> eventlist;
+	private static int count = 0;
 
 	/**
 	 * Create the application window.
 	 */
 	public EmanagerGUIjface() {
 		super(null);
-
+		eventlist = new Vector<Eventitem>();
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
 		addStatusLine();
 	}
 
+	public static void addEvent(Eventitem newevent) {
+		eventlist.add(newevent);
+		TableItem it1 = new TableItem(table,SWT.NONE);
+		 it1.setText(eventlist.get(count++).getName());
+
+	}
+	
 	/**
 	 * Create contents of the application window.
 	 * @param parent
@@ -99,10 +113,13 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			Button btnCreateEvent = formToolkit.createButton(c1, "Create Event", SWT.NONE);
 			btnCreateEvent.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-				/*	Button testbutton = new Button(c2, SWT.NONE);
-					testbutton.setBounds(0, 2, 187, 25);
-					testbutton.setText("Test Button");
-				 */
+					
+					//dispose of all children that currently is in c2
+					if (c2 != null && !c2.isDisposed()) {
+					Object[] children = c2.getChildren();
+					for (int i=0; i<children.length; i++)
+						((Composite)children[i]).dispose();
+					}
 					
 					CreateEventGUI CreatePage = new CreateEventGUI(c2, SWT.NONE);
 					CreatePage.setBounds(c2.getBounds());
@@ -110,7 +127,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 					formToolkit.paintBordersFor(CreatePage);
 	//				CreateEventGUI CreatePage = new CreateEventGUI(c2, SWT.NONE);
 		//			c2 = CreatePage;
-					c2.layout(true);
+					c2.layout(true);	//refreshes c2
 					
 				}
 			});
@@ -118,23 +135,42 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			gd_btnCreateEvent.widthHint = 294;
 			btnCreateEvent.setLayoutData(gd_btnCreateEvent);
 			
-			TableViewer tableViewer = new TableViewer(c1, SWT.BORDER | SWT.FULL_SELECTION);
-			table = tableViewer.getTable();
-			GridData gd_table = new GridData(SWT.CENTER, SWT.FILL, true, false, 1, 1);
-			gd_table.heightHint = 179;
+			table = new Table(c1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+			table.setToolTipText("All Events");
+			table.setTouchEnabled(true);
+			GridData gd_table = new GridData(SWT.CENTER, SWT.FILL, false, true, 1, 1);
 			gd_table.widthHint = 270;
+	//		TableColumn tc1 = new TableColumn(table, SWT.LEFT);
+	//		TableColumn tc2 = new TableColumn(table,SWT.RIGHT);
+	//	    tc1.setText("Event List");
+	//	    tc2.setText("Alert");
 			table.setLayoutData(gd_table);
+			formToolkit.adapt(table);
 			formToolkit.paintBordersFor(table);
+			table.setHeaderVisible(true);
+			table.setLinesVisible(true);
+/*			
+			table.setItemCount(100);
+			table.addListener (SWT.SetData, new Listener () {
+				public void handleEvent (Event event) {
+					TableItem item = (TableItem) event.item;
+					int index = table.indexOf (item);
+					item.setText (eventlist.get(0).getName());
+					System.out.println (item.getText ());
+				}
+
+				
+			});
 			
-			table_1 = new Table(c1, SWT.BORDER | SWT.FULL_SELECTION);
-			table_1.setTouchEnabled(true);
-			GridData gd_table_1 = new GridData(SWT.CENTER, SWT.FILL, false, true, 1, 1);
-			gd_table_1.widthHint = 270;
-			table_1.setLayoutData(gd_table_1);
-			formToolkit.adapt(table_1);
-			formToolkit.paintBordersFor(table_1);
-			table_1.setHeaderVisible(true);
-			table_1.setLinesVisible(true);
+			
+			
+			
+	*/		
+			
+			DateTime Calender = new DateTime(c1, SWT.BORDER | SWT.CALENDAR | SWT.LONG);
+			Calender.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+			formToolkit.adapt(Calender);
+			formToolkit.paintBordersFor(Calender);
 			
 			
 			Label Vseparator = new Label(maincomposite, SWT.SEPARATOR | SWT.VERTICAL);

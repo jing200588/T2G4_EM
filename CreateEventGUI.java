@@ -16,11 +16,15 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 
 public class CreateEventGUI extends Composite {
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Text txtNewText;
+	private DateTime StartDate;
+	private DateTime EndDate;
 
 	/**
 	 * Create the composite.
@@ -32,16 +36,16 @@ public class CreateEventGUI extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Form CreateEventForm = formToolkit.createForm(this);
-		CreateEventForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_SELECTION));
-		CreateEventForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 14, SWT.BOLD));
+		CreateEventForm.getBody().setBackground(SWTResourceManager.getColor(255, 255, 255));
+		CreateEventForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		formToolkit.paintBordersFor(CreateEventForm);
 		CreateEventForm.setText("Create Event");
 		CreateEventForm.getBody().setLayout(new FormLayout());
 		
 		Composite composite = new Composite(CreateEventForm.getBody(), SWT.NONE);
 		FormData fd_composite = new FormData();
-		fd_composite.top = new FormAttachment(50, -45);
-		fd_composite.bottom = new FormAttachment (50, 45);
+		fd_composite.top = new FormAttachment(50, -100);
+		fd_composite.bottom = new FormAttachment (50, -10);
 		fd_composite.left = new FormAttachment(50, -200);
 		fd_composite.right = new FormAttachment(50, 200);
 		composite.setLayoutData(fd_composite);
@@ -63,7 +67,7 @@ public class CreateEventGUI extends Composite {
 		lblStartDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblStartDate.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
 		
-		DateTime StartDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
+		StartDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
 		formToolkit.adapt(StartDate);
 		formToolkit.paintBordersFor(StartDate);
 		
@@ -77,7 +81,7 @@ public class CreateEventGUI extends Composite {
 		lblEndDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEndDate.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
 		
-		DateTime EndDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
+		EndDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
 		formToolkit.adapt(EndDate);
 		formToolkit.paintBordersFor(EndDate);
 		
@@ -87,6 +91,18 @@ public class CreateEventGUI extends Composite {
 		formToolkit.paintBordersFor(EndTime);
 		
 		Button btnCreate = new Button(CreateEventForm.getBody(), SWT.NONE);
+		btnCreate.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Eventitem newevent = new Eventitem(txtNewText.getText(), StartDate.getYear(), StartDate.getMonth(), StartDate.getDay(),
+						EndDate.getYear(), EndDate.getMonth(), EndDate.getDay());
+				EmanagerGUIjface.addEvent(newevent);
+			}
+		});
+		
+		
+		
+		
+		btnCreate.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
 		FormData fd_btnCreate = new FormData();
 		fd_btnCreate.top = new FormAttachment(composite, 16);
 		fd_btnCreate.right = new FormAttachment(50, 70);
