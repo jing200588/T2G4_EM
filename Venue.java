@@ -12,6 +12,7 @@ public class Venue {
 	 ***********************************************************************/
 	private String m_name;
 	private String m_address;
+	private String m_description;
 	private int m_maxCapacity;
 	private double m_cost;
 	private Vector<TimeSlot> m_bookedTimeSlots;
@@ -19,10 +20,12 @@ public class Venue {
 	/************************************************************************
 	 * Constructor
 	 ************************************************************************/
-	public Venue(String name, String address, int maxCapacity, double cost)
+	public Venue(String name, String address, String description,
+					int maxCapacity, double cost)
 	{
 		m_name = name;
 		m_address = address;
+		m_description = description;
 		m_maxCapacity = maxCapacity;
 		m_cost = cost;
 		m_bookedTimeSlots = new Vector<TimeSlot>();
@@ -41,6 +44,11 @@ public class Venue {
 		return m_address;
 	}
 	
+	public String getDescription()
+	{
+		return m_description;
+	}
+	
 	public int getMaxCapacity()
 	{
 		return m_maxCapacity;
@@ -50,6 +58,29 @@ public class Venue {
 	{
 		return m_cost;
 	}
+	
+	/**
+	 * 
+	 * @return a list of pieces of venue information. All pieces are of type
+	 * 			String.
+	 * 		+ String[0] - name of the venue
+	 * 		+ String[1] - address
+	 * 		+ String[2] - description
+	 * 		+ String[3] - maximum capacity
+	 * 		+ String[4] - cost
+	 * 	
+	 */
+	public String[] getAllVenueInformation()
+	{
+		String[] allInfo = new String[5];
+		allInfo[0] = m_name;
+		allInfo[1] = m_address;
+		allInfo[2] = m_description;
+		allInfo[3] = Integer.toString(m_maxCapacity);
+		allInfo[4] = Double.toString(m_cost);
+		
+		return allInfo;
+ 	}
 	
 	/*************************************************************************
 	 * Methods that support updating information
@@ -62,6 +93,11 @@ public class Venue {
 	public void updateAddress(String newAddress)
 	{
 		m_address = newAddress;
+	}
+	
+	public void updateDescription(String newDescription)
+	{
+		m_description = newDescription;
 	}
 	
 	public void updateMaxCapacity(int newMaxCapacity)
@@ -125,5 +161,5 @@ public class Venue {
 		}
 		return true;
 	}
-	
+	 
 }
