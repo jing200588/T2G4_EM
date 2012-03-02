@@ -73,7 +73,7 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(lblPreferredTimeSlot, true, true);
 		lblPreferredTimeSlot.setText("Preferred Time Slot:");
 		
-		DateTime dateTime = new DateTime(composite_1, SWT.BORDER);
+		DateTime dateTime = new DateTime(composite_1, SWT.DROP_DOWN);
 		dateTime.setBounds(112, 30, 85, 24);
 		toolkit.adapt(dateTime);
 		toolkit.paintBordersFor(dateTime);
@@ -97,7 +97,7 @@ public class BookingSystemGUI extends Composite {
 		lblTo.setBounds(65, 60, 41, 15);
 		toolkit.adapt(lblTo, true, true);
 		
-		DateTime dateTime_1 = new DateTime(composite_1, SWT.BORDER);
+		DateTime dateTime_1 = new DateTime(composite_1, SWT.DROP_DOWN);
 		dateTime_1.setBounds(112, 59, 85, 24);
 		toolkit.adapt(dateTime_1);
 		toolkit.paintBordersFor(dateTime_1);
@@ -134,7 +134,7 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(label_2, true, true);
 		
 		SashForm sashForm = new SashForm(this, SWT.NONE);
-		sashForm.setBounds(379, 0, 350, 496);
+		sashForm.setBounds(379, 0, 350, 526);
 		toolkit.adapt(sashForm);
 		toolkit.paintBordersFor(sashForm);
 		
