@@ -75,6 +75,14 @@ public class EmanagerGUIjface extends ApplicationWindow {
 
 	}
 	
+	public static Eventitem getEvent (String event) {
+		for (int i=0; i<eventlist.size(); i++) {
+			if (eventlist.get(i).getName().equals(event))
+				return eventlist.get(i);
+		}
+		
+		return null;
+	}
 	/**
 	 * Create contents of the application window.
 	 * @param parent
@@ -122,7 +130,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 					}
 					
 					CreateEventGUI CreatePage = new CreateEventGUI(c2, SWT.NONE);
-					CreatePage.setBounds(c2.getBounds());
+		//			CreatePage.setBounds(c2.getBounds());
 					formToolkit.adapt(CreatePage);
 					formToolkit.paintBordersFor(CreatePage);
 	//				CreateEventGUI CreatePage = new CreateEventGUI(c2, SWT.NONE);
@@ -138,6 +146,34 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			table = new Table(c1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 			table.setToolTipText("All Events");
 			table.setTouchEnabled(true);
+			//Listener for table item select
+			table.addListener(SWT.Selection, new Listener() {
+		     public void handleEvent(Event event) {
+		        String string = event.detail == SWT.CHECK ? "Checked"
+		            : "Selected";
+		        //extract event name
+		        String itemname = "";
+		        itemname += event.item;
+		        itemname = itemname.substring(11, itemname.length() -1);
+		 
+		      //dispose of all children that currently is in c2
+				if (c2 != null && !c2.isDisposed()) {
+				Object[] children = c2.getChildren();
+				for (int i=0; i<children.length; i++)
+					((Composite)children[i]).dispose();
+				}
+				
+		        ViewEventGUI view = new ViewEventGUI(c2, SWT.NONE, getEvent(itemname));
+		      //  view.setBounds(c2.getBounds());
+		   //     formToolkit.adapt(view);
+		//		formToolkit.paintBordersFor(view);
+				c2.layout(true);
+		        
+		     //   System.out.println(itemname + "hh " + string);
+		     }
+			});
+				
+			
 			GridData gd_table = new GridData(SWT.CENTER, SWT.FILL, false, true, 1, 1);
 			gd_table.widthHint = 270;
 			TableColumn tc1 = new TableColumn(table, SWT.LEFT);
