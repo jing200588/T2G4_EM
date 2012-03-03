@@ -252,7 +252,7 @@ public class BudgetView extends ApplicationWindow {
 		{
 			Step2 = new Composite(container, SWT.NONE);
 			Step2.setBounds(0, 26, 561, 219);
-			//Step2.setVisible(false);
+			Step2.setVisible(false);
 			{
 				Button btnStep2_1 = new Button(Step2, SWT.NONE);
 				btnStep2_1.addSelectionListener(new SelectionAdapter() {
@@ -387,7 +387,7 @@ public class BudgetView extends ApplicationWindow {
 		{
 			Step3 = new Composite(container, SWT.NONE);
 			Step3.setBounds(0, 26, 561, 219);
-			//Step3.setVisible(false);
+			Step3.setVisible(false);
 			{
 				Button btnStep3_3 = new Button(Step3, SWT.NONE);
 				btnStep3_3.setEnabled(false);
@@ -519,6 +519,7 @@ public class BudgetView extends ApplicationWindow {
 		{
 			Step4 = new Composite(container, SWT.NONE);
 			Step4.setBounds(0, 0, 561, 245);
+			Step4.setVisible(true);
 		}
 		{
 			Button btnStep4_3 = new Button(Step4, SWT.NONE);
