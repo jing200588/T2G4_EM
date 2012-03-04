@@ -53,10 +53,10 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Composite c1;
 	private static Table table;
-	private Composite c2;
+	private static Composite c2;
 	private static Vector<Eventitem> eventlist;
 	private static int count = 0;
-	private StackLayout layout = new StackLayout();
+	private static StackLayout layout = new StackLayout();
 
 	/**
 	 * Create the application window.
@@ -84,6 +84,12 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		}
 		
 		return null;
+	}
+	
+	public static void CalcBudget () {
+		BudgetView bv = new BudgetView(c2, SWT.NONE, 0);
+		layout.topControl = bv;
+		c2.layout(true);
 	}
 	/**
 	 * Create contents of the application window.
