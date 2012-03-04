@@ -71,7 +71,7 @@ public class CreateEventGUI extends Composite {
 		formToolkit.adapt(StartDate);
 		formToolkit.paintBordersFor(StartDate);
 		
-		DateTime StartTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);		
+		final DateTime StartTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);		
 		StartTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		StartTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(StartTime);
@@ -85,7 +85,7 @@ public class CreateEventGUI extends Composite {
 		formToolkit.adapt(EndDate);
 		formToolkit.paintBordersFor(EndDate);
 		
-		DateTime EndTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);
+		final DateTime EndTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);
 		EndTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(EndTime);
 		formToolkit.paintBordersFor(EndTime);
@@ -94,11 +94,10 @@ public class CreateEventGUI extends Composite {
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				Eventitem newevent = new Eventitem(txtNewText.getText(), StartDate.getYear(), StartDate.getMonth(), StartDate.getDay(),
-						EndDate.getYear(), EndDate.getMonth(), EndDate.getDay());
+						EndDate.getYear(), EndDate.getMonth(), EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes());
 				EmanagerGUIjface.addEvent(newevent);
 			}
 		});
-		
 		
 		
 		
