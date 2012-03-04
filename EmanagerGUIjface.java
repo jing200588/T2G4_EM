@@ -43,6 +43,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.custom.StackLayout;
 
 
 public class EmanagerGUIjface extends ApplicationWindow {
@@ -55,6 +56,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private Composite c2;
 	private static Vector<Eventitem> eventlist;
 	private static int count = 0;
+	private StackLayout layout = new StackLayout();
 
 	/**
 	 * Create the application window.
@@ -99,7 +101,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		container.setEnabled(true);
 		container.setLayout(null);
 		{
-			maincomposite = new Composite(container, SWT.V_SCROLL);
+			maincomposite = new Composite(container, SWT.NONE);
 			maincomposite.setBounds(0, 0, 400, 415);
 			maincomposite.setSize(container.getSize());
 			maincomposite.setLayout(new GridLayout(3, false));
@@ -131,10 +133,11 @@ public class EmanagerGUIjface extends ApplicationWindow {
 					
 					CreateEventGUI CreatePage = new CreateEventGUI(c2, SWT.NONE);
 		//			CreatePage.setBounds(c2.getBounds());
-					formToolkit.adapt(CreatePage);
-					formToolkit.paintBordersFor(CreatePage);
+		//			formToolkit.adapt(CreatePage);
+			//		formToolkit.paintBordersFor(CreatePage);
 	//				CreateEventGUI CreatePage = new CreateEventGUI(c2, SWT.NONE);
 		//			c2 = CreatePage;
+					layout.topControl = CreatePage;
 					c2.layout(true);	//refreshes c2
 					
 				}
@@ -163,10 +166,11 @@ public class EmanagerGUIjface extends ApplicationWindow {
 					((Composite)children[i]).dispose();
 				}
 				
-		        ViewEventGUI view = new ViewEventGUI(c2, SWT.NONE, getEvent(itemname));
+		        ViewEventGUI2 view = new ViewEventGUI2(c2, SWT.NONE, getEvent(itemname));
 		      //  view.setBounds(c2.getBounds());
 		   //     formToolkit.adapt(view);
 		//		formToolkit.paintBordersFor(view);
+		        layout.topControl = view;
 				c2.layout(true);
 		        
 		     //   System.out.println(itemname + "hh " + string);
@@ -227,7 +231,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			formToolkit.adapt(Vseparator, true, true);
 			{
 				c2 = new Composite(maincomposite, SWT.NONE);
-				c2.setLayout(new FillLayout(SWT.HORIZONTAL | SWT.VERTICAL));
+				c2.setLayout(layout);
 				GridData gd_c2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_c2.heightHint = 415;
 				gd_c2.widthHint = 700;

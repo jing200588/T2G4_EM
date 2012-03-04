@@ -16,6 +16,9 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Combo;
 
 
 public class ViewEventGUI extends Composite {
@@ -27,20 +30,18 @@ public class ViewEventGUI extends Composite {
 	 * @param style
 	 */
 	public ViewEventGUI(Composite parent, int style, Eventitem curevent) {
-		super(parent, style);
+		super(parent, SWT.NONE);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		ScrolledForm scrldfrmNewScrolledform = formToolkit.createScrolledForm(this);
+		ScrolledForm ViewAdminister = formToolkit.createScrolledForm(this);
+		ViewAdminister.setContent(ViewAdminister.getBody());
+		ViewAdminister.getBody().setSize(ViewAdminister.getBody().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		ViewAdminister.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		formToolkit.paintBordersFor(ViewAdminister);
+		ViewAdminister.setText("View Event:");
+		ViewAdminister.getBody().setLayout(new FormLayout());
 		
-		scrldfrmNewScrolledform.setMinHeight(415);
-		scrldfrmNewScrolledform.setAlwaysShowScrollBars(true);
-//		scrldfrmNewScrolledform.reflow(true);
-		scrldfrmNewScrolledform.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
-		formToolkit.paintBordersFor(scrldfrmNewScrolledform);
-		scrldfrmNewScrolledform.setText("View Event:");
-		scrldfrmNewScrolledform.getBody().setLayout(new FormLayout());
-		
-		Composite EparticularsComp = new Composite(scrldfrmNewScrolledform.getBody(), SWT.NONE);
+		Composite EparticularsComp = new Composite(ViewAdminister.getBody(), SWT.NONE);
 		FormData fd_EparticularsComp = new FormData();
 		fd_EparticularsComp.right = new FormAttachment(80, 0);
 		fd_EparticularsComp.top = new FormAttachment(0, 85);
@@ -127,7 +128,7 @@ public class ViewEventGUI extends Composite {
 		formToolkit.paintBordersFor(Edescription);
 		Edescription.setText("New Label");
 		
-		Label divider1 = new Label(scrldfrmNewScrolledform.getBody(), SWT.SEPARATOR | SWT.HORIZONTAL);
+		Label divider1 = new Label(ViewAdminister.getBody(), SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_divider1 = new FormData();
 		fd_divider1.top = new FormAttachment(EparticularsComp, 53);
 		fd_divider1.bottom = new FormAttachment(EparticularsComp, 55, SWT.BOTTOM);
@@ -136,7 +137,7 @@ public class ViewEventGUI extends Composite {
 		divider1.setLayoutData(fd_divider1);
 		formToolkit.adapt(divider1, true, true);
 		
-		Composite composite = new Composite(scrldfrmNewScrolledform.getBody(), SWT.NONE);
+		Composite composite = new Composite(ViewAdminister.getBody(), SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 		FormData fd_composite = new FormData();
 		fd_composite.right = new FormAttachment(80, 0);
@@ -165,7 +166,7 @@ public class ViewEventGUI extends Composite {
 		formToolkit.adapt(Eprogflowedit, true, true);
 		Eprogflowedit.setText("Edit");
 		
-		Label Divider2 = new Label(scrldfrmNewScrolledform.getBody(), SWT.SEPARATOR | SWT.HORIZONTAL);
+		Label Divider2 = new Label(ViewAdminister.getBody(), SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_Divider2 = new FormData();
 		fd_Divider2.top = new FormAttachment(composite, 30);
 		fd_Divider2.left = new FormAttachment(5, 0);
