@@ -37,14 +37,20 @@ public class ViewEventGUI2 extends Composite {
 		//formToolkit.adapt(composite_1);
 		//formToolkit.paintBordersFor(composite_1);
 		composite_1.setLayout(new RowLayout(SWT.HORIZONTAL));
+		composite_1.setBounds(0, 0, 434, 159);
+
+		
 		
 		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(composite_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite.setLayoutData(new RowData(205, 124));
 		scrolledComposite.setBounds(0, 0, 434, 159);
 		//formToolkit.adapt(scrolledComposite);
 		//formToolkit.paintBordersFor(scrolledComposite);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
+		
+
 		
 		
 	/*	ScrolledComposite sc = new ScrolledComposite(composite_1, SWT.BORDER | SWT.V_SCROLL);
@@ -56,7 +62,7 @@ public class ViewEventGUI2 extends Composite {
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 		*/
-		Composite maincomp = new Composite(scrolledComposite, SWT.NONE);
+	/*	Composite maincomp = new Composite(scrolledComposite, SWT.NONE);
 		maincomp.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		maincomp.setLayout(new FormLayout());
 		scrolledComposite.setContent(maincomp);
@@ -285,7 +291,7 @@ public class ViewEventGUI2 extends Composite {
 		btnCalculate.setLayoutData(gd_btnCalculate);
 		
 		//formToolkit.adapt(btnCalculate, true, true);
-		btnCalculate.setText("Calculate");
+		btnCalculate.setText("Calculate");*/
 
 	}
 
@@ -297,10 +303,15 @@ public class ViewEventGUI2 extends Composite {
 	public static void main(String[] args){
 	    Display display = new Display();
 	    Shell shell = new Shell(display);
+	    shell.setSize(450, 300);
+	    shell.setLayout(new FillLayout());
 	    ViewEventGUI2 calc = new ViewEventGUI2(shell, SWT.NONE, new Eventitem("test event", 2012, 11, 13,
 				2012, 11, 15, 10, 30, 23, 0));
 	    calc.pack();
-	    shell.setSize(423, 345);
+	    
+
+		
+	    
 	    shell.pack();
 	    shell.open();
 	    while(!shell.isDisposed()){
