@@ -1,0 +1,21 @@
+import java.util.Vector;
+
+
+public interface BudgetInterface {
+	
+	public Vector<Item> getItemList(int id);
+	
+	public void compulsory(Vector<Integer> vec);
+	
+	public String budgetleft();
+	
+	public boolean emptyComputeList();
+	
+	public String findOptimalShopList(int hastype,int hassatisfaction) throws Exception;
+	
+	public void differentiateCompulsory();
+	
+	public void sendDBList(int option);
+	
+	public int noOfCombination();
+}

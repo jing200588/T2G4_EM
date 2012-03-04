@@ -1,694 +1,507 @@
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.StatusLineManager;
-import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.window.ApplicationWindow;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
+import java.util.Collections;
+import java.util.Vector;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Combo;
 
-
-public class BudgetView extends ApplicationWindow {
+public class BudgetView extends Composite {
 	/*My declaration start here.*/
-	private IBudgetAssistant budgetPersonalAssistant;
+	private final StackLayout stackLayout = new StackLayout();
+	private final String[] titles = { "No.", "Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", "Price\t\t\t\t", "Satisfaction", "Type\t\t\t\t\t\t\t\t\t\t"};
+	private BudgetInterface budgetPersonalAssistant;
+	private int event_id;
+	private Vector<Item> item_list;
+	private Vector<Integer> selected_compulsory;
 	private int budget;
-	private int choice;
+	private int type_choice;
+	private int satisfaction_choice;
 	/*My declaration end here.*/
 
-	private Text textInputBudget;
-	private Text Input_Field;
-	private Button btnWithType;
+	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
+	private Text txtBudget;
+	private Text txt_input_list;
+	private Composite type_option;
 	private Button btnWithoutType;
+	private Button btnWithType;
+	private Composite satisfaction_option;
+	private Button btnWithoutSatisfaction;
+	private Button btnWithSatisfaction;
+	private Button btnChange;
+	private Button btnResetInputList;
+	private Button btnConfirm_S1;
+	private Composite budgetBtn_Composite;
+	private Button btnStep;
 	private Button btnStep_1;
-	private Composite Step2;
+	private Button btnStep_2;
 	private Composite Step1;
-	private Button btnNext;
-	private Label lblErrorMsg;
-	private Text Output_Table;
-	private Text txtInput_Compulsory;
 	private Composite Step3;
-	private Text Output_confirm;
-	private Text Output_Left;
-	private Text txtBudgetLeft;
-	private Label lblbudgetIsNot;
-	private Button btnGenerate;
-	private Composite Step4;
-	private Text OutputPermu;
-	private Button btnConfirm_Select;
-	private Text txtDB;
-	private Combo combo;
-	private Button btnFinalConfirm;
-
-
+	private Composite BigContent;
+	private Text txt_error_S1;
+	private Composite Step2;
+	private Table table;
+	private Label lblError_S2;
+	private Label lblListOfItems;
+	private Button btnNext;
+	private Label label;
+	private Text txt_result;
+	private Combo combo_selection;
+	private Button btnFinish;
 
 	/**
-	 * Create the application window.
-	 */
-	public BudgetView() {
-		super(null);
-		createActions();
-		addToolBar(SWT.FLAT | SWT.WRAP);
-		addMenuBar();
-		addStatusLine();
-	}
-
-	/**
-	 * Create contents of the application window.
+	 * Create the composite.
 	 * @param parent
+	 * @param style
 	 */
-	@Override
-	protected Control createContents(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		{
-			Step1 = new Composite(container, SWT.NONE);
-			Step1.setBounds(0, 21, 561, 214);
-			{
-				Label lblEventBudget = new Label(Step1, SWT.NONE);
-				lblEventBudget.setBounds(10, 51, 78, 15);
-				lblEventBudget.setText("Event Budget $");
+	public BudgetView(final Composite parent, int style, int id) {
+		super(parent, style);
+		addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				toolkit.dispose();
 			}
+		});
+		toolkit.adapt(this);
+		toolkit.paintBordersFor(this);
+		event_id = id;
+		
+		BigContent = new Composite(this, SWT.NONE);
+		BigContent.setBounds(0, 80, 700, 300);
+		toolkit.adapt(BigContent);
+		toolkit.paintBordersFor(BigContent);
+		BigContent.setLayout(stackLayout);
+		
+		
 
-			textInputBudget = new Text(Step1, SWT.BORDER);
-			textInputBudget.setBounds(94, 48, 90, 21);
+		Label lblOptimizeBudgetSystem = new Label(this, SWT.NONE);
+		lblOptimizeBudgetSystem.setBounds(0, 0, 130, 15);
+		toolkit.adapt(lblOptimizeBudgetSystem, true, true);
+		lblOptimizeBudgetSystem.setText("Optimize Budget System");
 
-			Label lblNewLabel = new Label(Step1, SWT.NONE);
-			lblNewLabel.setBounds(10, 72, 70, 15);
-			lblNewLabel.setText("Please Select:");
+		budgetBtn_Composite = new Composite(this, SWT.NONE);
+		budgetBtn_Composite.setBounds(0, 21, 613, 48);
+		toolkit.adapt(budgetBtn_Composite);
+		toolkit.paintBordersFor(budgetBtn_Composite);
 
-			Composite composite_1 = new Composite(Step1, SWT.NONE);
-			composite_1.setBounds(94, 72, 90, 38);
-
-			btnWithoutType = new Button(composite_1, SWT.RADIO);
-			btnWithoutType.setSelection(true);
-			btnWithoutType.setBounds(0, 0, 90, 16);
-			btnWithoutType.setText("Without Type");
-
-			btnWithType = new Button(composite_1, SWT.RADIO);
-			btnWithType.setBounds(0, 22, 90, 16);
-			btnWithType.setText("With Type");
-
-			{
-				Input_Field = new Text(Step1, SWT.BORDER | SWT.MULTI);
-				Input_Field.setEditable(false);
-				Input_Field.setBounds(271, 35, 280, 143);
-			}
-
-			{
-				Button btnStep = new Button(Step1, SWT.NONE);
-				btnStep.setBounds(10, 4, 75, 25);
+		btnStep = new Button(budgetBtn_Composite, SWT.NONE);
+		btnStep.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				stackLayout.topControl = Step1;
+				BigContent.layout();
 				btnStep.setEnabled(false);
-				btnStep.setText("Step 1");
+				btnStep_1.setEnabled(false);
+				btnStep_2.setEnabled(false);
 			}
+		});
+		btnStep.setLocation(10, 10);
+		btnStep.setSize(175, 25);
+		btnStep.setEnabled(false);
+		toolkit.adapt(btnStep, true, true);
+		btnStep.setText("Step 1: Input Details");
 
-			{
-				lblErrorMsg = new Label(Step1, SWT.NONE);
-				lblErrorMsg.setBounds(10, 127, 255, 15);
-				lblErrorMsg.setVisible(false);
+		btnStep_1 = new Button(budgetBtn_Composite, SWT.NONE);
+		btnStep_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				stackLayout.topControl = Step2;
+				BigContent.layout();
+				btnStep.setEnabled(true);
+				btnStep_1.setEnabled(false);
+				btnStep_2.setEnabled(false);
 			}
+		});
+		btnStep_1.setLocation(200, 10);
+		btnStep_1.setSize(175, 25);
+		btnStep_1.setEnabled(false);
+		toolkit.adapt(btnStep_1, true, true);
+		btnStep_1.setText("Step 2: Select Compulsory");
 
-			{
-				btnStep_1 = new Button(Step1, SWT.NONE);
-				btnStep_1.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(false);
-						Step2.setVisible(true);
-						Step3.setVisible(false);
-						Step4.setVisible(false);
-					}
-				});
-				btnStep_1.setBounds(94, 4, 75, 25);
-				btnStep_1.setText("Step 2");
+		btnStep_2 = new Button(budgetBtn_Composite, SWT.NONE);
+		btnStep_2.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//stackLayout.topControl = Step3;
+				BigContent.layout();
+				btnStep.setEnabled(true);
+				btnStep_1.setEnabled(true);
+				btnStep_2.setEnabled(false);
 			}
-			{
-				Button btnStep_2 = new Button(Step1, SWT.NONE);
-				btnStep_2.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(false);
-						Step2.setVisible(false);
-						Step3.setVisible(true);
-						Step4.setVisible(false);
-					}
-				});
-				btnStep_2.setBounds(190, 4, 75, 25);
-				btnStep_2.setText("Step 3");
-			}
-			{
-				Button btnStep_3 = new Button(Step1, SWT.NONE);
-				btnStep_3.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(false);
-						Step2.setVisible(false);
-						Step3.setVisible(false);
-						Step4.setVisible(true);
+		});
+		btnStep_2.setLocation(390, 10);
+		btnStep_2.setSize(175, 25);
+		btnStep_2.setEnabled(false);
+		toolkit.adapt(btnStep_2, true, true);
+		btnStep_2.setText("Step 3: Confirm Result");
+		
+		/*
+		 * 
+		 * 
+		 * Start of Step 1 Composite*/
+		Step1 = new Composite(BigContent, SWT.NONE);
+		Step1.setBounds(0, 0, 700, 300);
+		
+		toolkit.adapt(Step1);
+		toolkit.paintBordersFor(Step1);
 
-					}
-				});
-				btnStep_3.setBounds(281, 4, 75, 25);
-				btnStep_3.setText("Step 4");
-			}
-		}
+		Label lblEventBudget = new Label(Step1, SWT.NONE);
+		lblEventBudget.setBounds(10, 10, 82, 15);
+		toolkit.adapt(lblEventBudget, true, true);
+		lblEventBudget.setText("Event Budget: $");
 
-		{
-			btnNext = new Button(Step1, SWT.NONE);
-			btnNext.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					try {
-						Step1.setVisible(false);
-						Step2.setVisible(true);
-						Step3.setVisible(false);
-						Step4.setVisible(false);
-						budgetPersonalAssistant  = new BudgetController(Input_Field.getText(), budget, choice);
-						Output_Table.setText(budgetPersonalAssistant.displayList());
-					}
-					catch (Exception ie) {
-						Input_Field.setText(ie.getMessage());
-					}
+		satisfaction_option = new Composite(Step1, SWT.NONE);
+		satisfaction_option.setBounds(10, 103, 148, 59);
+		toolkit.adapt(satisfaction_option);
+		toolkit.paintBordersFor(satisfaction_option);
 
-				}
-			});
-			btnNext.setEnabled(false);
-			btnNext.setBounds(476, 179, 75, 25);
-			btnNext.setText("Next");
-		}
+		btnWithSatisfaction = new Button(satisfaction_option, SWT.RADIO);
+		btnWithSatisfaction.setBounds(10, 38, 115, 16);
+		toolkit.adapt(btnWithSatisfaction, true, true);
+		btnWithSatisfaction.setText("With Satisfaction");
 
-		Button btnChange = new Button(Step1, SWT.NONE);
+		btnWithoutSatisfaction = new Button(satisfaction_option, SWT.RADIO);
+		btnWithoutSatisfaction.setSelection(true);
+		btnWithoutSatisfaction.setBounds(10, 16, 128, 16);
+		toolkit.adapt(btnWithoutSatisfaction, true, true);
+		btnWithoutSatisfaction.setText("Without Satisfaction");
+
+		Label lblSelectSatisfactionOption = new Label(satisfaction_option, SWT.NONE);
+		lblSelectSatisfactionOption.setSize(148, 15);
+		toolkit.adapt(lblSelectSatisfactionOption, true, true);
+		lblSelectSatisfactionOption.setText("Select Satisfaction Option:");
+
+		type_option = new Composite(Step1, SWT.NONE);
+		type_option.setBounds(10, 31, 148, 66);
+		toolkit.adapt(type_option);
+		toolkit.paintBordersFor(type_option);
+
+		btnWithoutType = new Button(type_option, SWT.RADIO);
+		btnWithoutType.setLocation(10, 20);
+		btnWithoutType.setSize(90, 16);
+		btnWithoutType.setSelection(true);
+		toolkit.adapt(btnWithoutType, true, true);
+		btnWithoutType.setText("Without Type");
+
+		btnWithType = new Button(type_option, SWT.RADIO);
+		btnWithType.setLocation(10, 43);
+		btnWithType.setSize(90, 16);
+		toolkit.adapt(btnWithType, true, true);
+		btnWithType.setText("With Type");
+
+		Label lblSelectTypeOption = new Label(type_option, SWT.NONE);
+		lblSelectTypeOption.setSize(128, 15);
+		toolkit.adapt(lblSelectTypeOption, true, true);
+		lblSelectTypeOption.setText("Select Type Option:");
+
+		btnChange = new Button(Step1, SWT.NONE);
 		btnChange.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				textInputBudget.setEditable(true);
+				txtBudget.setEditable(true);
 				btnWithoutType.setEnabled(true);
 				btnWithType.setEnabled(true);
-				Input_Field.setEditable(false);
-				btnNext.setEnabled(false);
-				lblErrorMsg.setVisible(false);
+				btnWithoutSatisfaction.setEnabled(true);
+				btnWithSatisfaction.setEnabled(true);
+				btnConfirm_S1.setEnabled(true);
+				txt_input_list.setEnabled(false);
+				btnResetInputList.setEnabled(false);
+				txt_error_S1.setVisible(false);
 			}
 		});
-		btnChange.setBounds(190, 47, 75, 25);
+		btnChange.setBounds(10, 168, 75, 25);
+		toolkit.adapt(btnChange, true, true);
 		btnChange.setText("Change");
-		{
-			Button btnConfirm = new Button(Step1, SWT.NONE);
-			btnConfirm.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					try 
-					{
-						textInputBudget.setEditable(false);
-						btnWithoutType.setEnabled(false);
-						btnWithType.setEnabled(false);
 
-						budget = (int) (Double.parseDouble(textInputBudget.getText().toString()) * 100);
-						if(btnWithoutType.getSelection() == true)
-							choice = 0;
-						else if(btnWithType.getSelection() == true)
-							choice = 1;					
-						Input_Field.setEditable(true);
-						btnNext.setEnabled(true);
+		btnConfirm_S1 = new Button(Step1, SWT.NONE);
+		btnConfirm_S1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try 
+				{
+					budget = (int) (Double.parseDouble(txtBudget.getText().toString()) * 100);
 
-					}
-					catch (Exception ie) {
-						if(ie.getMessage().equals("empty String")) 
-							lblErrorMsg.setText("***Please input an event budget.***");
-						else
-							lblErrorMsg.setText("***Event Budget can only be numeric.***");
-						lblErrorMsg.setVisible(true);
-					}
+					/*Disable all option on the left*/
+					txtBudget.setEditable(false);
+					btnWithoutType.setEnabled(false);
+					btnWithType.setEnabled(false);
+					btnWithoutSatisfaction.setEnabled(false);
+					btnWithSatisfaction.setEnabled(false);
+					btnConfirm_S1.setEnabled(false);
 
+					if(btnWithoutType.getSelection() == true)
+						type_choice = 0;
+					else if(btnWithType.getSelection() == true)
+						type_choice = 1;
+
+					if(btnWithoutSatisfaction.getSelection() == true)
+						satisfaction_choice = 0;
+					else if(btnWithSatisfaction.getSelection() == true)
+						satisfaction_choice = 1;
+
+					/*Enable all option on the right*/
+					txt_error_S1.setVisible(false);
+					txt_input_list.setEnabled(true);
+					btnResetInputList.setEnabled(true);
+					btnConfirm_S1.setEnabled(true);
 				}
-			});
-			btnConfirm.setBounds(190, 85, 75, 25);
-			btnConfirm.setText("Confirm");
-		}
-		{
-			Button btnClear = new Button(Step1, SWT.NONE);
-			btnClear.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					Input_Field.setText("");
+				catch (Exception ie) {
+					if(ie.getMessage().equals("empty String")) 
+						txt_error_S1.setText("***Please input an event budget.***");
+					else
+						txt_error_S1.setText("***Event Budget can only be numeric.***");
+					txt_error_S1.setVisible(true);
 				}
-			});
-			btnClear.setBounds(382, 179, 75, 25);
-			btnClear.setText("Clear");
-		}
+			}
+		});
+		btnConfirm_S1.setBounds(108, 168, 75, 25);
+		toolkit.adapt(btnConfirm_S1, true, true);
+		btnConfirm_S1.setText("Confirm");
 
+		txtBudget = new Text(Step1, SWT.BORDER);
+		txtBudget.setBounds(96, 4, 76, 21);
+		toolkit.adapt(txtBudget, true, true);
 
-		/* End of Step 1 Composite
-		 * 
-		 * 
-		 * 
-		 */
-		{
-			Step2 = new Composite(container, SWT.NONE);
-			Step2.setBounds(0, 26, 561, 219);
-			Step2.setVisible(false);
-			{
-				Button btnStep2_1 = new Button(Step2, SWT.NONE);
-				btnStep2_1.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(true);
-						Step2.setVisible(false);
-						Step3.setVisible(false);
-						Step4.setVisible(false);
+		txt_input_list = new Text(Step1, SWT.BORDER | SWT.MULTI);
+		txt_input_list.setEnabled(false);
+		txt_input_list.setBounds(229, 55, 461, 209);
+		toolkit.adapt(txt_input_list, true, true);
+
+		Label lblInputList = new Label(Step1, SWT.NONE);
+		lblInputList.setBounds(229, 34, 55, 15);
+		toolkit.adapt(lblInputList, true, true);
+		lblInputList.setText("Input List:");
+
+		btnResetInputList = new Button(Step1, SWT.NONE);
+		btnResetInputList.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				txt_input_list.setText("");
+			}
+		});
+		btnResetInputList.setEnabled(false);
+		btnResetInputList.setBounds(455, 275, 128, 25);
+		toolkit.adapt(btnResetInputList, true, true);
+		btnResetInputList.setText("Reset Input List");
+
+		btnConfirm_S1 = new Button(Step1, SWT.NONE);
+		btnConfirm_S1.setBounds(615, 275, 75, 25);
+		btnConfirm_S1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				selected_compulsory = new Vector<Integer>();
+				
+				try {	
+					budgetPersonalAssistant  = new BudgetController(txt_input_list.getText(), budget, type_choice, satisfaction_choice, event_id);
+					item_list = budgetPersonalAssistant.getItemList(event_id);
+					lblError_S2.setVisible(false);
+					stackLayout.topControl = Step2;
+					BigContent.layout();
+					
+					table.removeAll();
+					for (int loopIndex = 0; loopIndex < item_list.size(); loopIndex++) {
+						TableItem item = new TableItem(table, SWT.NULL);
+						item.setText(0, "Item " + (loopIndex+1));
+						item.setText(1, item_list.get(loopIndex).getItem());
+						item.setText(2, "$"+((double) item_list.get(loopIndex).getPrice())/100);
+						if(satisfaction_choice == 1) 
+							item.setText(3, ""+item_list.get(loopIndex).getSatisfaction_value());
+						if(type_choice == 1)
+							item.setText(4, ""+item_list.get(loopIndex).getType());					
 					}
-				});
-				btnStep2_1.setText("Step 1");
-				btnStep2_1.setBounds(10, 10, 75, 25);
-			}
-			{
-				Button btnStep2_2 = new Button(Step2, SWT.NONE);
-				btnStep2_2.setEnabled(false);
-				btnStep2_2.setText("Step 2");
-				btnStep2_2.setBounds(94, 10, 75, 25);
-			}
-			{
-				Button btnStep2_3 = new Button(Step2, SWT.NONE);
-				btnStep2_3.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(false);
-						Step2.setVisible(false);
-						Step3.setVisible(true);
-						Step4.setVisible(false);
-					}
-				});
-				btnStep2_3.setText("Step 3");
-				btnStep2_3.setBounds(190, 10, 75, 25);
-			}
-			{
-				Button btnStep2_4 = new Button(Step2, SWT.CENTER);
-				btnStep2_4.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(false);
-						Step2.setVisible(false);
-						Step3.setVisible(false);
-						Step4.setVisible(true);
-					}
-				});
-				btnStep2_4.setBounds(291, 10, 75, 25);
-				btnStep2_4.setText("Step 4");
-			}
-			{
-				Label lblTableOutput = new Label(Step2, SWT.NONE);
-				lblTableOutput.setBounds(10, 54, 82, 15);
-				lblTableOutput.setText("Table Output:");
-			}
-			{
-				Output_Table = new Text(Step2, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-				Output_Table.setEditable(false);
-				Output_Table.setBounds(9, 70, 398, 139);
-
-			}
-			{
-				Label lblCompulsoryItem = new Label(Step2, SWT.NONE);
-				lblCompulsoryItem.setBounds(431, 54, 103, 15);
-				lblCompulsoryItem.setText("Compulsory Item:");
-			}
-			{
-				txtInput_Compulsory = new Text(Step2, SWT.BORDER);
-				txtInput_Compulsory.setEditable(false);
-				txtInput_Compulsory.setBounds(432, 70, 119, 21);
-			}
-			{
-				Button btnChange_1 = new Button(Step2, SWT.NONE);
-				btnChange_1.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						txtInput_Compulsory.setEditable(true);
-					}
-				});
-				btnChange_1.setBounds(431, 97, 75, 25);
-				btnChange_1.setText("Change");
-			}
-			{
-				Button btnNext_1 = new Button(Step2, SWT.NONE);
-				btnNext_1.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						txtInput_Compulsory.setEditable(false);
-						Step1.setVisible(false);
-						Step2.setVisible(false);
-						Step3.setVisible(true);
-						Step4.setVisible(false);
-						budgetPersonalAssistant.compulsory(txtInput_Compulsory.getText());
-
-						Output_confirm.setText(budgetPersonalAssistant.displaySplit(1)); //1 denote compulsory display
-						double budget_left = Double.parseDouble(budgetPersonalAssistant.budgetleft());
-						txtBudgetLeft.setText(budgetPersonalAssistant.budgetleft());
-						Output_Left.setText(budgetPersonalAssistant.displaySplit(0));
-						if(budget_left < 0) {
-							lblbudgetIsNot.setVisible(true);
-							btnGenerate.setEnabled(false);
-						}
-						else {
-							lblbudgetIsNot.setVisible(false); //budget is enough, don't have to display error message.
-							
-							if(Output_Left.getText().equals("") == false) 
-								btnGenerate.setEnabled(true); //have items left to generate
-							else
-								btnGenerate.setEnabled(false); //no items left to generate so disable the button
-						}
-
-
-
-					}
-				});
-				btnNext_1.setBounds(431, 128, 75, 25);
-				btnNext_1.setText("Next");
-			}
-
-		}
-
-		/* End of Step 2 Composite
-		 * 
-		 * 
-		 * 
-		 */
-
-		{
-			Label lblOptimizeBudget = new Label(container, SWT.NONE);
-			lblOptimizeBudget.setBounds(10, 5, 159, 15);
-			lblOptimizeBudget.setText("Optimize Budget");
-		}
-
-		{
-			Step3 = new Composite(container, SWT.NONE);
-			Step3.setBounds(0, 26, 561, 219);
-			Step3.setVisible(false);
-			{
-				Button btnStep3_3 = new Button(Step3, SWT.NONE);
-				btnStep3_3.setEnabled(false);
-				btnStep3_3.setText("Step 3");
-				btnStep3_3.setBounds(190, 10, 75, 25);
-			}
-			{
-				Button btnStep3_2 = new Button(Step3, SWT.NONE);
-				btnStep3_2.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(false);
-						Step2.setVisible(true);
-						Step3.setVisible(false);
-						Step4.setVisible(false);
-					}
-				});
-				btnStep3_2.setText("Step 2");
-				btnStep3_2.setBounds(94, 10, 75, 25);
-			}
-			{
-				Button btnStep3_1 = new Button(Step3, SWT.NONE);
-				btnStep3_1.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(true);
-						Step2.setVisible(false);
-						Step3.setVisible(false);
-						Step4.setVisible(false);
-					}
-				});
-				btnStep3_1.setText("Step 1");
-				btnStep3_1.setBounds(10, 10, 75, 25);
-			}
-			{
-				Button btnStep3_4 = new Button(Step3, SWT.NONE);
-				btnStep3_4.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						Step1.setVisible(false);
-						Step2.setVisible(false);
-						Step3.setVisible(false);
-						Step4.setVisible(true);
-					}
-				});
-				btnStep3_4.setBounds(300, 10, 75, 25);
-				btnStep3_4.setText("Step 4");
-			}
-			{
-				Label lblConfirmedItems = new Label(Step3, SWT.NONE);
-				lblConfirmedItems.setBounds(10, 59, 97, 15);
-				lblConfirmedItems.setText("Confirmed Item(s):");
-			}
-			{
-				Output_confirm = new Text(Step3, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-				Output_confirm.setEditable(false);
-				Output_confirm.setBounds(10, 80, 250, 130);
-			}
-			{
-				Label lblBudgetLeft = new Label(Step3, SWT.NONE);
-				lblBudgetLeft.setBounds(10, 41, 97, 15);
-				lblBudgetLeft.setText("Budget Left:        $");
-			}
-			{
-				Label lblItemsLeft = new Label(Step3, SWT.NONE);
-				lblItemsLeft.setBounds(285, 59, 67, 15);
-				lblItemsLeft.setText("Item(s) Left:");
-			}
-			{
-				Output_Left = new Text(Step3, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
-				Output_Left.setEditable(false);
-				Output_Left.setBounds(286, 80, 250, 130);
-			}
-			{
-				txtBudgetLeft = new Text(Step3, SWT.BORDER);
-				txtBudgetLeft.setEditable(false);
-				txtBudgetLeft.setBounds(113, 41, 76, 21);
-			}
-			{
-				btnGenerate = new Button(Step3, SWT.NONE);
-				btnGenerate.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						try {
-							Step1.setVisible(false);
-							Step2.setVisible(false);
-							Step3.setVisible(false);
-							Step4.setVisible(true);
-							OutputPermu.setText(budgetPersonalAssistant.findOptimalShopList(choice));
-							if(budgetPersonalAssistant.noOfCombination() == 0) { //not enough money
-								combo.setEnabled(false);
-								btnConfirm_Select.setEnabled(false);
-							}
-							else {
-								combo.setEnabled(true);
-								combo.removeAll();
-								btnConfirm_Select.setEnabled(true);
-								for(int i=1; i<=budgetPersonalAssistant.noOfCombination(); i++) {
-									combo.add("Combination " + i);
-								}
-							}
-						
-						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							OutputPermu.setText(e1.getMessage());
-						}
-					}
-				});
-				btnGenerate.setEnabled(false);
-				btnGenerate.setBounds(461, 31, 75, 25);
-				btnGenerate.setText("Generate");
-			}
-			{
-				lblbudgetIsNot = new Label(Step3, SWT.NONE);
-				lblbudgetIsNot.setBounds(200, 41, 255, 15);
-				lblbudgetIsNot.setText("*Budget is not enough! You can't generate!*");
-				lblbudgetIsNot.setVisible(false);
-			}
-
-		}
-
-		/* End of Step 3 Composite
-		 * 
-		 * 
-		 * 
-		 */
-	
-
-		{
-			Step4 = new Composite(container, SWT.NONE);
-			Step4.setBounds(0, 0, 561, 245);
-			Step4.setVisible(true);
-		}
-		{
-			Button btnStep4_3 = new Button(Step4, SWT.NONE);
-			btnStep4_3.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					Step1.setVisible(false);
-					Step2.setVisible(false);
-					Step3.setVisible(true);
-					Step4.setVisible(false);
+					for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+						table.getColumn(loopIndex).pack();
+					}								
+					btnStep.setEnabled(true);	
 				}
-			});
-			btnStep4_3.setText("Step 3");
-			btnStep4_3.setBounds(190, 10, 75, 25);
-		}
-		{
-			Button btnStep4_2 = new Button(Step4, SWT.NONE);
-			btnStep4_2.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					Step1.setVisible(false);
-					Step2.setVisible(true);
-					Step3.setVisible(false);
-					Step4.setVisible(false);
+				catch (Exception ie) {
+					txt_error_S1.setText(ie.getMessage());
 				}
-			});
-			btnStep4_2.setText("Step 2");
-			btnStep4_2.setBounds(94, 10, 75, 25);
-		}
-		{
-			Button btnStep4_1 = new Button(Step4, SWT.NONE);
-			btnStep4_1.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					Step1.setVisible(true);
-					Step2.setVisible(false);
-					Step3.setVisible(false);
-					Step4.setVisible(false);
-				}
-			});
-			btnStep4_1.setText("Step 1");
-			btnStep4_1.setBounds(10, 10, 75, 25);
-		}
-		{
-			Button btnStep4_4 = new Button(Step4, SWT.NONE);
-			btnStep4_4.setEnabled(false);
-			btnStep4_4.setBounds(300, 10, 75, 25);
-			btnStep4_4.setText("Step 4");
-		}
-		{
-			Label lblGeneratedOutput = new Label(Step4, SWT.NONE);
-			lblGeneratedOutput.setBounds(10, 49, 103, 15);
-			lblGeneratedOutput.setText("Generated Output:");
-		}
-		{
-			OutputPermu = new Text(Step4, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
-			OutputPermu.setEditable(false);
-			OutputPermu.setBounds(10, 70, 197, 165);
-		}
-		{
-			Label lblSelectedCombination = new Label(Step4, SWT.NONE);
-			lblSelectedCombination.setBounds(232, 49, 120, 15);
-			lblSelectedCombination.setText("Selected Combination:");
-		}
-		{
-			btnConfirm_Select = new Button(Step4, SWT.NONE);
-			btnConfirm_Select.setEnabled(false);
-			btnConfirm_Select.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					btnFinalConfirm.setEnabled(true);
-					int option = combo.getSelectionIndex();
-					txtDB.setText(budgetPersonalAssistant.sendDBList(option));
-				}
-			});
-			btnConfirm_Select.setBounds(460, 39, 75, 25);
-			btnConfirm_Select.setText("Select");
-		}
-		{
-			Label lblSelectedCombination_1 = new Label(Step4, SWT.NONE);
-			lblSelectedCombination_1.setBounds(232, 82, 126, 15);
-			lblSelectedCombination_1.setText("Final Combination:");
-		}
-		{
-			txtDB = new Text(Step4, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
-			txtDB.setEditable(false);
-			txtDB.setBounds(232, 103, 208, 132);
-		}
-		{
-			btnFinalConfirm = new Button(Step4, SWT.NONE);
-			btnFinalConfirm.setEnabled(false);
-			btnFinalConfirm.setBounds(460, 210, 75, 25);
-			btnFinalConfirm.setText("Confirm");
+			}
+		});
+
+		btnConfirm_S1.setEnabled(false);
+		toolkit.adapt(btnConfirm_S1, true, true);
+		btnConfirm_S1.setText("Confirm");
+
+		txt_error_S1 = new Text(Step1, SWT.READ_ONLY | SWT.MULTI);
+		txt_error_S1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		txt_error_S1.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		txt_error_S1.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
+		txt_error_S1.setBounds(229, -1, 461, 34);
+		toolkit.adapt(txt_error_S1, true, true);
+
+		/*
+		 * 
+		 * 
+		 * End of Step 1 Composite*/
+
+		/*
+		 * 
+		 * 
+		 * Start of Step 2 Composite*/
+		Step2 = new Composite(BigContent, SWT.NONE);
+		Step2.setBounds(0, 80, 700, 300);
+		toolkit.adapt(Step2);
+		toolkit.paintBordersFor(Step2);
+		
+		table = new Table(Step2, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);			
+		table.setHeaderVisible(true);
+		
+		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+			TableColumn column = new TableColumn(table, SWT.NULL);
+			column.setText(titles[loopIndex]);
+			column.setResizable(false);
 		}
 		
-		combo = new Combo(Step4, SWT.NONE);
-		combo.setBounds(352, 46, 91, 23);
-
-		return container;
+		table.setBounds(25, 25, 665, 200);
+		selected_compulsory = new Vector<Integer>();
+		table.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event event) {
+				if (event.detail == SWT.CHECK) {
+					int select = Integer.parseInt(event.item.toString().substring(16, event.item.toString().length()-1));
+					if(selected_compulsory.contains(select) == false)
+						selected_compulsory.add(select);
+					else
+						selected_compulsory.removeElement(select);
+				} 
+			}
+		});	
+		
+		lblError_S2 = new Label(Step2, SWT.NONE);
+		lblError_S2.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
+		lblError_S2.setBounds(25, 260, 555, 28);
+		toolkit.adapt(lblError_S2, true, true);
+		
+		lblListOfItems = new Label(Step2, SWT.NONE);
+		lblListOfItems.setBounds(25, 4, 234, 15);
+		toolkit.adapt(lblListOfItems, true, true);
+		lblListOfItems.setText("Check the compulsory item(s):");
+		
+		btnNext = new Button(Step2, SWT.NONE);
+		btnNext.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String t ="";
+				Collections.sort(selected_compulsory);
+				for(int i=0; i<selected_compulsory.size();i++) {
+					t+=selected_compulsory.get(i) + "  ";
+				}
+				label.setText(t);
+				try {	
+					lblError_S2.setVisible(false);
+					budgetPersonalAssistant.compulsory(selected_compulsory);
+					double budget_left = Double.parseDouble(budgetPersonalAssistant.budgetleft());
+					System.out.println("Budget left: " + budget_left);
+					if(budget_left < 0) throw new Exception("***Not enough money to buy all compulsory item(s).***");
+					//boolean empty = budgetPersonalAssistant.emptyComputeList();
+					//if(empty == true) throw new Exception("***You have selected all item(s) and you can buy all item(s).***");
+					stackLayout.topControl = Step3;
+					BigContent.layout();
+					budgetPersonalAssistant.differentiateCompulsory();
+					txt_result.setText(budgetPersonalAssistant.findOptimalShopList(type_choice, satisfaction_choice));	
+					btnStep.setEnabled(true);
+					btnStep_1.setEnabled(true);
+					btnStep_2.setEnabled(false);
+					
+					combo_selection.removeAll();
+					for(int i=1; i<=budgetPersonalAssistant.noOfCombination(); i++) {
+						combo_selection.add("Combination " + i);
+					}
+					
+				} catch(Exception ie) {
+					lblError_S2.setText(ie.getMessage());
+					lblError_S2.setVisible(true);
+				}		
+			}
+		});
+		btnNext.setBounds(615, 265, 75, 25);
+		toolkit.adapt(btnNext, true, true);
+		btnNext.setText("Next");
+		
+		/*
+		 * 
+		 * End of Step2
+		 */
+		
+		/*
+		 * 
+		 * Start of Step3
+		 */
+		
+		Step3 = new Composite(BigContent, SWT.NONE);
+		Step3.setBounds(0, 80, 700, 300);
+		toolkit.adapt(Step3);
+		toolkit.paintBordersFor(Step3);
+		
+		txt_result = new Text(Step3, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		txt_result.setBounds(10, 41, 664, 173);
+		toolkit.adapt(txt_result, true, true);
+		
+		combo_selection = new Combo(Step3, SWT.NONE);
+		combo_selection.setBounds(486, 246, 91, 23);
+		toolkit.adapt(combo_selection);
+		toolkit.paintBordersFor(combo_selection);
+		
+		btnFinish = new Button(Step3, SWT.NONE);
+		btnFinish.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int option = combo_selection.getSelectionIndex();
+				budgetPersonalAssistant.sendDBList(option);
+				//txtDB.setText(budgetPersonalAssistant.sendDBList(option));
+			}
+		});
+		btnFinish.setBounds(599, 244, 75, 25);
+		toolkit.adapt(btnFinish, true, true);
+		btnFinish.setText("Finish");
+		
+		Label lblSelectAnCombination = new Label(Step3, SWT.NONE);
+		lblSelectAnCombination.setBounds(359, 249, 121, 15);
+		toolkit.adapt(lblSelectAnCombination, true, true);
+		lblSelectAnCombination.setText("Select an combination:");
+		
+		label = new Label(this, SWT.NONE);
+		label.setBounds(311, 78, 202, 15);
+		toolkit.adapt(label, true, true);
+		
+		/*
+		 * 
+		 * End of Step3
+		 */
+		
 	}
-
-	/**
-	 * Create the actions.
-	 */
-	private void createActions() {
-		// Create the actions
-	}
-
-	/**
-	 * Create the menu manager.
-	 * @return the menu manager
-	 */
-	@Override
-	protected MenuManager createMenuManager() {
-		MenuManager menuManager = new MenuManager("menu");
-		return menuManager;
-	}
-
-	/**
-	 * Create the toolbar manager.
-	 * @return the toolbar manager
-	 */
-	@Override
-	protected ToolBarManager createToolBarManager(int style) {
-		ToolBarManager toolBarManager = new ToolBarManager(style);
-		return toolBarManager;
-	}
-
-	/**
-	 * Create the status line manager.
-	 * @return the status line manager
-	 */
-	@Override
-	protected StatusLineManager createStatusLineManager() {
-		StatusLineManager statusLineManager = new StatusLineManager();
-		return statusLineManager;
-	}
-
-	/**
-	 * Launch the application.
-	 * @param args
-	 */
-	public static void main(String args[]) {
-		try {
-			BudgetView window = new BudgetView();
-			window.setBlockOnOpen(true);
-			window.open();
-			Display.getCurrent().dispose();
-		} catch (Exception e) {
-			e.printStackTrace();
+	
+	public static void main(String[] args)
+	{
+		Display display = new Display();
+		
+		Shell shell = new Shell(display, SWT.CLOSE | SWT.TITLE);
+		shell.setText("Budget Calc");
+		BudgetView budView = new BudgetView(shell, SWT.NONE, 0);
+		budView.pack();
+		
+		shell.pack();
+		shell.open();
+		while(!shell.isDisposed())
+		{
+			if(!display.readAndDispatch()) display.sleep();
 		}
-	}
-
-
-	/**
-	 * Configure the shell.
-	 * @param newShell
-	 */
-	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("New Application");
-	}
-
-	/**
-	 * Return the initial size of the window.
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(577, 356);
+		
 	}
 }
