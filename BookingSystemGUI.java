@@ -39,13 +39,13 @@ public class BookingSystemGUI extends Composite {
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 	private final StackLayout stackLayout = new StackLayout();
 	
-	private Text LowBoundCapacity;
-	private Text UpBoundCapacity;
-	private Text text;
+	private Text LowerBoundCapacity;
+	private Text UpperBoundCapacity;
+	private Text HourFromChoice;
 	private Text NameToSearch;
-	private Text text_2;
-	private Text text_3;
-	private Text text_4;
+	private Text HourToChoice;
+	private Text LowerBoundCost;
+	private Text UpperBoundCost;
 	private Composite SearchNameCompo;
 	private Composite SearchCriteriaCompo;
 	private Composite AddOutsideVenue;
@@ -64,7 +64,21 @@ public class BookingSystemGUI extends Composite {
 	private Text HourToOutside;
 	private DateTime dateTimeFromOutside;
 	private DateTime dateTimeToOutside;
-
+	private boolean flagCapacityChoice;			
+	private boolean flagCostChoice;				
+	private boolean flagTimeSlotChoice;
+	private Button CapacityConfirmButton;
+	private Button TimeChoiceButton;
+	private Button CostChoiceButton;
+	private Button CapacityChoiceButton;
+	private Button CriteriaConfirmButton;
+	private Button TimeConfirmButton;
+	private Button CostConfirmButton;
+	private DateTime dateTimeFrom;
+	private DateTime dateTimeTo;
+	private Button FindCriteriaButton;
+	private Text CapacityChoiceErrorBoard;
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -77,6 +91,10 @@ public class BookingSystemGUI extends Composite {
 				toolkit.dispose();
 			}
 		});
+		
+		// Initialize some variables
+		flagCapacityChoice = flagCostChoice = flagTimeSlotChoice = false;
+		
 		toolkit.adapt(this);
 		toolkit.paintBordersFor(this);
 		
@@ -206,7 +224,7 @@ public class BookingSystemGUI extends Composite {
 		toolkit.paintBordersFor(SearchCriteriaCompo);
 		
 		Composite composite_4 = new Composite(SearchCriteriaCompo, SWT.NONE);
-		composite_4.setBounds(10, 10, 321, 79);
+		composite_4.setBounds(10, 10, 321, 112);
 		toolkit.adapt(composite_4);
 		toolkit.paintBordersFor(composite_4);
 		
@@ -221,46 +239,200 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(lblPleaseChooseYour, true, true);
 		lblPleaseChooseYour.setText("Please choose your preferred criteria:");
 		
-		Button btnCapacity = new Button(composite_4, SWT.CHECK);
-		btnCapacity.setBounds(30, 52, 93, 16);
-		toolkit.adapt(btnCapacity, true, true);
-		btnCapacity.setText("Capacity");
+		CapacityChoiceButton = new Button(composite_4, SWT.CHECK);
+		CapacityChoiceButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				flagCapacityChoice = CapacityChoiceButton.getSelection();
+				
+				if(flagCapacityChoice == true)
+					CriteriaConfirmButton.setEnabled(true);
+				else
+				{
+					if(flagTimeSlotChoice == false && flagCostChoice == false)
+						CriteriaConfirmButton.setEnabled(false);
+				}
+			}
+		});
 		
-		Button btnTime = new Button(composite_4, SWT.CHECK);
-		btnTime.setBounds(129, 52, 66, 16);
-		toolkit.adapt(btnTime, true, true);
-		btnTime.setText("Time");
+		CapacityChoiceButton.setBounds(30, 52, 93, 16);
+		toolkit.adapt(CapacityChoiceButton, true, true);
+		CapacityChoiceButton.setText("Capacity");
 		
-		Button btnCost = new Button(composite_4, SWT.CHECK);
-		btnCost.setBounds(207, 52, 93, 16);
-		toolkit.adapt(btnCost, true, true);
-		btnCost.setText("Cost");
+		TimeChoiceButton = new Button(composite_4, SWT.CHECK);
+		TimeChoiceButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				flagTimeSlotChoice = TimeChoiceButton.getSelection();
+				
+				if(flagTimeSlotChoice == true)
+					CriteriaConfirmButton.setEnabled(true);
+				else
+				{
+					if(flagCapacityChoice == false && flagCostChoice == false)
+						CriteriaConfirmButton.setEnabled(false);
+				}
+			}
+		});
+		TimeChoiceButton.setBounds(129, 52, 66, 16);
+		toolkit.adapt(TimeChoiceButton, true, true);
+		TimeChoiceButton.setText("Time");
 		
-		Composite Capacity = new Composite(SearchCriteriaCompo, SWT.NONE);
-		Capacity.setBounds(10, 95, 321, 43);
-		toolkit.adapt(Capacity);
-		toolkit.paintBordersFor(Capacity);
+		CostChoiceButton = new Button(composite_4, SWT.CHECK);
+		CostChoiceButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				flagCostChoice = CostChoiceButton.getSelection();
+				
+				if(flagCostChoice == true)
+					CriteriaConfirmButton.setEnabled(true);
+				else
+				{
+					if(flagTimeSlotChoice == false && flagCapacityChoice == false)
+						CriteriaConfirmButton.setEnabled(false);
+				}
+			}
+		});
+		CostChoiceButton.setBounds(207, 52, 93, 16);
+		toolkit.adapt(CostChoiceButton, true, true);
+		CostChoiceButton.setText("Cost");
 		
-		Label lblEstimatedCapacity = new Label(Capacity, SWT.NONE);
+		CriteriaConfirmButton = new Button(composite_4, SWT.NONE);
+		CriteriaConfirmButton.setEnabled(false);
+		CriteriaConfirmButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String commandType = CriteriaConfirmButton.getText();
+				
+				if(commandType.equals("Confirm") == true)
+				{
+					// Disable all the criteria choice buttons
+					CapacityChoiceButton.setEnabled(false);
+					CostChoiceButton.setEnabled(false);
+					TimeChoiceButton.setEnabled(false);
+				
+					// Change the command type from "Confirm" to "Edit"
+					CriteriaConfirmButton.setText("Edit");
+					
+					// Enable the corresponding choice section
+					if(flagCapacityChoice == true)
+					{
+						LowerBoundCapacity.setEnabled(true);
+						UpperBoundCapacity.setEnabled(true);
+						CapacityConfirmButton.setEnabled(true);
+					}
+					else
+					{
+						LowerBoundCapacity.setText("");
+						UpperBoundCapacity.setText("");
+					}
+					
+					if(flagCostChoice == true)
+					{
+						LowerBoundCost.setEnabled(true);
+						UpperBoundCost.setEnabled(true);
+						CostConfirmButton.setEnabled(true);
+					}
+					else
+					{
+						LowerBoundCost.setText("");
+						UpperBoundCost.setText("");
+					}
+					
+					if(flagTimeSlotChoice == true)
+					{
+						dateTimeFrom.setEnabled(true);
+						dateTimeTo.setEnabled(true);
+						HourFromChoice.setEnabled(true);
+						HourToChoice.setEnabled(true);
+						TimeConfirmButton.setEnabled(true);
+					}
+					else
+					{
+						HourFromChoice.setText("");
+						HourToChoice.setText("");
+					}
+				}
+				else
+				{
+					// The case when the command is "Edit"
+					// Enable the choice buttons
+					CapacityChoiceButton.setEnabled(true);
+					TimeChoiceButton.setEnabled(true);
+					CostChoiceButton.setEnabled(true);
+					// Change command type to "Confirm"
+					CriteriaConfirmButton.setText("Confirm");
+					
+					// Disable all the text-boxes and buttons in all three choice sections
+					LowerBoundCapacity.setEnabled(false);
+					UpperBoundCapacity.setEnabled(false);
+					CapacityConfirmButton.setEnabled(false);
+					LowerBoundCost.setEnabled(false);
+					UpperBoundCost.setEnabled(false);
+					CostConfirmButton.setEnabled(false);
+					dateTimeFrom.setEnabled(false);
+					dateTimeTo.setEnabled(false);
+					HourFromChoice.setEnabled(false);
+					HourToChoice.setEnabled(false);
+					TimeConfirmButton.setEnabled(false);
+					FindCriteriaButton.setEnabled(false);
+				}
+			}
+		});
+		CriteriaConfirmButton.setBounds(236, 77, 75, 25);
+		toolkit.adapt(CriteriaConfirmButton, true, true);
+		CriteriaConfirmButton.setText("Confirm");
+		
+		Composite CapacityCompo = new Composite(SearchCriteriaCompo, SWT.NONE);
+		CapacityCompo.setBounds(10, 128, 321, 79);
+		toolkit.adapt(CapacityCompo);
+		toolkit.paintBordersFor(CapacityCompo);
+		
+		Label lblEstimatedCapacity = new Label(CapacityCompo, SWT.NONE);
 		lblEstimatedCapacity.setBounds(10, 10, 104, 15);
 		toolkit.adapt(lblEstimatedCapacity, true, true);
 		lblEstimatedCapacity.setText("Estimated capacity:");
 		
-		LowBoundCapacity = new Text(Capacity, SWT.BORDER);
-		LowBoundCapacity.setBounds(120, 7, 76, 21);
-		toolkit.adapt(LowBoundCapacity, true, true);
+		LowerBoundCapacity = new Text(CapacityCompo, SWT.BORDER);
+		LowerBoundCapacity.setEnabled(false);
+		LowerBoundCapacity.setBounds(120, 7, 76, 21);
+		toolkit.adapt(LowerBoundCapacity, true, true);
 		
-		UpBoundCapacity = new Text(Capacity, SWT.BORDER);
-		UpBoundCapacity.setBounds(227, 7, 76, 21);
-		toolkit.adapt(UpBoundCapacity, true, true);
+		UpperBoundCapacity = new Text(CapacityCompo, SWT.BORDER);
+		UpperBoundCapacity.setEnabled(false);
+		UpperBoundCapacity.setBounds(227, 7, 76, 21);
+		toolkit.adapt(UpperBoundCapacity, true, true);
 		
-		Label lblNewLabel = new Label(Capacity, SWT.NONE);
+		Label lblNewLabel = new Label(CapacityCompo, SWT.NONE);
 		lblNewLabel.setBounds(206, 10, 15, 15);
 		toolkit.adapt(lblNewLabel, true, true);
 		lblNewLabel.setText("to");
 		
+		CapacityConfirmButton = new Button(CapacityCompo, SWT.NONE);
+		CapacityConfirmButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String lowerCapacity = LowerBoundCapacity.getText();
+				if(lowerCapacity == null || lowerCapacity.equals("") == true)
+				{
+					CapacityChoiceErrorBoard
+					return;
+				}
+			}
+		});
+		CapacityConfirmButton.setEnabled(false);
+		CapacityConfirmButton.setBounds(236, 44, 75, 25);
+		toolkit.adapt(CapacityConfirmButton, true, true);
+		CapacityConfirmButton.setText("Confirm");
+		
+		CapacityChoiceErrorBoard = new Text(CapacityCompo, SWT.BORDER);
+		CapacityChoiceErrorBoard.setEditable(false);
+		CapacityChoiceErrorBoard.setBounds(10, 48, 199, 21);
+		toolkit.adapt(CapacityChoiceErrorBoard, true, true);
+		CapacityChoiceErrorBoard.setVisible(false);
+		
 		Composite composite_1 = new Composite(SearchCriteriaCompo, SWT.NONE);
-		composite_1.setBounds(10, 198, 321, 116);
+		composite_1.setBounds(10, 213, 321, 152);
 		toolkit.adapt(composite_1);
 		toolkit.paintBordersFor(composite_1);
 		
@@ -269,19 +441,21 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(lblPreferredTimeSlot, true, true);
 		lblPreferredTimeSlot.setText("Preferred Time Slot:");
 		
-		DateTime dateTime = new DateTime(composite_1, SWT.DROP_DOWN);
-		dateTime.setBounds(89, 53, 85, 24);
-		toolkit.adapt(dateTime);
-		toolkit.paintBordersFor(dateTime);
+		dateTimeFrom = new DateTime(composite_1, SWT.DROP_DOWN);
+		dateTimeFrom.setEnabled(false);
+		dateTimeFrom.setBounds(89, 53, 85, 24);
+		toolkit.adapt(dateTimeFrom);
+		toolkit.paintBordersFor(dateTimeFrom);
 		
 		Label lblFrom = new Label(composite_1, SWT.NONE);
 		lblFrom.setBounds(42, 54, 41, 15);
 		toolkit.adapt(lblFrom, true, true);
 		lblFrom.setText("From:");
 		
-		text = new Text(composite_1, SWT.BORDER);
-		text.setBounds(201, 53, 67, 21);
-		toolkit.adapt(text, true, true);
+		HourFromChoice = new Text(composite_1, SWT.BORDER);
+		HourFromChoice.setEnabled(false);
+		HourFromChoice.setBounds(201, 53, 67, 21);
+		toolkit.adapt(HourFromChoice, true, true);
 		
 		Label lblAt = new Label(composite_1, SWT.NONE);
 		lblAt.setText("at");
@@ -293,19 +467,21 @@ public class BookingSystemGUI extends Composite {
 		lblTo.setBounds(42, 83, 41, 15);
 		toolkit.adapt(lblTo, true, true);
 		
-		DateTime dateTime_1 = new DateTime(composite_1, SWT.DROP_DOWN);
-		dateTime_1.setBounds(89, 82, 85, 24);
-		toolkit.adapt(dateTime_1);
-		toolkit.paintBordersFor(dateTime_1);
+		dateTimeTo = new DateTime(composite_1, SWT.DROP_DOWN);
+		dateTimeTo.setEnabled(false);
+		dateTimeTo.setBounds(89, 82, 85, 24);
+		toolkit.adapt(dateTimeTo);
+		toolkit.paintBordersFor(dateTimeTo);
 		
 		Label label_4 = new Label(composite_1, SWT.NONE);
 		label_4.setText("at");
 		label_4.setBounds(180, 82, 15, 15);
 		toolkit.adapt(label_4, true, true);
 		
-		text_2 = new Text(composite_1, SWT.BORDER);
-		text_2.setBounds(201, 82, 67, 21);
-		toolkit.adapt(text_2, true, true);
+		HourToChoice = new Text(composite_1, SWT.BORDER);
+		HourToChoice.setEnabled(false);
+		HourToChoice.setBounds(201, 82, 67, 21);
+		toolkit.adapt(HourToChoice, true, true);
 		
 		Label lblhourShouldBe = new Label(composite_1, SWT.NONE);
 		lblhourShouldBe.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.ITALIC));
@@ -313,8 +489,14 @@ public class BookingSystemGUI extends Composite {
 		lblhourShouldBe.setBounds(10, 32, 161, 15);
 		toolkit.adapt(lblhourShouldBe, true, true);
 		
+		TimeConfirmButton = new Button(composite_1, SWT.NONE);
+		TimeConfirmButton.setEnabled(false);
+		TimeConfirmButton.setBounds(236, 117, 75, 25);
+		toolkit.adapt(TimeConfirmButton, true, true);
+		TimeConfirmButton.setText("Confirm");
+		
 		Composite composite_5 = new Composite(SearchCriteriaCompo, SWT.NONE);
-		composite_5.setBounds(10, 331, 321, 43);
+		composite_5.setBounds(10, 371, 321, 66);
 		toolkit.adapt(composite_5);
 		toolkit.paintBordersFor(composite_5);
 		
@@ -323,29 +505,35 @@ public class BookingSystemGUI extends Composite {
 		lblPreferredCost.setBounds(10, 10, 104, 15);
 		toolkit.adapt(lblPreferredCost, true, true);
 		
-		text_3 = new Text(composite_5, SWT.BORDER);
-		text_3.setBounds(120, 7, 76, 21);
-		toolkit.adapt(text_3, true, true);
+		LowerBoundCost = new Text(composite_5, SWT.BORDER);
+		LowerBoundCost.setBounds(120, 7, 76, 21);
+		toolkit.adapt(LowerBoundCost, true, true);
 		
-		text_4 = new Text(composite_5, SWT.BORDER);
-		text_4.setBounds(227, 7, 76, 21);
-		toolkit.adapt(text_4, true, true);
+		UpperBoundCost = new Text(composite_5, SWT.BORDER);
+		UpperBoundCost.setBounds(227, 7, 76, 21);
+		toolkit.adapt(UpperBoundCost, true, true);
 		
 		Label label_5 = new Label(composite_5, SWT.NONE);
 		label_5.setText("to");
 		label_5.setBounds(206, 10, 15, 15);
 		toolkit.adapt(label_5, true, true);
 		
-		Button btnNewButton = new Button(SearchCriteriaCompo, SWT.NONE);
-		btnNewButton.setBounds(193, 380, 138, 25);
-		btnNewButton.setEnabled(true);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
+		CostConfirmButton = new Button(composite_5, SWT.NONE);
+		CostConfirmButton.setEnabled(false);
+		CostConfirmButton.setBounds(236, 41, 75, 25);
+		toolkit.adapt(CostConfirmButton, true, true);
+		CostConfirmButton.setText("Confirm");
+		
+		FindCriteriaButton = new Button(SearchCriteriaCompo, SWT.NONE);
+		FindCriteriaButton.setBounds(91, 443, 138, 25);
+		FindCriteriaButton.setEnabled(false);
+		FindCriteriaButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
-		toolkit.adapt(btnNewButton, true, true);
-		btnNewButton.setText("Find All Suitable Venues");
+		toolkit.adapt(FindCriteriaButton, true, true);
+		FindCriteriaButton.setText("Find All Suitable Venues");
 		
 		AddOutsideVenue = new Composite(FunctionContentPage, SWT.NONE);
 		AddOutsideVenue.setBounds(0, 70, 330, 238);
