@@ -344,8 +344,12 @@ public class ViewEventGUI3 extends Composite {
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				deleteconfirmDiaglog confirm = new deleteconfirmDiaglog(new Shell(), SWT.NONE, "dummy name");
+				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, "dummy name");
 				confirm.open();
+				if (EmanagerGUIjface.getdelete()) {
+					//do be completed
+				}
+					
 			}
 		});
 		FormData fd_btnDeleteEvent = new FormData();

@@ -99,7 +99,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		delete = a;
 	}
 	
-	public boolean getdelete () {
+	public static boolean getdelete () {
 		return delete;
 	}
 	/**

@@ -13,7 +13,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 
-public class deleteconfirmDiaglog extends Dialog {
+public class deleteconfirmDialog extends Dialog {
 
 	protected Object result;
 	protected Shell shell;
@@ -24,8 +24,8 @@ public class deleteconfirmDiaglog extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public deleteconfirmDiaglog(Shell parent, int style, String Ename) {
-		super(parent, style);
+	public deleteconfirmDialog(Shell parent, int style, String Ename) {
+		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		setText("Delete Confirmation");
 		name = Ename;
 	}
