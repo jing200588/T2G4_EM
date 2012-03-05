@@ -1,12 +1,11 @@
-import java.sql.SQLException;
+/*
+ * 
+ * CLASS NAME: 				EMDB
+ * CLASS DESCRIPTION: 		Wrapper class for different Database implementation.
+ * 							
+ * 
+ */
 
 
-public interface EMDB {
-	
-	//Set up db name
-	void set_name(String name);
-	
-	//connection control
-	void connect() throws SQLException;
-	void close();
+public class EMDB extends EMDB_sqlite{
 }

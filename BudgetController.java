@@ -418,10 +418,12 @@ public class BudgetController implements BudgetInterface{
 			db_list.add(compulsory_list.get(i));
 		}
 
-		BitSet bitmask = soln.getSolnSet().get(select);
-		for(int i=0; i<number; i++) {
-			if(bitmask.get(i)) {
-				db_list.add(compute_list.get(i));
+		if(soln.getSolnSetSize() > 0) {
+			BitSet bitmask = soln.getSolnSet().get(select);
+			for(int i=0; i<number; i++) {
+				if(bitmask.get(i)) {
+					db_list.add(compute_list.get(i));
+				}
 			}
 		}
 
