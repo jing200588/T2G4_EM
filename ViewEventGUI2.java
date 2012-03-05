@@ -38,8 +38,13 @@ public class ViewEventGUI2 extends Composite {
 		scrolledComposite.setBounds(0, 0, 700, 415);
 		formToolkit.adapt(scrolledComposite);
 		formToolkit.paintBordersFor(scrolledComposite);
+
+		
+		scrolledComposite.setLayoutData(new RowData(205, 124));
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
+		
+
 		
 		
 	/*	ScrolledComposite sc = new ScrolledComposite(composite_1, SWT.BORDER | SWT.V_SCROLL);
@@ -299,9 +304,14 @@ public class ViewEventGUI2 extends Composite {
 	public static void main(String[] args){
 	    Display display = new Display();
 	    Shell shell = new Shell(display);
+	    shell.setSize(450, 300);
+	    shell.setLayout(new FillLayout());
 	    ViewEventGUI2 calc = new ViewEventGUI2(shell, SWT.NONE, new Eventitem("test event", 2012, 11, 13,
 				2012, 11, 15, 10, 30, 23, 0));
 	    calc.pack();
+
+		
+	    
 	    shell.pack();
 	    shell.open();
 	    while(!shell.isDisposed()){

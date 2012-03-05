@@ -13,7 +13,7 @@ public interface BudgetInterface {
 	
 	public String findOptimalShopList(int hastype,int hassatisfaction) throws Exception;
 	
-	public void differentiateCompulsory();
+	public void differentiateCompulsory(int hassatisfaction);
 	
 	public void sendDBList(int option);
 	

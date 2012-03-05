@@ -1,30 +1,34 @@
-import java.util.Collections;
 import java.util.Vector;
+
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.wb.swt.SWTResourceManager;
+import java.util.Collections;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.GridData;
 
 public class BudgetView extends Composite {
 	/*My declaration start here.*/
@@ -38,31 +42,30 @@ public class BudgetView extends Composite {
 	private int type_choice;
 	private int satisfaction_choice;
 	/*My declaration end here.*/
-
-	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
+	
+	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
+	private Button btnStepInputDetails;
+	private Button btnStepSelectCompulsoy;
+	private Button btnStepConfirmResult;
+	private Composite Step1;
+	private Composite Step2;
+	private Composite Step3;
+	private Composite BigContent;
+	private Composite type_option;
+	private Composite satisfaction_option;
 	private Text txtBudget;
 	private Text txt_input_list;
-	private Composite type_option;
 	private Button btnWithoutType;
 	private Button btnWithType;
-	private Composite satisfaction_option;
 	private Button btnWithoutSatisfaction;
 	private Button btnWithSatisfaction;
 	private Button btnChange;
 	private Button btnResetInputList;
 	private Button btnConfirm_S1;
 	private Button btnConfirm_S1_1;
-	private Composite budgetBtn_Composite;
-	private Button btnStep;
-	private Button btnStep_1;
-	private Button btnStep_2;
-	private Composite Step1;
-	private Composite Step3;
-	private Composite BigContent;
 	private Text txt_error_S1;
-	private Composite Step2;
-	private Table table;
 	private Label lblError_S2;
+	private Table table;
 	private Label lblListOfItems;
 	private Button btnNext;
 	private Label label;
@@ -75,175 +78,149 @@ public class BudgetView extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public BudgetView(final Composite parent, int style, int id) {
+	public BudgetView(Composite parent, int style, int id) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
-				toolkit.dispose();
+				formToolkit.dispose();
 			}
 		});
-		toolkit.adapt(this);
-		toolkit.paintBordersFor(this);
-		event_id = id;
-		setLayout(new FormLayout());
+		formToolkit.adapt(this);
+		formToolkit.paintBordersFor(this);
+		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		BigContent = new Composite(this, SWT.NONE);
-		FormData fd_BigContent = new FormData();
-		fd_BigContent.right = new FormAttachment(0, 700);
-		fd_BigContent.top = new FormAttachment(0, 80);
-		fd_BigContent.left = new FormAttachment(0);
-		BigContent.setLayoutData(fd_BigContent);
-		toolkit.adapt(BigContent);
-		toolkit.paintBordersFor(BigContent);
+		Form BudgetViewForm = formToolkit.createForm(this);
+		BudgetViewForm.setBounds(0, 0, 700, 400);
+		BudgetViewForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		formToolkit.paintBordersFor(BudgetViewForm);
+		BudgetViewForm.setText("Budget Optimization");
+		BudgetViewForm.getBody().setLayout(new FormLayout());
+		
+		Composite mainComposite = new Composite(BudgetViewForm.getBody(), SWT.NONE);
+		FormData fd_mainComposite = new FormData();
+		fd_mainComposite.top = new FormAttachment(50, -160);
+		fd_mainComposite.bottom = new FormAttachment (50, 180);
+		fd_mainComposite.left = new FormAttachment(50, -350);
+		fd_mainComposite.right = new FormAttachment(50, 350);
+		mainComposite.setLayoutData(fd_mainComposite);
+		formToolkit.adapt(mainComposite);
+		formToolkit.paintBordersFor(mainComposite);
+		
+		BigContent = new Composite(mainComposite, SWT.NONE);
+		BigContent.setBounds(10, 76, 680, 264);
+		formToolkit.adapt(BigContent);
+		formToolkit.paintBordersFor(BigContent);
 		BigContent.setLayout(stackLayout);
 		
+		Composite btnComposite = new Composite(mainComposite, SWT.NONE);
+		btnComposite.setBounds(10, 10, 680, 57);
+		formToolkit.adapt(btnComposite);
+		formToolkit.paintBordersFor(btnComposite);
 		
-
-		Label lblOptimizeBudgetSystem = new Label(this, SWT.NONE);
-		FormData fd_lblOptimizeBudgetSystem = new FormData();
-		fd_lblOptimizeBudgetSystem.top = new FormAttachment(0);
-		fd_lblOptimizeBudgetSystem.left = new FormAttachment(0);
-		lblOptimizeBudgetSystem.setLayoutData(fd_lblOptimizeBudgetSystem);
-		toolkit.adapt(lblOptimizeBudgetSystem, true, true);
-		lblOptimizeBudgetSystem.setText("Optimize Budget System");
-
-		budgetBtn_Composite = new Composite(this, SWT.NONE);
-		budgetBtn_Composite.setLayout(new GridLayout(3, false));
-		FormData fd_budgetBtn_Composite = new FormData();
-		fd_budgetBtn_Composite.bottom = new FormAttachment(0, 69);
-		fd_budgetBtn_Composite.right = new FormAttachment(90, 0);
-		fd_budgetBtn_Composite.top = new FormAttachment(0, 21);
-		fd_budgetBtn_Composite.left = new FormAttachment(10, 0);
-		budgetBtn_Composite.setLayoutData(fd_budgetBtn_Composite);
-		toolkit.adapt(budgetBtn_Composite);
-		toolkit.paintBordersFor(budgetBtn_Composite);
-
-		btnStep = new Button(budgetBtn_Composite, SWT.NONE);
-		btnStep.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		btnStep.addSelectionListener(new SelectionAdapter() {
+		btnStepInputDetails = new Button(btnComposite, SWT.NONE);
+		btnStepInputDetails.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = Step1;
 				BigContent.layout();
-				btnStep.setEnabled(false);
-				btnStep_1.setEnabled(false);
-				btnStep_2.setEnabled(false);
+				btnStepInputDetails.setEnabled(false);
+				btnStepSelectCompulsoy.setEnabled(false);
+				btnStepConfirmResult.setEnabled(false);
 			}
 		});
-		btnStep.setEnabled(false);
-		toolkit.adapt(btnStep, true, true);
-		btnStep.setText("Step 1: Input Details");
+		btnStepInputDetails.setEnabled(false);
+		btnStepInputDetails.setBounds(0, 10, 170, 25);
+		formToolkit.adapt(btnStepInputDetails, true, true);
+		btnStepInputDetails.setText("Step1: Input Details");
 
-		btnStep_1 = new Button(budgetBtn_Composite, SWT.NONE);
-		btnStep_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		btnStep_1.addSelectionListener(new SelectionAdapter() {
+		btnStepSelectCompulsoy = new Button(btnComposite, SWT.NONE);
+		btnStepSelectCompulsoy.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = Step2;
 				BigContent.layout();
-				btnStep.setEnabled(true);
-				btnStep_1.setEnabled(false);
-				btnStep_2.setEnabled(false);
+				btnStepInputDetails.setEnabled(true);
+				btnStepSelectCompulsoy.setEnabled(false);
+				btnStepConfirmResult.setEnabled(false);
 			}
 		});
-		btnStep_1.setEnabled(false);
-		toolkit.adapt(btnStep_1, true, true);
-		btnStep_1.setText("Step 2: Select Compulsory");
+		btnStepSelectCompulsoy.setEnabled(false);
+		btnStepSelectCompulsoy.setBounds(255, 10, 170, 25);
+		formToolkit.adapt(btnStepSelectCompulsoy, true, true);
+		btnStepSelectCompulsoy.setText("Step2: Select Compulsoy");
 
-		btnStep_2 = new Button(budgetBtn_Composite, SWT.NONE);
-		btnStep_2.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		btnStep_2.addSelectionListener(new SelectionAdapter() {
+		btnStepConfirmResult = new Button(btnComposite, SWT.NONE);
+		btnStepConfirmResult.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//stackLayout.topControl = Step3;
+				stackLayout.topControl = Step3;
 				BigContent.layout();
-				btnStep.setEnabled(true);
-				btnStep_1.setEnabled(true);
-				btnStep_2.setEnabled(false);
+				btnStepInputDetails.setEnabled(true);
+				btnStepSelectCompulsoy.setEnabled(true);
+				btnStepConfirmResult.setEnabled(false);
 			}
 		});
-		btnStep_2.setEnabled(false);
-		toolkit.adapt(btnStep_2, true, true);
-		btnStep_2.setText("Step 3: Confirm Result");
-		
-		/*
-		 * 
-		 * 
-		 * Start of Step 1 Composite*/
-		Step1 = new Composite(BigContent, SWT.NONE);
-		Step1.setBounds(0, 0, 700, 300);
-		
-		toolkit.adapt(Step1);
-		toolkit.paintBordersFor(Step1);
-		Step1.setLayout(new FormLayout());
+		btnStepConfirmResult.setEnabled(false);
+		btnStepConfirmResult.setBounds(510, 10, 170, 25);
+		formToolkit.adapt(btnStepConfirmResult, true, true);
+		btnStepConfirmResult.setText("Step3: Confirm Result");
 
+		Step1 = new Composite(BigContent, SWT.NONE);
+		Step1.setBounds(0, 0, 675, 260);
+		formToolkit.adapt(Step1);
+		formToolkit.paintBordersFor(Step1);
+		
 		Label lblEventBudget = new Label(Step1, SWT.NONE);
-		FormData fd_lblEventBudget = new FormData();
-		fd_lblEventBudget.top = new FormAttachment(0, 10);
-		fd_lblEventBudget.left = new FormAttachment(0, 10);
-		lblEventBudget.setLayoutData(fd_lblEventBudget);
-		toolkit.adapt(lblEventBudget, true, true);
+		lblEventBudget.setBounds(10, 10, 82, 15);
+		formToolkit.adapt(lblEventBudget, true, true);
 		lblEventBudget.setText("Event Budget: $");
 
 		satisfaction_option = new Composite(Step1, SWT.NONE);
-		FormData fd_satisfaction_option = new FormData();
-		fd_satisfaction_option.bottom = new FormAttachment(0, 162);
-		fd_satisfaction_option.top = new FormAttachment(0, 103);
-		fd_satisfaction_option.left = new FormAttachment(0, 10);
-		satisfaction_option.setLayoutData(fd_satisfaction_option);
-		toolkit.adapt(satisfaction_option);
-		toolkit.paintBordersFor(satisfaction_option);
+		satisfaction_option.setBounds(10, 103, 148, 59);
+		formToolkit.adapt(satisfaction_option);
+		formToolkit.paintBordersFor(satisfaction_option);
 
 		btnWithSatisfaction = new Button(satisfaction_option, SWT.RADIO);
 		btnWithSatisfaction.setBounds(10, 38, 115, 16);
-		toolkit.adapt(btnWithSatisfaction, true, true);
+		formToolkit.adapt(btnWithSatisfaction, true, true);
 		btnWithSatisfaction.setText("With Satisfaction");
 
 		btnWithoutSatisfaction = new Button(satisfaction_option, SWT.RADIO);
 		btnWithoutSatisfaction.setSelection(true);
 		btnWithoutSatisfaction.setBounds(10, 16, 128, 16);
-		toolkit.adapt(btnWithoutSatisfaction, true, true);
+		formToolkit.adapt(btnWithoutSatisfaction, true, true);
 		btnWithoutSatisfaction.setText("Without Satisfaction");
 
 		Label lblSelectSatisfactionOption = new Label(satisfaction_option, SWT.NONE);
 		lblSelectSatisfactionOption.setSize(148, 15);
-		toolkit.adapt(lblSelectSatisfactionOption, true, true);
+		formToolkit.adapt(lblSelectSatisfactionOption, true, true);
 		lblSelectSatisfactionOption.setText("Select Satisfaction Option:");
 
 		type_option = new Composite(Step1, SWT.NONE);
-		FormData fd_type_option = new FormData();
-		fd_type_option.bottom = new FormAttachment(0, 97);
-		fd_type_option.right = new FormAttachment(0, 158);
-		fd_type_option.top = new FormAttachment(0, 31);
-		fd_type_option.left = new FormAttachment(0, 10);
-		type_option.setLayoutData(fd_type_option);
-		toolkit.adapt(type_option);
-		toolkit.paintBordersFor(type_option);
+		type_option.setBounds(10, 31, 148, 66);
+		formToolkit.adapt(type_option);
+		formToolkit.paintBordersFor(type_option);
 
 		btnWithoutType = new Button(type_option, SWT.RADIO);
 		btnWithoutType.setLocation(10, 20);
 		btnWithoutType.setSize(90, 16);
 		btnWithoutType.setSelection(true);
-		toolkit.adapt(btnWithoutType, true, true);
+		formToolkit.adapt(btnWithoutType, true, true);
 		btnWithoutType.setText("Without Type");
 
 		btnWithType = new Button(type_option, SWT.RADIO);
 		btnWithType.setLocation(10, 43);
 		btnWithType.setSize(90, 16);
-		toolkit.adapt(btnWithType, true, true);
+		formToolkit.adapt(btnWithType, true, true);
 		btnWithType.setText("With Type");
 
 		Label lblSelectTypeOption = new Label(type_option, SWT.NONE);
 		lblSelectTypeOption.setSize(128, 15);
-		toolkit.adapt(lblSelectTypeOption, true, true);
+		formToolkit.adapt(lblSelectTypeOption, true, true);
 		lblSelectTypeOption.setText("Select Type Option:");
 
 		btnChange = new Button(Step1, SWT.NONE);
-		FormData fd_btnChange = new FormData();
-		fd_btnChange.right = new FormAttachment(0, 85);
-		fd_btnChange.top = new FormAttachment(0, 168);
-		fd_btnChange.left = new FormAttachment(0, 10);
-		btnChange.setLayoutData(fd_btnChange);
+		btnChange.setBounds(10, 168, 75, 25);
 		btnChange.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -258,15 +235,11 @@ public class BudgetView extends Composite {
 				txt_error_S1.setVisible(false);
 			}
 		});
-		toolkit.adapt(btnChange, true, true);
+		formToolkit.adapt(btnChange, true, true);
 		btnChange.setText("Change");
 
 		btnConfirm_S1 = new Button(Step1, SWT.NONE);
-		FormData fd_btnConfirm_S1 = new FormData();
-		fd_btnConfirm_S1.right = new FormAttachment(0, 183);
-		fd_btnConfirm_S1.top = new FormAttachment(0, 168);
-		fd_btnConfirm_S1.left = new FormAttachment(0, 108);
-		btnConfirm_S1.setLayoutData(fd_btnConfirm_S1);
+		btnConfirm_S1.setBounds(108, 168, 75, 25);
 		btnConfirm_S1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -296,7 +269,7 @@ public class BudgetView extends Composite {
 					txt_error_S1.setVisible(false);
 					txt_input_list.setEnabled(true);
 					btnResetInputList.setEnabled(true);
-					btnConfirm_S1.setEnabled(true);
+					btnConfirm_S1_1.setEnabled(true);
 				}
 				catch (Exception ie) {
 					if(ie.getMessage().equals("empty String")) 
@@ -307,41 +280,25 @@ public class BudgetView extends Composite {
 				}
 			}
 		});
-		toolkit.adapt(btnConfirm_S1, true, true);
+		formToolkit.adapt(btnConfirm_S1, true, true);
 		btnConfirm_S1.setText("Confirm");
 
 		txtBudget = new Text(Step1, SWT.BORDER);
-		FormData fd_txtBudget = new FormData();
-		fd_txtBudget.top = new FormAttachment(0, 4);
-		fd_txtBudget.left = new FormAttachment(0, 96);
-		txtBudget.setLayoutData(fd_txtBudget);
-		toolkit.adapt(txtBudget, true, true);
+		txtBudget.setBounds(96, 4, 76, 21);
+		formToolkit.adapt(txtBudget, true, true);
 
 		txt_input_list = new Text(Step1, SWT.BORDER | SWT.MULTI);
-		FormData fd_txt_input_list = new FormData();
-		fd_txt_input_list.bottom = new FormAttachment(0, 264);
-		fd_txt_input_list.right = new FormAttachment(0, 690);
-		fd_txt_input_list.top = new FormAttachment(0, 55);
-		fd_txt_input_list.left = new FormAttachment(0, 229);
-		txt_input_list.setLayoutData(fd_txt_input_list);
+		txt_input_list.setBounds(229, 55, 441, 163);
 		txt_input_list.setEnabled(false);
-		toolkit.adapt(txt_input_list, true, true);
+		formToolkit.adapt(txt_input_list, true, true);
 
 		Label lblInputList = new Label(Step1, SWT.NONE);
-		FormData fd_lblInputList = new FormData();
-		fd_lblInputList.right = new FormAttachment(0, 284);
-		fd_lblInputList.top = new FormAttachment(0, 34);
-		fd_lblInputList.left = new FormAttachment(0, 229);
-		lblInputList.setLayoutData(fd_lblInputList);
-		toolkit.adapt(lblInputList, true, true);
+		lblInputList.setBounds(229, 34, 55, 15);
+		formToolkit.adapt(lblInputList, true, true);
 		lblInputList.setText("Input List:");
 
 		btnResetInputList = new Button(Step1, SWT.NONE);
-		FormData fd_btnResetInputList = new FormData();
-		fd_btnResetInputList.right = new FormAttachment(0, 583);
-		fd_btnResetInputList.top = new FormAttachment(0, 275);
-		fd_btnResetInputList.left = new FormAttachment(0, 455);
-		btnResetInputList.setLayoutData(fd_btnResetInputList);
+		btnResetInputList.setBounds(418, 229, 128, 25);
 		btnResetInputList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -349,15 +306,11 @@ public class BudgetView extends Composite {
 			}
 		});
 		btnResetInputList.setEnabled(false);
-		toolkit.adapt(btnResetInputList, true, true);
+		formToolkit.adapt(btnResetInputList, true, true);
 		btnResetInputList.setText("Reset Input List");
 
 		btnConfirm_S1_1 = new Button(Step1, SWT.NONE);
-		FormData fd_btnConfirm_S1_1 = new FormData();
-		fd_btnConfirm_S1_1.right = new FormAttachment(0, 690);
-		fd_btnConfirm_S1_1.top = new FormAttachment(0, 275);
-		fd_btnConfirm_S1_1.left = new FormAttachment(0, 615);
-		btnConfirm_S1_1.setLayoutData(fd_btnConfirm_S1_1);
+		btnConfirm_S1_1.setBounds(595,  229, 75, 25);
 		btnConfirm_S1_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -385,7 +338,7 @@ public class BudgetView extends Composite {
 					for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
 						table.getColumn(loopIndex).pack();
 					}								
-					btnStep.setEnabled(true);	
+					btnStepInputDetails.setEnabled(true);	
 				}
 				catch (Exception ie) {
 					txt_error_S1.setText(ie.getMessage());
@@ -394,34 +347,21 @@ public class BudgetView extends Composite {
 		});
 
 		btnConfirm_S1_1.setEnabled(false);
-		toolkit.adapt(btnConfirm_S1_1, true, true);
+		formToolkit.adapt(btnConfirm_S1_1, true, true);
 		btnConfirm_S1_1.setText("Confirm");
 
 		txt_error_S1 = new Text(Step1, SWT.READ_ONLY | SWT.MULTI);
-		FormData fd_txt_error_S1 = new FormData();
-		fd_txt_error_S1.bottom = new FormAttachment(0, 33);
-		fd_txt_error_S1.right = new FormAttachment(0, 690);
-		fd_txt_error_S1.top = new FormAttachment(0, -1);
-		fd_txt_error_S1.left = new FormAttachment(0, 229);
-		txt_error_S1.setLayoutData(fd_txt_error_S1);
+		txt_error_S1.setBounds(229, 4, 441, 29);
 		txt_error_S1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		txt_error_S1.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 		txt_error_S1.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
-		toolkit.adapt(txt_error_S1, true, true);
-
-		/*
-		 * 
-		 * 
-		 * End of Step 1 Composite*/
-
-		/*
-		 * 
-		 * 
-		 * Start of Step 2 Composite*/
+		formToolkit.adapt(txt_error_S1, true, true);
+		
+		
 		Step2 = new Composite(BigContent, SWT.NONE);
-		Step2.setBounds(0, 80, 700, 300);
-		toolkit.adapt(Step2);
-		toolkit.paintBordersFor(Step2);
+		Step2.setBounds(0, 0, 675, 260);
+		formToolkit.adapt(Step2);
+		formToolkit.paintBordersFor(Step2);
 		
 		table = new Table(Step2, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);			
 		table.setHeaderVisible(true);
@@ -432,7 +372,7 @@ public class BudgetView extends Composite {
 			column.setResizable(false);
 		}
 		
-		table.setBounds(25, 25, 665, 200);
+		table.setBounds(25, 25, 645, 200);
 		selected_compulsory = new Vector<Integer>();
 		table.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
@@ -448,24 +388,21 @@ public class BudgetView extends Composite {
 		
 		lblError_S2 = new Label(Step2, SWT.NONE);
 		lblError_S2.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
-		lblError_S2.setBounds(25, 260, 555, 28);
-		toolkit.adapt(lblError_S2, true, true);
+		lblError_S2.setBounds(25, 226, 446, 28);
+		formToolkit.adapt(lblError_S2, true, true);
 		
 		lblListOfItems = new Label(Step2, SWT.NONE);
 		lblListOfItems.setBounds(25, 4, 234, 15);
-		toolkit.adapt(lblListOfItems, true, true);
+		formToolkit.adapt(lblListOfItems, true, true);
 		lblListOfItems.setText("Check the compulsory item(s):");
 		
 		btnNext = new Button(Step2, SWT.NONE);
 		btnNext.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String t ="";
+
 				Collections.sort(selected_compulsory);
-				for(int i=0; i<selected_compulsory.size();i++) {
-					t+=selected_compulsory.get(i) + "  ";
-				}
-				label.setText(t);
+
 				try {	
 					lblError_S2.setVisible(false);
 					budgetPersonalAssistant.compulsory(selected_compulsory);
@@ -476,11 +413,12 @@ public class BudgetView extends Composite {
 					//if(empty == true) throw new Exception("***You have selected all item(s) and you can buy all item(s).***");
 					stackLayout.topControl = Step3;
 					BigContent.layout();
-					budgetPersonalAssistant.differentiateCompulsory();
+					budgetPersonalAssistant.differentiateCompulsory(satisfaction_choice);
 					txt_result.setText(budgetPersonalAssistant.findOptimalShopList(type_choice, satisfaction_choice));	
-					btnStep.setEnabled(true);
-					btnStep_1.setEnabled(true);
-					btnStep_2.setEnabled(false);
+					
+					btnStepInputDetails.setEnabled(true);
+					btnStepSelectCompulsoy.setEnabled(true);
+					btnStepConfirmResult.setEnabled(false);
 					
 					combo_selection.removeAll();
 					for(int i=1; i<=budgetPersonalAssistant.noOfCombination(); i++) {
@@ -490,36 +428,42 @@ public class BudgetView extends Composite {
 				} catch(Exception ie) {
 					lblError_S2.setText(ie.getMessage());
 					lblError_S2.setVisible(true);
-				}		
+				}/* catch(OutOfMemoryError outofmemo)
+				{
+					combo_selection.setEnabled(false);
+					btnFinish.setEnabled(false);
+					txt_result.setText("There is not enough memory space to perform the task.\n"
+							+ "Please restart the program and reduce your input size.\n");
+					btnStep.setEnabled(false);
+					btnStep_2.setEnabled(false);
+					btnStep_1.setEnabled(false);
+					//Execute.setEnabled(false);
+					//ChangeSettings.setEnabled(false);
+					//ConfirmButton.setEnabled(false);
+					//ClearAll.setEnabled(false);
+					
+					//Output_Box.setText
+				}*/
 			}
 		});
-		btnNext.setBounds(615, 265, 75, 25);
-		toolkit.adapt(btnNext, true, true);
+		btnNext.setBounds(595, 232, 75, 25);
+		formToolkit.adapt(btnNext, true, true);
 		btnNext.setText("Next");
-		
-		/*
-		 * 
-		 * End of Step2
-		 */
-		
-		/*
-		 * 
-		 * Start of Step3
-		 */
 		
 		Step3 = new Composite(BigContent, SWT.NONE);
 		Step3.setBounds(0, 80, 700, 300);
-		toolkit.adapt(Step3);
-		toolkit.paintBordersFor(Step3);
-		
+		formToolkit.adapt(Step3);
+		formToolkit.paintBordersFor(Step3);
+				
 		txt_result = new Text(Step3, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
-		txt_result.setBounds(10, 41, 664, 173);
-		toolkit.adapt(txt_result, true, true);
+		txt_result.setEditable(false);
+		txt_result.setBounds(10, 32, 664, 182);
+		formToolkit.adapt(txt_result, true, true);
 		
 		combo_selection = new Combo(Step3, SWT.NONE);
-		combo_selection.setBounds(486, 246, 91, 23);
-		toolkit.adapt(combo_selection);
-		toolkit.paintBordersFor(combo_selection);
+		combo_selection.setBounds(483, 236, 91, 23);
+		formToolkit.adapt(combo_selection);
+		formToolkit.paintBordersFor(combo_selection);
 		
 		btnFinish = new Button(Step3, SWT.NONE);
 		btnFinish.addSelectionListener(new SelectionAdapter() {
@@ -530,45 +474,20 @@ public class BudgetView extends Composite {
 				//txtDB.setText(budgetPersonalAssistant.sendDBList(option));
 			}
 		});
-		btnFinish.setBounds(599, 244, 75, 25);
-		toolkit.adapt(btnFinish, true, true);
+		btnFinish.setBounds(595, 234, 75, 25);
+		formToolkit.adapt(btnFinish, true, true);
 		btnFinish.setText("Finish");
 		
 		Label lblSelectAnCombination = new Label(Step3, SWT.NONE);
-		lblSelectAnCombination.setBounds(359, 249, 121, 15);
-		toolkit.adapt(lblSelectAnCombination, true, true);
+		lblSelectAnCombination.setBounds(356, 239, 121, 15);
+		formToolkit.adapt(lblSelectAnCombination, true, true);
 		lblSelectAnCombination.setText("Select an combination:");
 		
-		label = new Label(this, SWT.NONE);
-		FormData fd_label = new FormData();
-		fd_label.right = new FormAttachment(0, 513);
-		fd_label.top = new FormAttachment(0, 78);
-		fd_label.left = new FormAttachment(0, 311);
-		label.setLayoutData(fd_label);
-		toolkit.adapt(label, true, true);
-		
-		/*
-		 * 
-		 * End of Step3
-		 */
-		
-	}
-	
-	public static void main(String[] args)
-	{
-		Display display = new Display();
-		
-		Shell shell = new Shell(display, SWT.CLOSE | SWT.TITLE);
-		shell.setText("Budget Calc");
-		BudgetView budView = new BudgetView(shell, SWT.NONE, 0);
-		budView.pack();
-		
-		shell.pack();
-		shell.open();
-		while(!shell.isDisposed())
-		{
-			if(!display.readAndDispatch()) display.sleep();
-		}
-		
+		Label lblListOfAll = new Label(Step3, SWT.NONE);
+		lblListOfAll.setBounds(10, 10, 249, 15);
+		formToolkit.adapt(lblListOfAll, true, true);
+		lblListOfAll.setText("List of all possible combination:");
+
+
 	}
 }

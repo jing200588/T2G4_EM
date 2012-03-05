@@ -24,11 +24,11 @@ public class BudgetController implements BudgetInterface{
 	public String findOptimalShopList(int hastype, int hassatisfaction) {
 		soln = new Solution();
 		recursive_fnc_budget = ((double) temp_budget)/100;	
-		return analysis(hastype);
+		return analysis(hastype, hassatisfaction);
 	}
 
 	public BudgetController(String input, int budget, int type_c, int satisfaction_c, int id) throws Exception {
-
+		System.out.println("Coming in");
 		if(input.equals("")) throw new IOException("***Input list must not be empty!***");
 		item_list = new Vector<Item>();
 		event_id=id;
@@ -43,6 +43,7 @@ public class BudgetController implements BudgetInterface{
 
 		if(type_c == 1) { //has type
 			while(sc.hasNextLine()) {
+				System.out.println("running");
 				line = sc.nextLine();
 				if(line.length() > 0) {
 					component = line.split(" ");
@@ -124,7 +125,7 @@ public class BudgetController implements BudgetInterface{
 			return false;
 	}
 
-	public void differentiateCompulsory() {
+	public void differentiateCompulsory(int satisfaction_choice) {
 		compulsory_cost = 0;
 		compulsory_satisfaction = 0;
 		non_compulsory_cost = 0;
@@ -134,17 +135,19 @@ public class BudgetController implements BudgetInterface{
 			if(item_list.get(i).getCompulsory() == 'Y') 
 			{
 				compulsory_cost = compulsory_cost + item_list.get(i).getPrice();
-				compulsory_satisfaction = compulsory_satisfaction + item_list.get(i).getSatisfaction_value();
+				if(satisfaction_choice == 1)
+					compulsory_satisfaction = compulsory_satisfaction + item_list.get(i).getSatisfaction_value();
 			}
 			else {
 				non_compulsory_cost = non_compulsory_cost + item_list.get(i).getPrice();
-				non_compulsory_satisfaction = non_compulsory_satisfaction + item_list.get(i).getSatisfaction_value();
+				if(satisfaction_choice == 1)
+					non_compulsory_satisfaction = non_compulsory_satisfaction + item_list.get(i).getSatisfaction_value();
 			}
 		}	
 	}
 
 
-	public String analysis(int type) {
+	public String analysis(int type, int satisfaction_choice) {
 
 		String text = "Test";
 		double price;
@@ -157,27 +160,46 @@ public class BudgetController implements BudgetInterface{
 		System.out.println("Temp: " + temp_budget + " Non: " + non_compulsory_cost + " Com: " + compulsory_cost );
 		if(compulsory_list.size() == item_list.size()){ //All items checked as compulsory and budget is enough to buy all.
 			totalCombination = 1;
-			text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: \t$" + ((double) (compulsory_cost))/100 +"\n";
+			if(satisfaction_choice == 1)
+				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: \t$" + ((double) (compulsory_cost))/100 +"\n";
+			else
+				text = "Total combination:\t"+totalCombination+"\nTotal cost: \t$" + ((double) (compulsory_cost))/100 +"\n";	
 			text +="***********Combination 1***********\n";
 			for(int i=0; i<item_list.size(); i++) {
 				text +=non_compulsory_num+"\t";
 				text +=item_list.get(i).getItem()+" for $";
 				price = ((double) item_list.get(i).getPrice())/100;
-				text += price + " for ";
-				text +=item_list.get(i).getSatisfaction_value()+" satisfaction.\n";
+				if(satisfaction_choice == 1) {
+					text += price + " for ";
+					text +=item_list.get(i).getSatisfaction_value()+" satisfaction.\n";
+				}
+				else {
+					text += price+"\n";
+				}
+
 				non_compulsory_num++;
 			}
 		}
 		else if(non_compulsory_cost <= temp_budget) {
 			totalCombination = 1;
-			text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (compulsory_satisfaction+non_compulsory_satisfaction) + "\nTotal cost: \t$" + ((double) (compulsory_cost+non_compulsory_cost))/100 +"\n";
+			if(satisfaction_choice == 1)
+				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (compulsory_satisfaction+non_compulsory_satisfaction) + "\nTotal cost: \t$" + ((double) (compulsory_cost+non_compulsory_cost))/100 +"\n";
+			else
+				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + "\nTotal cost: \t$" + ((double) (compulsory_cost+non_compulsory_cost))/100 +"\n";
+
 			text +="***********Combination 1***********\n";
 			for(int i=0; i<item_list.size(); i++) {
 				text +=non_compulsory_num+"\t";
 				text +=item_list.get(i).getItem()+" for $";
 				price = ((double) item_list.get(i).getPrice())/100;
-				text += price + " for ";
-				text +=item_list.get(i).getSatisfaction_value()+" satisfaction.\n";
+				if(satisfaction_choice == 1) {
+					text += price + " for ";
+					text +=item_list.get(i).getSatisfaction_value()+" satisfaction.\n";
+				}
+				else {
+					text += price+"\n";
+				}
+
 				non_compulsory_num++;
 			}
 		}
@@ -188,7 +210,10 @@ public class BudgetController implements BudgetInterface{
 			}
 			else {
 				totalCombination = 1;
-				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: $\t" + ((double) compulsory_cost)/100 +"\n";
+				if (satisfaction_choice == 1) 
+					text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: $\t" + ((double) compulsory_cost)/100 +"\n";
+				else
+					text = "Total combination:\t"+totalCombination+"\nTotal cost: $\t" + ((double) compulsory_cost)/100 +"\n";
 				text +="***********Combination 1***********\n";
 				for(int i=0; i<item_list.size(); i++) {
 					if(item_list.get(i).getCompulsory() == 'Y') 
@@ -196,27 +221,32 @@ public class BudgetController implements BudgetInterface{
 						text +=compulsory_num+"\t";
 						text +=item_list.get(i).getItem()+" for $";
 						price = ((double) item_list.get(i).getPrice())/100;
-						text += price + " for ";
-						text +=item_list.get(i).getSatisfaction_value()+" satisfaction.\n";
+						if(satisfaction_choice == 1) {
+							text += price + " for ";
+							text +=item_list.get(i).getSatisfaction_value()+" satisfaction.\n";
+						}
+						else {
+							text += price+"\n";
+						}
 						compulsory_num++;
 					}
 				}
 			}
 		}
 		else {
-			
-			System.out.println("Executing this");
 			if(type == 1)
-				generateType();
+				generateType(satisfaction_choice);
 			else
-				generate();
+				generate(satisfaction_choice);
 
 			if(soln.getSolnSetSize() == 0)
 				totalCombination = 0;
 			else
 				totalCombination = soln.getSolnSetSize();
-			text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (soln.getSvalue()+compulsory_satisfaction) +"\n";
-
+			if (satisfaction_choice == 1)
+				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (soln.getSvalue()+compulsory_satisfaction) +"\n";
+			else
+				text = "Total combination:\t"+totalCombination+"\n";
 			for(int i=0; i<soln.getSolnSetSize(); i++) {
 				BitSet bitmask = soln.getSolnSet().get(i);
 
@@ -227,8 +257,13 @@ public class BudgetController implements BudgetInterface{
 					text+= num+"\t";
 					text+= compulsory_list.get(k).getItem() + " for $";
 					price = ((double) compulsory_list.get(k).getPrice())/100;
-					text+=price + " for ";
-					text+= compulsory_list.get(k).getSatisfaction_value() + " satisfaction.\n";
+					if(satisfaction_choice == 1) {
+						text+=price + " for ";
+						text+= compulsory_list.get(k).getSatisfaction_value() + " satisfaction.\n";
+					}
+					else {
+						text+=price+"\n";
+					}
 					num++;
 				}
 				for(int j=0; j<number; j++) {
@@ -236,8 +271,13 @@ public class BudgetController implements BudgetInterface{
 						text+= num+"\t";
 						text+= compute_list.get(j).getItem() + " for $";
 						price = ((double) compute_list.get(j).getPrice())/100;
-						text+= price + " for ";
-						text+= compute_list.get(j).getSatisfaction_value() + " satisfaction.\n";
+						if(satisfaction_choice == 1) {
+							text+= price + " for ";
+							text+= compute_list.get(j).getSatisfaction_value() + " satisfaction.\n";
+						}
+						else {
+							text+= price+"\n";
+						}
 						num++;
 					}
 				}
@@ -247,10 +287,32 @@ public class BudgetController implements BudgetInterface{
 		return text;
 	}
 
-	public  void generate() {
+	public  void generate(int satisfaction_choice) {
 		BitSet bitmask = new BitSet(number);
-		for (int i=0; i<number; i++)
-			recurse(i, bitmask, recursive_fnc_budget, 0);
+		if(satisfaction_choice == 1) {
+			for (int i=0; i<number; i++)
+				recurse(i, bitmask, recursive_fnc_budget, 0);
+		}
+		else {
+			for (int i=0; i<number; i++)
+				recurseNoSatisfaction(i, bitmask, recursive_fnc_budget);
+		}
+
+	}
+
+	public  void recurseNoSatisfaction (int cur, BitSet bitmask, double subbudget) {
+
+		BitSet bitmask2 = (BitSet) bitmask.clone();
+		if (((double) compute_list.get(cur).getPrice())/100 <= subbudget) {
+			subbudget -= ((double) compute_list.get(cur).getPrice())/100;
+			bitmask2.set(cur);
+			for (int i=cur+1 ; i<number; i++)
+				recurseNoSatisfaction(i, bitmask2 , subbudget);
+		}
+
+		if (DupCheck(bitmask2) == 0) {
+			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
+		}
 	}
 
 	public  void recurse (int cur, BitSet bitmask, double subbudget, int max) {
@@ -275,6 +337,7 @@ public class BudgetController implements BudgetInterface{
 			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
 		}
 	}
+
 	public  int DupCheck(BitSet bitmask) {
 		for (int i=0; i<soln.getSolnSetSize(); i++) {
 			if (soln.getSolnSet().get(i).hashCode() == bitmask.hashCode())
@@ -289,11 +352,32 @@ public class BudgetController implements BudgetInterface{
 
 	/*Swee Khoon's CE code*/
 
-	public void generateType() {
+	public void generateType(int satisfaction_choice) {
 		BitSet bitmask = new BitSet(number);
-		for (int i=0; i<number; i++) {
-			recurseType(i, bitmask, recursive_fnc_budget, 0);
+		if(satisfaction_choice == 1) {
+			for (int i=0; i<number; i++) {
+				recurseType(i, bitmask, recursive_fnc_budget, 0);
+			}
 		}
+		else {
+			for (int i=0; i<number; i++) {
+				recurseTypeNoSatisfaction(i, bitmask, recursive_fnc_budget);
+			}
+		}
+
+	}
+
+	public  void recurseTypeNoSatisfaction (int cur, BitSet bitmask, double subbudget) {
+
+		BitSet bitmask2 = (BitSet) bitmask.clone();
+		if (((double) compute_list.get(cur).getPrice())/100 <= subbudget && TypeChecker(bitmask2, cur) == 0) {
+			subbudget -= ((double) compute_list.get(cur).getPrice())/100;
+			bitmask2.set(cur);
+			for (int i=cur+1 ; i<number; i++)
+				recurseTypeNoSatisfaction(i, bitmask2 , subbudget);
+		}
+		if (DupCheck(bitmask2) == 0)
+			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
 	}
 
 	public  void recurseType (int cur, BitSet bitmask, double subbudget, int max) {
@@ -340,16 +424,14 @@ public class BudgetController implements BudgetInterface{
 				db_list.add(compute_list.get(i));
 			}
 		}
-		
+
 		bm.recevied_combination_list(event_id, db_list);
-		
+
 		System.out.println("TESTING START");
 		for(int i=0; i<bm.displayConfirm().size(); i++) {
 			System.out.print(bm.displayConfirm().get(i).getItem() + " " + bm.displayConfirm().get(i).getPrice());
 			System.out.println();
 		}
 	}
-	
-	
 
 }
