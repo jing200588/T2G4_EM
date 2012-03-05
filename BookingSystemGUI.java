@@ -78,6 +78,9 @@ public class BookingSystemGUI extends Composite {
 	private DateTime dateTimeTo;
 	private Button FindCriteriaButton;
 	private Text CapacityChoiceErrorBoard;
+	private int[] capacityChoiceInput = new int[2];
+	private int[] costChoiceInput = new int[2];
+	private TimeSlot[] timeSlotChoiceInput = new TimeSlot[2];
 	
 	/**
 	 * Create the composite.
@@ -376,6 +379,9 @@ public class BookingSystemGUI extends Composite {
 					HourToChoice.setEnabled(false);
 					TimeConfirmButton.setEnabled(false);
 					FindCriteriaButton.setEnabled(false);
+					
+					// Disable all the error board text-boxes
+					
 				}
 			}
 		});
@@ -412,11 +418,57 @@ public class BookingSystemGUI extends Composite {
 		CapacityConfirmButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String lowerCapacity = LowerBoundCapacity.getText();
-				if(lowerCapacity == null || lowerCapacity.equals("") == true)
+				if(CapacityConfirmButton.getText().equals("Confirm") == true)
 				{
-					CapacityChoiceErrorBoard
-					return;
+					try
+					{
+						// Make the error board invisible at the beginning
+						CapacityChoiceErrorBoard.setVisible(false);
+						
+						String lowerCapacity = LowerBoundCapacity.getText();
+						if(lowerCapacity == null || lowerCapacity.equals("") == true)
+						{
+							throw new Exception("Lower bound of the capacity missing!");
+						}
+						else
+						{
+							CapacityChoiceErrorBoard.setVisible(false);
+						}
+						String upperCapacity = UpperBoundCapacity.getText();
+						if(upperCapacity == null || upperCapacity.equals("") == true)
+						{
+							throw new Exception("Upper bound of the capacity missing!");
+						}
+						else
+						{
+							CapacityChoiceErrorBoard.setVisible(false);
+						}
+						capacityChoiceInput[0] = Integer.parseInt(lowerCapacity);
+						capacityChoiceInput[1] = Integer.parseInt(upperCapacity);
+						
+						// Everything is OK by now. Disable all the text-boxes and change command
+						// type to "Modify"
+						UpperBoundCapacity.setEnabled(false);
+						LowerBoundCapacity.setEnabled(false);
+						CapacityConfirmButton.setText("Modify");
+					}
+					catch(NumberFormatException exception)
+					{
+						CapacityChoiceErrorBoard.setText("Lower and upper bound must be integers!");
+						CapacityChoiceErrorBoard.setVisible(true);
+					}
+					catch(Exception exception)
+					{
+						CapacityChoiceErrorBoard.setText(exception.getMessage());
+						CapacityChoiceErrorBoard.setVisible(true);
+					}
+				}
+				else
+				{
+					// It is the case when the command type is "Modify"
+					LowerBoundCapacity.setEnabled(true);
+					UpperBoundCapacity.setEnabled(true);
+					CapacityConfirmButton.setText("Confirm");
 				}
 			}
 		});
@@ -425,9 +477,9 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(CapacityConfirmButton, true, true);
 		CapacityConfirmButton.setText("Confirm");
 		
-		CapacityChoiceErrorBoard = new Text(CapacityCompo, SWT.BORDER);
+		CapacityChoiceErrorBoard = new Text(CapacityCompo, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
 		CapacityChoiceErrorBoard.setEditable(false);
-		CapacityChoiceErrorBoard.setBounds(10, 48, 199, 21);
+		CapacityChoiceErrorBoard.setBounds(10, 48, 211, 21);
 		toolkit.adapt(CapacityChoiceErrorBoard, true, true);
 		CapacityChoiceErrorBoard.setVisible(false);
 		
@@ -490,6 +542,11 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(lblhourShouldBe, true, true);
 		
 		TimeConfirmButton = new Button(composite_1, SWT.NONE);
+		TimeConfirmButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		TimeConfirmButton.setEnabled(false);
 		TimeConfirmButton.setBounds(236, 117, 75, 25);
 		toolkit.adapt(TimeConfirmButton, true, true);
@@ -719,7 +776,9 @@ public class BookingSystemGUI extends Composite {
 					if(capacity <= 0)
 						throw new Exception("Capacity must be a positive integer.");
 					
-					double cost = Double.parseDouble(CostField.getText());
+					if(correctMoneyFormat(CostField.getText()) == false)
+						throw new Exception("The cost should have at most 2 decimal digits!");
+					int cost = (int) (Double.parseDouble(CostField.getText()) * 100);
 					if(cost < 0)
 						throw new Exception("Cost must be a nonnegative real number.");
 					
@@ -809,7 +868,7 @@ public class BookingSystemGUI extends Composite {
 			@Override
 			public String getText(Object element) {
 				Venue venue = (Venue) element;
-				return ((Double) venue.getCost()).toString();
+				return ((Double) (venue.getCost() / 100.0)).toString();
 			}
 		});
 		
@@ -821,11 +880,42 @@ public class BookingSystemGUI extends Composite {
 
 	}
 	
+	/**
+	 * 
+	 * @param money
+	 * @return true if money is in the correct format of currency.
+	 * @return false otherwise.
+	 * 
+	 * money is in the correct format of currency if and only if
+	 * 	+ It may not have a decimal point.
+	 *  + If it has a decimal point, the number of decimal digits must be at least 1
+	 *  	and at most 2.
+	 * 
+	 * Other cases will be checked by the function Double.parseDouble().
+ 	 */
+	private boolean correctMoneyFormat(String money)
+	{
+		int decimalPointIndex = -1;
+		
+		for(int i = 0; i < money.length(); i++)
+			if(money.charAt(i) == '.')
+			{
+				decimalPointIndex = i;
+				break;
+			}
+		
+		if(decimalPointIndex < 0)
+			return true;
+		if(money.length() - decimalPointIndex == 1 || money.length() - decimalPointIndex > 2)
+			return false;
+		return true;
+	}
+	
 	public static void main(String[] args){
 		Display display = new Display();
 
 		Shell shell = new Shell(display, SWT.CLOSE | SWT.TITLE);
-		shell.setText("Budget Calc");
+		shell.setText("Booking System");
 		BookingSystemGUI calc = new BookingSystemGUI(shell, SWT.NONE);
 		calc.pack();
 
