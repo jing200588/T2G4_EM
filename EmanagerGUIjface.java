@@ -44,6 +44,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 
 public class EmanagerGUIjface extends ApplicationWindow {
@@ -57,6 +59,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private static Vector<Eventitem> eventlist;
 	private static int count = 0;
 	private static StackLayout layout = new StackLayout();
+	private static boolean delete = false;
 
 	/**
 	 * Create the application window.
@@ -90,6 +93,14 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		BudgetView bv = new BudgetView(c2, SWT.NONE, 0);
 		layout.topControl = bv;
 		c2.layout(true);
+	}
+	
+	public static void setdelete (boolean a) {
+		delete = a;
+	}
+	
+	public boolean getdelete () {
+		return delete;
 	}
 	/**
 	 * Create contents of the application window.
@@ -172,7 +183,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 					((Composite)children[i]).dispose();
 				}
 				
-		        ViewEventGUI2 view = new ViewEventGUI2(c2, SWT.NONE, getEvent(itemname));
+		        ViewEventGUI3 view = new ViewEventGUI3(c2, SWT.NONE, getEvent(itemname));
 		      //  view.setBounds(c2.getBounds());
 		   //     formToolkit.adapt(view);
 		//		formToolkit.paintBordersFor(view);
@@ -203,6 +214,18 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			formToolkit.paintBordersFor(table);
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
+			
+			Menu menu = new Menu(table);
+			table.setMenu(menu);
+			
+			//Delete event
+			MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.NONE);
+			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+				}
+			});
+			mntmDeleteEvent.setText("Delete Event");
 /*			
 			table.setItemCount(100);
 			table.addListener (SWT.SetData, new Listener () {
@@ -214,10 +237,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 				}
 
 				
-			});
-			
-			
-			
+			});		
 			
 	*/		
 			

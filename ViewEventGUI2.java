@@ -61,11 +61,21 @@ public class ViewEventGUI2 extends Composite {
 //		maincomp.setSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 //		sc.setMinSize(400, 400);
 	//	sc.setSize(200, 200);
+		
 		//Start of body
+		Label lblNewLabel = new Label(maincomp, SWT.NONE);
+		FormData fd_lblNewLabel = new FormData();
+		fd_lblNewLabel.top = new FormAttachment(0, 10);
+		fd_lblNewLabel.left = new FormAttachment(0, 10);
+		lblNewLabel.setLayoutData(fd_lblNewLabel);
+		lblNewLabel.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		formToolkit.adapt(lblNewLabel, true, true);
+		lblNewLabel.setText("View Event:");
+		
 		Composite EparticularsComp = new Composite(maincomp, SWT.NONE);
 		FormData fd_EparticularsComp = new FormData();
 		fd_EparticularsComp.right = new FormAttachment(80, 0);
-		fd_EparticularsComp.top = new FormAttachment(0, 85);
+		fd_EparticularsComp.top = new FormAttachment(lblNewLabel, 30);
 		fd_EparticularsComp.left = new FormAttachment(20, 0);
 		EparticularsComp.setLayoutData(fd_EparticularsComp);
 		formToolkit.adapt(EparticularsComp);
@@ -200,15 +210,6 @@ public class ViewEventGUI2 extends Composite {
 		fd_Divider2.right = new FormAttachment(95, 0);
 		Divider2.setLayoutData(fd_Divider2);
 		formToolkit.adapt(Divider2, true, true);
-		
-		Label lblNewLabel = new Label(maincomp, SWT.NONE);
-		FormData fd_lblNewLabel = new FormData();
-		fd_lblNewLabel.top = new FormAttachment(0, 10);
-		fd_lblNewLabel.left = new FormAttachment(0, 10);
-		lblNewLabel.setLayoutData(fd_lblNewLabel);
-		lblNewLabel.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
-		formToolkit.adapt(lblNewLabel, true, true);
-		lblNewLabel.setText("View Event:");
 		
 		Composite Bookvenuecomp = new Composite(maincomp, SWT.NONE);
 		Bookvenuecomp.setLayout(new GridLayout(3, false));

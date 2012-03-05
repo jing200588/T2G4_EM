@@ -57,7 +57,7 @@ public class EmanagerGUI {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(450, 300);
+		shell.setSize(629, 606);
 		shell.setText("SWT Application");
 		shell.setLayout(new FillLayout());
 		
@@ -101,7 +101,10 @@ public class EmanagerGUI {
 		fd_composite_2.right = new FormAttachment(80);
 		fd_composite_2.left = new FormAttachment(20);
 		composite_2.setLayoutData(fd_composite_2);
-		
+		scrolledComposite.setContent(composite);
+		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+		// Experiment
+		System.out.println(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		Label label_13 = new Label(composite_2, SWT.NONE);
 		label_13.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		label_13.setText("Event Program Flow");
@@ -153,6 +156,9 @@ public class EmanagerGUI {
 		gd_label_18.widthHint = 27;
 		label_18.setLayoutData(gd_label_18);
 		
+		// Experiment
+		System.out.println(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
 		Button button_2 = new Button(composite_3, SWT.NONE);
 		GridData gd_button_2 = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_button_2.widthHint = 85;
@@ -165,7 +171,9 @@ public class EmanagerGUI {
 		fd_label_19.right = new FormAttachment(95);
 		fd_label_19.left = new FormAttachment(5);
 		label_19.setLayoutData(fd_label_19);
-		
+		// Experiment
+		System.out.println(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				
 		Composite composite_4 = new Composite(composite, SWT.NONE);
 		composite_4.setLayout(new GridLayout(3, false));
 		FormData fd_composite_4 = new FormData();
@@ -189,8 +197,9 @@ public class EmanagerGUI {
 		gd_button_3.widthHint = 85;
 		button_3.setLayoutData(gd_button_3);
 		button_3.setText("Calculate");
-		scrolledComposite.setContent(composite);
-		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		// Experiment
+		System.out.println(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
 	//	ViewEventGUI view = new ViewEventGUI(shell, SWT.NONE, EmanagerGUIjface.getEvent("abc"));
 
 	}

@@ -9,16 +9,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.wb.swt.layout.grouplayout.GroupLayout;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Combo;
+
 
 
 public class ViewEventGUI extends Composite {
@@ -173,6 +170,9 @@ public class ViewEventGUI extends Composite {
 		fd_Divider2.right = new FormAttachment(95, 0);
 		Divider2.setLayoutData(fd_Divider2);
 		formToolkit.adapt(Divider2, true, true);
+		
+//		ViewAdminister.setContent(ViewAdminister.getBody());
+		ViewAdminister.setMinSize(ViewAdminister.getBody().computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	
 	}
 
