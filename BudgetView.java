@@ -108,18 +108,18 @@ public class BudgetView extends Composite {
 		lblOptimizeBudgetSystem.setText("Optimize Budget System");
 
 		budgetBtn_Composite = new Composite(this, SWT.NONE);
-		budgetBtn_Composite.setLayout(new GridLayout(3, false));
 		FormData fd_budgetBtn_Composite = new FormData();
 		fd_budgetBtn_Composite.bottom = new FormAttachment(0, 69);
-		fd_budgetBtn_Composite.right = new FormAttachment(90, 0);
+		fd_budgetBtn_Composite.right = new FormAttachment(0, 630);
 		fd_budgetBtn_Composite.top = new FormAttachment(0, 21);
-		fd_budgetBtn_Composite.left = new FormAttachment(10, 0);
+		fd_budgetBtn_Composite.left = new FormAttachment(0, 70);
 		budgetBtn_Composite.setLayoutData(fd_budgetBtn_Composite);
 		toolkit.adapt(budgetBtn_Composite);
 		toolkit.paintBordersFor(budgetBtn_Composite);
+		budgetBtn_Composite.setLayout(null);
 
 		btnStep = new Button(budgetBtn_Composite, SWT.NONE);
-		btnStep.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		btnStep.setBounds(29, 5, 116, 25);
 		btnStep.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -135,7 +135,7 @@ public class BudgetView extends Composite {
 		btnStep.setText("Step 1: Input Details");
 
 		btnStep_1 = new Button(budgetBtn_Composite, SWT.NONE);
-		btnStep_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		btnStep_1.setBounds(198, 5, 149, 25);
 		btnStep_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -151,7 +151,7 @@ public class BudgetView extends Composite {
 		btnStep_1.setText("Step 2: Select Compulsory");
 
 		btnStep_2 = new Button(budgetBtn_Composite, SWT.NONE);
-		btnStep_2.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		btnStep_2.setBounds(401, 5, 129, 25);
 		btnStep_2.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -296,7 +296,7 @@ public class BudgetView extends Composite {
 					txt_error_S1.setVisible(false);
 					txt_input_list.setEnabled(true);
 					btnResetInputList.setEnabled(true);
-					btnConfirm_S1.setEnabled(true);
+					btnConfirm_S1_1.setEnabled(true);
 				}
 				catch (Exception ie) {
 					if(ie.getMessage().equals("empty String")) 
@@ -476,7 +476,7 @@ public class BudgetView extends Composite {
 					//if(empty == true) throw new Exception("***You have selected all item(s) and you can buy all item(s).***");
 					stackLayout.topControl = Step3;
 					BigContent.layout();
-					budgetPersonalAssistant.differentiateCompulsory();
+					budgetPersonalAssistant.differentiateCompulsory(satisfaction_choice);
 					txt_result.setText(budgetPersonalAssistant.findOptimalShopList(type_choice, satisfaction_choice));	
 					btnStep.setEnabled(true);
 					btnStep_1.setEnabled(true);
@@ -490,7 +490,22 @@ public class BudgetView extends Composite {
 				} catch(Exception ie) {
 					lblError_S2.setText(ie.getMessage());
 					lblError_S2.setVisible(true);
-				}		
+				}/* catch(OutOfMemoryError outofmemo)
+				{
+					combo_selection.setEnabled(false);
+					btnFinish.setEnabled(false);
+					txt_result.setText("There is not enough memory space to perform the task.\n"
+							+ "Please restart the program and reduce your input size.\n");
+					btnStep.setEnabled(false);
+					btnStep_2.setEnabled(false);
+					btnStep_1.setEnabled(false);
+					//Execute.setEnabled(false);
+					//ChangeSettings.setEnabled(false);
+					//ConfirmButton.setEnabled(false);
+					//ClearAll.setEnabled(false);
+					
+					//Output_Box.setText
+				}*/
 			}
 		});
 		btnNext.setBounds(615, 265, 75, 25);
@@ -513,6 +528,7 @@ public class BudgetView extends Composite {
 		toolkit.paintBordersFor(Step3);
 		
 		txt_result = new Text(Step3, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		txt_result.setEditable(false);
 		txt_result.setBounds(10, 41, 664, 173);
 		toolkit.adapt(txt_result, true, true);
 		
