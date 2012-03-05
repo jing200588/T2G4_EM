@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.Vector;
 
 //import org.sqlite.SQLiteJDBCLoader;
 
@@ -781,28 +782,45 @@ public class EMDB_sqlite{
 	/*
 	 * Get a budget list attached to the event by it's id
 	 */
-	public void get_budget_list(int id){
+	public Vector<Item> get_budget_list(int id, boolean optimized){
 		
 		//create empty budget list vector here.
 		
+		Vector<Item> list = new Vector<Item>();
+		
 		try {
-			String query = this.select_all(
-					this.TABLE_budget, 
-					"event_id="+ id , 
-					0);
-
+			String query = "";
+			
+			
+			if (optimized){
+				query = this.select_all(
+						this.TABLE_budget_optimized, 
+						"event_id="+ id , 
+						0);
+			}else{
+				query = this.select_all(
+						this.TABLE_budget, 
+						"event_id="+ id , 
+						0);
+			}
+			
+			
 			ResultSet result = this.DBQUERY.executeQuery(query);
-			
-			
-			
-			
+		    while (result.next()) {
+			      Item current = new Item(result.getString("name"), result.getInt("price"), result.getInt("satisfaction"), result.getString("type"));
+			      list.add(current);
+			}
 			result.close();
+
+			return list;
+			
 			
 		} catch (SQLException e) {
 			
 			//return empty budget list here.
 		
 		}
+		return null;
 		
 		
 	}

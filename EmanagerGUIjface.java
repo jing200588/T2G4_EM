@@ -183,11 +183,11 @@ public class EmanagerGUIjface extends ApplicationWindow {
 					((Composite)children[i]).dispose();
 				}
 				
-		        ViewEventGUI3 view = new ViewEventGUI3(c2, SWT.NONE, getEvent(itemname));
+		     //   ViewEventGUI3 view = new ViewEventGUI3(c2, SWT.NONE, getEvent(itemname));
 		      //  view.setBounds(c2.getBounds());
 		   //     formToolkit.adapt(view);
 		//		formToolkit.paintBordersFor(view);
-		        layout.topControl = view;
+		      //  layout.topControl = view;
 				c2.layout(true);
 		        
 		     //   System.out.println(itemname + "hh " + string);
