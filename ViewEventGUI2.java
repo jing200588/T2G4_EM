@@ -56,7 +56,7 @@ public class ViewEventGUI2 extends Composite {
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 		*/
-	/*	Composite maincomp = new Composite(scrolledComposite, SWT.NONE);
+		Composite maincomp = new Composite(scrolledComposite, SWT.NONE);
 		maincomp.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		maincomp.setLayout(new FormLayout());
 		scrolledComposite.setContent(maincomp);
@@ -291,7 +291,7 @@ public class ViewEventGUI2 extends Composite {
 		btnCalculate.setLayoutData(gd_btnCalculate);
 		
 		formToolkit.adapt(btnCalculate, true, true);
-		btnCalculate.setText("Calculate");*/
+		btnCalculate.setText("Calculate");
 
 	}
 
