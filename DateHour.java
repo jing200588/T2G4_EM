@@ -32,6 +32,19 @@ public class DateHour implements Comparable<DateHour> {
 		m_hour = anotherObj.getHour();
 	}
 	
+	// Create a DateHour object from the input string which has the format:
+	//			<day>/<month>/<year>/<hour>
+	// That is the 4 fields (day, month, year, hour) are separated by '/'
+	// Assumption: the input string is in the correct format
+	public DateHour(String dateHourRepresentation)
+	{
+		String[] arrString = dateHourRepresentation.split("/");
+		m_day = Integer.parseInt(arrString[0]);
+		m_month = Integer.parseInt(arrString[1]);
+		m_year = Integer.parseInt(arrString[2]);
+		m_hour = Integer.parseInt(arrString[3]);
+	}
+	
 	/************************************************************************
 	 * Methods that support extracting information
 	 ************************************************************************/
@@ -55,10 +68,35 @@ public class DateHour implements Comparable<DateHour> {
 		return m_hour;
 	}
 	
+	// Return a String object that represent the DateHour object.
+	// The format is dd/mm/yyyy/hh
+	public String getDateHourRepresentation()
+	{
+		char[] charArr = new char[13];
+		charArr[2] = charArr[5] = charArr[10] = '/';
+		int day = m_day;
+		int month = m_month;
+		int year = m_year;
+		int hour = m_hour;
+		for(int i = 0; i < 2; i++)
+		{
+			charArr[1 - i] = Character.forDigit(day % 10, 10);
+			charArr[4 - i] = Character.forDigit(month % 10, 10);
+			charArr[12 - i] = Character.forDigit(hour % 10, 10);
+			day /= 10;
+			month /= 10;
+			hour /=10;
+ 		}
+		for(int i = 0; i < 4; i++)
+		{
+			charArr[9 - i] = Character.forDigit(year % 10, 10);
+			year /= 10;
+		}
+		return new String(charArr);
+	}
 	/**************************************************************************
 	 * Methods that support querying
 	 *************************************************************************/
-	
 	/**
 	 * @param year
 	 * @return true if the given input is a valid leap year. It returns false
@@ -152,5 +190,24 @@ public class DateHour implements Comparable<DateHour> {
 			return 1;
 		
 		return 0;
+	}
+
+	@Override
+	public String toString() {
+		return "DateHour [m_year=" + m_year + ", m_month=" + m_month
+				+ ", m_day=" + m_day + ", m_hour=" + m_hour + "]";
+	}
+	
+	// For testing purpose
+	public static void main(String[] args)
+	{
+		DateHour myDate = new DateHour(850, 12, 1, 12);
+		String inputDate = myDate.getDateHourRepresentation();
+		System.out.println(inputDate);
+		System.out.println(inputDate.length());
+		DateHour newObj = new DateHour(inputDate);
+		System.out.println(newObj.getDateHourRepresentation());
+		System.out.println(newObj.toString());
+		
 	}
 }
