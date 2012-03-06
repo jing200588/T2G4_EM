@@ -107,6 +107,7 @@ public class BookingSystem {
 	{
 		Vector<Venue> returnList = null;
 		
+		
 		switch(type)
 		{
 			case CAPACITY:
