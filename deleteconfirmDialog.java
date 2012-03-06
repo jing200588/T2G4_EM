@@ -15,7 +15,7 @@ import org.eclipse.swt.events.SelectionEvent;
 
 public class deleteconfirmDialog extends Dialog {
 
-	protected Object result;
+	protected int result;
 	protected Shell shell;
 	protected String name;
 
@@ -34,7 +34,7 @@ public class deleteconfirmDialog extends Dialog {
 	 * Open the dialog.
 	 * @return the result
 	 */
-	public Object open() {
+	public int open() {
 		createContents();
 		shell.open();
 		shell.layout();
@@ -59,7 +59,7 @@ public class deleteconfirmDialog extends Dialog {
 		Composite composite = new Composite(shell, SWT.NONE);
 		composite.setLayout(new FormLayout());
 		
-		Label Prompt = new Label(composite, SWT.NONE);
+		Label Prompt = new Label(composite, SWT.WRAP);
 		FormData fd_Prompt = new FormData();
 		fd_Prompt.top = new FormAttachment(30, 0);
 		fd_Prompt.left = new FormAttachment(10, 0);
@@ -71,6 +71,7 @@ public class deleteconfirmDialog extends Dialog {
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				result = 0;
 				shell.close();
 			}
 		});
@@ -85,7 +86,8 @@ public class deleteconfirmDialog extends Dialog {
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				EmanagerGUIjface.setdelete(true);
+				//EmanagerGUIjface.setdelete(true);
+				result = 1;
 				shell.close();
 			}
 		});

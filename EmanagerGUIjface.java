@@ -45,6 +45,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private static int count = 0;
 	private static StackLayout layout = new StackLayout();
 	private static boolean delete = false;
+	private MainModel mm = new MainModel();
 	private static Display display = new Display();
     private static Color red = display.getSystemColor(SWT.COLOR_RED);
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
@@ -82,6 +83,35 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		}
 		 */
 	}
+	public static void DeleteItem() {
+
+		table.remove(table.getSelectionIndices());
+	
+	/*	testing purpose
+	  	for (int i=0; i<eventlist.size(); i++)
+			System.out.println(eventlist.get(i).getName());*/
+	}
+	
+	//Method to update the table in c1
+	public static void UpdateTable () {
+		eventlist = MainModel.PullList();
+
+		TableItem item;
+		int i;
+		if (table.getItemCount() == 0) 
+			i=0;
+		else
+			i = eventlist.size()-1;
+		
+		for (; i<eventlist.size(); i++) {
+			item = new TableItem(table,SWT.NONE);
+			item.setText(eventlist.get(i).getName());
+			item.setText(1, "TEST");
+			item.setBackground(1, red);
+	    	item.setText(2, "C3");
+	    	item.setBackground(2,blue);
+		}
+	}
 	
 	public static Eventitem getEvent (String event) {
 		for (int i=0; i<eventlist.size(); i++) {
@@ -104,6 +134,12 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		c2.layout(true);
 	}
 	
+	public static void EventParticulars() {
+		EventParticulars ep = new EventParticulars(c2, SWT.NONE);
+		layout.topControl = ep;
+		c2.layout(true);
+	}
+	
 	public static void setdelete (boolean a) {
 		delete = a;
 	}
@@ -118,7 +154,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	protected Control createContents(Composite parent) {
 		setStatus("Welcome!");
 		ScrolledComposite container = new ScrolledComposite(parent, SWT.V_SCROLL);
-		
+
 		container.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		container.setExpandHorizontal(true);
 		container.setExpandVertical(true);
@@ -147,6 +183,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			formToolkit.paintBordersFor(c1);
 			
 			Button btnCreateEvent = formToolkit.createButton(c1, "Create Event", SWT.NONE);
+			btnCreateEvent.setFont(SWTResourceManager.getFont("Tekton Pro Ext", 16, SWT.BOLD));
 			btnCreateEvent.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					
@@ -223,15 +260,23 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			formToolkit.paintBordersFor(table);
 			table.setHeaderVisible(true);
 			table.setLinesVisible(true);
-			
+			UpdateTable();
 			Menu menu = new Menu(table);
 			table.setMenu(menu);
 			
 			//Delete event
-			MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.NONE);
+			MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
 			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
+					TableItem tb = table.getItem(table.getSelectionIndex());
+					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, tb.getText(0));
+					if (confirm.open() == 1) {
+//						System.out.println(table.getSelectionIndex());
+						MainModel.DeleteEvent(getEvent(tb.getText(0)));	//Finds the selected event and deletes it from vector
+						DeleteItem();
+
+					}
 				}
 			});
 			mntmDeleteEvent.setText("Delete Event");
