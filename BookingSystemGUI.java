@@ -81,6 +81,8 @@ public class BookingSystemGUI extends Composite {
 	private int[] capacityChoiceInput = new int[2];
 	private int[] costChoiceInput = new int[2];
 	private TimeSlot[] timeSlotChoiceInput = new TimeSlot[2];
+	private Composite FunctionOptionCompo;
+	private Composite ResultColumnCompo;
 	
 	/**
 	 * Create the composite.
@@ -100,32 +102,26 @@ public class BookingSystemGUI extends Composite {
 		
 		toolkit.adapt(this);
 		toolkit.paintBordersFor(this);
-		
-		Label label = new Label(this, SWT.SEPARATOR | SWT.VERTICAL);
-		label.setBounds(410, 0, -17, 192);
-		toolkit.adapt(label, true, true);
-		
-		Label label_1 = new Label(this, SWT.SEPARATOR | SWT.VERTICAL);
-		label_1.setBounds(433, 0, -8, 440);
-		toolkit.adapt(label_1, true, true);
-		
-		Label label_2 = new Label(this, SWT.SEPARATOR | SWT.VERTICAL);
-		label_2.setBounds(449, 0, -6, 153);
-		toolkit.adapt(label_2, true, true);
+		setLayout(new FormLayout());
 		
 		
-		Composite composite_2 = new Composite(this, SWT.NONE);
-		composite_2.setBounds(0, 0, 331, 113);
-		toolkit.adapt(composite_2);
-		toolkit.paintBordersFor(composite_2);
+		FunctionOptionCompo = new Composite(this, SWT.NONE);
+		FormData fd_FunctionOptionCompo = new FormData();
+		fd_FunctionOptionCompo.left = new FormAttachment(0);
+		fd_FunctionOptionCompo.top = new FormAttachment(0);
+		fd_FunctionOptionCompo.right = new FormAttachment(ResultColumnCompo, 340);
+		fd_FunctionOptionCompo.bottom = new FormAttachment(FunctionContentPage, 110);
+		FunctionOptionCompo.setLayoutData(fd_FunctionOptionCompo);
+		toolkit.adapt(FunctionOptionCompo);
+		toolkit.paintBordersFor(FunctionOptionCompo);
 		
-		Label lblChooseFunctionality = new Label(composite_2, SWT.NONE);
+		Label lblChooseFunctionality = new Label(FunctionOptionCompo, SWT.NONE);
 		lblChooseFunctionality.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
 		lblChooseFunctionality.setBounds(10, 10, 148, 20);
 		toolkit.adapt(lblChooseFunctionality, true, true);
 		lblChooseFunctionality.setText("Choose functionality:");
 		
-		Button SearchNameButton = new Button(composite_2, SWT.RADIO);
+		Button SearchNameButton = new Button(FunctionOptionCompo, SWT.RADIO);
 		SearchNameButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -137,7 +133,7 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(SearchNameButton, true, true);
 		SearchNameButton.setText("Search venue by name and view information");
 		
-		Button SearchCriteriaButton = new Button(composite_2, SWT.RADIO);
+		Button SearchCriteriaButton = new Button(FunctionOptionCompo, SWT.RADIO);
 		SearchCriteriaButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -149,7 +145,7 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(SearchCriteriaButton, true, true);
 		SearchCriteriaButton.setText("Search venues with specified criteria");
 		
-		Button AddOutsideVenueButton = new Button(composite_2, SWT.RADIO);
+		Button AddOutsideVenueButton = new Button(FunctionOptionCompo, SWT.RADIO);
 		AddOutsideVenueButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -162,7 +158,14 @@ public class BookingSystemGUI extends Composite {
 		AddOutsideVenueButton.setText("Add an event outside NUS");
 		
 		FunctionContentPage = new Composite(this, SWT.NONE);
-		FunctionContentPage.setBounds(0, 119, 331, 468);
+//		fd_FunctionOptionCompo.bottom = new FormAttachment(FunctionContentPage, -6);
+//		fd_FunctionOptionCompo.right = new FormAttachment(FunctionContentPage, 0, SWT.RIGHT);
+		FormData fd_FunctionContentPage = new FormData();
+		fd_FunctionContentPage.top = new FormAttachment(FunctionOptionCompo, 10);
+		fd_FunctionContentPage.left = new FormAttachment(0);
+		fd_FunctionContentPage.right = new FormAttachment(ResultColumnCompo, 340);
+		fd_FunctionContentPage.bottom = new FormAttachment(100);
+		FunctionContentPage.setLayoutData(fd_FunctionContentPage);
 		toolkit.adapt(FunctionContentPage);
 		toolkit.paintBordersFor(FunctionContentPage);
 		FunctionContentPage.setLayout(stackLayout);
@@ -813,12 +816,18 @@ public class BookingSystemGUI extends Composite {
 		
 		
 		
-		Composite composite_3 = new Composite(this, SWT.NONE);
-		composite_3.setBounds(363, 0, 421, 587);
-		toolkit.adapt(composite_3);
-		toolkit.paintBordersFor(composite_3);
+		ResultColumnCompo = new Composite(this, SWT.NONE);
+//		fd_FunctionOptionCompo.top = new FormAttachment(ResultColumnCompo, 0, SWT.TOP);
+		FormData fd_ResultColumnCompo = new FormData();
+		fd_ResultColumnCompo.bottom = new FormAttachment(0, 600);
+		fd_ResultColumnCompo.top = new FormAttachment(0);
+		fd_ResultColumnCompo.left = new FormAttachment(FunctionOptionCompo, 20);
+		fd_ResultColumnCompo.right = new FormAttachment(100);
+		ResultColumnCompo.setLayoutData(fd_ResultColumnCompo);
+		toolkit.adapt(ResultColumnCompo);
+		toolkit.paintBordersFor(ResultColumnCompo);
 		
-		tableViewer = new TableViewer(composite_3, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewer = new TableViewer(ResultColumnCompo, SWT.BORDER | SWT.FULL_SELECTION);
 		DisplayTable = tableViewer.getTable();
 		DisplayTable.setBounds(10, 36, 411, 293);
 		toolkit.paintBordersFor(DisplayTable);
@@ -872,7 +881,7 @@ public class BookingSystemGUI extends Composite {
 			}
 		});
 		
-		Label lblSearchResult = new Label(composite_3, SWT.NONE);
+		Label lblSearchResult = new Label(ResultColumnCompo, SWT.NONE);
 		lblSearchResult.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
 		lblSearchResult.setBounds(10, 10, 94, 20);
 		toolkit.adapt(lblSearchResult, true, true);
