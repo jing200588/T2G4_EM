@@ -521,7 +521,6 @@ public class EMDB_sqlite{
 	
 	// There is another method for batch
 	public int add_budget(int event_id, String name, int price, int satisfaction, String type){
-		System.out.print(event_id + name + price + satisfaction + type);
 		this.add_prepare("budget");
 		try {
 			ResultSet result;
@@ -735,21 +734,24 @@ public class EMDB_sqlite{
 		String query = "";
 		 try {
 			 
-			switch(type){
-				case "event":
-					query = this.select_all(
+			
+			if (type.compareTo("event") == 0){
+				query = this.select_all(
 							this.TABLE_venue_bookings, 
 							"event_id="+ id , 
 							1);	
-					break;
-				case "venue":
-				default:
-					query = this.select_all(
+			}else if (type.compareTo("venue") == 0){
+			
+				query = this.select_all(
 							this.TABLE_venue_bookings, 
 							"venue_id="+ id , 
 							1);	
-					break;
-			} 
+			} else{
+				query = this.select_all(
+							this.TABLE_venue_bookings, 
+							"venue_id="+ id , 
+							1);	
+			}
 			 
 
 			ResultSet result = this.DBQUERY.executeQuery(query);
@@ -835,14 +837,14 @@ public class EMDB_sqlite{
 
 
 	public void delete_budget_list(int id){
-		String $sql ="";
+		String sql ="";
 		
 		
 		try {
-			$sql = "DELETE FROM " + this.TABLE_budget + " WHERE event_id="+id;
-			this.DBQUERY.execute($sql);
-			$sql = "DELETE FROM "+this.TABLE_budget_optimized +" WHERE event_id="+id;
-			this.DBQUERY.execute($sql);
+			sql = "DELETE FROM " + this.TABLE_budget + " WHERE event_id="+id;
+			this.DBQUERY.execute(sql);
+			sql = "DELETE FROM "+this.TABLE_budget_optimized +" WHERE event_id="+id;
+			this.DBQUERY.execute(sql);
 			
 			
 		} catch (SQLException e) {
@@ -858,8 +860,18 @@ public class EMDB_sqlite{
 	
 	
 	public void delete_event(int id){
+		String sql = "";
+		try {
+			sql = "DELETE FROM " + this.TABLE_events + " WHERE event_id="+id;
+			this.DBQUERY.execute(sql);
+			
+			this.delete_budget_list(id);
+			
+		} catch (SQLException e) {
 		
-		this.delete_budget_list(id);
+		}
+		
+		
 	}
 	
 	
@@ -867,9 +879,15 @@ public class EMDB_sqlite{
 	
 	
 	
-	public void delete_venue(){
+	public void delete_venue(int id){
+		String sql = "";
+		try {
+			sql = "DELETE FROM " + this.TABLE_events + " WHERE venue_id="+id;
+			this.DBQUERY.execute(sql);
+
+		} catch (SQLException e) {
 		
-		
+		}
 	}
 
 	
@@ -931,57 +949,11 @@ public class EMDB_sqlite{
 	}
 	
 	public void test(){
-		 // out(String.format("running in %s mode", SQLiteJDBCLoader.isNativeMode() ? "native" : "pure-java"));
-		out("start");
-		
-		
-		try {
-		
-		    this.DBQUERY.executeUpdate("drop table if exists people;");
-		    this.DBQUERY.executeUpdate("create table people (name, occupation);");
-		    PreparedStatement prep = this.DBCON.prepareStatement(
-		      "insert into people values (?, ?);");
-
-
-		    prep.setString(1, "Gandhi");
-		    prep.setString(2, "politics");
-		    prep.addBatch();
-		    prep.setString(1, "Turing");
-		    prep.setString(2, "computers");
-		    prep.addBatch();
-		    prep.setString(1, "Wittgenstein");
-		    prep.setString(2, "smartypants");
-		    prep.addBatch();
-
-
-		    this.DBCON.setAutoCommit(false);
-		    prep.executeBatch();
-		    this.DBCON.setAutoCommit(true);
-
-		    ResultSet rs = this.DBQUERY.executeQuery("select * from people;");
-		    while (rs.next()) {
-		      System.out.println("name = " + rs.getString("name"));
-		      System.out.println("job = " + rs.getString("occupation"));
-		    }
-		    rs.close();
-		    this.DBCON.close();
-		    
-		    
-
-		    
-		    
-		    
-		} catch (SQLException e) {
-			
-		}
-		
-		
-		out("end");
+		// this.out(String.format("running in %s mode", SQLiteJDBCLoader.isNativeMode() ? "native" : "pure-java"));
 	}
 	
 	
-	
-	
+
 
 
 	
