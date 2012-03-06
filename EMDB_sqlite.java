@@ -521,7 +521,6 @@ public class EMDB_sqlite{
 	
 	// There is another method for batch
 	public int add_budget(int event_id, String name, int price, int satisfaction, String type){
-		System.out.print(event_id + name + price + satisfaction + type);
 		this.add_prepare("budget");
 		try {
 			ResultSet result;
@@ -954,8 +953,7 @@ public class EMDB_sqlite{
 	}
 	
 	
-	
-	
+
 
 
 	

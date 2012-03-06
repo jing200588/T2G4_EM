@@ -115,6 +115,17 @@ public class BudgetModel {
 	
 	
 	
+	public Vector<Item> return_item__optimized_list(int id) {
+		
+		db.connect();
+		item_list = db.get_budget_list(id, true);
+		db.disconnect();
+		
+		return item_list;
+	}	
+	
+	
+	
 	
 	/*
 	 * TESTING SECTION
