@@ -14,7 +14,7 @@ public class EMDBtest {
 		
 		
 		
-		db.set_name("testsuite.sqlite");
+		db.set_name("test.sqlite");
 		
 		//Connect to DB
 		
