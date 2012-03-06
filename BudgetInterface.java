@@ -16,4 +16,6 @@ public interface BudgetInterface {
 	public void sendDBList(int option);
 	
 	public int noOfCombination();
+	
+	public Vector<Item> getCombinationList(int id);
 }

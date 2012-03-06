@@ -95,7 +95,8 @@ public class CreateEventGUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				Eventitem newevent = new Eventitem(txtNewText.getText(), StartDate.getYear(), StartDate.getMonth(), StartDate.getDay(),
 						EndDate.getYear(), EndDate.getMonth(), EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes());
-				EmanagerGUIjface.addEvent(newevent);
+				MainModel.CreateEvent(newevent);
+				EmanagerGUIjface.UpdateTable();
 			}
 		});
 
@@ -105,7 +106,6 @@ public class CreateEventGUI extends Composite {
 		FormData fd_btnCreate = new FormData();
 		fd_btnCreate.top = new FormAttachment(composite, 16);
 		fd_btnCreate.right = new FormAttachment(50, 70);
-//		fd_btnCreate.left = new FormAttachment(50,-200);
 		fd_btnCreate.left = new FormAttachment(composite, 0, SWT.LEFT);
 		btnCreate.setLayoutData(fd_btnCreate);
 		formToolkit.adapt(btnCreate, true, true);

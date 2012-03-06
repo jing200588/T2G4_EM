@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.SWT;
@@ -8,15 +10,19 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Table;
 
 
 public class ViewEventGUI3 extends Composite {
+	private Table BudgetResult;
 
 	/**
 	 * Create the composite.
@@ -61,6 +67,12 @@ public class ViewEventGUI3 extends Composite {
 		new Label(EparticularsComp, SWT.NONE);
 		
 		Button Epartedit = new Button(EparticularsComp, SWT.NONE);
+		Epartedit.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				EmanagerGUIjface.EventParticulars();
+			}
+		});
 		GridData gd_Epartedit = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		gd_Epartedit.widthHint = 85;
 		Epartedit.setLayoutData(gd_Epartedit);
@@ -74,7 +86,7 @@ public class ViewEventGUI3 extends Composite {
 		Enamelabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		Enamelabel.setText("Event Name:");
 		
-		Label Ename = new Label(EparticularsComp, SWT.NONE);
+		Label Ename = new Label(EparticularsComp, SWT.WRAP);
 		Ename.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
 		Ename.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
 		Ename.setText(curevent.getName());
@@ -119,13 +131,15 @@ public class ViewEventGUI3 extends Composite {
 		Edescription.setText("New Label");
 	
 		//Divider1
+		/*
 		Label divider1 = new Label(maincomp, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_divider1 = new FormData();
 		fd_divider1.top = new FormAttachment(EparticularsComp, 30);
 		fd_divider1.bottom = new FormAttachment(EparticularsComp, 55, SWT.BOTTOM);
 		fd_divider1.left = new FormAttachment(5, 0);
 		fd_divider1.right = new FormAttachment(95, 0);
-		divider1.setLayoutData(fd_divider1);
+		divider1.setLayoutData(fd_divider1);*/
+		Label divider1 = createdivider(maincomp, EparticularsComp);
 		
 		//Event Program Flow
 		Composite Eprogflowcomp = new Composite(maincomp, SWT.NONE);
@@ -151,6 +165,7 @@ public class ViewEventGUI3 extends Composite {
 		Eprogflowedit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+	
 			}
 		});
 		GridData gd_Eprogflowedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -159,12 +174,14 @@ public class ViewEventGUI3 extends Composite {
 		Eprogflowedit.setText("Edit");
 		
 		//Divider 2
+		/*
 		Label Divider2 = new Label(maincomp, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_Divider2 = new FormData();
 		fd_Divider2.top = new FormAttachment(Eprogflowcomp, 30);
 		fd_Divider2.left = new FormAttachment(5, 0);
 		fd_Divider2.right = new FormAttachment(95, 0);
-		Divider2.setLayoutData(fd_Divider2);
+		Divider2.setLayoutData(fd_Divider2);*/
+		Label divider2 = createdivider(maincomp, Eprogflowcomp);
 		
 		//Book Venue 
 		Label lblNewLabel = new Label(maincomp, SWT.NONE);
@@ -180,7 +197,7 @@ public class ViewEventGUI3 extends Composite {
 		FormData fd_Bookvenuecomp = new FormData();
 		fd_Bookvenuecomp.right = new FormAttachment(80, 0);
 		fd_Bookvenuecomp.left = new FormAttachment(20, 0);
-		fd_Bookvenuecomp.top = new FormAttachment(Divider2, 30);
+		fd_Bookvenuecomp.top = new FormAttachment(divider2, 30);
 		Bookvenuecomp.setLayoutData(fd_Bookvenuecomp);
 		
 		Label lblBookVenue = new Label(Bookvenuecomp, SWT.NONE);
@@ -206,12 +223,14 @@ public class ViewEventGUI3 extends Composite {
 		Bookvenueedit.setText("Edit");
 		
 		//Divider 3
+		
 		Label divider3 = new Label(maincomp, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_divider3 = new FormData();
 		fd_divider3.top = new FormAttachment(Bookvenuecomp, 30);
 		fd_divider3.left = new FormAttachment(5, 0);
 		fd_divider3.right = new FormAttachment(95, 0);
 		divider3.setLayoutData(fd_divider3);
+	//	Label divider3 = createdivider(maincomp, Bookvenuecomp);
 		
 		//Calculate Budget
 		Composite Budgetcomp = new Composite(maincomp, SWT.NONE);
@@ -246,12 +265,50 @@ public class ViewEventGUI3 extends Composite {
 		btnCalculate.setText("Calculate");
 		
 		//Divider 4
+		/*
 		Label divider4 = new Label(maincomp, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_divider4 = new FormData();
 		fd_divider4.top = new FormAttachment(Budgetcomp, 30);
 		fd_divider4.left = new FormAttachment(5, 0);
 		fd_divider4.right = new FormAttachment(95, 0);
-		divider4.setLayoutData(fd_divider4);
+		divider4.setLayoutData(fd_divider4);*/
+		Label divider4 = createdivider(maincomp, Budgetcomp);
+		
+	//	if ()
+	//		Table BudgetTable = OptimizedTable(Eventitem curevent, Composite Budgetcomp);
+		//Budget Table
+	/*	BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION);		
+		BudgetResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		BudgetResult.setHeaderVisible(true);
+		BudgetResult.setBounds(25, 25, 645, 200);
+		
+		TableColumn col0 = new TableColumn(BudgetResult, SWT.NULL);
+		col0.setText("No.");
+		col0.setResizable(false);
+
+		TableColumn col1 = new TableColumn(BudgetResult, SWT.NULL);
+		col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+		col1.setResizable(false);
+		
+		TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
+		col2.setText("Price\t\t\t\t");
+		col2.setResizable(false);
+		
+		TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
+		col3.setText("Satisfaction");
+		col3.setResizable(false);
+		
+
+		TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
+		col4.setText("Type\t\t\t\t\t\t\t\t\t\t");
+		col4.setResizable(false);
+		
+
+		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
+			BudgetResult.getColumn(loopIndex).pack();
+		}	
+
+		*/
 		
 		//Participant List
 		Composite Plistcomp = new Composite(maincomp, SWT.NONE);
@@ -277,12 +334,14 @@ public class ViewEventGUI3 extends Composite {
 		btnEdit.setText("Edit");
 		
 		//Divider 5
+		/*
 		Label divider5 = new Label(maincomp, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_divider5 = new FormData();
 		fd_divider5.top = new FormAttachment(Plistcomp, 30);
 		fd_divider5.left = new FormAttachment(5, 0);
 		fd_divider5.right = new FormAttachment(95, 0);
-		divider5.setLayoutData(fd_divider5);
+		divider5.setLayoutData(fd_divider5);*/
+		Label divider5 = createdivider(maincomp, Plistcomp);
 		
 		//Advertising
 		Composite Advertcomp = new Composite(maincomp, SWT.NONE);
@@ -311,10 +370,10 @@ public class ViewEventGUI3 extends Composite {
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, "dummy name");
-				confirm.open();
-				if (EmanagerGUIjface.getdelete()) {
-					//do be completed
+				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, curevent.getName());
+				if (confirm.open() == 1) {
+					MainModel.DeleteEvent(curevent);
+					EmanagerGUIjface.DeleteItem();
 				}
 					
 			}
@@ -330,7 +389,62 @@ public class ViewEventGUI3 extends Composite {
 		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
+	public Label createdivider (Composite container, Composite object) {
+		Label divider = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
+		FormData fd_divider = new FormData();
+		fd_divider.top = new FormAttachment(object, 30);
+		fd_divider.left = new FormAttachment(5, 0);
+		fd_divider.right = new FormAttachment(95, 0);
+		divider.setLayoutData(fd_divider);
+		
+		return divider;
+	}
+	
+	public Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
+		BudgetController bc = new BudgetController();
+		Vector<Item> item_list = bc.getCombinationList(0);
+		
+		BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION);		
+		BudgetResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		BudgetResult.setHeaderVisible(true);
+		BudgetResult.setBounds(25, 25, 645, 200);
+		
+		TableColumn col0 = new TableColumn(BudgetResult, SWT.NULL);
+		col0.setText("No.");
+		col0.setResizable(false);
 
+		TableColumn col1 = new TableColumn(BudgetResult, SWT.NULL);
+		col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+		col1.setResizable(false);
+		
+		TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
+		col2.setText("Price\t\t\t\t");
+		col2.setResizable(false);
+		
+		TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
+		col3.setText("Satisfaction");
+		col3.setResizable(false);
+		
+
+		TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
+		col4.setText("Type\t\t\t\t\t\t\t\t\t\t");
+		col4.setResizable(false);
+		
+		BudgetResult.removeAll();
+		for (int loopIndex = 0; loopIndex < item_list.size(); loopIndex++) {
+			TableItem item = new TableItem(BudgetResult, SWT.NULL);
+			item.setText(0, "Item " + (loopIndex+1));
+			item.setText(1, item_list.get(loopIndex).getItem());
+			item.setText(2, "$"+((double) item_list.get(loopIndex).getPrice())/100);
+			item.setText(3, ""+item_list.get(loopIndex).getSatisfaction_value());
+			item.setText(4, ""+item_list.get(loopIndex).getType());					
+		}
+		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
+			BudgetResult.getColumn(loopIndex).pack();
+		}							
+
+		return null;
+	}
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components

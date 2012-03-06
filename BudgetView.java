@@ -123,7 +123,6 @@ public class BudgetView extends Composite {
 
 		btnStepInputDetails = new Button(btnComposite, SWT.NONE);
 		btnStepInputDetails.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = Step1;
 				BigContent.layout();
@@ -139,7 +138,6 @@ public class BudgetView extends Composite {
 
 		btnStepSelectCompulsoy = new Button(btnComposite, SWT.NONE);
 		btnStepSelectCompulsoy.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = Step2;
 				BigContent.layout();
@@ -155,7 +153,6 @@ public class BudgetView extends Composite {
 
 		btnStepConfirmResult = new Button(btnComposite, SWT.NONE);
 		btnStepConfirmResult.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = Step3;
 				BigContent.layout();
@@ -227,7 +224,6 @@ public class BudgetView extends Composite {
 		btnChange.setEnabled(false);
 		btnChange.setBounds(10, 168, 75, 25);
 		btnChange.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				txtBudget.setEnabled(true);
 				btnWithoutType.setEnabled(true);
@@ -391,12 +387,33 @@ public class BudgetView extends Composite {
 		TableColumn col0 = new TableColumn(table, SWT.NULL);
 		col0.setText("No.");
 		col0.setResizable(false);
+		col0.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				//sort name
+				TableItem[] items = table.getItems();
+				Collator collator = Collator.getInstance(Locale.getDefault());
+				for (int i = 1; i<items.length; i++) {
+					int value1 = Integer.parseInt(items[i].getText(0).substring(5, items[i].getText(0).length()));
+					for(int j=0; j < i; j++) {
+						int value2 = Integer.parseInt(items[j].getText(0).substring(5, items[j].getText(0).length()));
+						if(value1 - value2 < 0) {
+							System.out.println(value1 + " " + value2);
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(table, SWT.NONE, j);
+							item.setText(values);
+							items = table.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
 
 		TableColumn col1 = new TableColumn(table, SWT.NULL);
 		col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
 		col1.setResizable(false);
 		col1.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort name
 				TableItem[] items = table.getItems();
@@ -422,7 +439,6 @@ public class BudgetView extends Composite {
 		col2.setText("Price\t\t\t\t");
 		col2.setResizable(false);
 		col2.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort price
 				TableItem[] items = table.getItems();
@@ -447,7 +463,6 @@ public class BudgetView extends Composite {
 		col3.setText("Satisfaction");
 		col3.setResizable(false);
 		col3.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort satisfaction
 				TableItem[] items = table.getItems();
@@ -472,7 +487,6 @@ public class BudgetView extends Composite {
 		col4.setText("Type\t\t\t\t\t\t\t\t\t\t");
 		col4.setResizable(false);
 		col4.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort name
 				TableItem[] items = table.getItems();
@@ -596,6 +610,8 @@ public class BudgetView extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				int option = combo_selection.getSelectionIndex();
 				budgetPersonalAssistant.sendDBList(option);
+				
+				EmanagerGUIjface.ReturnView();
 			}
 		});
 		btnFinish.setBounds(595, 234, 75, 25);

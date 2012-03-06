@@ -21,6 +21,10 @@ public class BudgetController implements BudgetInterface{
 	private Vector<Item> db_list;
 
 	private BudgetModel bm = new BudgetModel();
+	
+	public BudgetController() {
+		
+	}
 
 
 	public String findOptimalShopList(int hastype, int hassatisfaction) {
@@ -442,6 +446,10 @@ public class BudgetController implements BudgetInterface{
 			System.out.print(bm.displayConfirm().get(i).getItem() + " " + bm.displayConfirm().get(i).getPrice());
 			System.out.println();
 		}
+	}
+	
+	public Vector<Item> getCombinationList(int id) {
+		return bm.return_item__optimized_list(id);
 	}
 
 }
