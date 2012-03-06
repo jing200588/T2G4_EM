@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Vector;
 
 import org.eclipse.swt.custom.StackLayout;
@@ -30,6 +31,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
+
+import com.ibm.icu.text.Collator;
 
 public class BudgetView extends Composite {
 	/*My declaration start here.*/
@@ -257,8 +260,8 @@ public class BudgetView extends Composite {
 					btnWithoutSatisfaction.setEnabled(false);
 					btnWithSatisfaction.setEnabled(false);
 					btnConfirm_S1.setEnabled(false);
-					
-					
+
+
 					//Enable some button
 					btnChange.setEnabled(true);
 
@@ -379,11 +382,118 @@ public class BudgetView extends Composite {
 		table = new Table(Step2, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);			
 		table.setHeaderVisible(true);
 
-		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+		/*for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
 			TableColumn column = new TableColumn(table, SWT.NULL);
 			column.setText(titles[loopIndex]);
 			column.setResizable(false);
-		}
+		}*/
+
+		TableColumn col0 = new TableColumn(table, SWT.NULL);
+		col0.setText("No.");
+		col0.setResizable(false);
+
+		TableColumn col1 = new TableColumn(table, SWT.NULL);
+		col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+		col1.setResizable(false);
+		col1.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event e) {
+				//sort name
+				TableItem[] items = table.getItems();
+				Collator collator = Collator.getInstance(Locale.getDefault());
+				for (int i = 1; i<items.length; i++) {
+					String value1 = items[i].getText(1);
+					for(int j=0; j < i; j++) {
+						String value2 = items[j].getText(1);
+						if(collator.compare(value1, value2) < 0) {
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(table, SWT.NONE, j);
+							item.setText(values);
+							items = table.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+
+		TableColumn col2 = new TableColumn(table, SWT.NULL);
+		col2.setText("Price\t\t\t\t");
+		col2.setResizable(false);
+		col2.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event e) {
+				//sort price
+				TableItem[] items = table.getItems();
+				for (int i = 1; i<items.length; i++) {
+					double value1 = Double.parseDouble(items[i].getText(2).substring(1,items[i].getText(2).length()));
+					for(int j=0; j < i; j++) {
+						double value2 = Double.parseDouble(items[j].getText(2).substring(1,items[j].getText(2).length()));
+						if((value1 - value2) > 0) {
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(table, SWT.NONE, j);
+							item.setText(values);
+							items = table.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+
+		TableColumn col3 = new TableColumn(table, SWT.NULL);
+		col3.setText("Satisfaction");
+		col3.setResizable(false);
+		col3.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event e) {
+				//sort satisfaction
+				TableItem[] items = table.getItems();
+				for (int i = 1; i<items.length; i++) {
+					int value1 = Integer.parseInt(items[i].getText(3));
+					for(int j=0; j < i; j++) {
+						int value2 = Integer.parseInt(items[j].getText(3));
+						if((value1 - value2) > 0) {
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(table, SWT.NONE, j);
+							item.setText(values);
+							items = table.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+
+		TableColumn col4 = new TableColumn(table, SWT.NULL);
+		col4.setText("Type\t\t\t\t\t\t\t\t\t\t");
+		col4.setResizable(false);
+		col4.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event e) {
+				//sort name
+				TableItem[] items = table.getItems();
+				Collator collator = Collator.getInstance(Locale.getDefault());
+				for (int i = 1; i<items.length; i++) {
+					String value1 = items[i].getText(4);
+					for(int j=0; j < i; j++) {
+						String value2 = items[j].getText(4);
+						if(collator.compare(value1, value2) < 0) {
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(table, SWT.NONE, j);
+							item.setText(values);
+							items = table.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+
 
 		table.setBounds(25, 25, 645, 200);
 		selected_compulsory = new Vector<Integer>();
@@ -437,7 +547,7 @@ public class BudgetView extends Composite {
 					for(int i=1; i<=budgetPersonalAssistant.noOfCombination(); i++) {
 						combo_selection.add("Combination " + i);
 					}
-					
+
 					if(budgetPersonalAssistant.noOfCombination() > 0) {
 						combo_selection.select(0);
 					}
