@@ -33,6 +33,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.swt.widgets.Spinner;
 import java.lang.NumberFormatException;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 
 public class BookingSystemGUI extends Composite {
 
@@ -100,22 +102,16 @@ public class BookingSystemGUI extends Composite {
 		
 		toolkit.adapt(this);
 		toolkit.paintBordersFor(this);
-		
-		Label label = new Label(this, SWT.SEPARATOR | SWT.VERTICAL);
-		label.setBounds(410, 0, -17, 192);
-		toolkit.adapt(label, true, true);
-		
-		Label label_1 = new Label(this, SWT.SEPARATOR | SWT.VERTICAL);
-		label_1.setBounds(433, 0, -8, 440);
-		toolkit.adapt(label_1, true, true);
-		
-		Label label_2 = new Label(this, SWT.SEPARATOR | SWT.VERTICAL);
-		label_2.setBounds(449, 0, -6, 153);
-		toolkit.adapt(label_2, true, true);
+		setLayout(new FormLayout());
 		
 		
 		Composite composite_2 = new Composite(this, SWT.NONE);
-		composite_2.setBounds(0, 0, 331, 113);
+		FormData fd_composite_2 = new FormData();
+		fd_composite_2.right = new FormAttachment(0, 324);
+		fd_composite_2.bottom = new FormAttachment(0, 124);
+		fd_composite_2.top = new FormAttachment(0, 5);
+		fd_composite_2.left = new FormAttachment(0, 5);
+		composite_2.setLayoutData(fd_composite_2);
 		toolkit.adapt(composite_2);
 		toolkit.paintBordersFor(composite_2);
 		
@@ -161,8 +157,83 @@ public class BookingSystemGUI extends Composite {
 		toolkit.adapt(AddOutsideVenueButton, true, true);
 		AddOutsideVenueButton.setText("Add an event outside NUS");
 		
+		
+		
+		Composite composite_3 = new Composite(this, SWT.NONE);
+		FormData fd_composite_3 = new FormData();
+		fd_composite_3.bottom = new FormAttachment(0, 719);
+		fd_composite_3.top = new FormAttachment(0, 5);
+		fd_composite_3.left = new FormAttachment(0, 347);
+		composite_3.setLayoutData(fd_composite_3);
+		toolkit.adapt(composite_3);
+		toolkit.paintBordersFor(composite_3);
+		
+		tableViewer = new TableViewer(composite_3, SWT.BORDER | SWT.FULL_SELECTION);
+		DisplayTable = tableViewer.getTable();
+		DisplayTable.setBounds(10, 36, 411, 293);
+		toolkit.paintBordersFor(DisplayTable);
+		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+		
+		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnVenueid = tableViewerColumn_3.getColumn();
+		tblclmnVenueid.setWidth(100);
+		tblclmnVenueid.setText("Venue ID");
+		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				Venue venue = (Venue) element;
+				return ((Integer) venue.getVenueID()).toString();
+			}
+		});
+		
+		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnVenuename = tableViewerColumn_2.getColumn();
+		tblclmnVenuename.setWidth(100);
+		tblclmnVenuename.setText("Venue Name");
+		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				Venue venue = (Venue) element;
+				return venue.getName();
+			}
+		});
+		
+		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnCapacity = tableViewerColumn_1.getColumn();
+		tblclmnCapacity.setWidth(100);
+		tblclmnCapacity.setText("Capacity");
+		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				Venue venue = (Venue) element;
+				return ((Integer) venue.getMaxCapacity()).toString();
+			}
+		});
+		
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnCost = tableViewerColumn.getColumn();
+		tblclmnCost.setWidth(100);
+		tblclmnCost.setText("Cost");
+		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				Venue venue = (Venue) element;
+				return ((Double) (venue.getCost() / 100.0)).toString();
+			}
+		});
+		
+		Label lblSearchResult = new Label(composite_3, SWT.NONE);
+		lblSearchResult.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
+		lblSearchResult.setBounds(10, 10, 94, 20);
+		toolkit.adapt(lblSearchResult, true, true);
+		lblSearchResult.setText("Search result:");
+		
 		FunctionContentPage = new Composite(this, SWT.NONE);
-		FunctionContentPage.setBounds(0, 119, 331, 468);
+		FormData fd_FunctionContentPage = new FormData();
+		fd_FunctionContentPage.bottom = new FormAttachment(0, 719);
+		fd_FunctionContentPage.top = new FormAttachment(0, 182);
+		fd_FunctionContentPage.left = new FormAttachment(0, 5);
+		FunctionContentPage.setLayoutData(fd_FunctionContentPage);
 		toolkit.adapt(FunctionContentPage);
 		toolkit.paintBordersFor(FunctionContentPage);
 		FunctionContentPage.setLayout(stackLayout);
@@ -810,73 +881,6 @@ public class BookingSystemGUI extends Composite {
 		txtIndicatesA.setText("(*) indicates a compulsory field");
 		txtIndicatesA.setBounds(20, 366, 172, 21);
 		toolkit.adapt(txtIndicatesA, true, true);
-		
-		
-		
-		Composite composite_3 = new Composite(this, SWT.NONE);
-		composite_3.setBounds(363, 0, 421, 587);
-		toolkit.adapt(composite_3);
-		toolkit.paintBordersFor(composite_3);
-		
-		tableViewer = new TableViewer(composite_3, SWT.BORDER | SWT.FULL_SELECTION);
-		DisplayTable = tableViewer.getTable();
-		DisplayTable.setBounds(10, 36, 411, 293);
-		toolkit.paintBordersFor(DisplayTable);
-		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-		
-		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnVenueid = tableViewerColumn_3.getColumn();
-		tblclmnVenueid.setWidth(100);
-		tblclmnVenueid.setText("Venue ID");
-		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				Venue venue = (Venue) element;
-				return ((Integer) venue.getVenueID()).toString();
-			}
-		});
-		
-		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnVenuename = tableViewerColumn_2.getColumn();
-		tblclmnVenuename.setWidth(100);
-		tblclmnVenuename.setText("Venue Name");
-		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				Venue venue = (Venue) element;
-				return venue.getName();
-			}
-		});
-		
-		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnCapacity = tableViewerColumn_1.getColumn();
-		tblclmnCapacity.setWidth(100);
-		tblclmnCapacity.setText("Capacity");
-		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				Venue venue = (Venue) element;
-				return ((Integer) venue.getMaxCapacity()).toString();
-			}
-		});
-		
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnCost = tableViewerColumn.getColumn();
-		tblclmnCost.setWidth(100);
-		tblclmnCost.setText("Cost");
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				Venue venue = (Venue) element;
-				return ((Double) (venue.getCost() / 100.0)).toString();
-			}
-		});
-		
-		Label lblSearchResult = new Label(composite_3, SWT.NONE);
-		lblSearchResult.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
-		lblSearchResult.setBounds(10, 10, 94, 20);
-		toolkit.adapt(lblSearchResult, true, true);
-		lblSearchResult.setText("Search result:");
 
 	}
 	

@@ -224,6 +224,7 @@ public class ViewEventGUI3 extends Composite {
 		Bookvenueedit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				EmanagerGUIjface.BookVenue();
 			}
 		});
 		GridData gd_Bookvenueedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);

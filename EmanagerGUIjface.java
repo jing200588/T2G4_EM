@@ -1,5 +1,5 @@
 import java.awt.event.ActionEvent;
-import java.awt.Color;
+//import java.awt.Color;
 import java.util.Vector;
 
 import org.eclipse.jface.action.AbstractAction;
@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.graphics.Color;
 
 
 public class EmanagerGUIjface extends ApplicationWindow {
@@ -60,6 +61,10 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private static int count = 0;
 	private static StackLayout layout = new StackLayout();
 	private static boolean delete = false;
+	private static Display display = new Display();
+    private static Color red = display.getSystemColor(SWT.COLOR_RED);
+    private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
+    
 
 	/**
 	 * Create the application window.
@@ -77,7 +82,21 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		eventlist.add(newevent);
 		TableItem it1 = new TableItem(table,SWT.NONE);
 		 it1.setText(eventlist.get(count++).getName());
-
+		 it1.setText(1, "TEST");
+		 it1.setBackground(1, red);
+		 it1.setText(2, "C3");
+		 it1.setBackground(2,blue);
+		 
+		
+		/*
+	    //add event to db
+	    //query for db list and store as eventlist
+	    TableItem item;
+		for (int i=0; i<eventlist.size(); i++) {
+			item = new TableItem(table,SWT.NONE);
+			item.setText(eventlist.get(i).getName());
+		}
+		 */
 	}
 	
 	public static Eventitem getEvent (String event) {
@@ -92,6 +111,12 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	public static void CalcBudget () {
 		BudgetView bv = new BudgetView(c2, SWT.NONE, 0);
 		layout.topControl = bv;
+		c2.layout(true);
+	}
+	
+	public static void BookVenue() {
+		BookingSystemGUI bookgui = new BookingSystemGUI(c2, SWT.NONE);
+		layout.topControl = bookgui;
 		c2.layout(true);
 	}
 	
@@ -201,7 +226,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			TableColumn tc2 = new TableColumn(table,SWT.CENTER);
 			TableColumn tc3 = new TableColumn(table,SWT.CENTER);
 		    tc1.setText("Event List");
-	 	    tc2.setText("Alert");
+	 	    tc2.setText("DL");
 	 	    tc3.setText("Undone");
 	 	    tc1.setWidth(206);
 	 	    tc2.setWidth(40);
@@ -268,7 +293,9 @@ public class EmanagerGUIjface extends ApplicationWindow {
 				c2.setLayoutData(gd_c2);
 				formToolkit.adapt(c2);
 				formToolkit.paintBordersFor(c2);
-		
+				HomepageGUI hp = new HomepageGUI(c2, SWT.NONE);
+				layout.topControl = hp;
+				
 			
 			}
 	

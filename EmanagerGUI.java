@@ -130,6 +130,7 @@ public class EmanagerGUI {
 		label_15.setLayoutData(fd_label_15);
 		
 		Label label_16 = new Label(composite, SWT.NONE);
+		label_16.setImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\Pictures\\b34wl.jpg"));
 		fd_label_12.top = new FormAttachment(label_16, 395);
 		label_16.setText("View Event:");
 		label_16.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
