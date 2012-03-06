@@ -117,14 +117,6 @@ public class BudgetController implements BudgetInterface{
 		return ""+left;
 	}
 
-	/*Return to user if all items is checked*/
-	public boolean emptyComputeList() {
-		if (compute_list.size() == 0)
-			return true;
-		else
-			return false;
-	}
-
 	public void differentiateCompulsory(int satisfaction_choice) {
 		compulsory_cost = 0;
 		compulsory_satisfaction = 0;
@@ -148,16 +140,13 @@ public class BudgetController implements BudgetInterface{
 
 
 	public String analysis(int type, int satisfaction_choice) {
-
-		String text = "Test";
+		String text = "";
 		double price;
 		int compulsory_num = 1;
 		int num;
 		Collections.sort(compute_list);
 
-
 		int non_compulsory_num=1;
-		System.out.println("Temp: " + temp_budget + " Non: " + non_compulsory_cost + " Com: " + compulsory_cost );
 		if(compulsory_list.size() == item_list.size()){ //All items checked as compulsory and budget is enough to buy all.
 			totalCombination = 1;
 			if(satisfaction_choice == 1)
@@ -176,11 +165,10 @@ public class BudgetController implements BudgetInterface{
 				else {
 					text += price+"\n";
 				}
-
 				non_compulsory_num++;
 			}
 		}
-		else if(non_compulsory_cost <= temp_budget) {
+		else if(non_compulsory_cost <= temp_budget) { //cost of all non compulsory items is lower then budget, buy all.
 			totalCombination = 1;
 			if(satisfaction_choice == 1)
 				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (compulsory_satisfaction+non_compulsory_satisfaction) + "\nTotal cost: \t$" + ((double) (compulsory_cost+non_compulsory_cost))/100 +"\n";
@@ -208,7 +196,7 @@ public class BudgetController implements BudgetInterface{
 				totalCombination = 0;
 				text = "The budget is not enough to buy anything.";
 			}
-			else {
+			else { //there is compulsory item
 				totalCombination = 1;
 				if (satisfaction_choice == 1) 
 					text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: $\t" + ((double) compulsory_cost)/100 +"\n";
