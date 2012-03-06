@@ -521,7 +521,6 @@ public class EMDB_sqlite{
 	
 	// There is another method for batch
 	public int add_budget(int event_id, String name, int price, int satisfaction, String type){
-		System.out.print(event_id + name + price + satisfaction + type);
 		this.add_prepare("budget");
 		try {
 			ResultSet result;
@@ -880,9 +879,15 @@ public class EMDB_sqlite{
 	
 	
 	
-	public void delete_venue(){
+	public void delete_venue(int id){
+		String sql = "";
+		try {
+			sql = "DELETE FROM " + this.TABLE_events + " WHERE venue_id="+id;
+			this.DBQUERY.execute(sql);
+
+		} catch (SQLException e) {
 		
-		
+		}
 	}
 
 	
@@ -948,8 +953,7 @@ public class EMDB_sqlite{
 	}
 	
 	
-	
-	
+
 
 
 	

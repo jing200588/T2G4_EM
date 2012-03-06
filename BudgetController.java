@@ -413,6 +413,7 @@ public class BudgetController implements BudgetInterface{
 		if(differentResult == 1) { //Budget is enough to buy all item (Regardless is compulsory or not). *Take whole item list*
 			for(int i=0; i<item_list.size(); i++) {
 				db_list.add(item_list.get(i));
+				System.out.println(" - " + item_list.get(i).getItem());
 			}
 		}
 		else if (differentResult == 2) { //Budget is only enough to buy compulsory item. Take compulsory list*
