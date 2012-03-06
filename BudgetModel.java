@@ -80,8 +80,6 @@ public class BudgetModel {
 	
 	public void update_item_list(int id, Vector<Item> i_list) {
 		
-		//TODO : DELETE entire list first, then thow back.. Call received_item_list
-
 		item_list = i_list;
 	
 		this.delete_item_list(id);
@@ -105,7 +103,11 @@ public class BudgetModel {
 	 */
 	
 	public Vector<Item> return_item_list(int id) {
-		//db get id get list
+		
+		db.connect();
+		item_list = db.get_budget_list(id, false);
+		db.disconnect();
+		
 		return item_list;
 	}
 	
