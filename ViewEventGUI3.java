@@ -52,14 +52,11 @@ public class ViewEventGUI3 extends Composite {
 		fd_EparticularsComp.top = new FormAttachment(Title, 30);
 		fd_EparticularsComp.left = new FormAttachment(20, 0);
 		EparticularsComp.setLayoutData(fd_EparticularsComp);
-		//formToolkit.adapt(EparticularsComp);
-		//formToolkit.paintBordersFor(EparticularsComp);
 		EparticularsComp.setLayout(new GridLayout(3, false));
 
 		Label Eparticulars = new Label(EparticularsComp, SWT.NONE);
 		Eparticulars.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Eparticulars.setFont(SWTResourceManager.getFont("Courier New Baltic", 16, SWT.BOLD));
-		//formToolkit.adapt(Eparticulars, true, true);
 		Eparticulars.setText("Event Particulars");
 		new Label(EparticularsComp, SWT.NONE);
 		
@@ -67,7 +64,6 @@ public class ViewEventGUI3 extends Composite {
 		GridData gd_Epartedit = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		gd_Epartedit.widthHint = 85;
 		Epartedit.setLayoutData(gd_Epartedit);
-		//formToolkit.adapt(Epartedit, true, true);
 		Epartedit.setText("Edit");
 		new Label(EparticularsComp, SWT.NONE);
 		new Label(EparticularsComp, SWT.NONE);
@@ -76,61 +72,50 @@ public class ViewEventGUI3 extends Composite {
 		Label Enamelabel = new Label(EparticularsComp, SWT.NONE);
 		Enamelabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		Enamelabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		//formToolkit.adapt(Enamelabel, true, true);
 		Enamelabel.setText("Event Name:");
 		
 		Label Ename = new Label(EparticularsComp, SWT.NONE);
 		Ename.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
 		Ename.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		//formToolkit.adapt(Ename, true, true);
 		Ename.setText(curevent.getName());
 		
 		Label Startdntlabel = new Label(EparticularsComp, SWT.NONE);
 		Startdntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		Startdntlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		//formToolkit.adapt(Startdntlabel, true, true);
 		Startdntlabel.setText("Start Date and Time:");
 		
 		Label Startdate = new Label(EparticularsComp, SWT.NONE);
 		Startdate.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		Startdate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		//formToolkit.adapt(Startdate, true, true);
 		Startdate.setText(curevent.getStartDate());
 		
 		Label Starttime = new Label(EparticularsComp, SWT.NONE);
 		Starttime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		Starttime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		//formToolkit.adapt(Starttime, true, true);
 		Starttime.setText(curevent.getStartTime()+"HRS");
 		
 		Label Enddntlabel = new Label(EparticularsComp, SWT.NONE);
 		Enddntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		Enddntlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		//formToolkit.adapt(Enddntlabel, true, true);
 		Enddntlabel.setText("End Date and Time:");
 		
 		Label Enddate = new Label(EparticularsComp, SWT.NONE);
 		Enddate.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		Enddate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		//formToolkit.adapt(Enddate, true, true);
 		Enddate.setText(curevent.getEndDate());
 		
 		Label Endtime = new Label(EparticularsComp, SWT.NONE);
 		Endtime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		Endtime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		//formToolkit.adapt(Endtime, true, true);
 		Endtime.setText(curevent.getEndTime()+"HRS");
 		
 		Label Edescriptionlabel = new Label(EparticularsComp, SWT.NONE);
 		Edescriptionlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		Edescriptionlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		//formToolkit.adapt(Edescriptionlabel, true, true);
 		Edescriptionlabel.setText("Description:");
 		
 		CLabel Edescription = new CLabel(EparticularsComp, SWT.NONE);
 		Edescription.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
-		//formToolkit.adapt(Edescription);
-		//formToolkit.paintBordersFor(Edescription);
 		Edescription.setText("New Label");
 	
 		//Divider1
@@ -141,7 +126,6 @@ public class ViewEventGUI3 extends Composite {
 		fd_divider1.left = new FormAttachment(5, 0);
 		fd_divider1.right = new FormAttachment(95, 0);
 		divider1.setLayoutData(fd_divider1);
-		//formToolkit.adapt(divider1, true, true);
 		
 		//Event Program Flow
 		Composite Eprogflowcomp = new Composite(maincomp, SWT.NONE);
@@ -151,13 +135,10 @@ public class ViewEventGUI3 extends Composite {
 		fd_Eprogflowcomp.left = new FormAttachment(20, 0);
 		fd_Eprogflowcomp.top = new FormAttachment(divider1, 30);
 		Eprogflowcomp.setLayoutData(fd_Eprogflowcomp);
-		//formToolkit.adapt(Eprogflowcomp);
-		//formToolkit.paintBordersFor(Eprogflowcomp);
 		
 		Label EProgramFlow = new Label(Eprogflowcomp, SWT.NONE);
 		EProgramFlow.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		EProgramFlow.setFont(SWTResourceManager.getFont("Segoe UI", 16, SWT.BOLD));
-		//formToolkit.adapt(EProgramFlow, true, true);
 		EProgramFlow.setText("Event Program Flow");
 		
 		Label lblNewLabel_1 = new Label(Eprogflowcomp, SWT.NONE);
@@ -165,7 +146,6 @@ public class ViewEventGUI3 extends Composite {
 		gd_lblNewLabel_1.widthHint = 38;
 		lblNewLabel_1.setLayoutData(gd_lblNewLabel_1);
 		lblNewLabel_1.setText(" ");
-		//formToolkit.adapt(lblNewLabel_1, true, true);
 		
 		Button Eprogflowedit = new Button(Eprogflowcomp, SWT.NONE);
 		Eprogflowedit.addSelectionListener(new SelectionAdapter() {
@@ -176,7 +156,6 @@ public class ViewEventGUI3 extends Composite {
 		GridData gd_Eprogflowedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_Eprogflowedit.widthHint = 85;
 		Eprogflowedit.setLayoutData(gd_Eprogflowedit);
-		//formToolkit.adapt(Eprogflowedit, true, true);
 		Eprogflowedit.setText("Edit");
 		
 		//Divider 2
@@ -186,7 +165,6 @@ public class ViewEventGUI3 extends Composite {
 		fd_Divider2.left = new FormAttachment(5, 0);
 		fd_Divider2.right = new FormAttachment(95, 0);
 		Divider2.setLayoutData(fd_Divider2);
-		//formToolkit.adapt(Divider2, true, true);
 		
 		//Book Venue 
 		Label lblNewLabel = new Label(maincomp, SWT.NONE);
@@ -195,7 +173,6 @@ public class ViewEventGUI3 extends Composite {
 		fd_lblNewLabel.left = new FormAttachment(0, 10);
 		lblNewLabel.setLayoutData(fd_lblNewLabel);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
-		//formToolkit.adapt(lblNewLabel, true, true);
 		lblNewLabel.setText("View Event:");
 		
 		Composite Bookvenuecomp = new Composite(maincomp, SWT.NONE);
@@ -205,20 +182,16 @@ public class ViewEventGUI3 extends Composite {
 		fd_Bookvenuecomp.left = new FormAttachment(20, 0);
 		fd_Bookvenuecomp.top = new FormAttachment(Divider2, 30);
 		Bookvenuecomp.setLayoutData(fd_Bookvenuecomp);
-		//formToolkit.adapt(Bookvenuecomp);
-		//formToolkit.paintBordersFor(Bookvenuecomp);
 		
 		Label lblBookVenue = new Label(Bookvenuecomp, SWT.NONE);
 		lblBookVenue.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblBookVenue.setFont(SWTResourceManager.getFont("Segoe UI", 16, SWT.BOLD));
-		//formToolkit.adapt(lblBookVenue, true, true);
 		lblBookVenue.setText("Book Venue");
 		
 		Label dummy = new Label(Bookvenuecomp, SWT.NONE);
 		GridData gd_dummy = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_dummy.widthHint = 27;
 		dummy.setLayoutData(gd_dummy);
-		//formToolkit.adapt(dummy, true, true);
 		
 		Button Bookvenueedit = new Button(Bookvenuecomp, SWT.NONE);
 		Bookvenueedit.addSelectionListener(new SelectionAdapter() {
@@ -230,7 +203,6 @@ public class ViewEventGUI3 extends Composite {
 		GridData gd_Bookvenueedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_Bookvenueedit.widthHint = 85;
 		Bookvenueedit.setLayoutData(gd_Bookvenueedit);
-		//formToolkit.adapt(Bookvenueedit, true, true);
 		Bookvenueedit.setText("Edit");
 		
 		//Divider 3
@@ -240,7 +212,6 @@ public class ViewEventGUI3 extends Composite {
 		fd_divider3.left = new FormAttachment(5, 0);
 		fd_divider3.right = new FormAttachment(95, 0);
 		divider3.setLayoutData(fd_divider3);
-		//formToolkit.adapt(divider3, true, true);
 		
 		//Calculate Budget
 		Composite Budgetcomp = new Composite(maincomp, SWT.NONE);
@@ -250,20 +221,16 @@ public class ViewEventGUI3 extends Composite {
 		fd_Budgetcomp.left = new FormAttachment(20, 0);
 		fd_Budgetcomp.top = new FormAttachment(divider3, 30);
 		Budgetcomp.setLayoutData(fd_Budgetcomp);
-		//formToolkit.adapt(Budgetcomp);
-		//formToolkit.paintBordersFor(Budgetcomp);
 		
 		Label Cbudget = new Label(Budgetcomp, SWT.NONE);
 		Cbudget.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Cbudget.setFont(SWTResourceManager.getFont("Segoe UI", 16, SWT.BOLD));
-		//formToolkit.adapt(Cbudget, true, true);
 		Cbudget.setText("Optimal Purchase");
 		
 		Label dummy3 = new Label(Budgetcomp, SWT.NONE);
 		GridData gd_dummy3 = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_dummy3.widthHint = 49;
 		dummy3.setLayoutData(gd_dummy3);
-		//formToolkit.adapt(dummy3, true, true);
 		
 		Button btnCalculate = new Button(Budgetcomp, SWT.NONE);
 		btnCalculate.addSelectionListener(new SelectionAdapter() {
@@ -276,7 +243,6 @@ public class ViewEventGUI3 extends Composite {
 		gd_btnCalculate.widthHint = 85;
 		btnCalculate.setLayoutData(gd_btnCalculate);
 		
-		//formToolkit.adapt(btnCalculate, true, true);
 		btnCalculate.setText("Calculate");
 		
 		//Divider 4
