@@ -36,7 +36,7 @@ public class BookingSystem {
 	 */
 	public static boolean bookVenue(int eventID, Venue bookedVenue, TimeSlot wantedTimeSlot)
 	{
-		bookedVenue.bookTimeSlot(wantedTimeSlot);
+//		bookedVenue.bookTimeSlot(wantedTimeSlot);
 		
 		// Update in the database of venue.
 		
@@ -80,7 +80,7 @@ public class BookingSystem {
 	public static Venue findVenueByName(String venueName)
 	{
 		// look up in the database.
-		
+		// Search venue by Name
 		return null;
 	}
 	
@@ -116,7 +116,8 @@ public class BookingSystem {
 			case ALL_THREE:
 			{
 				// Search in the DATABASE
-				// Dummy code (will be REPLACED) when there is a database
+				// Dummy code (will be REPLACED) when there is a database 
+				// Capacity
 				Vector<Venue> firstRoundCapacity = new Vector<Venue>(); 
 				
 				// Actual code
@@ -156,7 +157,9 @@ public class BookingSystem {
 			{
 				// Search in the DATABASE
 				// Dummy code (will be REPLACED) when there is a database
+				// Cost
 				Vector<Venue> firstRoundCost = new Vector<Venue>();
+				
 				
 				// Actual code
 				if(type == SearchCriteria.COST)
@@ -175,6 +178,7 @@ public class BookingSystem {
 			{
 				// Search in the DATABASE
 				// Dummy code (will be REPLACED) when there is a database
+				// Time slot
 				returnList = new Vector<Venue>();
 			}
 		}
