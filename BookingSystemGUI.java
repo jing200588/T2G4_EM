@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -162,7 +163,7 @@ public class BookingSystemGUI extends Composite {
 //		fd_FunctionOptionCompo.bottom = new FormAttachment(FunctionContentPage, -6);
 //		fd_FunctionOptionCompo.right = new FormAttachment(FunctionContentPage, 0, SWT.RIGHT);
 		FormData fd_FunctionContentPage = new FormData();
-		fd_FunctionContentPage.top = new FormAttachment(FunctionOptionCompo, 10);
+//		fd_FunctionContentPage.top = new FormAttachment(FunctionOptionCompo, 10);
 		fd_FunctionContentPage.left = new FormAttachment(0);
 		fd_FunctionContentPage.right = new FormAttachment(ResultColumnCompo, 340);
 		fd_FunctionContentPage.bottom = new FormAttachment(100);
@@ -832,7 +833,7 @@ public class BookingSystemGUI extends Composite {
 		FormData fd_ResultColumnCompo = new FormData();
 		fd_ResultColumnCompo.bottom = new FormAttachment(0, 600);
 		fd_ResultColumnCompo.top = new FormAttachment(0);
-		fd_ResultColumnCompo.left = new FormAttachment(FunctionOptionCompo, 20);
+//		fd_ResultColumnCompo.left = new FormAttachment(FunctionOptionCompo, 20);
 		fd_ResultColumnCompo.right = new FormAttachment(100);
 		ResultColumnCompo.setLayoutData(fd_ResultColumnCompo);
 		toolkit.adapt(ResultColumnCompo);
@@ -933,9 +934,11 @@ public class BookingSystemGUI extends Composite {
 	
 	public static void main(String[] args){
 		Display display = new Display();
-
-		Shell shell = new Shell(display, SWT.CLOSE | SWT.TITLE);
+		display = Display.getDefault();
+		Shell shell = new Shell();
+		shell.setLayout(new FillLayout());
 		shell.setText("Booking System");
+		shell.setSize(629, 606);
 		BookingSystemGUI calc = new BookingSystemGUI(shell, SWT.NONE);
 		calc.pack();
 
