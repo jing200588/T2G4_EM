@@ -11,6 +11,7 @@ public class BudgetController implements BudgetInterface{
 	private Solution soln;
 	private int event_id;
 	private int differentResult;
+	private boolean hasSolnSet;
 
 	private Vector<Item> compute_list;
 	private Vector<Item> compulsory_list;
@@ -144,6 +145,7 @@ public class BudgetController implements BudgetInterface{
 		int num;
 		Collections.sort(compute_list);
 		differentResult = 0;
+		hasSolnSet = false;
 		int non_compulsory_num=1;
 		if(compulsory_list.size() == item_list.size()){ //All items checked as compulsory and budget is enough to buy all.
 			differentResult = 1; // (Whole item list)
@@ -224,6 +226,7 @@ public class BudgetController implements BudgetInterface{
 			}
 		}
 		else {
+			differentResult = 3;
 			if(type == 1)
 				generateType(satisfaction_choice);
 			else
@@ -233,9 +236,9 @@ public class BudgetController implements BudgetInterface{
 				totalCombination = 0;
 			else {
 				totalCombination = soln.getSolnSetSize();
-				differentResult = 3; //There is combination.
+				hasSolnSet = true; //There is combination.
 			}
-				
+
 			if (satisfaction_choice == 1)
 				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (soln.getSvalue()+compulsory_satisfaction) +"\n";
 			else
@@ -406,7 +409,7 @@ public class BudgetController implements BudgetInterface{
 
 	public void sendDBList(int select) {
 		db_list = new Vector<Item>();
-		
+
 		if(differentResult == 1) { //Budget is enough to buy all item (Regardless is compulsory or not). *Take whole item list*
 			for(int i=0; i<item_list.size(); i++) {
 				db_list.add(item_list.get(i));
@@ -421,17 +424,16 @@ public class BudgetController implements BudgetInterface{
 			for(int i=0; i<compulsory_list.size(); i++) {
 				db_list.add(compulsory_list.get(i));
 			}
-			
-			if(soln.getSolnSetSize() > 0) {
+
+			if(hasSolnSet == true) {
 				BitSet bitmask = soln.getSolnSet().get(select);
 				for(int i=0; i<number; i++) {
-					if(bitmask.get(i)) {
+					if(bitmask.get(i))
 						db_list.add(compute_list.get(i));
-					}
 				}
 			}
 		}
-		
+
 		bm.recevied_combination_list(event_id, db_list);
 
 		System.out.println("TESTING START");
