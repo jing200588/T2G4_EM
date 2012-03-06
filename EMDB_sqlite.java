@@ -880,9 +880,15 @@ public class EMDB_sqlite{
 	
 	
 	
-	public void delete_venue(){
+	public void delete_venue(int id){
+		String sql = "";
+		try {
+			sql = "DELETE FROM " + this.TABLE_events + " WHERE venue_id="+id;
+			this.DBQUERY.execute(sql);
+
+		} catch (SQLException e) {
 		
-		
+		}
 	}
 
 	
