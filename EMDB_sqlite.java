@@ -395,30 +395,22 @@ public class EMDB_sqlite{
 	 */
 	public void add_prepare(String type){
 		try {
-			switch (type){
-				case "event":			
+				if (type.compareTo("event") == 0)		
 					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_events + " (name, description) VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS);
-					break;
-					
-				case "venue":
-					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_venue + " (name, address, description, capacity, cost) VALUES (?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
-					break;
 				
-				case "bookings":
+				else if (type.compareTo("venue") == 0)
+					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_venue + " (name, address, description, capacity, cost) VALUES (?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+					
+				else if (type.compareTo("bookings") == 0)
 					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_venue_bookings + " (event_id, venue_id, date, time_hour, time_min) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
-					break;
 					
-				case "budget":
+				else if (type.compareTo("budget") == 0)
 					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_budget + " (event_id, name, price, satisfaction, type) VALUES (?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
-					break;
 					
-				case "budgetOptimized":
+				else if (type.compareTo("budgetOptimized") == 0)
 					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_budget_optimized + " (event_id, name, price, satisfaction, type) VALUES (?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
-					break;
-						
-				default:
-					break;
-			}
+				
+			
 			
 			
 		} catch (SQLException e) {
