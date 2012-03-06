@@ -10,6 +10,7 @@ public class BudgetController implements BudgetInterface{
 	private double budget, recursive_fnc_budget;
 	private Solution soln;
 	private int event_id;
+	private int differentResult;
 
 	private Vector<Item> compute_list;
 	private Vector<Item> compulsory_list;
@@ -28,8 +29,8 @@ public class BudgetController implements BudgetInterface{
 	}
 
 	public BudgetController(String input, int budget, int type_c, int satisfaction_c, int id) throws Exception {
-		System.out.println("Coming in");
-		if(input.equals("")) throw new IOException("***Input list must not be empty!***");
+
+		if(input.length() == 0) throw new IOException("***Input list must not be empty.***");
 		item_list = new Vector<Item>();
 		event_id=id;
 		Scanner sc = new Scanner(input);
@@ -43,14 +44,11 @@ public class BudgetController implements BudgetInterface{
 
 		if(type_c == 1) { //has type
 			while(sc.hasNextLine()) {
-				System.out.println("running");
 				line = sc.nextLine();
 				if(line.length() > 0) {
 					component = line.split(" ");
 					name = component[0];
 					cost = Double.parseDouble(component[1]);
-					if(cost < 0) 
-						throw new IOException("Cost should not be negative");
 					if(satisfaction_c == 1) { //has satisfaction
 						satisfaction = Integer.parseInt(component[2]);
 						type = component[3];
@@ -145,9 +143,10 @@ public class BudgetController implements BudgetInterface{
 		int compulsory_num = 1;
 		int num;
 		Collections.sort(compute_list);
-
+		differentResult = 0;
 		int non_compulsory_num=1;
 		if(compulsory_list.size() == item_list.size()){ //All items checked as compulsory and budget is enough to buy all.
+			differentResult = 1; // (Whole item list)
 			totalCombination = 1;
 			if(satisfaction_choice == 1)
 				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: \t$" + ((double) (compulsory_cost))/100 +"\n";
@@ -169,6 +168,7 @@ public class BudgetController implements BudgetInterface{
 			}
 		}
 		else if(non_compulsory_cost <= temp_budget) { //cost of all non compulsory items is lower then budget, buy all.
+			differentResult = 1; // (Whole item list)
 			totalCombination = 1;
 			if(satisfaction_choice == 1)
 				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (compulsory_satisfaction+non_compulsory_satisfaction) + "\nTotal cost: \t$" + ((double) (compulsory_cost+non_compulsory_cost))/100 +"\n";
@@ -193,10 +193,12 @@ public class BudgetController implements BudgetInterface{
 		}
 		else if(compute_list.get(compute_list.size()-1).getPrice() > temp_budget) { //budget left is not enough to buy the cheapest items left
 			if (compute_list.size() == item_list.size()) {//no compulsory item
+				differentResult = 0; // (Take nothing)
 				totalCombination = 0;
-				text = "The budget is not enough to buy anything.";
+				text = "The budget is not enough to buy anything. \nIncrease your budget and try again.";
 			}
 			else { //there is compulsory item
+				differentResult = 2; // (Take Compulsory List only)
 				totalCombination = 1;
 				if (satisfaction_choice == 1) 
 					text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: $\t" + ((double) compulsory_cost)/100 +"\n";
@@ -229,8 +231,11 @@ public class BudgetController implements BudgetInterface{
 
 			if(soln.getSolnSetSize() == 0)
 				totalCombination = 0;
-			else
+			else {
 				totalCombination = soln.getSolnSetSize();
+				differentResult = 3; //There is combination.
+			}
+				
 			if (satisfaction_choice == 1)
 				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (soln.getSvalue()+compulsory_satisfaction) +"\n";
 			else
@@ -401,20 +406,32 @@ public class BudgetController implements BudgetInterface{
 
 	public void sendDBList(int select) {
 		db_list = new Vector<Item>();
-
-		for(int i=0; i<compulsory_list.size(); i++) {
-			db_list.add(compulsory_list.get(i));
+		
+		if(differentResult == 1) { //Budget is enough to buy all item (Regardless is compulsory or not). *Take whole item list*
+			for(int i=0; i<item_list.size(); i++) {
+				db_list.add(item_list.get(i));
+			}
 		}
-
-		if(soln.getSolnSetSize() > 0) {
-			BitSet bitmask = soln.getSolnSet().get(select);
-			for(int i=0; i<number; i++) {
-				if(bitmask.get(i)) {
-					db_list.add(compute_list.get(i));
+		else if (differentResult == 2) { //Budget is only enough to buy compulsory item. Take compulsory list*
+			for(int i=0; i<compulsory_list.size(); i++) {
+				db_list.add(compulsory_list.get(i));
+			}
+		}
+		else if (differentResult == 3) { //There is solution set
+			for(int i=0; i<compulsory_list.size(); i++) {
+				db_list.add(compulsory_list.get(i));
+			}
+			
+			if(soln.getSolnSetSize() > 0) {
+				BitSet bitmask = soln.getSolnSet().get(select);
+				for(int i=0; i<number; i++) {
+					if(bitmask.get(i)) {
+						db_list.add(compute_list.get(i));
+					}
 				}
 			}
 		}
-
+		
 		bm.recevied_combination_list(event_id, db_list);
 
 		System.out.println("TESTING START");

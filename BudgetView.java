@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Vector;
 
 import org.eclipse.swt.custom.StackLayout;
@@ -220,16 +221,18 @@ public class BudgetView extends Composite {
 		lblSelectTypeOption.setText("Select Type Option:");
 
 		btnChange = new Button(Step1, SWT.NONE);
+		btnChange.setEnabled(false);
 		btnChange.setBounds(10, 168, 75, 25);
 		btnChange.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				txtBudget.setEditable(true);
+				txtBudget.setEnabled(true);
 				btnWithoutType.setEnabled(true);
 				btnWithType.setEnabled(true);
 				btnWithoutSatisfaction.setEnabled(true);
 				btnWithSatisfaction.setEnabled(true);
 				btnConfirm_S1.setEnabled(true);
+				btnConfirm_S1_1.setEnabled(false);
 				txt_input_list.setEnabled(false);
 				btnResetInputList.setEnabled(false);
 				txt_error_S1.setVisible(false);
@@ -248,12 +251,16 @@ public class BudgetView extends Composite {
 					budget = (int) (Double.parseDouble(txtBudget.getText().toString()) * 100);
 
 					/*Disable all option on the left*/
-					txtBudget.setEditable(false);
+					txtBudget.setEnabled(false);
 					btnWithoutType.setEnabled(false);
 					btnWithType.setEnabled(false);
 					btnWithoutSatisfaction.setEnabled(false);
 					btnWithSatisfaction.setEnabled(false);
 					btnConfirm_S1.setEnabled(false);
+					
+					
+					//Enable some button
+					btnChange.setEnabled(true);
 
 					if(btnWithoutType.getSelection() == true)
 						type_choice = 0;
@@ -287,7 +294,7 @@ public class BudgetView extends Composite {
 		txtBudget.setBounds(96, 4, 76, 21);
 		formToolkit.adapt(txtBudget, true, true);
 
-		txt_input_list = new Text(Step1, SWT.BORDER | SWT.MULTI);
+		txt_input_list = new Text(Step1, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		txt_input_list.setBounds(229, 55, 441, 163);
 		txt_input_list.setEnabled(false);
 		formToolkit.adapt(txt_input_list, true, true);
@@ -309,6 +316,13 @@ public class BudgetView extends Composite {
 		formToolkit.adapt(btnResetInputList, true, true);
 		btnResetInputList.setText("Reset Input List");
 
+		txt_error_S1 = new Text(Step1, SWT.READ_ONLY | SWT.MULTI);
+		txt_error_S1.setBounds(229, 4, 441, 29);
+		txt_error_S1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		txt_error_S1.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		txt_error_S1.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
+		formToolkit.adapt(txt_error_S1, true, true);
+
 		btnConfirm_S1_1 = new Button(Step1, SWT.NONE);
 		btnConfirm_S1_1.setBounds(595,  229, 75, 25);
 		btnConfirm_S1_1.addSelectionListener(new SelectionAdapter() {
@@ -318,6 +332,7 @@ public class BudgetView extends Composite {
 				selected_compulsory = new Vector<Integer>();
 
 				try {	
+					txt_error_S1.setVisible(false);
 					budgetPersonalAssistant  = new BudgetController(txt_input_list.getText(), budget, type_choice, satisfaction_choice, event_id);
 					item_list = budgetPersonalAssistant.getItemList(event_id);
 					lblError_S2.setVisible(false);
@@ -337,11 +352,15 @@ public class BudgetView extends Composite {
 					}
 					for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
 						table.getColumn(loopIndex).pack();
-					}								
+					}							
 					btnStepInputDetails.setEnabled(true);	
 				}
 				catch (Exception ie) {
-					txt_error_S1.setText(ie.getMessage());
+					if(ie.getMessage().equals("***Input list must not be empty.***"))
+						txt_error_S1.setText("***Input list must not be empty.***");
+					else
+						txt_error_S1.setText("***Incorrect input format.***");
+					txt_error_S1.setVisible(true);
 				}
 			}
 		});
@@ -350,12 +369,7 @@ public class BudgetView extends Composite {
 		formToolkit.adapt(btnConfirm_S1_1, true, true);
 		btnConfirm_S1_1.setText("Confirm");
 
-		txt_error_S1 = new Text(Step1, SWT.READ_ONLY | SWT.MULTI);
-		txt_error_S1.setBounds(229, 4, 441, 29);
-		txt_error_S1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		txt_error_S1.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		txt_error_S1.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
-		formToolkit.adapt(txt_error_S1, true, true);
+
 
 		Step2 = new Composite(BigContent, SWT.NONE);
 		Step2.setBounds(0, 0, 675, 260);
@@ -403,6 +417,8 @@ public class BudgetView extends Composite {
 				Collections.sort(selected_compulsory);
 
 				try {	
+					btnFinish.setEnabled(true);
+					combo_selection.setEnabled(true);
 					lblError_S2.setVisible(false);
 					budgetPersonalAssistant.compulsory(selected_compulsory);
 					double budget_left = Double.parseDouble(budgetPersonalAssistant.budgetleft());
@@ -420,6 +436,14 @@ public class BudgetView extends Composite {
 					combo_selection.removeAll();
 					for(int i=1; i<=budgetPersonalAssistant.noOfCombination(); i++) {
 						combo_selection.add("Combination " + i);
+					}
+					
+					if(budgetPersonalAssistant.noOfCombination() > 0) {
+						combo_selection.select(0);
+					}
+					else {
+						combo_selection.setEnabled(false);
+						btnFinish.setEnabled(false);
 					}
 
 				} catch(Exception ie) {
@@ -452,7 +476,7 @@ public class BudgetView extends Composite {
 		formToolkit.adapt(txt_result, true, true);
 
 		combo_selection = new Combo(Step3, SWT.NONE);
-		combo_selection.setBounds(483, 236, 91, 23);
+		combo_selection.setBounds(448, 236, 126, 23);
 		formToolkit.adapt(combo_selection);
 		formToolkit.paintBordersFor(combo_selection);
 
@@ -469,7 +493,7 @@ public class BudgetView extends Composite {
 		btnFinish.setText("Finish");
 
 		Label lblSelectAnCombination = new Label(Step3, SWT.NONE);
-		lblSelectAnCombination.setBounds(356, 239, 121, 15);
+		lblSelectAnCombination.setBounds(321, 239, 121, 15);
 		formToolkit.adapt(lblSelectAnCombination, true, true);
 		lblSelectAnCombination.setText("Select an combination:");
 
