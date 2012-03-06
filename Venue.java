@@ -21,6 +21,11 @@ public class Venue {
 	/************************************************************************
 	 * Constructor
 	 ************************************************************************/
+	public Venue(){
+		
+	}
+	
+	
 	public Venue(String name, String address, String description,
 					int maxCapacity, double cost)
 	{
@@ -137,6 +142,13 @@ public class Venue {
 	{
 		m_bookedTimeSlots.add(wantedTimeSlot);
 	}
+	
+	
+	public void bookTimeSlotBlock(Vector<TimeSlot>  wantedTimeSlots){
+		m_bookedTimeSlots = wantedTimeSlots;	
+	}
+	
+	
 	
 	/**
 	 * 
