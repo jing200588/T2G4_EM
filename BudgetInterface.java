@@ -9,8 +9,6 @@ public interface BudgetInterface {
 	
 	public String budgetleft();
 	
-	public boolean emptyComputeList();
-	
 	public String findOptimalShopList(int hastype,int hassatisfaction) throws Exception;
 	
 	public void differentiateCompulsory(int hassatisfaction);
