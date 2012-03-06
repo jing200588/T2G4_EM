@@ -735,21 +735,24 @@ public class EMDB_sqlite{
 		String query = "";
 		 try {
 			 
-			switch(type){
-				case "event":
-					query = this.select_all(
+			
+			if (type.compareTo("event") == 0){
+				query = this.select_all(
 							this.TABLE_venue_bookings, 
 							"event_id="+ id , 
 							1);	
-					break;
-				case "venue":
-				default:
-					query = this.select_all(
+			}else if (type.compareTo("venue") == 0){
+			
+				query = this.select_all(
 							this.TABLE_venue_bookings, 
 							"venue_id="+ id , 
 							1);	
-					break;
-			} 
+			} else{
+				query = this.select_all(
+							this.TABLE_venue_bookings, 
+							"venue_id="+ id , 
+							1);	
+			}
 			 
 
 			ResultSet result = this.DBQUERY.executeQuery(query);
