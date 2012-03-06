@@ -49,6 +49,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private static Display display = new Display();
     private static Color red = display.getSystemColor(SWT.COLOR_RED);
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
+    private ViewEventGUI3 view;
     
 
 	/**
@@ -147,6 +148,11 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	public static boolean getdelete () {
 		return delete;
 	}
+	
+	public static void ReturnView() {
+		layout.topControl = view;
+	}
+	
 	/**
 	 * Create contents of the application window.
 	 * @param parent
@@ -229,7 +235,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 					((Composite)children[i]).dispose();
 				}
 				
-		        ViewEventGUI3 view = new ViewEventGUI3(c2, SWT.NONE, getEvent(itemname));
+		        view = new ViewEventGUI3(c2, SWT.NONE, getEvent(itemname));
 		      //  view.setBounds(c2.getBounds());
 		   //     formToolkit.adapt(view);
 		//		formToolkit.paintBordersFor(view);

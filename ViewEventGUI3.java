@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.SWT;
@@ -8,15 +10,19 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Table;
 
 
 public class ViewEventGUI3 extends Composite {
+	private Table BudgetResult;
 
 	/**
 	 * Create the composite.
@@ -217,14 +223,14 @@ public class ViewEventGUI3 extends Composite {
 		Bookvenueedit.setText("Edit");
 		
 		//Divider 3
-		/*
+		
 		Label divider3 = new Label(maincomp, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_divider3 = new FormData();
 		fd_divider3.top = new FormAttachment(Bookvenuecomp, 30);
 		fd_divider3.left = new FormAttachment(5, 0);
 		fd_divider3.right = new FormAttachment(95, 0);
-		divider3.setLayoutData(fd_divider3);*/
-		Label divider3 = createdivider(maincomp, Bookvenuecomp);
+		divider3.setLayoutData(fd_divider3);
+	//	Label divider3 = createdivider(maincomp, Bookvenuecomp);
 		
 		//Calculate Budget
 		Composite Budgetcomp = new Composite(maincomp, SWT.NONE);
@@ -267,6 +273,42 @@ public class ViewEventGUI3 extends Composite {
 		fd_divider4.right = new FormAttachment(95, 0);
 		divider4.setLayoutData(fd_divider4);*/
 		Label divider4 = createdivider(maincomp, Budgetcomp);
+		
+	//	if ()
+	//		Table BudgetTable = OptimizedTable(Eventitem curevent, Composite Budgetcomp);
+		//Budget Table
+	/*	BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION);		
+		BudgetResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		BudgetResult.setHeaderVisible(true);
+		BudgetResult.setBounds(25, 25, 645, 200);
+		
+		TableColumn col0 = new TableColumn(BudgetResult, SWT.NULL);
+		col0.setText("No.");
+		col0.setResizable(false);
+
+		TableColumn col1 = new TableColumn(BudgetResult, SWT.NULL);
+		col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+		col1.setResizable(false);
+		
+		TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
+		col2.setText("Price\t\t\t\t");
+		col2.setResizable(false);
+		
+		TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
+		col3.setText("Satisfaction");
+		col3.setResizable(false);
+		
+
+		TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
+		col4.setText("Type\t\t\t\t\t\t\t\t\t\t");
+		col4.setResizable(false);
+		
+
+		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
+			BudgetResult.getColumn(loopIndex).pack();
+		}	
+
+		*/
 		
 		//Participant List
 		Composite Plistcomp = new Composite(maincomp, SWT.NONE);
@@ -356,6 +398,52 @@ public class ViewEventGUI3 extends Composite {
 		divider.setLayoutData(fd_divider);
 		
 		return divider;
+	}
+	
+	public Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
+		BudgetController bc = new BudgetController();
+		Vector<Item> item_list = bc.getCombinationList(0);
+		
+		BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION);		
+		BudgetResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		BudgetResult.setHeaderVisible(true);
+		BudgetResult.setBounds(25, 25, 645, 200);
+		
+		TableColumn col0 = new TableColumn(BudgetResult, SWT.NULL);
+		col0.setText("No.");
+		col0.setResizable(false);
+
+		TableColumn col1 = new TableColumn(BudgetResult, SWT.NULL);
+		col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+		col1.setResizable(false);
+		
+		TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
+		col2.setText("Price\t\t\t\t");
+		col2.setResizable(false);
+		
+		TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
+		col3.setText("Satisfaction");
+		col3.setResizable(false);
+		
+
+		TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
+		col4.setText("Type\t\t\t\t\t\t\t\t\t\t");
+		col4.setResizable(false);
+		
+		BudgetResult.removeAll();
+		for (int loopIndex = 0; loopIndex < item_list.size(); loopIndex++) {
+			TableItem item = new TableItem(BudgetResult, SWT.NULL);
+			item.setText(0, "Item " + (loopIndex+1));
+			item.setText(1, item_list.get(loopIndex).getItem());
+			item.setText(2, "$"+((double) item_list.get(loopIndex).getPrice())/100);
+			item.setText(3, ""+item_list.get(loopIndex).getSatisfaction_value());
+			item.setText(4, ""+item_list.get(loopIndex).getType());					
+		}
+		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
+			BudgetResult.getColumn(loopIndex).pack();
+		}							
+
+		return null;
 	}
 	@Override
 	protected void checkSubclass() {

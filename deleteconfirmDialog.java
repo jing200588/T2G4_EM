@@ -86,7 +86,6 @@ public class deleteconfirmDialog extends Dialog {
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//EmanagerGUIjface.setdelete(true);
 				result = 1;
 				shell.close();
 			}

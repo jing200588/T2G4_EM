@@ -388,7 +388,6 @@ public class BudgetView extends Composite {
 		col0.setText("No.");
 		col0.setResizable(false);
 		col0.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort name
 				TableItem[] items = table.getItems();
@@ -415,7 +414,6 @@ public class BudgetView extends Composite {
 		col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
 		col1.setResizable(false);
 		col1.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort name
 				TableItem[] items = table.getItems();
@@ -441,7 +439,6 @@ public class BudgetView extends Composite {
 		col2.setText("Price\t\t\t\t");
 		col2.setResizable(false);
 		col2.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort price
 				TableItem[] items = table.getItems();
@@ -466,7 +463,6 @@ public class BudgetView extends Composite {
 		col3.setText("Satisfaction");
 		col3.setResizable(false);
 		col3.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort satisfaction
 				TableItem[] items = table.getItems();
@@ -491,7 +487,6 @@ public class BudgetView extends Composite {
 		col4.setText("Type\t\t\t\t\t\t\t\t\t\t");
 		col4.setResizable(false);
 		col4.addListener(SWT.Selection, new Listener() {
-			@Override
 			public void handleEvent(Event e) {
 				//sort name
 				TableItem[] items = table.getItems();
@@ -615,6 +610,8 @@ public class BudgetView extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				int option = combo_selection.getSelectionIndex();
 				budgetPersonalAssistant.sendDBList(option);
+				
+				EmanagerGUIjface.ReturnView();
 			}
 		});
 		btnFinish.setBounds(595, 234, 75, 25);
