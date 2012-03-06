@@ -49,7 +49,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private static Display display = new Display();
     private static Color red = display.getSystemColor(SWT.COLOR_RED);
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
-    private ViewEventGUI3 view;
+    private static ViewEventGUI3 view;
     
 
 	/**
@@ -151,6 +151,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	
 	public static void ReturnView() {
 		layout.topControl = view;
+		c2.layout(true);
 	}
 	
 	/**
