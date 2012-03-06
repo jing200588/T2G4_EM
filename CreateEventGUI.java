@@ -18,7 +18,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-
+import org.eclipse.swt.graphics.Color;
 
 public class CreateEventGUI extends Composite {
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
@@ -98,7 +98,7 @@ public class CreateEventGUI extends Composite {
 				EmanagerGUIjface.addEvent(newevent);
 			}
 		});
-		
+
 		
 		
 		btnCreate.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
