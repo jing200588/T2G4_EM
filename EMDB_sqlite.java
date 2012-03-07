@@ -1065,6 +1065,55 @@ public class EMDB_sqlite{
 	
 	
 	
+	
+	/*
+	 * ***********************************
+	 * 
+	 * SETUP
+	 * - SEARCH
+	 * 
+	 * ***********************************
+	 */
+	public Vector<Venue> find_venue_by_name(String name){
+		
+		String query = "SELECT * FROM " + this.TABLE_venue + " WHERE name LIKE '%?%'";
+		//name = name.replaceAll("[^\\w]", "");
+		//query = String.format(query, name);
+		Vector<Venue> list = new Vector<Venue>();
+		
+		try {
+			PreparedStatement pstm = this.DBCON.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			
+			pstm.setString(1, name);
+			ResultSet result = pstm.executeQuery();
+			while (result.next()) {
+			    	Venue place = new Venue();
+					place.updateID(result.getInt("venue_id"));
+					place.updateName(result.getString("name"));
+					place.updateAddress(result.getString("address"));
+					place.updateDescription(result.getString("description"));
+					place.updateCost(result.getInt("cost"));
+					place.updateMaxCapacity(result.getInt("capacity"));
+					
+					list.add(place);
+			}
+			result.close();
+
+			return list;
+			
+		} catch (SQLException e) {
+			return null;
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	/*
 	 * ***********************************
 	 * 
