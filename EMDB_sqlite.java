@@ -431,6 +431,16 @@ public class EMDB_sqlite{
 	
 	// There is another method for batch
 	public int add_event(String name, String description, String startdate, String enddate, String starttime, String endtime){
+		this.out(name);
+		this.out(description);
+		this.out(startdate);
+		this.out(enddate);
+		this.out(starttime);
+		this.out(endtime);
+		
+		
+		
+		
 		this.add_prepare("event");
 		
 		try {
