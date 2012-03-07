@@ -140,7 +140,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	}
 	
 	public static void BookVenue() {
-		BookingSystemGUI bookgui = new BookingSystemGUI(c2, SWT.NONE);
+		VenueView bookgui = new VenueView(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
 		layout.topControl = bookgui;
 		c2.layout(true);
 	}

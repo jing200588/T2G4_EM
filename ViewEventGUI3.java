@@ -28,6 +28,8 @@ public class ViewEventGUI3 extends Composite {
 	private static Composite Budgetcomp;
 	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
 	private Table table;
+	private static ScrolledComposite sc1;
+	private static Composite maincomp;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -37,11 +39,11 @@ public class ViewEventGUI3 extends Composite {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		ScrolledComposite sc1 = new ScrolledComposite(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		sc1 = new ScrolledComposite(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		sc1.setExpandHorizontal(true);
 		sc1.setExpandVertical(true);
 		
-		Composite maincomp = new Composite(sc1, SWT.NONE);
+		maincomp = new Composite(sc1, SWT.NONE);
 		maincomp.setLayout(new FormLayout());
 		budgetflag = false;
 		cevent = curevent;
@@ -396,7 +398,7 @@ public class ViewEventGUI3 extends Composite {
 		btnDeleteEvent.setLayoutData(fd_btnDeleteEvent);
 		btnDeleteEvent.setText("DELETE EVENT");
 		
-		
+		RefreshBudget();
 		sc1.setContent(maincomp);
 		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
@@ -415,7 +417,10 @@ public class ViewEventGUI3 extends Composite {
 	public static void UpdateEvent(Eventitem event) {
 		cevent = event;
 		RefreshParticulars();
-		//RefreshBudget();
+		RefreshBudget();
+		sc1.layout(true);
+		sc1.setContent(maincomp);
+		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
 	public static void RefreshParticulars() {
@@ -433,6 +438,7 @@ public class ViewEventGUI3 extends Composite {
 		if (budgetflag)
 			BudgetResult.dispose();
 		BudgetResult = OptimizedTable(cevent, Budgetcomp);
+		
 	}
 	
 	public static Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
