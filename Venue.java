@@ -14,7 +14,7 @@ public class Venue {
 	private String m_address;
 	private String m_description;
 	private int m_maxCapacity;
-	private double m_cost;
+	private int m_cost;
 	private int m_venueID;				// Its value will be assigned by database
 	private Vector<TimeSlot> m_bookedTimeSlots;
 	
@@ -27,7 +27,7 @@ public class Venue {
 	
 	
 	public Venue(String name, String address, String description,
-					int maxCapacity, double cost)
+					int maxCapacity, int cost)
 	{
 		m_name = name;
 		m_address = address;
@@ -60,7 +60,7 @@ public class Venue {
 		return m_maxCapacity;
 	}
 	
-	public double getCost()
+	public int getCost()
 	{
 		return m_cost;
 	}
@@ -116,7 +116,7 @@ public class Venue {
 		m_maxCapacity = newMaxCapacity;
 	}
 	
-	public void updateCost(double newCost)
+	public void updateCost(int newCost)
 	{
 		m_cost = newCost;
 	}

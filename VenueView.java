@@ -33,13 +33,15 @@ import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.swt.widgets.Spinner;
+
+
 import java.lang.NumberFormatException;
 
 
 public class VenueView extends Composite {
 	private final StackLayout stackLayout = new StackLayout();
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
-	private final StackLayout resultStackLayout = new StackLayout();
+	private final StackLayout sl_ResultPageCompo = new StackLayout();
 	
 	private Text LowerBoundCapacity;
 	private Text UpperBoundCapacity;
@@ -79,15 +81,22 @@ public class VenueView extends Composite {
 	private DateTime dateTimeFrom;
 	private DateTime dateTimeTo;
 	private Button FindCriteriaButton;
-	private Text CapacityChoiceErrorBoard;
 	private int[] capacityChoiceInput;
 	private int[] costChoiceInput;
 	private TimeSlot timeSlotChoiceInput;
 	private Composite FunctionOptionCompo;
-	private Composite ResultColumnCompo;
-	private Text TimeSlotChoiceErrorBoard;
-	private Text CostChoiceErrorBoard;
-	
+	private Composite ResultPageCompo;
+	private Text ChoiceErrorBoard;
+	private Vector<Venue> searchResultList;
+	private Composite TableSearchResultCompo;
+	private Composite PreviousSearchPage;
+	private Text NoResultTextBox;
+	private Text txtEnterTheVenue;
+	private Text VenueIDTextBox;
+	private Button BookVenueButton;
+	private Button btnViewDetails;
+	private Text text;
+	private Text text_1;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -100,6 +109,18 @@ public class VenueView extends Composite {
 				toolkit.dispose();
 			}
 		});
+		
+		// Initialize some variables
+		flagCapacityChoice = false;
+		flagCostChoice = false;
+		flagTimeSlotChoice = false;
+		timeSlotChoiceInput = null;
+		capacityChoiceInput = null;
+		costChoiceInput = null;
+		PreviousSearchPage = null;
+		searchResultList = new Vector<Venue>();
+		
+		// Continue with the GUI
 		toolkit.adapt(this);
 		toolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -114,7 +135,7 @@ public class VenueView extends Composite {
 		Composite mainComposite = new Composite(VenueViewForm.getBody(), SWT.NONE);
 		FormData fd_mainComposite = new FormData();
 		fd_mainComposite.top = new FormAttachment(50, -160);
-		fd_mainComposite.bottom = new FormAttachment (50, 180);
+		fd_mainComposite.bottom = new FormAttachment (50, 193);
 		fd_mainComposite.left = new FormAttachment(50, -350);
 		fd_mainComposite.right = new FormAttachment(50, 350);
 		mainComposite.setLayoutData(fd_mainComposite);
@@ -215,13 +236,32 @@ public class VenueView extends Composite {
 				else
 				{
 					SearchNameErrorBoard.setVisible(false);
-//					Venue searchResult = BookingSystem.findVenueByName(venueName);
-					Vector<Venue> listVenue = new Vector<Venue>();
-//					listVenue.add(searchResult);
 					
 					// For testing: 
-					listVenue.add(new Venue("A", "B", "C", 10, 100));
-					tableViewer.setInput(listVenue);
+					//listVenue.add(new Venue("A", "B", "C", 10, 100));
+					
+					// Ask the logic component to do the searching
+					searchResultList = BookingSystem.findVenueByName(venueName);
+					
+					PreviousSearchPage = SearchNameCompo;
+					stackLayout.topControl = ResultPageCompo;
+					FunctionContentPage.layout();
+					
+					if(searchResultList.size() == 0)
+					{
+						NoResultTextBox.setText("There is no result satisfying your criteria");
+						NoResultTextBox.setVisible(true);
+					}
+					else
+						NoResultTextBox.setVisible(false);
+					
+					tableViewer.setInput(searchResultList);
+						
+					// Trial!
+					tableViewer.refresh();
+						
+					sl_ResultPageCompo.topControl = TableSearchResultCompo;
+					ResultPageCompo.layout();
 				}
 			}
 		});
@@ -268,7 +308,7 @@ public class VenueView extends Composite {
 			}
 		});
 		
-		CapacityChoiceButton.setBounds(30, 52, 93, 16);
+		CapacityChoiceButton.setBounds(102, 52, 93, 16);
 		toolkit.adapt(CapacityChoiceButton, true, true);
 		CapacityChoiceButton.setText("Capacity");
 		
@@ -287,7 +327,7 @@ public class VenueView extends Composite {
 				}
 			}
 		});
-		TimeChoiceButton.setBounds(129, 52, 66, 16);
+		TimeChoiceButton.setBounds(30, 52, 66, 16);
 		toolkit.adapt(TimeChoiceButton, true, true);
 		TimeChoiceButton.setText("Time");
 		
@@ -338,6 +378,7 @@ public class VenueView extends Composite {
 					{
 						LowerBoundCapacity.setText("");
 						UpperBoundCapacity.setText("");
+						CapacityConfirmButton.setText("Confirm");
 					}
 					
 					if(flagCostChoice == true)
@@ -350,6 +391,7 @@ public class VenueView extends Composite {
 					{
 						LowerBoundCost.setText("");
 						UpperBoundCost.setText("");
+						CostConfirmButton.setText("Confirm");
 					}
 					
 					if(flagTimeSlotChoice == true)
@@ -364,6 +406,7 @@ public class VenueView extends Composite {
 					{
 						HourFromChoice.setText("");
 						HourToChoice.setText("");
+						TimeConfirmButton.setText("Confirm");
 					}
 				}
 				else
@@ -433,31 +476,24 @@ public class VenueView extends Composite {
 					try
 					{
 						// Make the error board invisible at the beginning
-						CapacityChoiceErrorBoard.setVisible(false);
+						ChoiceErrorBoard.setVisible(false);
 						
 						String lowerCapacity = LowerBoundCapacity.getText();
 						if(lowerCapacity == null || lowerCapacity.equals("") == true)
 						{
-							throw new Exception("Lower bound of the capacity missing!");
-						}
-						else
-						{
-							CapacityChoiceErrorBoard.setVisible(false);
+							throw new Exception("You have not entered the lower bound of the capacity!");
 						}
 						String upperCapacity = UpperBoundCapacity.getText();
 						if(upperCapacity == null || upperCapacity.equals("") == true)
 						{
-							throw new Exception("Upper bound of the capacity missing!");
+							throw new Exception("You have not entered the upper bound of the capacity!");
 						}
-						else
-						{
-							CapacityChoiceErrorBoard.setVisible(false);
-						}
+		
 						int lower = Integer.parseInt(lowerCapacity);
 						int upper = Integer.parseInt(upperCapacity);
 						if(lower > upper)
 						{
-							throw new Exception("Lowerbound larger than upperbound!");
+							throw new Exception("Lower bound value is larger than upper bound value!");
 						}
 						if(lower <= 0 || upper <= 0)
 						{
@@ -478,13 +514,13 @@ public class VenueView extends Composite {
 					}
 					catch(NumberFormatException exception)
 					{
-						CapacityChoiceErrorBoard.setText("The bounds must be integers!");
-						CapacityChoiceErrorBoard.setVisible(true);
+						ChoiceErrorBoard.setText("The bounds must be integers!");
+						ChoiceErrorBoard.setVisible(true);
 					}
 					catch(Exception exception)
 					{
-						CapacityChoiceErrorBoard.setText(exception.getMessage());
-						CapacityChoiceErrorBoard.setVisible(true);
+						ChoiceErrorBoard.setText(exception.getMessage());
+						ChoiceErrorBoard.setVisible(true);
 					}
 				}
 				else
@@ -504,13 +540,6 @@ public class VenueView extends Composite {
 		CapacityConfirmButton.setBounds(236, 44, 75, 25);
 		toolkit.adapt(CapacityConfirmButton, true, true);
 		CapacityConfirmButton.setText("Confirm");
-		
-		CapacityChoiceErrorBoard = new Text(CapacityCompo, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
-		CapacityChoiceErrorBoard.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		CapacityChoiceErrorBoard.setEditable(false);
-		CapacityChoiceErrorBoard.setBounds(10, 48, 211, 21);
-		toolkit.adapt(CapacityChoiceErrorBoard, true, true);
-		CapacityChoiceErrorBoard.setVisible(false);
 		
 		Composite composite_5 = new Composite(SearchCriteriaCompo, SWT.NONE);
 		composite_5.setBounds(349, 95, 321, 66);
@@ -544,17 +573,17 @@ public class VenueView extends Composite {
 					try
 					{
 						// Make the error board invisible at the beginning
-						CostChoiceErrorBoard.setVisible(false);
+						ChoiceErrorBoard.setVisible(false);
 						
 						String lowerCost = LowerBoundCost.getText();
 						if(lowerCost == null || lowerCost.equals("") == true)
 						{
-							throw new Exception("Lower bound of the cost missing!");
+							throw new Exception("You have not entered the lower bound of the cost!");
 						}
 						String upperCost = UpperBoundCost.getText();
 						if(upperCost == null || upperCost.equals("") == true)
 						{
-							throw new Exception("Upper bound of the cost missing!");
+							throw new Exception("You have not entered the upper bound of the cost!");
 						}
 						if(correctMoneyFormat(upperCost) == false || correctMoneyFormat(lowerCost) == false)
 						{
@@ -564,7 +593,7 @@ public class VenueView extends Composite {
 						int upper = (int) (Double.parseDouble(upperCost) * 100);
 						if(lower > upper)
 						{
-							throw new Exception("Lowerbound larger than upperbound!");
+							throw new Exception("The lower bound value is larger than the upperbound value!");
 						}
 						if(lower < 0 || upper < 0)
 							throw new Exception("Cost must be a nonnegative real number.");
@@ -583,13 +612,13 @@ public class VenueView extends Composite {
 					}
 					catch(NumberFormatException exception)
 					{
-						CostChoiceErrorBoard.setText("Cost must be real numbers!");
-						CostChoiceErrorBoard.setVisible(true);
+						ChoiceErrorBoard.setText("Cost values must be real numbers!");
+						ChoiceErrorBoard.setVisible(true);
 					}
 					catch(Exception exception)
 					{
-						CostChoiceErrorBoard.setText(exception.getMessage());
-						CostChoiceErrorBoard.setVisible(true);
+						ChoiceErrorBoard.setText(exception.getMessage());
+						ChoiceErrorBoard.setVisible(true);
 					}
 				}
 				else
@@ -610,19 +639,37 @@ public class VenueView extends Composite {
 		toolkit.adapt(CostConfirmButton, true, true);
 		CostConfirmButton.setText("Confirm");
 		
-		CostChoiceErrorBoard = new Text(composite_5, SWT.BORDER);
-		CostChoiceErrorBoard.setEnabled(false);
-		CostChoiceErrorBoard.setEditable(false);
-		CostChoiceErrorBoard.setVisible(false);
-		CostChoiceErrorBoard.setBounds(10, 45, 211, 21);
-		toolkit.adapt(CostChoiceErrorBoard, true, true);
-		
 		FindCriteriaButton = new Button(SearchCriteriaCompo, SWT.NONE);
-		FindCriteriaButton.setBounds(532, 191, 138, 25);
+		FindCriteriaButton.setBounds(532, 179, 138, 25);
 		FindCriteriaButton.setEnabled(false);
 		FindCriteriaButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				// Ask the logic component to do the searching
+				// Determine the criteria chosen
+				BookingSystem.SearchCriteria type = determineCriteriaChoice();
+				searchResultList = BookingSystem.findVenueByCriteria(costChoiceInput, 
+						capacityChoiceInput, timeSlotChoiceInput, type);
+				
+				PreviousSearchPage = SearchCriteriaCompo;
+				stackLayout.topControl = ResultPageCompo;
+				FunctionContentPage.layout();
+				
+				if(searchResultList.size() == 0)
+				{
+					NoResultTextBox.setText("There is no result satisfying your criteria");
+					NoResultTextBox.setVisible(true);
+				}
+				else
+					NoResultTextBox.setVisible(false);
+				
+				tableViewer.setInput(searchResultList);
+					
+				// Trial!
+				tableViewer.refresh();
+					
+				sl_ResultPageCompo.topControl = TableSearchResultCompo;
+				ResultPageCompo.layout();
 				
 			}
 		});
@@ -696,18 +743,18 @@ public class VenueView extends Composite {
 					try
 					{
 						// Invisible the error board textbox.
-						TimeSlotChoiceErrorBoard.setVisible(false);
+						ChoiceErrorBoard.setVisible(false);
 					
 						// Read and check user's inputs
 						String hourFromString = HourFromChoice.getText();
 						if(hourFromString == null || hourFromString.equals("") == true)
 						{
-							throw new Exception("Starting hour is missing!");
+							throw new Exception("You have not chosen the starting date and hour!");
 						}
 						String hourToString = HourToChoice.getText();
 						if(hourToString == null || hourToString.equals("") == true)
 						{
-							throw new Exception("Ending hour is missing!");
+							throw new Exception("You have not chosen the ending date and hour");
 						}
 						int hourFrom = Integer.parseInt(hourFromString);
 						int hourTo = Integer.parseInt(hourToString);
@@ -721,7 +768,7 @@ public class VenueView extends Composite {
 								dateTimeTo.getMonth(), dateTimeTo.getDay(), hourTo);
 						if(dateHourFrom.compareTo(dateHourTo) >= 0)
 						{
-							throw new Exception("Dates are not in chronological order!");
+							throw new Exception("Starting and ending dates and hours are not in the chronological order!");
 						}
 						timeSlotChoiceInput = new TimeSlot(dateHourFrom, dateHourTo);
 						
@@ -738,13 +785,13 @@ public class VenueView extends Composite {
 					}
 					catch(NumberFormatException exception)
 					{
-						TimeSlotChoiceErrorBoard.setText("Hour should be an integer!");
-						TimeSlotChoiceErrorBoard.setVisible(true);
+						ChoiceErrorBoard.setText("Hour should be an integer!");
+						ChoiceErrorBoard.setVisible(true);
 					}
 					catch(Exception exception)
 					{
-						TimeSlotChoiceErrorBoard.setText(exception.getMessage());
-						TimeSlotChoiceErrorBoard.setVisible(true);
+						ChoiceErrorBoard.setText(exception.getMessage());
+						ChoiceErrorBoard.setVisible(true);
 					}
 				}
 				else
@@ -767,11 +814,11 @@ public class VenueView extends Composite {
 		toolkit.adapt(TimeConfirmButton, true, true);
 		TimeConfirmButton.setText("Confirm");
 		
-		TimeSlotChoiceErrorBoard = new Text(composite_1, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
-		TimeSlotChoiceErrorBoard.setVisible(false);
-		TimeSlotChoiceErrorBoard.setEditable(false);
-		TimeSlotChoiceErrorBoard.setBounds(10, 121, 211, 21);
-		toolkit.adapt(TimeSlotChoiceErrorBoard, true, true);
+		ChoiceErrorBoard = new Text(SearchCriteriaCompo, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
+		ChoiceErrorBoard.setBounds(349, 214, 321, 66);
+		ChoiceErrorBoard.setVisible(false);
+		ChoiceErrorBoard.setEditable(false);
+		toolkit.adapt(ChoiceErrorBoard, true, true);
 		
 		AddOutsideVenue = new Composite(FunctionContentPage, SWT.NONE);
 		AddOutsideVenue.setBounds(0, 70, 330, 238);
@@ -994,21 +1041,17 @@ public class VenueView extends Composite {
 		
 		
 		
-		ResultColumnCompo = new Composite(FunctionContentPage, SWT.NONE);
-		ResultColumnCompo.setBounds(0, 70, 330, 238);
-		toolkit.adapt(ResultColumnCompo);
-		toolkit.paintBordersFor(ResultColumnCompo);
+		ResultPageCompo = new Composite(FunctionContentPage, SWT.NONE);
+		ResultPageCompo.setBounds(0, 70, 330, 238);
+		toolkit.adapt(ResultPageCompo);
+		toolkit.paintBordersFor(ResultPageCompo);
+		ResultPageCompo.setLayout(sl_ResultPageCompo);
 		
 		
-		
-		Composite TableSearchResultCompo = new Composite(ResultColumnCompo, SWT.NONE);
+		TableSearchResultCompo = new Composite(ResultPageCompo, SWT.NONE);
 		TableSearchResultCompo.setBounds(10, 10, 414, 580);
 		toolkit.adapt(TableSearchResultCompo);
 		toolkit.paintBordersFor(TableSearchResultCompo);
-		
-		ResultColumnCompo.setLayout(resultStackLayout);
-		resultStackLayout.topControl = TableSearchResultCompo;
-		ResultColumnCompo.layout();
 		
 		Composite SearchResult = new Composite(TableSearchResultCompo, SWT.NONE);
 		SearchResult.setBounds(0, 0, 680, 339);
@@ -1021,8 +1064,9 @@ public class VenueView extends Composite {
 		toolkit.adapt(lblSearchResult, true, true);
 		lblSearchResult.setText("Search result:");
 		
-		tableViewer = new TableViewer(SearchResult, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewer = new TableViewer(SearchResult, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		DisplayTable = tableViewer.getTable();
+		DisplayTable.setHeaderVisible(true);
 		DisplayTable.setBounds(10, 36, 411, 104);
 		toolkit.paintBordersFor(DisplayTable);
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -1076,15 +1120,127 @@ public class VenueView extends Composite {
 		});
 		
 		Composite ViewDetails = new Composite(SearchResult, SWT.NONE);
-		ViewDetails.setBounds(10, 160, 411, 104);
+		ViewDetails.setBounds(10, 146, 411, 137);
 		toolkit.adapt(ViewDetails);
 		toolkit.paintBordersFor(ViewDetails);
 		
 		Label lblViewVenueDetails = new Label(ViewDetails, SWT.NONE);
 		lblViewVenueDetails.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
-		lblViewVenueDetails.setBounds(10, 10, 141, 20);
+		lblViewVenueDetails.setBounds(10, 10, 217, 21);
 		toolkit.adapt(lblViewVenueDetails, true, true);
-		lblViewVenueDetails.setText("View Venue Details:");
+		lblViewVenueDetails.setText("View Venue Details and Book:");
+		
+		txtEnterTheVenue = new Text(ViewDetails, SWT.BORDER);
+		txtEnterTheVenue.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.ITALIC));
+		txtEnterTheVenue.setText("Enter Venue ID from the table above to view more details or book ");
+		txtEnterTheVenue.setEditable(false);
+		txtEnterTheVenue.setBounds(20, 33, 381, 21);
+		toolkit.adapt(txtEnterTheVenue, true, true);
+		
+		Label lblNewLabel_3 = new Label(ViewDetails, SWT.NONE);
+		lblNewLabel_3.setBounds(30, 60, 55, 15);
+		toolkit.adapt(lblNewLabel_3, true, true);
+		lblNewLabel_3.setText("Venue ID:");
+		
+		VenueIDTextBox = new Text(ViewDetails, SWT.BORDER);
+		VenueIDTextBox.setBounds(91, 57, 76, 21);
+		toolkit.adapt(VenueIDTextBox, true, true);
+		
+		btnViewDetails = new Button(ViewDetails, SWT.NONE);
+		btnViewDetails.setBounds(192, 55, 75, 25);
+		toolkit.adapt(btnViewDetails, true, true);
+		btnViewDetails.setText("View Details");
+		
+		BookVenueButton = new Button(ViewDetails, SWT.NONE);
+		BookVenueButton.setBounds(297, 55, 75, 25);
+		toolkit.adapt(BookVenueButton, true, true);
+		BookVenueButton.setText("BookVenue");
+		
+		Composite composite_2 = new Composite(ViewDetails, SWT.NONE);
+		composite_2.setBounds(148, 87, 253, 152);
+		toolkit.adapt(composite_2);
+		toolkit.paintBordersFor(composite_2);
+		
+		Label label = new Label(composite_2, SWT.NONE);
+		label.setText("Preferred Time Slot:");
+		label.setBounds(10, 10, 104, 15);
+		toolkit.adapt(label, true, true);
+		
+		DateTime dateTime = new DateTime(composite_2, SWT.DROP_DOWN);
+		dateTime.setEnabled(false);
+		dateTime.setBounds(57, 53, 85, 24);
+		toolkit.adapt(dateTime);
+		toolkit.paintBordersFor(dateTime);
+		
+		Label label_1 = new Label(composite_2, SWT.NONE);
+		label_1.setText("From:");
+		label_1.setBounds(10, 54, 41, 15);
+		toolkit.adapt(label_1, true, true);
+		
+		text = new Text(composite_2, SWT.BORDER);
+		text.setEnabled(false);
+		text.setBounds(169, 53, 67, 21);
+		toolkit.adapt(text, true, true);
+		
+		Label label_2 = new Label(composite_2, SWT.NONE);
+		label_2.setText("at");
+		label_2.setBounds(148, 53, 15, 15);
+		toolkit.adapt(label_2, true, true);
+		
+		Label label_14 = new Label(composite_2, SWT.NONE);
+		label_14.setText("To:");
+		label_14.setBounds(10, 84, 41, 15);
+		toolkit.adapt(label_14, true, true);
+		
+		DateTime dateTime_1 = new DateTime(composite_2, SWT.DROP_DOWN);
+		dateTime_1.setEnabled(false);
+		dateTime_1.setBounds(57, 83, 85, 24);
+		toolkit.adapt(dateTime_1);
+		toolkit.paintBordersFor(dateTime_1);
+		
+		Label label_15 = new Label(composite_2, SWT.NONE);
+		label_15.setText("at");
+		label_15.setBounds(148, 83, 15, 15);
+		toolkit.adapt(label_15, true, true);
+		
+		text_1 = new Text(composite_2, SWT.BORDER);
+		text_1.setEnabled(false);
+		text_1.setBounds(169, 83, 67, 21);
+		toolkit.adapt(text_1, true, true);
+		
+		Label label_16 = new Label(composite_2, SWT.NONE);
+		label_16.setText("(Hour should be from 0 to 23)");
+		label_16.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.ITALIC));
+		label_16.setBounds(10, 32, 161, 15);
+		toolkit.adapt(label_16, true, true);
+		
+		Button button = new Button(composite_2, SWT.NONE);
+		button.setText("Confirm");
+		button.setEnabled(false);
+		button.setBounds(10, 113, 75, 25);
+		toolkit.adapt(button, true, true);
+		
+		Button btnNewButton = new Button(SearchResult, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				stackLayout.topControl = PreviousSearchPage;
+				FunctionContentPage.layout();
+			}
+		});
+		btnNewButton.setBounds(605, 258, 75, 25);
+		toolkit.adapt(btnNewButton, true, true);
+		btnNewButton.setText("Back ");
+		
+		NoResultTextBox = new Text(SearchResult, SWT.BORDER);
+		NoResultTextBox.setEditable(false);
+		NoResultTextBox.setBounds(110, 10, 311, 21);
+		toolkit.adapt(NoResultTextBox, true, true);
+		
+		Composite composite_3 = new Composite(SearchResult, SWT.NONE);
+		composite_3.setBounds(439, 10, 241, 242);
+		toolkit.adapt(composite_3);
+		toolkit.paintBordersFor(composite_3);
 	}	
 	
 	
@@ -1118,9 +1274,7 @@ public class VenueView extends Composite {
 	 *  	and at most 2.
 	 * 
 	 * Other cases will be checked by the function Double.parseDouble().
- 	 */
-	
-	
+ 	 */	
 	private boolean correctMoneyFormat(String money)
 	{
 		int decimalPointIndex = -1;
@@ -1137,6 +1291,53 @@ public class VenueView extends Composite {
 		if(money.length() - decimalPointIndex == 1 || money.length() - decimalPointIndex > 2)
 			return false;
 		return true;
+	}
+	
+	/**
+	 * 
+	 * @return the search criteria that a user chooses. 
+	 */
+	private BookingSystem.SearchCriteria determineCriteriaChoice()
+	{
+		if(flagCapacityChoice == true)
+		{
+			if(flagCostChoice == true)
+			{
+				if(flagTimeSlotChoice == true)
+				{
+					return BookingSystem.SearchCriteria.ALL_THREE;
+				}
+				
+				// Now flagTimeSlotChoice == false
+				return BookingSystem.SearchCriteria.COST_CAPACITY;
+			}
+			
+			// Reach this point. That means flagCostChoice == false
+			if(flagTimeSlotChoice == true)
+			{
+				return BookingSystem.SearchCriteria.CAPACITY_TIME;
+			}
+			
+			// Now flagTimeSlotChoice == false
+			return BookingSystem.SearchCriteria.CAPACITY;
+			
+		}
+		
+		// Now flagCapacityChoice == false
+		if(flagCostChoice == true)
+		{
+			if(flagTimeSlotChoice == true)
+			{
+				return BookingSystem.SearchCriteria.COST_TIME;
+			}
+			
+			// Now flagTimeSlotChoice == false
+			return BookingSystem.SearchCriteria.COST;
+		}
+		
+		// Reach this point. That means flagCostChoice == false = flagCostChoice
+		// Thus flagTimeSlotChoice == true (since at least 1 criterion made)
+		return BookingSystem.SearchCriteria.TIME;
 	}
 	
 	
