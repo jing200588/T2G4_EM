@@ -21,6 +21,7 @@ public class Eventitem {
 		_enddate = new Date (ey, em, ed);
 		_starttime = new Time (shour, smin);
 		_endtime = new Time (ehour, emin);
+		_description = "";
 	}
 	
 	

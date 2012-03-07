@@ -22,14 +22,18 @@ import org.eclipse.swt.widgets.Table;
 
 
 public class ViewEventGUI3 extends Composite {
-	private Table BudgetResult;
-
+	private static Table BudgetResult;
+	private static boolean budgetflag;
+	private static Eventitem cevent;
+	private static Composite Budgetcomp;
+	private static CLabel Edescription;
+	private static Label Startdate, Starttime, Enddate, Endtime, Ename;
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEventGUI3(Composite parent, int style, final Eventitem curevent) {
+	public ViewEventGUI3(Composite parent, int style, Eventitem curevent) {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -39,8 +43,8 @@ public class ViewEventGUI3 extends Composite {
 		
 		Composite maincomp = new Composite(sc1, SWT.NONE);
 		maincomp.setLayout(new FormLayout());
-		
-		
+		budgetflag = false;
+		cevent = curevent;
 		
 		Label Title = new Label(maincomp, SWT.NONE);
 		
@@ -70,7 +74,7 @@ public class ViewEventGUI3 extends Composite {
 		Epartedit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				EmanagerGUIjface.EventParticulars();
+				EmanagerGUIjface.EventParticulars(cevent);
 			}
 		});
 		GridData gd_Epartedit = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
@@ -86,49 +90,49 @@ public class ViewEventGUI3 extends Composite {
 		Enamelabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		Enamelabel.setText("Event Name:");
 		
-		Label Ename = new Label(EparticularsComp, SWT.WRAP);
+		Ename = new Label(EparticularsComp, SWT.WRAP);
 		Ename.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
 		Ename.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Ename.setText(curevent.getName());
+		Ename.setText(cevent.getName());
 		
 		Label Startdntlabel = new Label(EparticularsComp, SWT.NONE);
 		Startdntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		Startdntlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		Startdntlabel.setText("Start Date and Time:");
 		
-		Label Startdate = new Label(EparticularsComp, SWT.NONE);
+		Startdate = new Label(EparticularsComp, SWT.NONE);
 		Startdate.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		Startdate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Startdate.setText(curevent.getStartDate());
+		Startdate.setText(cevent.getStartDate());
 		
-		Label Starttime = new Label(EparticularsComp, SWT.NONE);
+		Starttime = new Label(EparticularsComp, SWT.NONE);
 		Starttime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		Starttime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Starttime.setText(curevent.getStartTime()+"HRS");
+		Starttime.setText(cevent.getStartTime()+"HRS");
 		
 		Label Enddntlabel = new Label(EparticularsComp, SWT.NONE);
 		Enddntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		Enddntlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		Enddntlabel.setText("End Date and Time:");
 		
-		Label Enddate = new Label(EparticularsComp, SWT.NONE);
+	    Enddate = new Label(EparticularsComp, SWT.NONE);
 		Enddate.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		Enddate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Enddate.setText(curevent.getEndDate());
+		Enddate.setText(cevent.getEndDate());
 		
-		Label Endtime = new Label(EparticularsComp, SWT.NONE);
+		Endtime = new Label(EparticularsComp, SWT.NONE);
 		Endtime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		Endtime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Endtime.setText(curevent.getEndTime()+"HRS");
+		Endtime.setText(cevent.getEndTime()+"HRS");
 		
 		Label Edescriptionlabel = new Label(EparticularsComp, SWT.NONE);
 		Edescriptionlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		Edescriptionlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		Edescriptionlabel.setText("Description:");
 		
-		CLabel Edescription = new CLabel(EparticularsComp, SWT.NONE);
+		Edescription = new CLabel(EparticularsComp, SWT.NONE);
 		Edescription.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
-		Edescription.setText("New Label");
+		Edescription.setText(cevent.getDescription());
 	
 		//Divider1
 		/*
@@ -233,7 +237,7 @@ public class ViewEventGUI3 extends Composite {
 	//	Label divider3 = createdivider(maincomp, Bookvenuecomp);
 		
 		//Calculate Budget
-		Composite Budgetcomp = new Composite(maincomp, SWT.NONE);
+		Budgetcomp = new Composite(maincomp, SWT.NONE);
 		Budgetcomp.setLayout(new GridLayout(3, false));
 		FormData fd_Budgetcomp = new FormData();
 		fd_Budgetcomp.right = new FormAttachment(80, 0);
@@ -370,9 +374,9 @@ public class ViewEventGUI3 extends Composite {
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, curevent.getName());
+				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, cevent.getName());
 				if (confirm.open() == 1) {
-					MainModel.DeleteEvent(curevent);
+					MainModel.DeleteEvent(cevent);
 					EmanagerGUIjface.DeleteItem();
 				}
 					
@@ -400,9 +404,36 @@ public class ViewEventGUI3 extends Composite {
 		return divider;
 	}
 	
-	public Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
+	public static void UpdateEvent(Eventitem event) {
+		cevent = event;
+	}
+	
+	public static void RefreshParticulars() {
+		Startdate.setText(cevent.getStartDate());
+		Starttime.setText(cevent.getStartTime());
+		Enddate.setText(cevent.getEndDate());
+		Endtime.setText(cevent.getEndTime());
+		Edescription.setText(cevent.getDescription());
+		Ename.setText(cevent.getName());
+		System.out.println("refreshed");
+		System.out.println(cevent.getName());
+	}
+	
+	public static void RefreshBudget() {
+		if (budgetflag)
+			BudgetResult.dispose();
+		BudgetResult = OptimizedTable(cevent, Budgetcomp);
+	}
+	
+	public static Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
 		BudgetController bc = new BudgetController();
 		Vector<Item> item_list = bc.getCombinationList(0);
+		
+		if (item_list.isEmpty()) {
+			budgetflag = false;	
+			return null;
+		}
+			
 		
 		BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION);		
 		BudgetResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
@@ -443,8 +474,11 @@ public class ViewEventGUI3 extends Composite {
 			BudgetResult.getColumn(loopIndex).pack();
 		}							
 
-		return null;
+		budgetflag = true;
+		return BudgetResult;
 	}
+	
+	
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components

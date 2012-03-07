@@ -58,4 +58,10 @@ public class MainModel {
 		list.remove(eitem);
 	}
 	
+	public static void 	UpdateParticulars(Eventitem eitem, int index) {
+		//update particulars
+		list.remove(index);
+		list.add(index, eitem);
+		
+	}
 }

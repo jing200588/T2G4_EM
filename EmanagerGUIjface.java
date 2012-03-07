@@ -50,6 +50,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
     private static Color red = display.getSystemColor(SWT.COLOR_RED);
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
     private static ViewEventGUI3 view;
+    private static HomepageGUI hp;
     
 
 	/**
@@ -85,9 +86,10 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		 */
 	}
 	public static void DeleteItem() {
-
+	//	System.out.println(table.getSelectionIndex());
 		table.remove(table.getSelectionIndices());
-	
+		layout.topControl = hp;
+		c2.layout(true);
 	/*	testing purpose
 	  	for (int i=0; i<eventlist.size(); i++)
 			System.out.println(eventlist.get(i).getName());*/
@@ -99,10 +101,15 @@ public class EmanagerGUIjface extends ApplicationWindow {
 
 		TableItem item;
 		int i;
-		if (table.getItemCount() == 0) 
+		if (table.getItemCount() == 0)	//adds whole vector if table empty 
 			i=0;
+		
+		else if (table.getItemCount() == eventlist.size()) {	//updates vector list only
+			view.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
+			return;
+		}
 		else
-			i = eventlist.size()-1;
+			i = eventlist.size()-1;		//add the last item into table
 		
 		for (; i<eventlist.size(); i++) {
 			item = new TableItem(table,SWT.NONE);
@@ -135,21 +142,21 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		c2.layout(true);
 	}
 	
-	public static void EventParticulars() {
-		EventParticulars ep = new EventParticulars(c2, SWT.NONE);
+	public static void EventParticulars(Eventitem curevent) {
+		EventParticulars ep = new EventParticulars(c2, SWT.NONE, curevent, table.getSelectionIndex());
 		layout.topControl = ep;
 		c2.layout(true);
 	}
-	
-	public static void setdelete (boolean a) {
-		delete = a;
-	}
-	
-	public static boolean getdelete () {
-		return delete;
-	}
-	
-	public static void ReturnView() {
+		
+	public static void ReturnView(int i) {
+		if (i == 0)	//budget
+			ViewEventGUI3.RefreshBudget();
+		if (i == 1) {	//particulars
+			UpdateTable();
+			view.RefreshParticulars();
+		}
+	//	view.update();
+		System.out.println("test");
 		layout.topControl = view;
 		c2.layout(true);
 	}
@@ -282,7 +289,6 @@ public class EmanagerGUIjface extends ApplicationWindow {
 //						System.out.println(table.getSelectionIndex());
 						MainModel.DeleteEvent(getEvent(tb.getText(0)));	//Finds the selected event and deletes it from vector
 						DeleteItem();
-
 					}
 				}
 			});
@@ -329,7 +335,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 				c2.setLayoutData(gd_c2);
 				formToolkit.adapt(c2);
 				formToolkit.paintBordersFor(c2);
-				HomepageGUI hp = new HomepageGUI(c2, SWT.NONE);
+				hp = new HomepageGUI(c2, SWT.NONE);
 				layout.topControl = hp;
 				
 			
