@@ -81,6 +81,11 @@ public class MainModel {
 	
 	public static void 	UpdateParticulars(Eventitem eitem, int index) {
 		//update particulars
+
+		list.remove(index);
+		list.add(index, eitem);
+		
+		
 		db.out("testing start");
 		db.connect();
 		db.update_event(
@@ -91,10 +96,11 @@ public class MainModel {
 				eitem.getEndDate(), 
 				eitem.getStartTime(), 
 				eitem.getEndTime());
+		
 		db.disconnect();
+		db.out("index:" + index);
 		db.out("testing end");
-		list.remove(index);
-		list.add(index, eitem);
+		
 		
 	}
 }

@@ -1058,28 +1058,18 @@ public class EMDB_sqlite{
 			
 			
 			
-			/*
+			
 			query = "UPDATE " + this.TABLE_events +
 					" SET name='" + name + "'" 
-					+ ",description='" + name + "'"
+					+ ", description='" + description + "'"
 					+ ", startdate='" + startdate + "'"
 					+ ", enddate='" + enddate + "'"
 					+ ", starttime='" + starttime + "'"
 					+ ", endtime='" + endtime + "'"
 					+ "  WHERE event_id=" + id + ";";
-			*/
 			
-			query = "UPDATE " + this.TABLE_events +	" SET name='?',description='?', startdate='?', enddate='?', starttime='?', endtime='?'  WHERE event_id=?;";
-			PreparedStatement pstm = this.DBCON.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			
-			pstm.setString(1, name);
-			pstm.setString(2, description);
-			pstm.setString(3, startdate);
-			pstm.setString(4, enddate);
-			pstm.setString(5, starttime);
-			pstm.setString(6, endtime);
-
-			pstm.executeQuery();
+			this.DBQUERY.execute(query);
 			
 		
 	
