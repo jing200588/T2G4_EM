@@ -138,7 +138,7 @@ public class BookingSystem {
 				{
 					if(type == SearchCriteria.COST_CAPACITY)
 					{
-						returnList = shortListByCost(firstRoundCapacity, costRange[1], costRange[0]);
+						returnList = shortListByCost(firstRoundCapacity, costRange[0], costRange[1]);
 					}
 					else
 					{
