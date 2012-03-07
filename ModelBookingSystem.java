@@ -53,4 +53,15 @@ public class ModelBookingSystem {
 	}
 	
 	
+	
+	public Vector<Venue> find_venue_by_name(String name){
+		Vector<Venue> list;
+		
+		db.connect();
+		list = db.find_venue_by_name(name);
+		db.disconnect();
+		
+		return list;
+	}
+	
 }

@@ -800,27 +800,18 @@ public class EMDB_sqlite{
 		
 		
 		 try {
-			if (clause.compareTo("cost") == 0){
-				query = this.select_all(
-							this.TABLE_venue_bookings, 
-							"cost="+ clause , 
-							0);	
-		
-			}else if (clause.compareTo("capacity") == 0){
-				query = this.select_all(
-							this.TABLE_venue_bookings, 
-							"capacity="+ clause , 
-							0);	
-				
-			}else{
-				query = this.select_all(
-						this.TABLE_venue_bookings, 
+			
+			query = this.select_all(
+						this.TABLE_venue, 
 						"",
 						0);	
-			}
+			
+			this.out(query);
+			
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
 			while (result.next()) {
+				this.out(result.getString("name"));
 				int cost = result.getInt("cost");
 				int capacity = result.getInt("capacity");
 				
@@ -829,6 +820,7 @@ public class EMDB_sqlite{
 						|| (clause.compareTo("capacity") == 0 && capacity <= upper && capacity >= lower )
 						)
 				{	
+					
 					Venue place = new Venue();
 					place.updateID(result.getInt("venue_id"));
 					place.updateName(result.getString("name"));
@@ -1094,16 +1086,21 @@ public class EMDB_sqlite{
 	 */
 	public Vector<Venue> find_venue_by_name(String name){
 		
-		String query = "SELECT * FROM " + this.TABLE_venue + " WHERE name LIKE '%?%'";
-		//name = name.replaceAll("[^\\w]", "");
-		//query = String.format(query, name);
+		String query = "SELECT * FROM " + this.TABLE_venue + " WHERE name LIKE '%%%s%%'";
+		name = name.replaceAll("[^\\w]", " ");
+		query = String.format(query, name);
 		Vector<Venue> list = new Vector<Venue>();
 		
 		try {
-			PreparedStatement pstm = this.DBCON.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			//PreparedStatement pstm = this.DBCON.prepareStatement("SELECT * FROM " + this.TABLE_venue + " WHERE name LIKE '%?%'", Statement.RETURN_GENERATED_KEYS);
 			
-			pstm.setString(1, name);
-			ResultSet result = pstm.executeQuery();
+			
+			//pstm.setString(1, name);
+			//ResultSet result = pstm.executeQuery();
+			this.out(query);
+			ResultSet result = this.DBQUERY.executeQuery(query);
+			
+			
 			while (result.next()) {
 			    	Venue place = new Venue();
 					place.updateID(result.getInt("venue_id"));
