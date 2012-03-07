@@ -18,13 +18,15 @@ public class EventParticulars extends Composite {
 	private Text txtNewText;
 	private DateTime StartDate;
 	private DateTime EndDate;
+	private DateTime StartTime;
+	private DateTime EndTime;
 	private Text text;
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public EventParticulars(Composite parent, int style) {
+	public EventParticulars(Composite parent, int style, final Eventitem curevent, final int eventindex) {
 		super(parent, style);
 		setLayout(new FormLayout());
 
@@ -44,7 +46,8 @@ public class EventParticulars extends Composite {
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblNewLabel.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
 		
-		txtNewText = new Text(composite, SWT.NONE);
+		txtNewText = new Text(composite, SWT.BORDER);
+		txtNewText.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
 		GridData gd_txtNewText = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
 		gd_txtNewText.widthHint = 219;
 		txtNewText.setLayoutData(gd_txtNewText);
@@ -59,7 +62,7 @@ public class EventParticulars extends Composite {
 		//formToolkit.adapt(StartDate);
 		//formToolkit.paintBordersFor(StartDate);
 		
-		final DateTime StartTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);		
+		StartTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);		
 		StartTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		StartTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		//formToolkit.adapt(StartTime);
@@ -74,7 +77,7 @@ public class EventParticulars extends Composite {
 		//formToolkit.adapt(EndDate);
 		//formToolkit.paintBordersFor(EndDate);
 		
-		final DateTime EndTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);
+		EndTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);
 		EndTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		//formToolkit.adapt(EndTime);
 		//formToolkit.paintBordersFor(EndTime);
@@ -82,7 +85,11 @@ public class EventParticulars extends Composite {
 		Button btnCreate = new Button(this, SWT.NONE);
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-			
+				curevent.setName(txtNewText.getText());
+				curevent.setDescription(text.getText());
+				
+				MainModel.UpdateParticulars(curevent, eventindex);
+				EmanagerGUIjface.ReturnView(1);
 			}
 		});
 
@@ -97,6 +104,12 @@ public class EventParticulars extends Composite {
 		btnCreate.setText("Confirm");
 		
 		Button btnBack = new Button(this, SWT.NONE);
+		btnBack.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				EmanagerGUIjface.ReturnView(10);	//10 currently as default value
+			}
+		});
 		FormData fd_btnBack = new FormData();
 		fd_btnBack.top = new FormAttachment(composite, 30);
 		fd_btnBack.right = new FormAttachment(composite, 0, SWT.RIGHT);
@@ -117,7 +130,27 @@ public class EventParticulars extends Composite {
 		//formToolkit.adapt(btnBack, true, true);
 		btnBack.setText("Back");
 		
+		setParticulars(curevent.getName(), curevent.getStartDate(), curevent.getStartTime(), curevent.getEndDate(), curevent.getEndTime(), curevent.getDescription());
+	}
+	
+	public void setParticulars(String name, String startdate, String starttime, String enddate, String endtime, String descript) {
+		txtNewText.setText(name);
+		String arr[] = startdate.split("-");
+		String arr1[] = starttime.split(":");
+		StartDate.setYear(Integer.parseInt(arr[2]));
+		StartDate.setMonth(Integer.parseInt(arr[1])-1);
+		StartDate.setDay(Integer.parseInt(arr[0]));
+		StartTime.setHours(Integer.parseInt(arr1[0]));
+		StartTime.setMinutes(Integer.parseInt(arr1[1]));
 		
+		String arr2[] = enddate.split("-");
+		String arr3[] = endtime.split(":");
+		EndDate.setYear(Integer.parseInt(arr2[2]));
+		EndDate.setMonth(Integer.parseInt(arr2[1])-1);
+		EndDate.setDay(Integer.parseInt(arr2[0]));
+		EndTime.setHours(Integer.parseInt(arr3[0]));
+		EndTime.setMinutes(Integer.parseInt(arr3[1]));
+		text.setText(descript);	
 	}
 
 	@Override
