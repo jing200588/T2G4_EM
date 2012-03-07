@@ -37,11 +37,11 @@ public class BookingSystem {
 	 * 		+ A method to update booked time slot of a venue.
 	 * 		+ Do you think we need a venue ID in the class Venue?
 	 */
-	public static boolean bookVenue(int eventID, Venue bookedVenue, TimeSlot wantedTimeSlot)
+	public static boolean bookVenue(int eventID, int bookedVenueID, TimeSlot wantedTimeSlot)
 	{
 //		bookedVenue.bookTimeSlot(wantedTimeSlot);
 		
-		mbs.add_booking_to_db(eventID, bookedVenue.getVenueID(), wantedTimeSlot);
+		mbs.add_booking_to_db(eventID, bookedVenueID, wantedTimeSlot);
 		
 		// If the booking is successful
 		return true;
@@ -78,11 +78,22 @@ public class BookingSystem {
 	 * (DATABASE):
 	 * 	+ A method to return a venue with the specific name.
 	 */
-	public static Venue findVenueByName(String venueName)
+	public static Vector<Venue> findVenueByName(String venueName)
 	{
 		// look up in the database.
 		// Search venue by Name
-		return null;
+		//return null;
+		
+		// Create mock vector for testing
+		Vector<Venue> list = new Vector<Venue>();
+		list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
+		list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
+		list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
+		list.add(new Venue("LT16", "NUS", "Hot", 100, 203));
+		list.add(new Venue("LT16", "NUS", "Hot", 100, 203));
+		list.add(new Venue("LT16LT16LT15LT16", "NUS", "Hot", 100, 203));
+//		return new Vector<Venue>();
+		return list;
 	}
 	
 	/**
@@ -106,7 +117,7 @@ public class BookingSystem {
 	public static Vector<Venue> findVenueByCriteria(int[] costRange, int[] capacityRange,
 			TimeSlot preferredTime, SearchCriteria type)
 	{
-		Vector<Venue> returnList = null;
+		Vector<Venue> returnList = new Vector<Venue>();
 		
 		
 		switch(type)
@@ -116,9 +127,6 @@ public class BookingSystem {
 			case COST_CAPACITY:
 			case ALL_THREE:
 			{
-				// Search in the DATABASE
-				// Dummy code (will be REPLACED) when there is a database 
-				// Capacity
 				Vector<Venue> firstRoundCapacity = mbs.get_venue_by_capacity(capacityRange[1], capacityRange[0]); 
 				
 				// Actual code
@@ -130,8 +138,7 @@ public class BookingSystem {
 				{
 					if(type == SearchCriteria.COST_CAPACITY)
 					{
-						returnList = shortListByCost(firstRoundCapacity,
-								costRange[0], costRange[1]);
+						returnList = shortListByCost(firstRoundCapacity, costRange[1], costRange[0]);
 					}
 					else
 					{
@@ -156,9 +163,6 @@ public class BookingSystem {
 			case COST:
 			case COST_TIME:
 			{
-				// Search in the DATABASE
-				// Dummy code (will be REPLACED) when there is a database
-				// Cost
 				Vector<Venue> firstRoundCost = mbs.get_venue_by_cost(costRange[1], costRange[0]); ;
 				
 				
@@ -177,12 +181,14 @@ public class BookingSystem {
 			
 			case TIME:
 			{
-				// Search in the DATABASE
-				// Dummy code (will be REPLACED) when there is a database
-				// Time slot
-				returnList = mbs.get_venue_with_timeslot();
+				Vector<Venue> allVenue = mbs.get_all_venue();
+				returnList = shortListByTimeSlot(allVenue, preferredTime);
+				
 			}
 		}
+		
+		if(returnList == null)
+			returnList = new Vector<Venue>();
 		
 		return returnList;
 	}
