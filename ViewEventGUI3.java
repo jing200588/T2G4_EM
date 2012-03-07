@@ -27,6 +27,7 @@ public class ViewEventGUI3 extends Composite {
 	private static Eventitem cevent;
 	private static Composite Budgetcomp;
 	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
+	private Table table;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -279,7 +280,12 @@ public class ViewEventGUI3 extends Composite {
 		fd_divider4.right = new FormAttachment(95, 0);
 		divider4.setLayoutData(fd_divider4);*/
 		Label divider4 = createdivider(maincomp, Budgetcomp);
-		
+	/*	
+		table = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION);
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		*/
 	//	if ()
 	//		Table BudgetTable = OptimizedTable(Eventitem curevent, Composite Budgetcomp);
 		//Budget Table
@@ -409,6 +415,7 @@ public class ViewEventGUI3 extends Composite {
 	public static void UpdateEvent(Eventitem event) {
 		cevent = event;
 		RefreshParticulars();
+		//RefreshBudget();
 	}
 	
 	public static void RefreshParticulars() {
@@ -430,7 +437,7 @@ public class ViewEventGUI3 extends Composite {
 	
 	public static Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
 		BudgetController bc = new BudgetController();
-		Vector<Item> item_list = bc.getCombinationList(0);
+		Vector<Item> item_list = bc.getCombinationList(curevent.getID());
 		
 		if (item_list.isEmpty()) {
 			budgetflag = false;	

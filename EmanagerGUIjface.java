@@ -134,7 +134,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	}
 	
 	public static void CalcBudget () {		
-		BudgetView bv = new BudgetView(c2, SWT.NONE, 0);
+		BudgetView bv = new BudgetView(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
 		layout.topControl = bv;
 		c2.layout(true);
 	}
