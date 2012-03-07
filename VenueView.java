@@ -42,6 +42,7 @@ public class VenueView extends Composite {
 	private final StackLayout stackLayout = new StackLayout();
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 	private final StackLayout sl_ResultPageCompo = new StackLayout();
+	private final StackLayout sl_ViewBookCompo = new StackLayout();
 	
 	private Text LowerBoundCapacity;
 	private Text UpperBoundCapacity;
@@ -95,8 +96,20 @@ public class VenueView extends Composite {
 	private Text VenueIDTextBox;
 	private Button BookVenueButton;
 	private Button btnViewDetails;
-	private Text text;
-	private Text text_1;
+	private Text BookTimeFrom;
+	private Text BookTimeTo;
+	private Composite ViewBookCompo;
+	private Composite BookCompo;
+	private Text VenueDetailTextbox;
+	private Composite ViewCompo;
+	private Text ErrorBoardViewBook;
+	private boolean chooseTimeSlotYet;
+	private Text ErrorBoardBooking;
+	private DateTime BookDateTimeTo;
+	private DateTime BookDateTimeFrom;
+	private int chosenVenueID;
+	private int eventID;
+	private Label BookLabel;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -111,14 +124,17 @@ public class VenueView extends Composite {
 		});
 		
 		// Initialize some variables
+		eventID = id;
 		flagCapacityChoice = false;
 		flagCostChoice = false;
 		flagTimeSlotChoice = false;
+		chooseTimeSlotYet = false;
 		timeSlotChoiceInput = null;
 		capacityChoiceInput = null;
 		costChoiceInput = null;
 		PreviousSearchPage = null;
 		searchResultList = new Vector<Venue>();
+		chosenVenueID = -1;
 		
 		// Continue with the GUI
 		toolkit.adapt(this);
@@ -215,7 +231,7 @@ public class VenueView extends Composite {
 		SearchNameErrorBoard = new Text(SearchNameCompo, SWT.BORDER);
 		SearchNameErrorBoard.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 		SearchNameErrorBoard.setEditable(false);
-		SearchNameErrorBoard.setBounds(20, 99, 409, 80);
+		SearchNameErrorBoard.setBounds(70, 86, 409, 80);
 		toolkit.adapt(SearchNameErrorBoard, true, true);
 		SearchNameErrorBoard.setVisible(false);
 		
@@ -242,6 +258,9 @@ public class VenueView extends Composite {
 					
 					// Ask the logic component to do the searching
 					searchResultList = BookingSystem.findVenueByName(venueName);
+					
+					// If user chooses this option, he / she has not decided the time slot
+					chooseTimeSlotYet = false;
 					
 					PreviousSearchPage = SearchNameCompo;
 					stackLayout.topControl = ResultPageCompo;
@@ -552,10 +571,12 @@ public class VenueView extends Composite {
 		toolkit.adapt(lblPreferredCost, true, true);
 		
 		LowerBoundCost = new Text(composite_5, SWT.BORDER);
+		LowerBoundCost.setEnabled(false);
 		LowerBoundCost.setBounds(120, 7, 76, 21);
 		toolkit.adapt(LowerBoundCost, true, true);
 		
 		UpperBoundCost = new Text(composite_5, SWT.BORDER);
+		UpperBoundCost.setEnabled(false);
 		UpperBoundCost.setBounds(227, 7, 76, 21);
 		toolkit.adapt(UpperBoundCost, true, true);
 		
@@ -650,6 +671,8 @@ public class VenueView extends Composite {
 				BookingSystem.SearchCriteria type = determineCriteriaChoice();
 				searchResultList = BookingSystem.findVenueByCriteria(costChoiceInput, 
 						capacityChoiceInput, timeSlotChoiceInput, type);
+				
+				chooseTimeSlotYet = flagTimeSlotChoice;
 				
 				PreviousSearchPage = SearchCriteriaCompo;
 				stackLayout.topControl = ResultPageCompo;
@@ -1147,78 +1170,117 @@ public class VenueView extends Composite {
 		toolkit.adapt(VenueIDTextBox, true, true);
 		
 		btnViewDetails = new Button(ViewDetails, SWT.NONE);
+		btnViewDetails.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try
+				{
+					ErrorBoardViewBook.setVisible(false);
+					
+					String idString = VenueIDTextBox.getText();
+					if(idString == null || idString.equals("") == true)
+						throw new Exception("You have not entered the venue ID!");
+					int venueID = Integer.parseInt(idString);
+					if(venueID < 0)
+						throw new Exception("Venue ID must be nonnegative!");
+					
+					String detail = BookingSystem.getVenueDetail(searchResultList, venueID);
+					VenueDetailTextbox.setText(detail);
+					
+					sl_ViewBookCompo.topControl = ViewCompo;
+					ViewBookCompo.setVisible(true);
+					ViewBookCompo.layout();
+				}
+				catch(NumberFormatException exception)
+				{
+					ErrorBoardViewBook.setText("Venue ID must be an integer!");
+					ErrorBoardViewBook.setVisible(true);
+					ViewBookCompo.setVisible(false);
+				}
+				catch(Exception exception)
+				{
+					ErrorBoardViewBook.setText(exception.getMessage());
+					ErrorBoardViewBook.setVisible(true);
+					ViewBookCompo.setVisible(false);
+				}
+			}
+		});
 		btnViewDetails.setBounds(192, 55, 75, 25);
 		toolkit.adapt(btnViewDetails, true, true);
 		btnViewDetails.setText("View Details");
 		
 		BookVenueButton = new Button(ViewDetails, SWT.NONE);
+		BookVenueButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try
+				{
+					ErrorBoardViewBook.setVisible(false);
+					
+					String idString = VenueIDTextBox.getText();
+					if(idString == null || idString.equals("") == true)
+						throw new Exception("You have not entered the venue ID!");
+					int venueID = Integer.parseInt(idString);
+					if(venueID < 0)
+						throw new Exception("Venue ID must be nonnegative!");
+					if(BookingSystem.isInTheList(searchResultList, venueID) == false)
+						throw new Exception("There is no venue with such an ID in the table above!");
+					
+					// Venue ID is legal
+					chosenVenueID = venueID;
+					
+					// Prepare the image of BookCompo 
+					if(chooseTimeSlotYet == true)
+					{
+						BookDateTimeFrom.setDate(timeSlotChoiceInput.getStartDateHour().getYear(), 
+								timeSlotChoiceInput.getStartDateHour().getMonth(), 
+								timeSlotChoiceInput.getStartDateHour().getDay());
+						BookDateTimeFrom.setDate(timeSlotChoiceInput.getEndDateHour().getYear(), 
+								timeSlotChoiceInput.getEndDateHour().getMonth(), 
+								timeSlotChoiceInput.getEndDateHour().getDay());
+						BookTimeFrom.setText(Integer.toString(timeSlotChoiceInput.getStartDateHour().getDay()));
+						BookTimeTo.setText(Integer.toString(timeSlotChoiceInput.getEndDateHour().getDay()));
+						BookDateTimeFrom.setEnabled(false);
+						BookDateTimeTo.setEnabled(false);
+						BookTimeTo.setEnabled(false);
+						BookTimeFrom.setEnabled(false);
+						BookLabel.setText("Below is the time slot you have chosen:");
+					}
+					else
+					{
+						BookLabel.setText("Please choose your preferred time slot: ");
+						BookDateTimeFrom.setEnabled(true);
+						BookDateTimeTo.setEnabled(true);
+						BookTimeTo.setEnabled(true);
+						BookTimeFrom.setEnabled(true);
+						BookTimeTo.setText("");
+						BookTimeFrom.setText("");
+					}
+					sl_ViewBookCompo.topControl = BookCompo;
+					ViewBookCompo.setVisible(true);
+					ViewBookCompo.layout();
+				}
+				catch(NumberFormatException exception)
+				{
+					ErrorBoardViewBook.setText("Venue ID must be an integer!");
+					ErrorBoardViewBook.setVisible(true);
+					ViewBookCompo.setVisible(false);
+				}
+				catch(Exception exception)
+				{
+					ErrorBoardViewBook.setText(exception.getMessage());
+					ErrorBoardViewBook.setVisible(true);
+					ViewBookCompo.setVisible(false);
+				}
+			}
+		});
 		BookVenueButton.setBounds(297, 55, 75, 25);
 		toolkit.adapt(BookVenueButton, true, true);
-		BookVenueButton.setText("BookVenue");
+		BookVenueButton.setText("Book Venue");
 		
-		Composite composite_2 = new Composite(ViewDetails, SWT.NONE);
-		composite_2.setBounds(148, 87, 253, 152);
-		toolkit.adapt(composite_2);
-		toolkit.paintBordersFor(composite_2);
-		
-		Label label = new Label(composite_2, SWT.NONE);
-		label.setText("Preferred Time Slot:");
-		label.setBounds(10, 10, 104, 15);
-		toolkit.adapt(label, true, true);
-		
-		DateTime dateTime = new DateTime(composite_2, SWT.DROP_DOWN);
-		dateTime.setEnabled(false);
-		dateTime.setBounds(57, 53, 85, 24);
-		toolkit.adapt(dateTime);
-		toolkit.paintBordersFor(dateTime);
-		
-		Label label_1 = new Label(composite_2, SWT.NONE);
-		label_1.setText("From:");
-		label_1.setBounds(10, 54, 41, 15);
-		toolkit.adapt(label_1, true, true);
-		
-		text = new Text(composite_2, SWT.BORDER);
-		text.setEnabled(false);
-		text.setBounds(169, 53, 67, 21);
-		toolkit.adapt(text, true, true);
-		
-		Label label_2 = new Label(composite_2, SWT.NONE);
-		label_2.setText("at");
-		label_2.setBounds(148, 53, 15, 15);
-		toolkit.adapt(label_2, true, true);
-		
-		Label label_14 = new Label(composite_2, SWT.NONE);
-		label_14.setText("To:");
-		label_14.setBounds(10, 84, 41, 15);
-		toolkit.adapt(label_14, true, true);
-		
-		DateTime dateTime_1 = new DateTime(composite_2, SWT.DROP_DOWN);
-		dateTime_1.setEnabled(false);
-		dateTime_1.setBounds(57, 83, 85, 24);
-		toolkit.adapt(dateTime_1);
-		toolkit.paintBordersFor(dateTime_1);
-		
-		Label label_15 = new Label(composite_2, SWT.NONE);
-		label_15.setText("at");
-		label_15.setBounds(148, 83, 15, 15);
-		toolkit.adapt(label_15, true, true);
-		
-		text_1 = new Text(composite_2, SWT.BORDER);
-		text_1.setEnabled(false);
-		text_1.setBounds(169, 83, 67, 21);
-		toolkit.adapt(text_1, true, true);
-		
-		Label label_16 = new Label(composite_2, SWT.NONE);
-		label_16.setText("(Hour should be from 0 to 23)");
-		label_16.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.ITALIC));
-		label_16.setBounds(10, 32, 161, 15);
-		toolkit.adapt(label_16, true, true);
-		
-		Button button = new Button(composite_2, SWT.NONE);
-		button.setText("Confirm");
-		button.setEnabled(false);
-		button.setBounds(10, 113, 75, 25);
-		toolkit.adapt(button, true, true);
+		ErrorBoardViewBook = new Text(ViewDetails, SWT.BORDER | SWT.MULTI);
+		ErrorBoardViewBook.setBounds(20, 86, 381, 51);
+		toolkit.adapt(ErrorBoardViewBook, true, true);
 		
 		Button btnNewButton = new Button(SearchResult, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -1237,10 +1299,150 @@ public class VenueView extends Composite {
 		NoResultTextBox.setBounds(110, 10, 311, 21);
 		toolkit.adapt(NoResultTextBox, true, true);
 		
-		Composite composite_3 = new Composite(SearchResult, SWT.NONE);
-		composite_3.setBounds(439, 10, 241, 242);
-		toolkit.adapt(composite_3);
-		toolkit.paintBordersFor(composite_3);
+		ViewBookCompo = new Composite(SearchResult, SWT.NONE);
+		ViewBookCompo.setBounds(439, 10, 241, 242);
+		toolkit.adapt(ViewBookCompo);
+		toolkit.paintBordersFor(ViewBookCompo);
+		ViewBookCompo.setLayout(sl_ViewBookCompo);
+//		ViewBookCompo.setVisible(false);
+		
+		BookCompo = new Composite(ViewBookCompo, SWT.NONE);
+		toolkit.adapt(BookCompo);
+		toolkit.paintBordersFor(BookCompo);
+		
+		BookLabel = new Label(BookCompo, SWT.NONE);
+		BookLabel.setText("Preferred Time Slot:");
+		BookLabel.setBounds(10, 10, 226, 15);
+		toolkit.adapt(BookLabel, true, true);
+		
+		BookDateTimeFrom = new DateTime(BookCompo, SWT.DROP_DOWN);
+		BookDateTimeFrom.setEnabled(false);
+		BookDateTimeFrom.setBounds(57, 53, 85, 24);
+		toolkit.adapt(BookDateTimeFrom);
+		toolkit.paintBordersFor(BookDateTimeFrom);
+		
+		Label label_1 = new Label(BookCompo, SWT.NONE);
+		label_1.setText("From:");
+		label_1.setBounds(10, 54, 41, 15);
+		toolkit.adapt(label_1, true, true);
+		
+		BookTimeFrom = new Text(BookCompo, SWT.BORDER);
+		BookTimeFrom.setEnabled(false);
+		BookTimeFrom.setBounds(169, 53, 67, 21);
+		toolkit.adapt(BookTimeFrom, true, true);
+		
+		Label label_2 = new Label(BookCompo, SWT.NONE);
+		label_2.setText("at");
+		label_2.setBounds(148, 53, 15, 15);
+		toolkit.adapt(label_2, true, true);
+		
+		Label label_14 = new Label(BookCompo, SWT.NONE);
+		label_14.setText("To:");
+		label_14.setBounds(10, 84, 41, 15);
+		toolkit.adapt(label_14, true, true);
+		
+		BookDateTimeTo = new DateTime(BookCompo, SWT.DROP_DOWN);
+		BookDateTimeTo.setEnabled(false);
+		BookDateTimeTo.setBounds(57, 83, 85, 24);
+		toolkit.adapt(BookDateTimeTo);
+		toolkit.paintBordersFor(BookDateTimeTo);
+		
+		Label label_15 = new Label(BookCompo, SWT.NONE);
+		label_15.setText("at");
+		label_15.setBounds(148, 83, 15, 15);
+		toolkit.adapt(label_15, true, true);
+		
+		BookTimeTo = new Text(BookCompo, SWT.BORDER);
+		BookTimeTo.setEnabled(false);
+		BookTimeTo.setBounds(169, 83, 67, 21);
+		toolkit.adapt(BookTimeTo, true, true);
+		
+		Label label_16 = new Label(BookCompo, SWT.NONE);
+		label_16.setText("(Hour should be from 0 to 23)");
+		label_16.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.ITALIC));
+		label_16.setBounds(10, 32, 161, 15);
+		toolkit.adapt(label_16, true, true);
+		
+		Button btnBook = new Button(BookCompo, SWT.NONE);
+		btnBook.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try
+				{
+					if(chooseTimeSlotYet == false)
+					{
+						// Invisible the error board textbox.
+						ErrorBoardBooking.setVisible(false);
+			
+						// Read and check user's inputs
+						String hourFromString = BookTimeFrom.getText();
+						if(hourFromString == null || hourFromString.equals("") == true)
+						{
+							throw new Exception("You have not chosen the starting date and hour!");
+						}
+						String hourToString = BookTimeTo.getText();
+						if(hourToString == null || hourToString.equals("") == true)
+						{
+							throw new Exception("You have not chosen the ending date and hour");
+						}
+						int hourFrom = Integer.parseInt(hourFromString);
+						int hourTo = Integer.parseInt(hourToString);
+						if(hourFrom < 0 || hourFrom > 23 || hourTo < 0 || hourTo > 23)
+						{
+							throw new Exception("Hour should be from 0 to 23!");
+						}
+						DateHour dateHourFrom = new DateHour(BookDateTimeFrom.getYear(),
+								BookDateTimeFrom.getMonth(), BookDateTimeFrom.getDay(), hourFrom);
+						DateHour dateHourTo = new DateHour(BookDateTimeTo.getYear(),
+								BookDateTimeTo.getMonth(), BookDateTimeTo.getDay(), hourTo);
+						if(dateHourFrom.compareTo(dateHourTo) >= 0)
+						{
+							throw new Exception("Starting and ending dates and hours are not in the chronological order!");
+						}	
+						
+						timeSlotChoiceInput = new TimeSlot(dateHourFrom, dateHourTo);
+						if(BookingSystem.isAvailable(searchResultList, chosenVenueID, 
+								timeSlotChoiceInput) == false)
+						{
+							throw new Exception("The venue is not available at your time slot. Please choose"
+									+ " a different time slot");
+						}
+					}
+					
+					// Do the booking (The chosen time slot is legal)
+					BookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
+				}
+				catch(NumberFormatException exception)
+				{
+					ErrorBoardBooking.setText("Hour should be an integer!");
+					ErrorBoardBooking.setVisible(true);
+				}
+				catch(Exception exception)
+				{
+					ErrorBoardBooking.setText(exception.getMessage());
+					ErrorBoardBooking.setVisible(true);
+				}
+			}
+		});
+		btnBook.setText("Book");
+		btnBook.setBounds(161, 115, 75, 25);
+		toolkit.adapt(btnBook, true, true);
+		
+		ErrorBoardBooking = new Text(BookCompo, SWT.BORDER);
+		ErrorBoardBooking.setEditable(false);
+		ErrorBoardBooking.setBounds(10, 146, 226, 71);
+		toolkit.adapt(ErrorBoardBooking, true, true);
+		ErrorBoardBooking.setVisible(false);
+		
+		ViewCompo = new Composite(ViewBookCompo, SWT.NONE);
+		ViewCompo.setBounds(10, 10, 64, 64);
+		toolkit.adapt(ViewCompo);
+		toolkit.paintBordersFor(ViewCompo);
+		
+		VenueDetailTextbox = new Text(ViewCompo, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
+		VenueDetailTextbox.setEditable(false);
+		VenueDetailTextbox.setBounds(10, 10, 221, 222);
+		toolkit.adapt(VenueDetailTextbox, true, true);
 	}	
 	
 	

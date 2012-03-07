@@ -192,8 +192,81 @@ public class BookingSystem {
 		
 		return returnList;
 	}
+
+	/**
+	 * 
+	 * @param listVenue
+	 * @param venueID
+	 * @param preferredTime
+	 * @return true if a venue with venueID in the list of venues is available at the given
+	 * 				time slot. 
+	 * @return false otherwise.
+	 * 
+	 * @throws Exception If there does exist a venue with venueID in the list.
+	 */
+	public static boolean isAvailable(Vector<Venue> listVenue, int venueID, TimeSlot preferredTime) throws Exception
+	{
+		int index = findIndex(listVenue, venueID);
+		
+		if(index < 0)		// A venue with venueID does not exist
+			throw new Exception("There is no venue with such an ID in the table above!");
+		return listVenue.get(index).isAvailable(preferredTime);
+	}
 	
 	/**
+	 * 
+	 * @param listVenue
+	 * @param venueID
+	 * @return a string containing the details of a venue with venueID in the list of venues.
+	 * 
+	 * @throws Exception if there does not exist such a venue with venueID in the list.
+	 */
+	public static String getVenueDetail(Vector<Venue> listVenue, int venueID) throws Exception
+	{
+		int index = findIndex(listVenue, venueID);
+		
+		if(index < 0)		// A venue with venueID does not exist
+			throw new Exception("There is no venue with such an ID in the table above!");
+		String[] infoPieces = listVenue.get(index).getAllVenueInformation();
+		
+		String output = "Name: " + infoPieces[0] + "\nAddress: " + infoPieces[1] + 
+				"\nDescription: " + infoPieces[2] + "\nMaximum Capacity: " + infoPieces[3] +
+				"\nCost: $" + infoPieces[4];
+		
+		return output;
+	}
+	
+	/**
+	 * 
+	 * @param listVenue
+	 * @param venueID
+	 * @return true if there exists a venue with venueID in the list.
+	 * @return false otherwise
+	 */
+	public static boolean isInTheList(Vector<Venue> listVenue, int venueID)
+	{
+		if(findIndex(listVenue, venueID) < 0)
+			return false;
+		return true;
+	}
+	
+	/**
+	 * 
+	 * @param listVenue
+	 * @param venueID
+	 * @return the index of a venue with venueID in the list of venues (listVenue)
+	 * @return -1 if such an element does not exist.
+	 */
+	private static int findIndex(Vector<Venue> listVenue, int venueID)
+	{
+		for(int index = 0; index < listVenue.size(); index++)
+			if(listVenue.get(index).getVenueID() == venueID)
+				return index;
+		
+		return -1;
+	}
+	
+	/** 
 	 * 
 	 * @param listVenue
 	 * @param preferTime
