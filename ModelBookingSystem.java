@@ -27,7 +27,7 @@ public class ModelBookingSystem {
 	}	
 	
 	
-	public Vector<Venue> get_venue_with_timeslot(){
+	public Vector<Venue> get_all_venue(){
 		
 		db.connect();
 		Vector<Venue> venues = db.get_venue_list("all", 0,0);
@@ -55,8 +55,13 @@ public class ModelBookingSystem {
 	
 	
 	
-	public void find_venue_name(){
+	public Vector<Venue> find_venue_name(String name){
+		db.connect();
+		Vector<Venue> list = db.find_venue_by_name(name);
 		
+		db.disconnect();
+		
+		return list;
 	}
 	
 }
