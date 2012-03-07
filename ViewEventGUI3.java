@@ -26,8 +26,7 @@ public class ViewEventGUI3 extends Composite {
 	private static boolean budgetflag;
 	private static Eventitem cevent;
 	private static Composite Budgetcomp;
-	private static CLabel Edescription;
-	private static Label Startdate, Starttime, Enddate, Endtime, Ename;
+	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -130,8 +129,11 @@ public class ViewEventGUI3 extends Composite {
 		Edescriptionlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		Edescriptionlabel.setText("Description:");
 		
-		Edescription = new CLabel(EparticularsComp, SWT.NONE);
-		Edescription.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
+		Edescription = new Label(EparticularsComp, SWT.WRAP);
+		Edescription.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
+		GridData gd_Edescription = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
+		gd_Edescription.widthHint = 90;
+		Edescription.setLayoutData(gd_Edescription);
 		Edescription.setText(cevent.getDescription());
 	
 		//Divider1
@@ -410,9 +412,9 @@ public class ViewEventGUI3 extends Composite {
 	
 	public static void RefreshParticulars() {
 		Startdate.setText(cevent.getStartDate());
-		Starttime.setText(cevent.getStartTime());
+		Starttime.setText(cevent.getStartTime()+"HRS");
 		Enddate.setText(cevent.getEndDate());
-		Endtime.setText(cevent.getEndTime());
+		Endtime.setText(cevent.getEndTime()+"HRS");
 		Edescription.setText(cevent.getDescription());
 		Ename.setText(cevent.getName());
 		System.out.println("refreshed");

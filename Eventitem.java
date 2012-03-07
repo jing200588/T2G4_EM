@@ -53,25 +53,33 @@ public class Eventitem {
 	public String getName () {
 		return _name;
 	}
-	/*
-	public void setStartDate (Date start) {
-		_startdate = start;
+	
+	public void setStartDate (String start) {
+		_startdate = new Date(start);
 	}
-	*/
+	
 	public String getStartDate () {
 		return _startdate.getDate();
 	}
-	/*
-	public void setEndDate (Date end) {
-		_enddate = end;
+	
+	public void setEndDate (String end) {
+		_enddate = new Date(end);
 	}
-	*/
+	
 	public String getEndDate () {
 		return _enddate.getDate();
 	}	
 	
+	public void setStartTime (String start) {
+		_starttime = new Time(start);
+	}
+	
 	public String getStartTime () {
 		return _starttime.getTime();
+	}
+	
+	public void setEndTime (String end) {
+		_endtime = new Time(end);
 	}
 	
 	public String getEndTime () {

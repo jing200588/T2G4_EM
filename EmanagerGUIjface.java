@@ -105,7 +105,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			i=0;
 		
 		else if (table.getItemCount() == eventlist.size()) {	//updates vector list only
-			view.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
+			ViewEventGUI3.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
 			return;
 		}
 		else
@@ -153,9 +153,8 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			ViewEventGUI3.RefreshBudget();
 		if (i == 1) {	//particulars
 			UpdateTable();
-			view.RefreshParticulars();
+			ViewEventGUI3.RefreshParticulars();
 		}
-	//	view.update();
 		System.out.println("test");
 		layout.topControl = view;
 		c2.layout(true);

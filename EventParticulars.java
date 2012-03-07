@@ -87,6 +87,16 @@ public class EventParticulars extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				curevent.setName(txtNewText.getText());
 				curevent.setDescription(text.getText());
+				if (StartTime.getMinutes() == 0)
+					curevent.setStartTime(StartTime.getHours() + ":" + StartTime.getMinutes()+0);
+				else 
+					curevent.setStartTime(StartTime.getHours() + ":" + StartTime.getMinutes());
+				if (EndTime.getMinutes() == 0)
+					curevent.setEndTime(EndTime.getHours() + ":" + EndTime.getMinutes()+0);
+				else
+					curevent.setEndTime(EndTime.getHours() + ":" + EndTime.getMinutes());
+				curevent.setStartDate(StartDate.getDay() + "-" + (StartDate.getMonth()+1) + "-" + StartDate.getYear());
+				curevent.setEndDate(EndDate.getDay() + "-" + (EndDate.getMonth()+1) + "-" + EndDate.getYear());
 				
 				MainModel.UpdateParticulars(curevent, eventindex);
 				EmanagerGUIjface.ReturnView(1);
