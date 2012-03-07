@@ -85,13 +85,19 @@ public class BookingSystem {
 		//return null;
 		
 		// Create mock vector for testing
+		/*
 		Vector<Venue> list = new Vector<Venue>();
+		
 		list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
 		list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
 		list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
 		list.add(new Venue("LT16", "NUS", "Hot", 100, 203));
 		list.add(new Venue("LT16", "NUS", "Hot", 100, 203));
 		list.add(new Venue("LT16LT16LT15LT16", "NUS", "Hot", 100, 203));
+		*/
+		
+		Vector<Venue> list = mbs.find_venue_name(venueName);
+
 //		return new Vector<Venue>();
 		return list;
 	}
