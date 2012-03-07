@@ -206,7 +206,7 @@ public class EMDB_sqlite{
 					"'startdate' TEXT," +
 					"'enddate' TEXT," +
 					"'starttime' TEXT," +
-					"'endtime' TEXT," +
+					"'endtime' TEXT" +
 					")");
 		
 		
@@ -529,8 +529,7 @@ public class EMDB_sqlite{
 		this.add_prepare("budget");
 		try {
 			ResultSet result;
-			
-			
+		
 			this.PREPSTATEM.setInt(1, event_id);
 			this.PREPSTATEM.setString(2, name);
 			this.PREPSTATEM.setInt(3, price);
@@ -1062,6 +1061,55 @@ public class EMDB_sqlite{
 			return 0;
 		}
 	}
+	
+	
+	
+	
+	/*
+	 * ***********************************
+	 * 
+	 * SETUP
+	 * - SEARCH
+	 * 
+	 * ***********************************
+	 */
+	public Vector<Venue> find_venue_by_name(String name){
+		
+		String query = "SELECT * FROM " + this.TABLE_venue + " WHERE name LIKE '%?%'";
+		//name = name.replaceAll("[^\\w]", "");
+		//query = String.format(query, name);
+		Vector<Venue> list = new Vector<Venue>();
+		
+		try {
+			PreparedStatement pstm = this.DBCON.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			
+			pstm.setString(1, name);
+			ResultSet result = pstm.executeQuery();
+			while (result.next()) {
+			    	Venue place = new Venue();
+					place.updateID(result.getInt("venue_id"));
+					place.updateName(result.getString("name"));
+					place.updateAddress(result.getString("address"));
+					place.updateDescription(result.getString("description"));
+					place.updateCost(result.getInt("cost"));
+					place.updateMaxCapacity(result.getInt("capacity"));
+					
+					list.add(place);
+			}
+			result.close();
+
+			return list;
+			
+		} catch (SQLException e) {
+			return null;
+		}
+		
+		
+	}
+	
+	
+	
+	
 	
 	
 	
