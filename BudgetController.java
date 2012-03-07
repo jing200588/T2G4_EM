@@ -21,9 +21,9 @@ public class BudgetController implements BudgetInterface{
 	private Vector<Item> db_list;
 
 	private BudgetModel bm = new BudgetModel();
-	
+
 	public BudgetController() {
-		
+
 	}
 
 
@@ -88,8 +88,8 @@ public class BudgetController implements BudgetInterface{
 	}
 
 	public Vector<Item> getItemList(int id) {
-		//return bm.return_item_list(id);
-		return item_list;
+		return bm.return_item_list(id);
+		//return item_list;
 	}
 
 	/*flag compulsory items*/
@@ -240,6 +240,11 @@ public class BudgetController implements BudgetInterface{
 				totalCombination = 0;
 			else {
 				totalCombination = soln.getSolnSetSize();
+				for(int i=0; i<soln.getSolnSetSize(); i++) {
+					BitSet bitmask = soln.getSolnSet().get(i);
+					if(bitmask.isEmpty() == true)
+						totalCombination--;
+				}
 				hasSolnSet = true; //There is combination.
 			}
 
@@ -247,41 +252,48 @@ public class BudgetController implements BudgetInterface{
 				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (soln.getSvalue()+compulsory_satisfaction) +"\n";
 			else
 				text = "Total combination:\t"+totalCombination+"\n";
+			int index=0;
 			for(int i=0; i<soln.getSolnSetSize(); i++) {
 				BitSet bitmask = soln.getSolnSet().get(i);
+				if(bitmask.isEmpty() == false) {
+					System.out.println("bitmask is " + bitmask);
 
-				text +="***********Combination "+(i+1)+"***********\n";
-				num = 1;
-				text +="Total cost: \t$" + (soln.getSolnCostSet().get(i)+((double) compulsory_cost)/100) +"\n";
-				for(int k=0; k<compulsory_list.size();k++) {
-					text+= num+"\t";
-					text+= compulsory_list.get(k).getItem() + " for $";
-					price = ((double) compulsory_list.get(k).getPrice())/100;
-					if(satisfaction_choice == 1) {
-						text+=price + " for ";
-						text+= compulsory_list.get(k).getSatisfaction_value() + " satisfaction.\n";
-					}
-					else {
-						text+=price+"\n";
-					}
-					num++;
-				}
-				for(int j=0; j<number; j++) {
-					if(bitmask.get(j)) {
+					if(bitmask.isEmpty() == true) System.out.println("true");
+
+					text +="***********Combination "+(index+1)+"***********\n";
+					num = 1;
+					text +="Total cost: \t$" + (soln.getSolnCostSet().get(i)+((double) compulsory_cost)/100) +"\n";
+					for(int k=0; k<compulsory_list.size();k++) {
 						text+= num+"\t";
-						text+= compute_list.get(j).getItem() + " for $";
-						price = ((double) compute_list.get(j).getPrice())/100;
+						text+= compulsory_list.get(k).getItem() + " for $";
+						price = ((double) compulsory_list.get(k).getPrice())/100;
 						if(satisfaction_choice == 1) {
-							text+= price + " for ";
-							text+= compute_list.get(j).getSatisfaction_value() + " satisfaction.\n";
+							text+=price + " for ";
+							text+= compulsory_list.get(k).getSatisfaction_value() + " satisfaction.\n";
 						}
 						else {
-							text+= price+"\n";
+							text+=price+"\n";
 						}
 						num++;
 					}
+					for(int j=0; j<number; j++) {
+						if(bitmask.get(j)) {
+							text+= num+"\t";
+							text+= compute_list.get(j).getItem() + " for $";
+							price = ((double) compute_list.get(j).getPrice())/100;
+							if(satisfaction_choice == 1) {
+								text+= price + " for ";
+								text+= compute_list.get(j).getSatisfaction_value() + " satisfaction.\n";
+							}
+							else {
+								text+= price+"\n";
+							}
+							num++;
+						}
+					}
+					text+="\n\n";//here
+					index++;
 				}
-				text+="\n\n";
 			}
 		}
 		return text;
@@ -347,6 +359,7 @@ public class BudgetController implements BudgetInterface{
 	}
 
 	public int noOfCombination() {
+
 		return totalCombination;
 	}
 
@@ -447,7 +460,7 @@ public class BudgetController implements BudgetInterface{
 			System.out.println();
 		}
 	}
-	
+
 	public Vector<Item> getCombinationList(int id) {
 
 		return bm.return_item__optimized_list(id);

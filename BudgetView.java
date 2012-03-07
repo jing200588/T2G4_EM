@@ -339,7 +339,7 @@ public class BudgetView extends Composite {
 						TableItem item = new TableItem(table, SWT.NULL);
 						item.setText(0, "Item " + (loopIndex+1));
 						item.setText(1, item_list.get(loopIndex).getItem());
-						item.setText(2, "$"+((double) item_list.get(loopIndex).getPrice())/100);
+						item.setText(2, "$"+((double) item_list.get(loopIndex).getPrice())/10000);
 						if(satisfaction_choice == 1) 
 							item.setText(3, ""+item_list.get(loopIndex).getSatisfaction_value());
 						if(type_choice == 1)
