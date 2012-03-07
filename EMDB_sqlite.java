@@ -206,7 +206,7 @@ public class EMDB_sqlite{
 					"'startdate' TEXT," +
 					"'enddate' TEXT," +
 					"'starttime' TEXT," +
-					"'endtime' TEXT," +
+					"'endtime' TEXT" +
 					")");
 		
 		
@@ -529,8 +529,7 @@ public class EMDB_sqlite{
 		this.add_prepare("budget");
 		try {
 			ResultSet result;
-			
-			
+		
 			this.PREPSTATEM.setInt(1, event_id);
 			this.PREPSTATEM.setString(2, name);
 			this.PREPSTATEM.setInt(3, price);
