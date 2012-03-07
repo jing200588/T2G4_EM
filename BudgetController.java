@@ -449,6 +449,7 @@ public class BudgetController implements BudgetInterface{
 	}
 	
 	public Vector<Item> getCombinationList(int id) {
+
 		return bm.return_item__optimized_list(id);
 	}
 

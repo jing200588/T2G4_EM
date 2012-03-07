@@ -88,6 +88,8 @@ public class BudgetView extends Composite {
 		formToolkit.adapt(this);
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		event_id = id;
 
 		Form BudgetViewForm = formToolkit.createForm(this);
 		BudgetViewForm.setBounds(0, 0, 700, 400);
