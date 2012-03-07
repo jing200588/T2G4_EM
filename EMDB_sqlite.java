@@ -714,7 +714,7 @@ public class EMDB_sqlite{
 			String query = this.select_all(
 					this.TABLE_events, 
 					"", 
-					1);	
+					0);	
 			
 			ResultSet result;
 			result = this.DBQUERY.executeQuery(query);
@@ -728,6 +728,8 @@ public class EMDB_sqlite{
 						result.getString("endtime")
 						);
 				item.setDescription(result.getString("description"));
+				item.setID(result.getInt("event_id"));
+				list.add(item);
 			}
 	
 			result.close();
@@ -1007,8 +1009,10 @@ public class EMDB_sqlite{
 	
 	public void delete_event(int id){
 		String sql = "";
+		this.out("DELETE: "+ id);
 		try {
 			sql = "DELETE FROM " + this.TABLE_events + " WHERE event_id="+id;
+			this.out(sql);
 			this.DBQUERY.execute(sql);
 			
 			this.delete_budget_list(id);
@@ -1028,7 +1032,7 @@ public class EMDB_sqlite{
 	public void delete_venue(int id){
 		String sql = "";
 		try {
-			sql = "DELETE FROM " + this.TABLE_events + " WHERE venue_id="+id;
+			sql = "DELETE FROM " + this.TABLE_venue + " WHERE venue_id="+id;
 			this.DBQUERY.execute(sql);
 
 		} catch (SQLException e) {
@@ -1049,23 +1053,38 @@ public class EMDB_sqlite{
 	 * ***********************************
 	 */
 	public int update_event(int id, String name, String description, String startdate, String enddate, String starttime, String endtime){
-		String sql = "";
+		String query = "";
 		try{
-			sql = "UPDATE " + this.TABLE_events +
-					"SET name='" + name + "'" 
+			
+			
+			
+			/*
+			query = "UPDATE " + this.TABLE_events +
+					" SET name='" + name + "'" 
 					+ ",description='" + name + "'"
 					+ ", startdate='" + startdate + "'"
 					+ ", enddate='" + enddate + "'"
 					+ ", starttime='" + starttime + "'"
 					+ ", endtime='" + endtime + "'"
-					+ " WHERE event_id=" + id;
+					+ "  WHERE event_id=" + id + ";";
+			*/
 			
-			boolean result = this.DBQUERY.execute(sql, 1);
+			query = "UPDATE " + this.TABLE_events +	" SET name='?',description='?', startdate='?', enddate='?', starttime='?', endtime='?'  WHERE event_id=?;";
+			PreparedStatement pstm = this.DBCON.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			
+			pstm.setString(1, name);
+			pstm.setString(2, description);
+			pstm.setString(3, startdate);
+			pstm.setString(4, enddate);
+			pstm.setString(5, starttime);
+			pstm.setString(6, endtime);
+
+			pstm.executeQuery();
+			
 		
-			if(result)
-				return 1;
-			else
-				return 0;
+	
+			return 1;
+		
 			
 		}catch (SQLException e){
 			return 0;

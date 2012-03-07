@@ -20,16 +20,17 @@ public class MainModel {
 		 * Dummy content.
 		 */
 		db.connect();
-		//this.PullList();
+		list = db.get_event_list();
+		db.out(list.toString());
 		db.disconnect();
 		
-		
+		/*
 		list.add(new Eventitem("test event 1", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
 		list.add(new Eventitem("test event 2", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
 		list.add(new Eventitem("test event 3", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
 		list.add(new Eventitem("test event 4", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
 		list.add(new Eventitem("test event 5", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));	
-		
+		*/
 		
 		
 	};
@@ -51,34 +52,47 @@ public class MainModel {
 				eitem.getEndDate(),
 				eitem.getStartTime(),
 				eitem.getEndTime());
+		db.out("Create: " + id);
+		eitem.setID(id);
+		list.add(eitem);
 		
-		
-		if (id > 0){
-			eitem.setID(id);
-			list.add(eitem);
-		}
 		db.disconnect();
 		
+		db.out("Returned: " + eitem.getID());
 	
 	}
 	
 	public static Vector<Eventitem> PullList() {
 		db.connect();
-		//list = db.get_event_list();
+		list = db.get_event_list();
 		db.disconnect();
 		return list;
 	}
 	
 	public static void DeleteEvent(Eventitem eitem) {
+		
 		db.connect();
+		db.out("Passing: " + eitem.getID() + "-" + eitem.getName());
+		
 		db.delete_event(eitem.getID());
 		db.disconnect();
-		
 		list.remove(eitem);
 	}
 	
 	public static void 	UpdateParticulars(Eventitem eitem, int index) {
 		//update particulars
+		db.out("testing start");
+		db.connect();
+		db.update_event(
+				eitem.getID(), 
+				eitem.getName(), 
+				eitem.getDescription(), 
+				eitem.getStartDate(),
+				eitem.getEndDate(), 
+				eitem.getStartTime(), 
+				eitem.getEndTime());
+		db.disconnect();
+		db.out("testing end");
 		list.remove(index);
 		list.add(index, eitem);
 		
