@@ -203,7 +203,10 @@ public class EMDB_sqlite{
 					"'event_id' INTEGER PRIMARY KEY AUTOINCREMENT,"+
 					"'name' TEXT NOT NULL," +
 					"'description' TEXT," +
-					"'venue_booked' INTEGER"+
+					"'startdate' TEXT," +
+					"'enddate' TEXT," +
+					"'starttime' TEXT," +
+					"'endtime' TEXT," +
 					")");
 		
 		
@@ -235,9 +238,8 @@ public class EMDB_sqlite{
 					"'booking_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"'event_id' INTEGER NOT NULL," +
 					"'venue_id' INTEGER NOT NULL,"+
-					"'date' TEXT NOT NULL," +
-					"'time_hour' INTEGER NOT NULL," +
-					"'time_min' INTEGER"+
+					"'time_start' TEXT," +
+					"'time_end' TEXT"+
 					")");	
 			
 			
@@ -396,13 +398,13 @@ public class EMDB_sqlite{
 	public void add_prepare(String type){
 		try {
 				if (type.compareTo("event") == 0)		
-					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_events + " (name, description) VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS);
+					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_events + " (name, description, startdate, enddate, starttime, endtime) VALUES (?, ?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 				
 				else if (type.compareTo("venue") == 0)
 					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_venue + " (name, address, description, capacity, cost) VALUES (?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 					
 				else if (type.compareTo("bookings") == 0)
-					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_venue_bookings + " (event_id, venue_id, date, time_hour, time_min) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_venue_bookings + " (event_id, venue_id,  time_start, time_end) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 					
 				else if (type.compareTo("budget") == 0)
 					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_budget + " (event_id, name, price, satisfaction, type) VALUES (?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
@@ -428,7 +430,7 @@ public class EMDB_sqlite{
 	
 	
 	// There is another method for batch
-	public int add_event(String name, String description){
+	public int add_event(String name, String description, String startdate, String enddate, String starttime, String endtime){
 		this.add_prepare("event");
 		
 		try {
@@ -436,6 +438,10 @@ public class EMDB_sqlite{
 			
 			this.PREPSTATEM.setString(1, name);
 			this.PREPSTATEM.setString(2, description);
+			this.PREPSTATEM.setString(3, startdate);
+			this.PREPSTATEM.setString(4, enddate);
+			this.PREPSTATEM.setString(5, starttime);
+			this.PREPSTATEM.setString(6, endtime);
 			this.PREPSTATEM.executeUpdate();
 			
 			result = this.PREPSTATEM.getGeneratedKeys();
@@ -490,16 +496,15 @@ public class EMDB_sqlite{
 	
 	
 	// There is another method for batch
-	public int add_booking(int event_id, int venue_id, String date, int time_hour, int time_min){
+	public int add_booking(int event_id, int venue_id, String time_start , String time_end){
 		this.add_prepare("bookings");
 		try {
 			ResultSet result;
 			
 			this.PREPSTATEM.setInt(1, event_id);
 			this.PREPSTATEM.setInt(2, venue_id);
-			this.PREPSTATEM.setString(3, date);
-			this.PREPSTATEM.setInt(4, time_hour);
-			this.PREPSTATEM.setInt(5, time_min);
+			this.PREPSTATEM.setString(3, time_start);
+			this.PREPSTATEM.setString(4, time_end);
 			this.PREPSTATEM.executeUpdate();
 			
 			result = this.PREPSTATEM.getGeneratedKeys();
@@ -566,11 +571,15 @@ public class EMDB_sqlite{
 
 	
 	//Overloaded Function
-	public void add_event(String name, String description, boolean batch){
+	public void add_event(String name, String description, String startdate, String enddate, String starttime, String endtime, boolean batch){
 		
 	   	try {
 			this.PREPSTATEM.setString(1, name);
 			this.PREPSTATEM.setString(2, description);
+			this.PREPSTATEM.setString(3, startdate);
+			this.PREPSTATEM.setString(4, enddate);
+			this.PREPSTATEM.setString(5, starttime);
+			this.PREPSTATEM.setString(6, endtime);
 			this.PREPSTATEM.addBatch();
 			
 			
@@ -689,35 +698,78 @@ public class EMDB_sqlite{
 	
 	
 	
+	public Vector<Eventitem> get_event_list(){
+		
+		Vector<Eventitem> list = new Vector<Eventitem>();
+		try {
+			String query = this.select_all(
+					this.TABLE_events, 
+					"", 
+					1);	
+			
+			ResultSet result;
+			result = this.DBQUERY.executeQuery(query);
+
+			while (result.next()) {
+				Eventitem item = new Eventitem(
+						result.getString("name"),
+						result.getString("startdate"),
+						result.getString("enddate"),
+						result.getString("starttime"),
+						result.getString("endtime")
+						);
+				item.setDescription(result.getString("description"));
+			}
+	
+			result.close();
+			return list;
+			
+			
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	
+	
+	
+	
+	
 	/*
 	 * Getting a venue by the venue id as set in the database
 	 */
-	public void get_venue(int id){
+	public Venue get_venue(int id){
 		
-		//create empty venue container here
+		Venue place = new Venue();
 		
 		 try {
+			 
 			 
 			String query = this.select_all(
 					this.TABLE_venue, 
 					"venue_id="+ id , 
 					1);	
+	
+			
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
 			while (result.next()) {
-				System.out.println(result.getInt("venue_id"));
-				System.out.println(result.getString("name"));
+				place.updateName(result.getString("name"));
+				place.updateAddress(result.getString("address"));
+				place.updateDescription(result.getString("description"));
+				place.updateCost(result.getInt("cost"));
+				place.updateMaxCapacity(result.getInt("capacity"));
 			}
-			
-			
-			
+
 			result.close();
+			
+			return place;
 			
 		} catch (SQLException e) {
 			
-			//return empty venue container here.
-			
+			return null;
 		}
+		
 		
 		
 	}
@@ -725,13 +777,87 @@ public class EMDB_sqlite{
 	
 	
 	
+	
+	/* 
+	 * Get a list of venues. 
+	 * The clause is optional
+	 */
+	public Vector<Venue> get_venue_list(String clause, int upper, int lower){
+		
+		String query = "";
+		Vector<Venue> list = new Vector<Venue>();
+		
+		
+		 try {
+			if (clause.compareTo("cost") == 0){
+				query = this.select_all(
+							this.TABLE_venue_bookings, 
+							"cost="+ clause , 
+							0);	
+		
+			}else if (clause.compareTo("capacity") == 0){
+				query = this.select_all(
+							this.TABLE_venue_bookings, 
+							"capacity="+ clause , 
+							0);	
+				
+			}else{
+				query = this.select_all(
+						this.TABLE_venue_bookings, 
+						"",
+						0);	
+			}
+			ResultSet result = this.DBQUERY.executeQuery(query);
+			
+			while (result.next()) {
+				int cost = result.getInt("cost");
+				int capacity = result.getInt("capacity");
+				
+				if ( (upper == 0 && lower == 0) 
+						|| (clause.compareTo("cost") == 0 && cost <= upper && cost >= lower)
+						|| (clause.compareTo("capacity") == 0 && capacity <= upper && capacity >= lower )
+						)
+				{	
+					Venue place = new Venue();
+					place.updateID(result.getInt("venue_id"));
+					place.updateName(result.getString("name"));
+					place.updateAddress(result.getString("address"));
+					place.updateDescription(result.getString("description"));
+					place.updateCost(cost);
+					place.updateMaxCapacity(capacity);
+					
+					list.add(place);
+				}
+			}
+			
+			result.close();
+			return list;
+			
+		} catch (SQLException e) {
+			
+			return null;
+			
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	/*
 	 * Getting a list of bookings from db
 	 */
-	public void get_bookings(int id, String type){
+	public Vector<TimeSlot> get_bookings(int id, String type){
 		
 		//create empty venue container here
 		String query = "";
+		
+		Vector<TimeSlot> list = new Vector<TimeSlot>();
+		
 		 try {
 			 
 			
@@ -739,31 +865,42 @@ public class EMDB_sqlite{
 				query = this.select_all(
 							this.TABLE_venue_bookings, 
 							"event_id="+ id , 
-							1);	
+							0);	
 			}else if (type.compareTo("venue") == 0){
 			
 				query = this.select_all(
 							this.TABLE_venue_bookings, 
 							"venue_id="+ id , 
-							1);	
+							0);	
 			} else{
 				query = this.select_all(
 							this.TABLE_venue_bookings, 
 							"venue_id="+ id , 
-							1);	
+							0);	
 			}
 			 
 
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
-
+			while (result.next()) {
+			
+				list.add(
+					new TimeSlot(
+						new DateHour(result.getString("time_start")),
+						new DateHour(result.getString("time_end"))
+						)
+					);
+			}
 			
 			
 			result.close();
 			
+			
+			return null;
+			
 		} catch (SQLException e) {
 			
-			//return empty venue container here.
+			return null;
 			
 		}
 		
@@ -894,8 +1031,37 @@ public class EMDB_sqlite{
 	
 	
 	
-	
-	
+	/*
+	 * ***********************************
+	 * 
+	 * SETUP
+	 * -UPDATE REQUEST
+	 * 
+	 * ***********************************
+	 */
+	public int update_event(int id, String name, String description, String startdate, String enddate, String starttime, String endtime){
+		String sql = "";
+		try{
+			sql = "UPDATE " + this.TABLE_events +
+					"SET name='" + name + "'" 
+					+ ",description='" + name + "'"
+					+ ", startdate='" + startdate + "'"
+					+ ", enddate='" + enddate + "'"
+					+ ", starttime='" + starttime + "'"
+					+ ", endtime='" + endtime + "'"
+					+ " WHERE event_id=" + id;
+			
+			boolean result = this.DBQUERY.execute(sql, 1);
+		
+			if(result)
+				return 1;
+			else
+				return 0;
+			
+		}catch (SQLException e){
+			return 0;
+		}
+	}
 	
 	
 	

@@ -13,6 +13,9 @@ public class BookingSystem {
 	public static enum SearchCriteria{COST, CAPACITY, TIME, COST_TIME,
 						CAPACITY_TIME, COST_CAPACITY, ALL_THREE}
 	public static final double THRESHOLD = Double.MIN_VALUE;
+	
+	public static ModelBookingSystem mbs = new ModelBookingSystem();
+	
 	/**
 	 * 
 	 * @param eventID
@@ -38,9 +41,7 @@ public class BookingSystem {
 	{
 //		bookedVenue.bookTimeSlot(wantedTimeSlot);
 		
-		// Update in the database of venue.
-		
-		// Update in the database of event.
+		mbs.add_booking_to_db(eventID, bookedVenue.getVenueID(), wantedTimeSlot);
 		
 		// If the booking is successful
 		return true;
@@ -118,7 +119,7 @@ public class BookingSystem {
 				// Search in the DATABASE
 				// Dummy code (will be REPLACED) when there is a database 
 				// Capacity
-				Vector<Venue> firstRoundCapacity = new Vector<Venue>(); 
+				Vector<Venue> firstRoundCapacity = mbs.get_venue_by_capacity(capacityRange[1], capacityRange[0]); 
 				
 				// Actual code
 				if(type == SearchCriteria.CAPACITY)
@@ -158,7 +159,7 @@ public class BookingSystem {
 				// Search in the DATABASE
 				// Dummy code (will be REPLACED) when there is a database
 				// Cost
-				Vector<Venue> firstRoundCost = new Vector<Venue>();
+				Vector<Venue> firstRoundCost = mbs.get_venue_by_cost(costRange[1], costRange[0]); ;
 				
 				
 				// Actual code
@@ -179,7 +180,7 @@ public class BookingSystem {
 				// Search in the DATABASE
 				// Dummy code (will be REPLACED) when there is a database
 				// Time slot
-				returnList = new Vector<Venue>();
+				returnList = mbs.get_venue_with_timeslot();
 			}
 		}
 		

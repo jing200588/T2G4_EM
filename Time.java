@@ -16,6 +16,13 @@ public class Time {
 			_time += m;
 	}
 	
+	public Time(String time) {
+		String hm[] = time.split(":");
+		_hours = Integer.parseInt(hm[0]);;
+		_mins = Integer.parseInt(hm[1]);;
+		_time = time;
+	}
+
 	public String getTime () {
 		return _time;
 	}
