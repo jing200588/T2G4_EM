@@ -90,7 +90,7 @@ public class ViewEventGUI3 extends Composite {
 		Enamelabel.setText("Event Name:");
 		
 		Ename = new Label(EparticularsComp, SWT.WRAP);
-		Ename.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
+		Ename.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		Ename.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
 		Ename.setText(cevent.getName());
 		
@@ -131,7 +131,7 @@ public class ViewEventGUI3 extends Composite {
 		
 		Edescription = new Label(EparticularsComp, SWT.WRAP);
 		Edescription.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		GridData gd_Edescription = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
+		GridData gd_Edescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		gd_Edescription.widthHint = 90;
 		Edescription.setLayoutData(gd_Edescription);
 		Edescription.setText(cevent.getDescription());
@@ -408,6 +408,7 @@ public class ViewEventGUI3 extends Composite {
 	
 	public static void UpdateEvent(Eventitem event) {
 		cevent = event;
+		RefreshParticulars();
 	}
 	
 	public static void RefreshParticulars() {
@@ -418,7 +419,7 @@ public class ViewEventGUI3 extends Composite {
 		Edescription.setText(cevent.getDescription());
 		Ename.setText(cevent.getName());
 		System.out.println("refreshed");
-		System.out.println(cevent.getName());
+		System.out.println(cevent.getDescription());
 	}
 	
 	public static void RefreshBudget() {
