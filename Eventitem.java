@@ -1,7 +1,8 @@
-import java.util.Vector;
+import java.util.*;
 
 
 public class Eventitem {
+	private int _id;
 	private String _name;
 	private String _description;
 //	private Vector<Venue> _venuelist;
@@ -22,8 +23,22 @@ public class Eventitem {
 		_endtime = new Time (ehour, emin);
 	}
 	
+	
+	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime){
+		_name = name;
+		_startdate = new Date(startdate);
+		_enddate = new Date(enddate);
+		_starttime = new Time(starttime);
+		_endtime = new Time(endtime);
+	}
+	
+	
 	public void setDescription (String descript) {
 		_description = descript;
+	}
+	
+	public void setID(int id){
+		_id = id;
 	}
 	
 	public String getDescription () {
@@ -60,5 +75,8 @@ public class Eventitem {
 	
 	public String getEndTime () {
 		return _endtime.getTime();
+	}
+	public int getID(){
+		return _id;
 	}
 }

@@ -10,6 +10,14 @@ public class Date {
 		_date = "" + d + "-" + m + "-" + y;
 	}
 	
+	public Date(String date) {
+		String hm[] = date.split("-");
+		_year = Integer.parseInt(hm[2]);
+		_month = Integer.parseInt(hm[1]);
+		_day = Integer.parseInt(hm[0]);
+		_date = date;
+	}
+
 	public String getDate () {
 		return _date;
 	}

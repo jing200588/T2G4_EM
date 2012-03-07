@@ -203,7 +203,10 @@ public class EMDB_sqlite{
 					"'event_id' INTEGER PRIMARY KEY AUTOINCREMENT,"+
 					"'name' TEXT NOT NULL," +
 					"'description' TEXT," +
-					"'venue_booked' INTEGER"+
+					"'startdate' TEXT," +
+					"'enddate' TEXT," +
+					"'starttime' TEXT," +
+					"'endtime' TEXT," +
 					")");
 		
 		
@@ -395,7 +398,7 @@ public class EMDB_sqlite{
 	public void add_prepare(String type){
 		try {
 				if (type.compareTo("event") == 0)		
-					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_events + " (name, description) VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS);
+					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_events + " (name, description, startdate, enddate, starttime, endtime) VALUES (?, ?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 				
 				else if (type.compareTo("venue") == 0)
 					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_venue + " (name, address, description, capacity, cost) VALUES (?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
@@ -427,7 +430,7 @@ public class EMDB_sqlite{
 	
 	
 	// There is another method for batch
-	public int add_event(String name, String description){
+	public int add_event(String name, String description, String startdate, String enddate, String starttime, String endtime){
 		this.add_prepare("event");
 		
 		try {
@@ -435,6 +438,10 @@ public class EMDB_sqlite{
 			
 			this.PREPSTATEM.setString(1, name);
 			this.PREPSTATEM.setString(2, description);
+			this.PREPSTATEM.setString(3, startdate);
+			this.PREPSTATEM.setString(4, enddate);
+			this.PREPSTATEM.setString(5, starttime);
+			this.PREPSTATEM.setString(6, endtime);
 			this.PREPSTATEM.executeUpdate();
 			
 			result = this.PREPSTATEM.getGeneratedKeys();
@@ -564,11 +571,15 @@ public class EMDB_sqlite{
 
 	
 	//Overloaded Function
-	public void add_event(String name, String description, boolean batch){
+	public void add_event(String name, String description, String startdate, String enddate, String starttime, String endtime, boolean batch){
 		
 	   	try {
 			this.PREPSTATEM.setString(1, name);
 			this.PREPSTATEM.setString(2, description);
+			this.PREPSTATEM.setString(3, startdate);
+			this.PREPSTATEM.setString(4, enddate);
+			this.PREPSTATEM.setString(5, starttime);
+			this.PREPSTATEM.setString(6, endtime);
 			this.PREPSTATEM.addBatch();
 			
 			
@@ -684,6 +695,43 @@ public class EMDB_sqlite{
 		
 		
 	}
+	
+	
+	
+	public Vector<Eventitem> get_event_list(){
+		
+		Vector<Eventitem> list = new Vector<Eventitem>();
+		try {
+			String query = this.select_all(
+					this.TABLE_events, 
+					"", 
+					1);	
+			
+			ResultSet result;
+			result = this.DBQUERY.executeQuery(query);
+
+			while (result.next()) {
+				Eventitem item = new Eventitem(
+						result.getString("name"),
+						result.getString("startdate"),
+						result.getString("enddate"),
+						result.getString("starttime"),
+						result.getString("endtime")
+						);
+				item.setDescription(result.getString("description"));
+			}
+	
+			result.close();
+			return list;
+			
+			
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	
+	
 	
 	
 	
@@ -983,8 +1031,37 @@ public class EMDB_sqlite{
 	
 	
 	
-	
-	
+	/*
+	 * ***********************************
+	 * 
+	 * SETUP
+	 * -UPDATE REQUEST
+	 * 
+	 * ***********************************
+	 */
+	public int update_event(int id, String name, String description, String startdate, String enddate, String starttime, String endtime){
+		String sql = "";
+		try{
+			sql = "UPDATE " + this.TABLE_events +
+					"SET name='" + name + "'" 
+					+ ",description='" + name + "'"
+					+ ", startdate='" + startdate + "'"
+					+ ", enddate='" + enddate + "'"
+					+ ", starttime='" + starttime + "'"
+					+ ", endtime='" + endtime + "'"
+					+ " WHERE event_id=" + id;
+			
+			boolean result = this.DBQUERY.execute(sql, 1);
+		
+			if(result)
+				return 1;
+			else
+				return 0;
+			
+		}catch (SQLException e){
+			return 0;
+		}
+	}
 	
 	
 	
