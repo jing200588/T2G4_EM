@@ -105,7 +105,10 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			i=0;
 		
 		else if (table.getItemCount() == eventlist.size()) {	//updates vector list only
+			TableItem tb = table.getItem(table.getSelectionIndex());
+			tb.setText(0, eventlist.get(table.getSelectionIndex()).getName());
 			ViewEventGUI3.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
+			c2.layout(true);
 			return;
 		}
 		else
@@ -130,8 +133,8 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		return null;
 	}
 	
-	public static void CalcBudget () {
-		BudgetView bv = new BudgetView(c2, SWT.NONE, 0);
+	public static void CalcBudget () {		
+		BudgetView bv = new BudgetView(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
 		layout.topControl = bv;
 		c2.layout(true);
 	}
@@ -153,7 +156,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 			ViewEventGUI3.RefreshBudget();
 		if (i == 1) {	//particulars
 			UpdateTable();
-			ViewEventGUI3.RefreshParticulars();
+			//ViewEventGUI3.RefreshParticulars();
 		}
 		System.out.println("test");
 		layout.topControl = view;
@@ -241,8 +244,11 @@ public class EmanagerGUIjface extends ApplicationWindow {
 				for (int i=0; i<children.length; i++)
 					((Composite)children[i]).dispose();
 				}
-				
-		        view = new ViewEventGUI3(c2, SWT.NONE, getEvent(itemname));
+				//view.UpdateEvent(getEvent(itemname));
+	//			if (view != null)
+		//			view.UpdateEvent(getEvent(itemname));
+			//	else
+					view = new ViewEventGUI3(c2, SWT.NONE, getEvent(itemname));
 		      //  view.setBounds(c2.getBounds());
 		   //     formToolkit.adapt(view);
 		//		formToolkit.paintBordersFor(view);

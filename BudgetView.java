@@ -1,7 +1,6 @@
 import java.util.Locale;
 import java.util.Vector;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -41,8 +40,6 @@ public class BudgetView extends Composite {
 	private int budget;
 	private int type_choice;
 	private int satisfaction_choice;
-	private static Display display = new Display();
-    private Color red = display.getSystemColor(SWT.COLOR_RED);
 	/*My declaration end here.*/
 
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
@@ -91,6 +88,8 @@ public class BudgetView extends Composite {
 		formToolkit.adapt(this);
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		event_id = id;
 
 		Form BudgetViewForm = formToolkit.createForm(this);
 		BudgetViewForm.setBounds(0, 0, 700, 400);
@@ -316,8 +315,6 @@ public class BudgetView extends Composite {
 
 		txt_error_S1 = new Text(Step1, SWT.READ_ONLY | SWT.MULTI);
 		txt_error_S1.setBounds(229, 4, 441, 29);
-		txt_error_S1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		txt_error_S1.setForeground(red);
 		txt_error_S1.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
 		formToolkit.adapt(txt_error_S1, true, true);
 
@@ -626,4 +623,6 @@ public class BudgetView extends Composite {
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");
 	}
+
+	
 }

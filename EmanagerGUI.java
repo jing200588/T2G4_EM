@@ -202,6 +202,6 @@ public class EmanagerGUI {
 		System.out.println(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
 	//	ViewEventGUI view = new ViewEventGUI(shell, SWT.NONE, EmanagerGUIjface.getEvent("abc"));
-
+		BudgetView bv = new BudgetView(shell, SWT.NONE, 0);
 	}
 }
