@@ -463,7 +463,7 @@ public class BudgetController implements BudgetInterface{
 
 	public Vector<Item> getCombinationList(int id) {
 
-		return bm.return_item__optimized_list(id);
+		return bm.return_item_optimized_list(id);
 	}
 
 }

@@ -35,7 +35,7 @@ public class BudgetModel {
 		db.add_prepare("budget");
 		for (int i=0; i < count; i++){
 			Item current = i_list.get(i);
-			System.out.println(event_id + current.getItem() + current.getPrice()+ current.getSatisfaction_value()+ current.getType());
+			//System.out.println(event_id + current.getItem() + current.getPrice()+ current.getSatisfaction_value()+ current.getType());
 			db.add_budget(event_id, current.getItem(), current.getPrice(), current.getSatisfaction_value(), current.getType(), true);		
 		}
 		db.add_batch_commit();
@@ -62,7 +62,7 @@ public class BudgetModel {
 		db.add_prepare("budgetOptimized");
 		for (int i=0; i < count; i++){
 			Item current = i_list.get(i);
-			System.out.println(event_id + current.getItem() + current.getPrice()+ current.getSatisfaction_value()+ current.getType());
+			//System.out.println(event_id + current.getItem() + current.getPrice()+ current.getSatisfaction_value()+ current.getType());
 			db.add_budget_optimized(event_id, current.getItem(), current.getPrice(), current.getSatisfaction_value(), current.getType(), true);	
 		}
 	
@@ -115,7 +115,7 @@ public class BudgetModel {
 	
 	
 	
-	public Vector<Item> return_item__optimized_list(int id) {
+	public Vector<Item> return_item_optimized_list(int id) {
 		
 		db.connect();
 		item_list = db.get_budget_list(id, true);

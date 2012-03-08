@@ -89,7 +89,8 @@ public class EMDBtest {
 			 */
 			int id;
 			int eid;
-			Eventitem item;
+			Eventitem eitem;
+			Item item;
 			Vector<Item> list;
 			
 			
@@ -99,10 +100,11 @@ public class EMDBtest {
 			db.out("\n\nAdding Events\n--------------------------------------------");
 			id = db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2");
 			eid = db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
-			db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2");
-			db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
-			db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2");
-			db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
+			db.out("id: "+ eid);
+			db.out("id: "+ db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2"));
+			db.out("id: "+ db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2"));
+			db.out("id: "+ db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2"));
+			db.out("id: "+ db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2"));
 			
 			
 			
@@ -110,9 +112,15 @@ public class EMDBtest {
 			
 			
 			db.out("\n\nGetting Events\n--------------------------------------------");
-			item = db.get_event(id);
-			db.out(item.toString());
+			eitem = db.get_event(id);
 			
+			db.out(eitem.toString());
+			db.out(" + NAME: "+ eitem.getName());
+			db.out(" + DESCRIPTION: "+ eitem.getDescription());
+			db.out(" + START DATE: "+ eitem.getStartDate());
+			db.out(" + END: DATE"+ eitem.getEndDate());
+			db.out(" + START TIME: "+ eitem.getStartTime());
+			db.out(" + END: TIME"+ eitem.getEndTime());
 			
 			/*
 			 * BUDGET
@@ -131,7 +139,15 @@ public class EMDBtest {
 			list = db.get_budget_list(id, false);
 			db.out(list.toString());
 			
-			
+			for (int i=0; i<list.size(); i++){
+				item = list.get(i);
+				db.out(item.toString());
+				db.out(" + EVENT ID: " + item.getID());
+				db.out(" + NAME: " + item.getItem());
+				db.out(" + PRICE: "+ item.getPrice());
+				db.out(" + SATISFACTION: " + item.getSatisfaction_value());
+				db.out(" + TYPE: " + item.getType());
+			}
 			
 			
 			
@@ -191,15 +207,15 @@ public class EMDBtest {
 			
 			
 			db.out("\n\nGet Deleted Event (Empty Case)\n--------------------------------------------");
-			item = db.get_event(id);
+			eitem = db.get_event(id);
 	
 			try{
-				db.out(item.toString());
+				db.out(eitem.toString());
 			}catch (Exception e){
 				db.out(e.getMessage());
 			}
 	
-			if (item == null){
+			if (eitem == null){
 				db.out("event object is null");
 			}
 			

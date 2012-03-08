@@ -1058,7 +1058,7 @@ public class EMDB_sqlite{
 			
 			ResultSet result = this.DBQUERY.executeQuery(query);
 		    while (result.next()) {
-			      Item current = new Item(result.getString("name"), result.getInt("price"), result.getInt("satisfaction"), result.getString("type"));
+			      Item current = new Item(result.getInt("event_id"), result.getString("name"), result.getInt("price"), result.getInt("satisfaction"), result.getString("type"));
 			      list.add(current);
 			}
 			result.close();
