@@ -14,6 +14,14 @@ public class ModelBookingSystem {
 	public Vector<Venue> get_venue_by_cost(int upper, int lower){
 		db.connect();
 		Vector<Venue> venues = db.get_venue_list("cost", upper, lower);
+		
+		int count = venues.size();
+		for (int i=0; i< count; i++){
+			Venue current = venues.get(i);
+			current.bookTimeSlotBlock(db.get_bookings(current.getVenueID(), "venue"));
+		}
+		
+		
 		db.disconnect();
 		return venues;
 	}
@@ -22,6 +30,14 @@ public class ModelBookingSystem {
 	public Vector<Venue> get_venue_by_capacity(int upper, int lower){
 		db.connect();
 		Vector<Venue> venues = db.get_venue_list("capacity", upper, lower);
+		
+		
+		int count = venues.size();
+		for (int i=0; i< count; i++){
+			Venue current = venues.get(i);
+			current.bookTimeSlotBlock(db.get_bookings(current.getVenueID(), "venue"));
+		}
+		
 		db.disconnect();
 		return venues;
 	}	
