@@ -33,7 +33,7 @@ public class BudgetView extends Composite {
 	/*My declaration start here.*/
 	private final StackLayout stackLayout = new StackLayout();
 	private final String[] titles = { "No.", "Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", "Price\t\t\t\t", "Satisfaction", "Type\t\t\t\t\t\t\t\t\t\t"};
-	private BudgetInterface budgetPersonalAssistant;
+	private BudgetController budgetPersonalAssistant;
 	private int event_id;
 	private Vector<Item> item_list;
 	private Vector<Integer> selected_compulsory;
@@ -520,7 +520,7 @@ public class BudgetView extends Composite {
 
 		lblError_S2 = new Label(Step2, SWT.NONE);
 		lblError_S2.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
-		lblError_S2.setBounds(25, 226, 446, 28);
+		lblError_S2.setBounds(25, 226, 512, 28);
 		formToolkit.adapt(lblError_S2, true, true);
 
 		lblListOfItems = new Label(Step2, SWT.NONE);
