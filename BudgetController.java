@@ -3,7 +3,7 @@ import java.util.*;
 
 import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
-public class BudgetController implements BudgetInterface{
+public class BudgetController{
 
 	//private Vector<Item> list = new Vector<Item>();
 	private int number;
