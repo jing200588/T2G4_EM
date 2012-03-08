@@ -41,12 +41,17 @@ public class EMDBtest {
 		
 		
 		
-		db.out("Initialize System? (Y/N):  ");
-		option = sc.next();
+		db.out("File Exists: " + db.testFile());
 		
-		if (option.compareTo("N") == 0)
-			initialize = 0;
+		if (db.testFile()){
+			db.out("Initialize System? (Y/N):  ");
+			option = sc.next();
 			
+			if (option.compareTo("N") == 0)
+				initialize = 0;
+		}else{
+			initialize = 1;
+		}	
 		
 		
 		

@@ -8,7 +8,7 @@ import java.util.Vector;
 
 /*
  * 
- * CLASS NAME: 				EMDB
+ * CLASS NAME: 				EMDB SQLite
  * CLASS DESCRIPTION: 		This is the database class for EMan. It provides the set,get,update and delete abilities of the program.
  * 
  * 
@@ -42,7 +42,7 @@ public class EMDB_sqlite{
 	 * 
 	 * ***********************************
 	 */
-	private String DBNAME = "";
+	protected String DBNAME = "";
 	private Connection DBCON = null;
 	private Statement DBQUERY = null;
 	private PreparedStatement PREPSTATEM = null;
