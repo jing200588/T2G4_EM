@@ -27,7 +27,10 @@ public class EMDBtest {
 		
 		
 		String option = "";
-		int initialize = 1;
+		boolean initialize = true;
+		boolean runtest = false;
+		
+		
 		
 		
 		Scanner sc = new Scanner(System.in);
@@ -48,30 +51,28 @@ public class EMDBtest {
 			option = sc.next();
 			
 			if (option.compareTo("N") == 0)
-				initialize = 0;
+				initialize = false;
 		}else{
-			initialize = 1;
+			initialize = true;
 		}	
 		
 		
-		
+
 		
 		//Connect to DB
-		
-		db.out("\n\n\n\n*****************************************\n*\n* Test Start\n*\n*****************************************");
-		
-
+	
 		
 		db.out("\n\nConnect DB\n--------------------------------------------");
 		db.connect();
 		
 		int status = 0;
 		
-		if (initialize == 1){
+		if (initialize){
+			
 			db.out("\n\nInit DB\n--------------------------------------------");
 			db.init();
 			status = db.verify_table_count(false);
-			
+
 			if (status == 1){
 				db.out("Database init - OK");
 			}else{
@@ -83,12 +84,20 @@ public class EMDBtest {
 		}
 		
 		
-		
-		
-		
-		
-		
 		if (status == 1){
+			db.out("Run Test Suite? (Y/N): ");
+			option = sc.next();
+			
+			if (option.compareTo("Y") == 0)
+				runtest = true;
+			else
+				runtest = false;
+		}
+		
+		
+		if (status == 1 && runtest){
+			db.out("\n\n\n\n*****************************************\n*\n* Test Start\n*\n*****************************************");
+			
 			/*
 			 * EVENT VARS
 			 */
@@ -315,13 +324,17 @@ public class EMDBtest {
 			
 		
 		
-		
+			db.out("\n\n\n\n*****************************************\n*\nTest End\n*\n*****************************************");
 		} //end section for DB OK
 		
 		//Disconnect from DB
 		db.disconnect();
 		
-		db.out("\n\n\n\n*****************************************\n*\nTest End\n*\n*****************************************");
+		
+		db.out("\n*****************************************\n");
+		db.out("   END	");
+		db.out("\n*****************************************\n");	
+		
 	}
 
 }
