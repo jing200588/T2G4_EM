@@ -13,38 +13,7 @@ import java.util.Vector;
  * 
  * 
  * 
- * 
- * 
- * 
- * *******************************************
- * 
- * PROVIDED API (list)
- * 
- * *******************************************
- * 
- * 
- * set_name ()
- * add_venue()
- * add_budget()
- * add_event()
- * 
- * 
- * 
- * 
- * *******************************************
- * 
- * GENERAL ERROR VALUES
- * 
- * *******************************************
- * 
- * 0 = failed
- * 1 = OK
- * 
- * 
- * 
- * 
- * 
- * 
+
  * 
  * *******************************************
  * 
@@ -169,8 +138,10 @@ public class EMDB_sqlite{
 		int state = 0;
 			
 		state += this.drop_table(this.TABLE_venue);
+		state += this.drop_table(this.TABLE_venue_bookings);
 		state += this.drop_table(this.TABLE_events);
 		state += this.drop_table(this.TABLE_budget);
+		state += this.drop_table(this.TABLE_budget_optimized);
 		
 		return state;
 	}
@@ -184,22 +155,9 @@ public class EMDB_sqlite{
 	private int create_all_table(){
 		
 		try {
-				
-			
-			this.DBQUERY.executeUpdate("CREATE TABLE " + this.TABLE_venue + " ("+
-					"'venue_id' INTEGER PRIMARY KEY AUTOINCREMENT,"+
-					"'name' TEXT NOT NULL," +
-					"'address' TEXT," +
-					"'description' TEXT," +
-					"'capacity' INTEGER NOT NULL DEFAULT (0)," +
-					"'cost' INTEGER NOT NULL DEFAULT (0)"+
-					")");
-		
-		
-		
-			
-			
-			this.DBQUERY.executeUpdate("CREATE TABLE " + this.TABLE_events + " ("+
+
+			//Creating table for EVENTS
+			this.DBQUERY.execute("CREATE TABLE " + this.TABLE_events + " ("+
 					"'event_id' INTEGER PRIMARY KEY AUTOINCREMENT,"+
 					"'name' TEXT NOT NULL," +
 					"'description' TEXT," +
@@ -208,23 +166,49 @@ public class EMDB_sqlite{
 					"'starttime' TEXT," +
 					"'endtime' TEXT" +
 					")");
+			
+			
+			//Creating table for VENUEs
+			this.DBQUERY.execute("CREATE TABLE " + this.TABLE_venue + " ("+
+					"'venue_id' INTEGER PRIMARY KEY AUTOINCREMENT,"+
+					"'name' TEXT NOT NULL," +
+					"'address' TEXT," +
+					"'description' TEXT," +
+					"'capacity' INTEGER NOT NULL DEFAULT (0)," +
+					"'cost' INTEGER NOT NULL DEFAULT (0)"+
+					")");
+		
+
+			
+			//Creating table for the Booking of Venues
+			//This table saves the list of booked venue timings.
+			this.DBQUERY.execute("CREATE TABLE " + this.TABLE_venue_bookings + " ("+
+					"'booking_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
+					"'event_id' INTEGER NOT NULL," +
+					"'venue_id' INTEGER NOT NULL,"+
+					"'time_start' TEXT," +
+					"'time_end' TEXT"+
+					")");	
+
 		
 		
-		
-		
-		
-			this.DBQUERY.executeUpdate("CREATE TABLE " + this.TABLE_budget + " ("+
+			//Creating table for the Budget Optimization function
+			//This table saves the initial list of items
+			this.DBQUERY.execute("CREATE TABLE " + this.TABLE_budget + " ("+
 					"'budget_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"'event_id' INTEGER NOT NULL DEFAULT (-1),"+
 					"'name' TEXT," +
 					"'price' INTEGER," +
 					"'satisfaction' INTEGER," +
 					"'type' TEXT" +
-					")");
+					")");	
 			
 			
 
-			this.DBQUERY.executeUpdate("CREATE TABLE " + this.TABLE_budget_optimized + " ("+
+			
+			//Creating table for the Budget Optimization function
+			//This table saves the optimized list of items
+			this.DBQUERY.execute("CREATE TABLE " + this.TABLE_budget_optimized + " ("+
 					"'budget_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"'event_id' INTEGER NOT NULL DEFAULT (-1),"+
 					"'name' TEXT," +
@@ -232,20 +216,7 @@ public class EMDB_sqlite{
 					"'satisfaction' INTEGER," +
 					"'type' TEXT" +
 					")");			
-			
-			
-			this.DBQUERY.executeUpdate("CREATE TABLE " + this.TABLE_venue_bookings + " ("+
-					"'booking_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
-					"'event_id' INTEGER NOT NULL," +
-					"'venue_id' INTEGER NOT NULL,"+
-					"'time_start' TEXT," +
-					"'time_end' TEXT"+
-					")");	
-			
-			
-			
-	
-			
+
 			return 1;
 			
 			
@@ -255,6 +226,40 @@ public class EMDB_sqlite{
 		}
 		
 	}
+	
+	
+	
+	public int verify_table_count(){
+		int count = 0;
+		try {
+			
+	         PreparedStatement pstm = this.DBCON.prepareStatement(
+	        		 "SELECT name FROM " +
+                     " sqlite_master " +
+                     " WHERE "+ 
+                     "	  name='" + this.TABLE_events + "'" +
+                     " OR name='" + this.TABLE_budget + "'" +
+                     " OR name='" + this.TABLE_budget_optimized + "'" +
+                     " OR name='" + this.TABLE_venue + "'" +
+                     " OR name='" + this.TABLE_venue_bookings + "'"
+                     );
+			
+			ResultSet result = pstm.executeQuery();
+			
+			while (result.next()){
+				count++;
+			}
+			
+			if (count == 5)
+				return 1;
+			else
+				return 0;
+			
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
+	
 	
 	
 	
