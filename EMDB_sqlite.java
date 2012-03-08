@@ -900,6 +900,7 @@ public class EMDB_sqlite{
 			
 				list.add(
 					new TimeSlot(
+						result.getInt("booking_id"),
 						new DateHour(result.getString("time_start")),
 						new DateHour(result.getString("time_end"))
 						)
@@ -1019,6 +1020,7 @@ public class EMDB_sqlite{
 			this.DBQUERY.execute(sql);
 			
 			this.delete_budget_list(id);
+			this.delete_all_bookings(id, "event");
 			
 		} catch (SQLException e) {
 		
@@ -1028,8 +1030,7 @@ public class EMDB_sqlite{
 	}
 	
 	
-	
-	
+
 	
 	
 	public void delete_venue(int id){
@@ -1038,6 +1039,8 @@ public class EMDB_sqlite{
 			sql = "DELETE FROM " + this.TABLE_venue + " WHERE venue_id="+id;
 			this.DBQUERY.execute(sql);
 
+			this.delete_all_bookings(id, "venue");
+			
 		} catch (SQLException e) {
 		
 		}
@@ -1045,6 +1048,37 @@ public class EMDB_sqlite{
 
 	
 	
+	
+	public void delete_booking(int id){
+		String sql = "";
+		try {
+			
+			sql = "DELETE FROM " + this.TABLE_venue_bookings + " WHERE booking_id="+id;
+
+			this.DBQUERY.execute(sql);
+
+		} catch (SQLException e) {
+		
+		}
+	}
+	
+	
+	public void delete_all_bookings(int id, String type){
+		String sql = "";
+		try {
+			
+			if (type.compareTo("event") == 0)
+				sql = "DELETE FROM " + this.TABLE_venue_bookings + " WHERE event_id="+id;
+			else
+				sql = "DELETE FROM " + this.TABLE_venue_bookings + " WHERE venue_id="+id;
+			
+			this.DBQUERY.execute(sql);
+
+		} catch (SQLException e) {
+		
+		}
+	}
+
 	
 	
 	/*

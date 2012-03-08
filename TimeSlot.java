@@ -7,6 +7,7 @@ public class TimeSlot {
 	/************************************************************************
 	 * Class member variables
 	 ************************************************************************/
+	private int booking_id; 
 	private DateHour m_startDateHour;
 	private DateHour m_endDateHour;
 	
@@ -18,6 +19,14 @@ public class TimeSlot {
 		m_startDateHour = new DateHour(start);
 		m_endDateHour = new DateHour(end);
 	}
+
+	public TimeSlot(int id, DateHour start, DateHour end)
+	{
+		booking_id = id;
+		m_startDateHour = new DateHour(start);
+		m_endDateHour = new DateHour(end);
+	}
+	
 	
 	/**************************************************************************
 	 * Methods that support extracting information
@@ -30,6 +39,11 @@ public class TimeSlot {
 	public DateHour getEndDateHour()
 	{
 		return m_endDateHour;
+	}
+	
+	
+	public int getBookingID(){
+		return booking_id;
 	}
 	
 	/**

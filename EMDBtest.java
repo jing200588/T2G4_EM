@@ -1,3 +1,4 @@
+import java.util.Scanner;
 import java.util.Vector;
 
 /*
@@ -13,16 +14,26 @@ public class EMDBtest {
 	public static void main(String[] args) {
 		EMDB db = new EMDB();
 
-
-		db.set_name("test2.sqlite");
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter DB name (d for default):  ");
+		String option = sc.next();
+		
+		if (option.compareTo("d") == 0)
+			db.set_name("test.sqlite");
+		else
+			db.set_name(option);
 		
 		//Connect to DB
 		
+		db.out("\n\n\n\n*****************************************\n*\n* Test Start\n*\n*****************************************");
 		
 
 		
+		db.out("\n\nConnect DB\n--------------------------------------------");
 		db.connect();
 		
+		db.out("\n\nInit DB\n--------------------------------------------");
 		db.init();
 		
 		
@@ -30,13 +41,14 @@ public class EMDBtest {
 		 * EVENT VARS
 		 */
 		int id;
+		int eid;
 		Eventitem item;
 		Vector<Item> list;
 		
 		
 		db.out("\n\nAdding Events\n--------------------------------------------");
 		id = db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2");
-		db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
+		eid = db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
 		db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2");
 		db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
 		db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2");
@@ -131,13 +143,60 @@ public class EMDBtest {
 		
 		
 		
+		db.out("\n\nAdd Bookings "+vid+"\n--------------------------------------------");
+		int bid; 
+		Vector<TimeSlot> bookings; 
+		
+		
+		
+		bid = db.add_booking(eid, vid, "10/12/2100/11", "10/12/2100/12");
+		db.out("bid:" + bid);
+		db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/12", "10/12/2100/13"));
+		db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/13", "10/12/2100/14"));
+		db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/14", "10/12/2100/15"));
+		db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/15", "10/12/2100/16"));
+		
+		
+		
+		db.out("\n\nGet Bookings "+vid+"\n--------------------------------------------");
+		bookings = db.get_bookings(vid, "venue");
+		for (int i = 0; i < bookings.size(); i++){
+			TimeSlot timing = bookings.get(i);
+			db.out( timing.toString()
+					+ timing.getBookingID()
+					+ ":" 
+					+ timing.getStartDateHour() 
+					+ "-" 
+					+ timing.getEndDateHour()
+					);
+		}
+		
+		
+		db.out("\n\nDelete one Booking "+bid+"\n--------------------------------------------");
+		db.delete_booking(bid);
+		
+		db.out("\n\nGet Bookings Again"+vid+"\n--------------------------------------------");
+		bookings = db.get_bookings(vid, "venue");
+		for (int i = 0; i < bookings.size(); i++){
+			TimeSlot timing = bookings.get(i);
+			db.out( timing.toString()
+					+ timing.getBookingID()
+					+ ":" 
+					+ timing.getStartDateHour().getDateHourRepresentation() 
+					+ "-" 
+					+ timing.getEndDateHour().getDateHourRepresentation()
+					);
+		}	
+		
+		
 		
 		
 		
 		
 		//Disconnect from DB
 		db.disconnect();
-		db.out("Test End");
+		
+		db.out("\n\n\n\n*****************************************\n*\nTest End\n*\n*****************************************");
 	}
 
 }

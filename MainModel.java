@@ -11,6 +11,8 @@ public class MainModel {
 
 
 		db = new EMDB();
+		
+	
 		db.set_name("test.sqlite");
 		
 		
@@ -21,7 +23,7 @@ public class MainModel {
 		 */
 		db.connect();
 		list = db.get_event_list();
-		db.out(list.toString());
+		
 		db.disconnect();
 		
 		/*
