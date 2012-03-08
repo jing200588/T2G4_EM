@@ -6,7 +6,7 @@ public class ModelBookingSystem {
 	//Construct
 	public ModelBookingSystem() {
 		db = new EMDB();
-		db.set_name("test.sqlite");
+		db.set_name(EMSettings.dbname());
 	}
 	
 	

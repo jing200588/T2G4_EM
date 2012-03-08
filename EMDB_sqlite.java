@@ -73,6 +73,9 @@ public class EMDB_sqlite{
 	public EMDB_sqlite(){	
 		try {
 			Class.forName("org.sqlite.JDBC");
+			
+			this.set_default_db();
+			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,6 +97,15 @@ public class EMDB_sqlite{
 	 * 
 	 * ***********************************
 	 */
+	private void set_default_db(){
+		if (this.DBNAME.isEmpty()){
+			this.set_name(EMSettings.dbname());
+		}
+			
+	}
+
+	
+	
 	public int init(){
 		
 		

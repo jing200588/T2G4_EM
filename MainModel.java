@@ -3,7 +3,8 @@ import java.util.*;
 
 public class MainModel {
 	private static Vector<Eventitem> list;
-
+	
+	
 	private static EMDB db;
 
 	public MainModel() {
@@ -13,7 +14,7 @@ public class MainModel {
 		db = new EMDB();
 		
 	
-		db.set_name("test.sqlite");
+		db.set_name(EMSettings.dbname());
 		
 		
 		

@@ -31,11 +31,11 @@ public class EMDBtest {
 		
 		
 		Scanner sc = new Scanner(System.in);
-		db.out("Enter DB name (d for default):  ");
+		db.out("Enter DB name (use default: Y): ");
 		option = sc.next();
 		
-		if (option.compareTo("d") == 0)
-			db.set_name("test.sqlite");
+		if (option.compareTo("Y") == 0)
+			db.set_name(EMSettings.dbname());
 		else
 			db.set_name(option);
 		

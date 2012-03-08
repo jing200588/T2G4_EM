@@ -51,8 +51,8 @@ public class EmanagerGUIjface extends ApplicationWindow {
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
     private static ViewEventGUI3 view;
     private static HomepageGUI hp;
+    private static EMDB db;
     
-
 	/**
 	 * Create the application window.
 	 */
@@ -63,6 +63,10 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
 		addStatusLine();
+		
+		db = new EMDB();
+		db.system_check();
+		
 	}
 
 	public static void addEvent(Eventitem newevent) {

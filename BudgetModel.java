@@ -12,8 +12,7 @@ public class BudgetModel {
 	//Construct
 	public BudgetModel() {
 		db = new EMDB();
-		db.set_name("test.sqlite");
-		
+		db.set_name(EMSettings.dbname());
 	}
 	
 	
