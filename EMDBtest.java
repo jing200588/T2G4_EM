@@ -35,7 +35,7 @@ public class EMDBtest {
 		option = sc.next();
 		
 		if (option.compareTo("d") == 0)
-			db.set_name("test.sqlite");
+			db.set_name(EMSettings.dbname());
 		else
 			db.set_name(option);
 		
