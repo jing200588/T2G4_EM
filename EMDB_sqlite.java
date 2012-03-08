@@ -48,6 +48,7 @@ public class EMDB_sqlite{
 	private PreparedStatement PREPSTATEM = null;
 	
 	
+	private boolean EMDB_DEBUGGING = false;
 	
 	//Table names
 	private final String TABLE_venue 					= "EM_VENUE";
@@ -127,6 +128,9 @@ public class EMDB_sqlite{
 		
 	}
 
+	
+	
+	
 	
 	
 	
@@ -436,13 +440,18 @@ public class EMDB_sqlite{
 	
 	// There is another method for batch
 	public int add_event(String name, String description, String startdate, String enddate, String starttime, String endtime){
-		this.out(name);
-		this.out(description);
-		this.out(startdate);
-		this.out(enddate);
-		this.out(starttime);
-		this.out(endtime);
 		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("INSERTING EVENT:" + 
+					" \n + NAME: " + name +
+					" \n + DESCRIPTION: " + description +
+					" \n + START DATE: " + startdate +
+					" \n + END DATE: " + enddate +
+					" \n + START TIME: " + starttime +
+					" \n + END TIME: " + endtime
+					);
+		}
 		
 		
 		
@@ -482,6 +491,19 @@ public class EMDB_sqlite{
 	
 	// There is another method for batch
 	public int add_venue(String name, String address, String description, int capacity, int cost){
+		if (this.EMDB_DEBUGGING){
+			this.out("INSERTING VENUE:" + 
+					" \n + NAME: " + name  +
+					" \n + ADDRESS: " + address +
+					" \n + DESCRIPTION: " + description +
+					" \n + CAPACITY: " + capacity +
+					" \n + COST: " + cost
+					);
+		}
+		
+		
+		
+		
 		this.add_prepare("venue");
 		
 		try {
@@ -512,6 +534,19 @@ public class EMDB_sqlite{
 	
 	// There is another method for batch
 	public int add_booking(int event_id, int venue_id, String time_start , String time_end){
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("INSERTING BOOKING:" + 
+					" \n + EVENT ID:" + event_id  +
+					" \n + VENUE ID: " + venue_id +
+					" \n + START DTG: " + time_start +
+					" \n + END DTG: " + time_end
+					);
+		}
+		
+		
+		
+		
 		this.add_prepare("bookings");
 		try {
 			ResultSet result;
@@ -541,6 +576,18 @@ public class EMDB_sqlite{
 	
 	// There is another method for batch
 	public int add_budget(int event_id, String name, int price, int satisfaction, String type){
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("INSERTING BUDGET:" + 
+					" \n + EVENT ID:" + event_id  +
+					" \n + NAME: " + name +
+					" \n + PRICE: " + price +
+					" \n + SATISFACTION: " + satisfaction +
+					" \n + TYPE: " + type
+					);
+		}
+		
+		
 		this.add_prepare("budget");
 		try {
 			ResultSet result;
@@ -687,6 +734,13 @@ public class EMDB_sqlite{
 	 */
 	public Eventitem get_event(int id){
 		
+		if (this.EMDB_DEBUGGING){
+			this.out("GET EVENT:" + 
+					" #" + id 
+					);
+		}
+		
+		
 		//create empty event container here
 		Eventitem item = null;
 		
@@ -724,6 +778,11 @@ public class EMDB_sqlite{
 	
 	
 	public Vector<Eventitem> get_event_list(){
+
+		if (this.EMDB_DEBUGGING){
+			this.out("GET EVENT LIST");
+		}
+		
 		
 		Vector<Eventitem> list = new Vector<Eventitem>();
 		try {
@@ -766,6 +825,14 @@ public class EMDB_sqlite{
 	 * Getting a venue by the venue id as set in the database
 	 */
 	public Venue get_venue(int id){
+		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("GET VENUE:" + 
+					" #" + id 
+					);
+		}
+		
 		
 		Venue place = new Venue();
 		
@@ -810,6 +877,12 @@ public class EMDB_sqlite{
 	 * The clause is optional
 	 */
 	public Vector<Venue> get_venue_list(String clause, int upper, int lower){
+
+		if (this.EMDB_DEBUGGING){
+			this.out("GET VENUE LIST"
+					);
+		}
+		
 		
 		String query = "";
 		Vector<Venue> list = new Vector<Venue>();
@@ -871,6 +944,15 @@ public class EMDB_sqlite{
 	 * Getting a list of bookings from db
 	 */
 	public Vector<TimeSlot> get_bookings(int id, String type){
+		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("GET BOOKINGS OF: " + 
+					" #" + id +
+					" ("+ type +")"
+					);
+		}
+		
 		
 		//create empty venue container here
 		String query = "";
@@ -934,6 +1016,18 @@ public class EMDB_sqlite{
 	 * Get a budget list attached to the event by it's id
 	 */
 	public Vector<Item> get_budget_list(int id, boolean optimized){
+
+
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("GET BUDGET LIST: " + 
+					" #" + id +
+					" ("+ optimized +")"
+					);
+		}
+		
+		
+		
 		
 		//create empty budget list vector here.
 		
@@ -994,6 +1088,15 @@ public class EMDB_sqlite{
 
 
 	public void delete_budget_list(int id){
+		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("DEL BUDGET LIST: " + 
+					" #" + id
+					);
+		}
+		
+		
 		String sql ="";
 		
 		
@@ -1017,6 +1120,15 @@ public class EMDB_sqlite{
 	
 	
 	public void delete_event(int id){
+		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("DEL EVENT: " + 
+					" #" + id
+					);
+		}
+		
+		
 		String sql = "";
 		this.out("DELETE: "+ id);
 		try {
@@ -1039,6 +1151,15 @@ public class EMDB_sqlite{
 	
 	
 	public void delete_venue(int id){
+		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("DEL VENUE: " + 
+					" #" + id
+					);
+		}
+		
+		
 		String sql = "";
 		try {
 			sql = "DELETE FROM " + this.TABLE_venue + " WHERE venue_id="+id;
@@ -1055,6 +1176,14 @@ public class EMDB_sqlite{
 	
 	
 	public void delete_booking(int id){
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("DEL BOOKING: " + 
+					" #" + id
+					);
+		}
+		
+		
 		String sql = "";
 		try {
 			
@@ -1069,6 +1198,15 @@ public class EMDB_sqlite{
 	
 	
 	public void delete_all_bookings(int id, String type){
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("DEL BOOKING: ALL" + 
+					" #" + id +
+					" ("+type+")"
+					);
+		}
+		
+		
 		String sql = "";
 		try {
 			
@@ -1095,6 +1233,21 @@ public class EMDB_sqlite{
 	 * ***********************************
 	 */
 	public int update_event(int id, String name, String description, String startdate, String enddate, String starttime, String endtime){
+		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("UPDATE EVENT: " + 
+					" #"+ id +
+					" \n + NAME: " + name +
+					" \n + DESCRIPTION: " + description +
+					" \n + START DATE: " + startdate +
+					" \n + END DATE: " + enddate +
+					" \n + START TIME: " + starttime +
+					" \n + END TIME: " + endtime
+					);
+		}
+		
+		
 		String query = "";
 		try{
 			
@@ -1136,17 +1289,21 @@ public class EMDB_sqlite{
 	 */
 	public Vector<Venue> find_venue_by_name(String name){
 		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("FIND VENUE: " + 
+					" NAME = " + name
+					);
+		}
+		
+		
 		String query = "SELECT * FROM " + this.TABLE_venue + " WHERE name LIKE '%%%s%%'";
 		name = name.replaceAll("[^\\w]", " ");
 		query = String.format(query, name);
 		Vector<Venue> list = new Vector<Venue>();
 		
 		try {
-			//PreparedStatement pstm = this.DBCON.prepareStatement("SELECT * FROM " + this.TABLE_venue + " WHERE name LIKE '%?%'", Statement.RETURN_GENERATED_KEYS);
-			
-			
-			//pstm.setString(1, name);
-			//ResultSet result = pstm.executeQuery();
+
 			this.out(query);
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
@@ -1228,13 +1385,13 @@ public class EMDB_sqlite{
 		System.out.println(msg);
 	}
 	
-	public void test(){
-		// this.out(String.format("running in %s mode", SQLiteJDBCLoader.isNativeMode() ? "native" : "pure-java"));
+	public String testNative(){
+		return String.format("SQLite running in %s mode", org.sqlite.SQLiteJDBCLoader.isNativeMode() ? "native" : "pure-java");
 	}
-	
-	
 
-
+	public void set_debug(boolean state){
+		this.EMDB_DEBUGGING = state;
+	}
 
 	
 

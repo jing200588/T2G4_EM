@@ -12,11 +12,21 @@ import java.util.Vector;
 public class EMDBtest {
 
 	public static void main(String[] args) {
+		
 		EMDB db = new EMDB();
 
+		db.out("\n*****************************************\n");
+		db.out("   Database Case/Unit Testing Tool	");
+		db.out("\n*****************************************\n");	
+		db.out(db.testNative() + "\n");
+		
+		
+		db.set_debug(true);		
+		
+		
 		
 		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter DB name (d for default):  ");
+		db.out("Enter DB name (d for default):  ");
 		String option = sc.next();
 		
 		if (option.compareTo("d") == 0)
@@ -36,12 +46,11 @@ public class EMDBtest {
 		db.out("\n\nInit DB\n--------------------------------------------");
 		int status = 0;
 		db.init();
-		db.out(""+ db.verify_table_count());
 		status = db.verify_table_count();
 		if (status == 1)
-			db.out("Database init - OK");
+			db.out("Database init - OK - " + status);
 		else
-			db.out("Database init - NOT OK");
+			db.out("Database init - NOT OK - " + status);
 		
 		
 		if (status == 1){
