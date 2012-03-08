@@ -680,11 +680,12 @@ public class EMDB_sqlite{
 	/*
 	 * Getting an event by the event id as set in the database
 	 */
-	public void get_event(int id){
+	public Eventitem get_event(int id){
 		
 		//create empty event container here
+		Eventitem item = null;
 		
-		 try {
+		try {
 			 
 			String query = this.select_all(
 					this.TABLE_events, 
@@ -693,12 +694,22 @@ public class EMDB_sqlite{
 			
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			while (result.next()) {
-				System.out.println(1);
+				item = new Eventitem(
+						result.getString("name"),
+						result.getString("startdate"),
+						result.getString("enddate"),
+						result.getString("starttime"),
+						result.getString("endtime")
+						);
+				item.setDescription(result.getString("description"));
+				item.setID(result.getInt("event_id"));
 			}
+			
+			return item;
 			
 		} catch (SQLException e) {
 			
-			//return empty event container here.
+			return null;
 			
 		}
 		
@@ -899,7 +910,7 @@ public class EMDB_sqlite{
 			result.close();
 			
 			
-			return null;
+			return list;
 			
 		} catch (SQLException e) {
 			
