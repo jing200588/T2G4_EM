@@ -17,6 +17,7 @@ public class EMDBtest {
 
 		db.out("\n*****************************************\n");
 		db.out("   Database Case/Unit Testing Tool	");
+		db.out("	for EMDB formatted DB");
 		db.out("\n*****************************************\n");	
 		db.out(db.testNative() + "\n");
 		
@@ -25,14 +26,30 @@ public class EMDBtest {
 		
 		
 		
+		String option = "";
+		int initialize = 1;
+		
+		
 		Scanner sc = new Scanner(System.in);
 		db.out("Enter DB name (d for default):  ");
-		String option = sc.next();
+		option = sc.next();
 		
 		if (option.compareTo("d") == 0)
 			db.set_name("test.sqlite");
 		else
 			db.set_name(option);
+		
+		
+		
+		db.out("Initialize System? (Y/N):  ");
+		option = sc.next();
+		
+		if (option.compareTo("N") == 0)
+			initialize = 0;
+			
+		
+		
+		
 		
 		//Connect to DB
 		
@@ -43,14 +60,27 @@ public class EMDBtest {
 		db.out("\n\nConnect DB\n--------------------------------------------");
 		db.connect();
 		
-		db.out("\n\nInit DB\n--------------------------------------------");
 		int status = 0;
-		db.init();
-		status = db.verify_table_count(false);
-		if (status == 1)
-			db.out("Database init - OK");
-		else
-			db.out("Database init - NOT OK - " + db.verify_table_count(true));
+		
+		if (initialize == 1){
+			db.out("\n\nInit DB\n--------------------------------------------");
+			db.init();
+			status = db.verify_table_count(false);
+			
+			if (status == 1){
+				db.out("Database init - OK");
+			}else{
+				db.out("Database init - NOT OK - " + db.verify_table_count(true));
+			}
+			
+		}else{
+			status = 1;
+		}
+		
+		
+		
+		
+		
 		
 		
 		if (status == 1){
