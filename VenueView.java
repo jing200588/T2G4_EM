@@ -255,8 +255,6 @@ public class VenueView extends Composite {
 					// GUI Settings
 					SearchNameErrorBoard.setVisible(false);
 					resetResultPageView();
-					// For testing: 
-					//listVenue.add(new Venue("A", "B", "C", 10, 100));
 					
 					// Ask the logic component to do the searching
 					searchResultList = BookingSystem.findVenueByName(venueName);
@@ -1406,9 +1404,7 @@ public class VenueView extends Composite {
 						{
 							throw new Exception("Hour should be from 0 to 23!");
 						}
-						System.out.println(BookDateTimeFrom.getYear());
-						System.out.println(BookDateTimeFrom.getMonth());
-						System.out.println(BookDateTimeFrom.getDay());
+						
 						// Java DateTime month is from 0 to 11
 						// DateHour month is from 1 to 12!
 						DateHour dateHourFrom = new DateHour(BookDateTimeFrom.getYear(),
@@ -1422,9 +1418,7 @@ public class VenueView extends Composite {
 						}	
 						
 						timeSlotChoiceInput = new TimeSlot(dateHourFrom, dateHourTo);
-						System.out.println(timeSlotChoiceInput);
-						System.out.println(chosenVenueID);
-						System.out.println(searchResultList);
+				
 						if(BookingSystem.isAvailable(searchResultList, chosenVenueID, 
 								timeSlotChoiceInput) == false)
 						{
@@ -1434,12 +1428,9 @@ public class VenueView extends Composite {
 					}
 					
 					
-					System.out.println(chosenVenueID);
-					System.out.println(timeSlotChoiceInput.getEndDateHour().toString());
-					System.out.println(timeSlotChoiceInput.getStartDateHour().toString());
 					// Do the booking (The chosen time slot is legal)
-//					BookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
-					BookingSystem.bookVenue(0, chosenVenueID, timeSlotChoiceInput);
+					BookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
+					
 					// Testing
 					ErrorBoardBooking.setText("The venue is successfully booked!");
 					ErrorBoardBooking.setVisible(true);
@@ -1456,7 +1447,6 @@ public class VenueView extends Composite {
 				}
 				catch(Exception exception)
 				{
-					System.out.println(exception);
 					ErrorBoardBooking.setText(exception.getMessage());
 					ErrorBoardBooking.setVisible(true);
 				}
