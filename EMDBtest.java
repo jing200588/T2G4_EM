@@ -46,11 +46,11 @@ public class EMDBtest {
 		db.out("\n\nInit DB\n--------------------------------------------");
 		int status = 0;
 		db.init();
-		status = db.verify_table_count();
+		status = db.verify_table_count(false);
 		if (status == 1)
-			db.out("Database init - OK - " + status);
+			db.out("Database init - OK");
 		else
-			db.out("Database init - NOT OK - " + status);
+			db.out("Database init - NOT OK - " + db.verify_table_count(true));
 		
 		
 		if (status == 1){
@@ -63,6 +63,9 @@ public class EMDBtest {
 			Vector<Item> list;
 			
 			
+			
+			
+			
 			db.out("\n\nAdding Events\n--------------------------------------------");
 			id = db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2");
 			eid = db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
@@ -70,6 +73,11 @@ public class EMDBtest {
 			db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
 			db.add_event("test", "", "7-2-2012", "7-2-2012", "18:2", "18:2");
 			db.add_event("test", "", "5-2-2012", "7-6-2012", "18:2", "18:2");
+			
+			
+			
+			
+			
 			
 			db.out("\n\nGetting Events\n--------------------------------------------");
 			item = db.get_event(id);
@@ -85,21 +93,41 @@ public class EMDBtest {
 			db.add_budget(id, "3_Nikon_Cam",  6345, 9, null);
 	
 	
+			
+			
+			
+			
 			db.out("\n\nRetrieving Budget (Normal)\n--------------------------------------------");
 			list = db.get_budget_list(id, false);
 			db.out(list.toString());
+			
+			
+			
+			
 			
 			db.out("\n\nRetrieving Budget (Optimized)\n--------------------------------------------");
 			list = db.get_budget_list(id, true);
 			db.out(list.toString());
 			
+			
+			
+			
+			
 			db.out("\n\nDeleting list of budget for " + id + "\n--------------------------------------------");
 			db.delete_budget_list(id);
 			
 	
+			
+			
+			
+			
 			db.out("\n\nRetrieving Budget\n--------------------------------------------");
 			list = db.get_budget_list(id, false);
 			db.out(list.toString());
+			
+			
+			
+			
 			
 			
 			db.out("\n\nAdding NEW Budget\n--------------------------------------------");
@@ -108,8 +136,15 @@ public class EMDBtest {
 			db.add_budget(id, "6_Canon_DSLR", 100050, 11, null);
 			
 			
-			db.out("Delete Event "+id+"\n--------------------------------------------");
+			
+			
+			
+			db.out("Delete Event \n--------------------------------------------");
 			db.delete_event(id);
+			
+			
+			
+			
 			
 			db.out("\n\nRetrieving Budget after deleting event (Empty Case)\n--------------------------------------------");
 			list = db.get_budget_list(id, false);
@@ -117,17 +152,21 @@ public class EMDBtest {
 			try {
 				db.out(list.toString());
 			}catch (Exception e){
-				e.printStackTrace();
+				db.out(e.getMessage());
 			}
 			
 			
-			db.out("\n\nGet Deleted Event "+id+" (Empty Case)\n--------------------------------------------");
+			
+			
+			
+			
+			db.out("\n\nGet Deleted Event (Empty Case)\n--------------------------------------------");
 			item = db.get_event(id);
 	
 			try{
 				db.out(item.toString());
 			}catch (Exception e){
-				e.printStackTrace();
+				db.out(e.getMessage());
 			}
 	
 			if (item == null){
@@ -153,16 +192,24 @@ public class EMDBtest {
 			
 			
 			
-			db.out("\n\nGet Venue "+vid+"\n--------------------------------------------");
+			
+			
+			
+			
+			db.out("\n\nGet Venue \n--------------------------------------------");
 			place = db.get_venue(vid);
 			db.out(place.getName());
 	
 			
 			
 			
-			db.out("\n\nAdd Bookings "+vid+"\n--------------------------------------------");
+			
+			
+			db.out("\n\nAdd Bookings \n--------------------------------------------");
 			int bid; 
 			Vector<TimeSlot> bookings; 
+			
+			
 			
 			
 			
@@ -175,7 +222,10 @@ public class EMDBtest {
 			
 			
 			
-			db.out("\n\nGet Bookings "+vid+"\n--------------------------------------------");
+			
+			
+			
+			db.out("\n\nGet Bookings \n--------------------------------------------");
 			bookings = db.get_bookings(vid, "venue");
 			for (int i = 0; i < bookings.size(); i++){
 				TimeSlot timing = bookings.get(i);
@@ -189,10 +239,17 @@ public class EMDBtest {
 			}
 			
 			
-			db.out("\n\nDelete one Booking "+bid+"\n--------------------------------------------");
+			
+			
+			
+			db.out("\n\nDelete one Booking  \n--------------------------------------------");
 			db.delete_booking(bid);
 			
-			db.out("\n\nGet Bookings Again"+vid+"\n--------------------------------------------");
+			
+			
+			
+			
+			db.out("\n\nGet Bookings (should have one entry removed)\n--------------------------------------------");
 			bookings = db.get_bookings(vid, "venue");
 			for (int i = 0; i < bookings.size(); i++){
 				TimeSlot timing = bookings.get(i);

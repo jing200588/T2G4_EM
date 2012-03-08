@@ -233,7 +233,9 @@ public class EMDB_sqlite{
 	
 	
 	
-	public int verify_table_count(){
+	
+	/* Verifying table creations*/
+	public int verify_table_count(boolean num){
 		int count = 0;
 		try {
 			
@@ -253,6 +255,10 @@ public class EMDB_sqlite{
 			while (result.next()){
 				count++;
 			}
+			
+			
+			if (num)
+				return count;
 			
 			if (count == 5)
 				return 1;
