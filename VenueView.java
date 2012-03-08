@@ -110,6 +110,7 @@ public class VenueView extends Composite {
 	private int chosenVenueID;
 	private int eventID;
 	private Label BookLabel;
+	private Text text;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -251,8 +252,9 @@ public class VenueView extends Composite {
 				}
 				else
 				{
+					// GUI Settings
 					SearchNameErrorBoard.setVisible(false);
-					
+					resetResultPageView();
 					// For testing: 
 					//listVenue.add(new Venue("A", "B", "C", 10, 100));
 					
@@ -288,8 +290,6 @@ public class VenueView extends Composite {
 		toolkit.adapt(ButtonSearchName, true, true);
 		ButtonSearchName.setText("Search and view information");
 		
-		
-
 		SearchCriteriaCompo = new Composite(FunctionContentPage, SWT.NONE);
 		SearchCriteriaCompo.setBounds(0, 129, 331, 318);
 		toolkit.adapt(SearchCriteriaCompo);
@@ -666,6 +666,9 @@ public class VenueView extends Composite {
 		FindCriteriaButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				// GUI Settings
+				resetResultPageView();
+				
 				// Ask the logic component to do the searching
 				// Determine the criteria chosen
 				BookingSystem.SearchCriteria type = determineCriteriaChoice();
@@ -785,10 +788,13 @@ public class VenueView extends Composite {
 						{
 							throw new Exception("Hour should be from 0 to 23!");
 						}
+						
+						// Java DateTime month is from 0 to 11
+						// DateHour month is from 1 to 12!
 						DateHour dateHourFrom = new DateHour(dateTimeFrom.getYear(),
-								dateTimeFrom.getMonth(), dateTimeFrom.getDay(), hourFrom);
+								dateTimeFrom.getMonth() + 1, dateTimeFrom.getDay(), hourFrom);
 						DateHour dateHourTo = new DateHour(dateTimeTo.getYear(),
-								dateTimeTo.getMonth(), dateTimeTo.getDay(), hourTo);
+								dateTimeTo.getMonth() + 1, dateTimeTo.getDay(), hourTo);
 						if(dateHourFrom.compareTo(dateHourTo) >= 0)
 						{
 							throw new Exception("Starting and ending dates and hours are not in the chronological order!");
@@ -912,7 +918,7 @@ public class VenueView extends Composite {
 		OutsideVenueErrorBoard.setVisible(false);
 		
 		Composite composite = new Composite(AddOutsideVenue, SWT.NONE);
-		composite.setBounds(329, 20, 321, 116);
+		composite.setBounds(349, 25, 321, 116);
 		toolkit.adapt(composite);
 		toolkit.paintBordersFor(composite);
 		
@@ -1061,6 +1067,13 @@ public class VenueView extends Composite {
 		txtIndicatesA.setText("(*) indicates a compulsory field");
 		txtIndicatesA.setBounds(20, 366, 172, 21);
 		toolkit.adapt(txtIndicatesA, true, true);
+		
+		text = new Text(AddOutsideVenue, SWT.BORDER);
+		text.setText("(*) indicates a compulsory field");
+		text.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.ITALIC));
+		text.setEditable(false);
+		text.setBounds(20, 253, 172, 21);
+		toolkit.adapt(text, true, true);
 		
 		
 		
@@ -1232,14 +1245,16 @@ public class VenueView extends Composite {
 					// Prepare the image of BookCompo 
 					if(chooseTimeSlotYet == true)
 					{
+						// Note that DateTime in Java has month value from 0 to 11
+						// And our DateHour class has month value from 1 to 12
 						BookDateTimeFrom.setDate(timeSlotChoiceInput.getStartDateHour().getYear(), 
-								timeSlotChoiceInput.getStartDateHour().getMonth(), 
+								timeSlotChoiceInput.getStartDateHour().getMonth() - 1, 
 								timeSlotChoiceInput.getStartDateHour().getDay());
 						BookDateTimeFrom.setDate(timeSlotChoiceInput.getEndDateHour().getYear(), 
-								timeSlotChoiceInput.getEndDateHour().getMonth(), 
+								timeSlotChoiceInput.getEndDateHour().getMonth() - 1, 
 								timeSlotChoiceInput.getEndDateHour().getDay());
-						BookTimeFrom.setText(Integer.toString(timeSlotChoiceInput.getStartDateHour().getDay()));
-						BookTimeTo.setText(Integer.toString(timeSlotChoiceInput.getEndDateHour().getDay()));
+						BookTimeFrom.setText(Integer.toString(timeSlotChoiceInput.getStartDateHour().getHour()));
+						BookTimeTo.setText(Integer.toString(timeSlotChoiceInput.getEndDateHour().getHour()));
 						BookDateTimeFrom.setEnabled(false);
 						BookDateTimeTo.setEnabled(false);
 						BookTimeTo.setEnabled(false);
@@ -1391,16 +1406,25 @@ public class VenueView extends Composite {
 						{
 							throw new Exception("Hour should be from 0 to 23!");
 						}
+						System.out.println(BookDateTimeFrom.getYear());
+						System.out.println(BookDateTimeFrom.getMonth());
+						System.out.println(BookDateTimeFrom.getDay());
+						// Java DateTime month is from 0 to 11
+						// DateHour month is from 1 to 12!
 						DateHour dateHourFrom = new DateHour(BookDateTimeFrom.getYear(),
-								BookDateTimeFrom.getMonth(), BookDateTimeFrom.getDay(), hourFrom);
+								BookDateTimeFrom.getMonth() + 1, BookDateTimeFrom.getDay(), hourFrom);
+						System.out.println(dateHourFrom.toString());
 						DateHour dateHourTo = new DateHour(BookDateTimeTo.getYear(),
-								BookDateTimeTo.getMonth(), BookDateTimeTo.getDay(), hourTo);
+								BookDateTimeTo.getMonth() + 1, BookDateTimeTo.getDay(), hourTo);
 						if(dateHourFrom.compareTo(dateHourTo) >= 0)
 						{
 							throw new Exception("Starting and ending dates and hours are not in the chronological order!");
 						}	
 						
 						timeSlotChoiceInput = new TimeSlot(dateHourFrom, dateHourTo);
+						System.out.println(timeSlotChoiceInput);
+						System.out.println(chosenVenueID);
+						System.out.println(searchResultList);
 						if(BookingSystem.isAvailable(searchResultList, chosenVenueID, 
 								timeSlotChoiceInput) == false)
 						{
@@ -1409,16 +1433,30 @@ public class VenueView extends Composite {
 						}
 					}
 					
+					
+					System.out.println(chosenVenueID);
+					System.out.println(timeSlotChoiceInput.getEndDateHour().toString());
+					System.out.println(timeSlotChoiceInput.getStartDateHour().toString());
 					// Do the booking (The chosen time slot is legal)
-					BookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
+//					BookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
+					BookingSystem.bookVenue(0, chosenVenueID, timeSlotChoiceInput);
+					// Testing
+					ErrorBoardBooking.setText("The venue is successfully booked!");
+					ErrorBoardBooking.setVisible(true);
 				}
 				catch(NumberFormatException exception)
 				{
 					ErrorBoardBooking.setText("Hour should be an integer!");
 					ErrorBoardBooking.setVisible(true);
 				}
+				catch(NullPointerException exception)
+				{
+					ErrorBoardBooking.setText(exception.toString());
+					ErrorBoardBooking.setVisible(true);
+				}
 				catch(Exception exception)
 				{
+					System.out.println(exception);
 					ErrorBoardBooking.setText(exception.getMessage());
 					ErrorBoardBooking.setVisible(true);
 				}
@@ -1542,6 +1580,20 @@ public class VenueView extends Composite {
 		return BookingSystem.SearchCriteria.TIME;
 	}
 	
+	/**
+	 * This method is to clear content of all text-boxes in the result page
+	 * (since user has requested another query) and to make the ViewBookCompo
+	 * invisible temporarily 
+	 */
+	private void resetResultPageView()
+	{
+		VenueIDTextBox.setText("");
+		ErrorBoardViewBook.setVisible(false);
+		BookTimeFrom.setText("");
+		BookTimeTo.setText("");
+		ErrorBoardBooking.setVisible(false);
+		ViewBookCompo.setVisible(false);
+	}
 	
 	public static void main(String[] args){
 		Display display = new Display();

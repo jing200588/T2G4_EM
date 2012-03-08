@@ -88,7 +88,7 @@ public class Venue {
 		allInfo[1] = m_address;
 		allInfo[2] = m_description;
 		allInfo[3] = Integer.toString(m_maxCapacity);
-		allInfo[4] = Double.toString(m_cost);
+		allInfo[4] = Double.toString(m_cost / 100.0);
 		
 		return allInfo;
  	}
@@ -179,8 +179,16 @@ public class Venue {
 	{
 		for(int i = 0; i < m_bookedTimeSlots.size(); i++)
 		{
+			/* For debugging 
+			System.out.println("Time Slot " + i);
+			System.out.println(m_bookedTimeSlots.get(i).getStartDateHour());
+			System.out.println(m_bookedTimeSlots.get(i).getEndDateHour());
+			*/
 			if(m_bookedTimeSlots.get(i).isOverlapping(wantedTimeSlot) == true)
+			{
+				// For debugging: System.out.println("Clash!");
 				return false;
+			}
 		}
 		return true;
 	}
