@@ -116,11 +116,11 @@ public class BookedVenueInfo {
 	
 	public String getStartHourString()
 	{
-		return Integer.toString(m_bookedTimeSlot.getStartDateHour().getHour());
+		return Integer.toString(m_bookedTimeSlot.getStartDateHour().getHour()) + ":00";
 	}
 	
 	public String getEndHourString()
 	{
-		return Integer.toString(m_bookedTimeSlot.getEndDateHour().getHour());
+		return Integer.toString(m_bookedTimeSlot.getEndDateHour().getHour()) + ":00";
 	}
 }
