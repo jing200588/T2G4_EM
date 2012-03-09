@@ -38,9 +38,7 @@ public class BookingSystem {
 	 * 		+ Do you think we need a venue ID in the class Venue?
 	 */
 	public static boolean bookVenue(int eventID, int bookedVenueID, TimeSlot wantedTimeSlot)
-	{
-//		bookedVenue.bookTimeSlot(wantedTimeSlot);
-		
+	{	
 		mbs.add_booking_to_db(eventID, bookedVenueID, wantedTimeSlot);
 		
 		// If the booking is successful
@@ -84,20 +82,9 @@ public class BookingSystem {
 		// Search venue by Name
 		//return null;
 		
-		// Create mock vector for testing
-		
 		Vector<Venue> list = new Vector<Venue>();
-		/*list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
-		list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
-		list.add(new Venue("LT15", "NUS", "Hot", 100, 203));
-		list.add(new Venue("LT16", "NUS", "Hot", 100, 203));
-		list.add(new Venue("LT16", "NUS", "Hot", 100, 203));
-		list.add(new Venue("LT16LT16LT15LT16", "NUS", "Hot", 100, 203));*/
-		
 		list = mbs.find_venue_by_name(venueName);
 		
-		
-//		return new Vector<Venue>();
 		return list;
 	}
 	
@@ -134,6 +121,16 @@ public class BookingSystem {
 			{
 				Vector<Venue> firstRoundCapacity = mbs.get_venue_by_capacity(capacityRange[1], capacityRange[0]); 
 				
+				/* For debugging
+				System.out.println(firstRoundCapacity);
+				if(firstRoundCapacity == null)
+					System.out.println("null");
+				else
+					System.out.println("not null");
+				System.out.println(firstRoundCapacity.get(0).getName());
+				System.out.println(firstRoundCapacity.size());
+				System.out.println(firstRoundCapacity.get(0).get) */
+				
 				// Actual code
 				if(type == SearchCriteria.CAPACITY)
 				{
@@ -168,6 +165,7 @@ public class BookingSystem {
 			case COST:
 			case COST_TIME:
 			{
+				// For debugging: System.out.println(costRange[1] + " " + costRange[0]);
 				Vector<Venue> firstRoundCost = mbs.get_venue_by_cost(costRange[1], costRange[0]); ;
 				
 				
@@ -212,9 +210,10 @@ public class BookingSystem {
 	public static boolean isAvailable(Vector<Venue> listVenue, int venueID, TimeSlot preferredTime) throws Exception
 	{
 		int index = findIndex(listVenue, venueID);
-		
+		System.out.println("I'm here. Venue ID: " + venueID + " Index: " + index + " Time: " + preferredTime);
 		if(index < 0)		// A venue with venueID does not exist
 			throw new Exception("There is no venue with such an ID in the table above!");
+		System.out.println(listVenue.get(index));
 		return listVenue.get(index).isAvailable(preferredTime);
 	}
 	
@@ -284,8 +283,28 @@ public class BookingSystem {
 		Vector<Venue> returnList = new Vector<Venue>();
 		
 		for(int index = 0; index < listVenue.size(); index++)
+		{
+			// For debugging: System.out.println(index);
+			if(listVenue.get(index) == null)
+				System.out.println("null");
+			/* For debugging
+			else
+			{
+				System.out.println("not null");
+				System.out.println(listVenue.get(index).getName());
+			}
+			System.out.println("Venue ID: " + listVenue.get(index).getVenueID());
+			System.out.println("Venue Name: " + listVenue.get(index).getName()); */
 			if(listVenue.get(index).isAvailable(preferTime) == true)
+			{
+				// For debugging: System.out.println("Choose venue " + listVenue.get(index).getName());
 				returnList.add(listVenue.get(index));
+			}
+			/* For debugging 
+			else
+				System.out.println("NOT Choose venue " + listVenue.get(index).getName()); */
+			
+		}
 		
 		return returnList;
 	}
