@@ -14,7 +14,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 
-public class EventParticulars extends Composite {
+public class ViewEventParticulars extends Composite {
 	private Text txtNewText;
 	private DateTime StartDate;
 	private DateTime EndDate;
@@ -26,7 +26,7 @@ public class EventParticulars extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public EventParticulars(Composite parent, int style, final Eventitem curevent, final int eventindex) {
+	public ViewEventParticulars(Composite parent, int style, final Eventitem curevent, final int eventindex) {
 		super(parent, style);
 		setLayout(new FormLayout());
 
@@ -98,8 +98,8 @@ public class EventParticulars extends Composite {
 				curevent.setStartDate(StartDate.getDay() + "-" + (StartDate.getMonth()+1) + "-" + StartDate.getYear());
 				curevent.setEndDate(EndDate.getDay() + "-" + (EndDate.getMonth()+1) + "-" + EndDate.getYear());
 				
-				MainModel.UpdateParticulars(curevent, eventindex);
-				EmanagerGUIjface.ReturnView(1);
+				ModelEvent.UpdateParticulars(curevent, eventindex);
+				ViewMain.ReturnView(1);
 			}
 		});
 
@@ -117,7 +117,7 @@ public class EventParticulars extends Composite {
 		btnBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				EmanagerGUIjface.ReturnView(10);	//10 currently as default value
+				ViewMain.ReturnView(10);	//10 currently as default value
 			}
 		});
 		FormData fd_btnBack = new FormData();

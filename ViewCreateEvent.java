@@ -20,7 +20,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 
-public class CreateEventGUI extends Composite {
+public class ViewCreateEvent extends Composite {
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Text txtNewText;
 	private DateTime StartDate;
@@ -31,7 +31,7 @@ public class CreateEventGUI extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public CreateEventGUI(Composite parent, int style) {
+	public ViewCreateEvent(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -95,8 +95,8 @@ public class CreateEventGUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				Eventitem newevent = new Eventitem(txtNewText.getText(), StartDate.getYear(), StartDate.getMonth(), StartDate.getDay(),
 						EndDate.getYear(), EndDate.getMonth(), EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes());
-				MainModel.CreateEvent(newevent);
-				EmanagerGUIjface.UpdateTable();
+				ModelEvent.CreateEvent(newevent);
+				ViewMain.UpdateTable();
 			}
 		});
 

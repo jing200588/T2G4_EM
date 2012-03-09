@@ -1,13 +1,13 @@
 import java.util.*;
 
 
-public class MainModel {
+public class ModelEvent {
 	private static Vector<Eventitem> list;
 	
 	
 	private static EMDB db;
 
-	public MainModel() {
+	public ModelEvent() {
 		list = new Vector<Eventitem>();
 
 

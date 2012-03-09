@@ -5,14 +5,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 
-public class HomepageGUI extends Composite {
+public class ViewHomepage extends Composite {
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public HomepageGUI(Composite parent, int style) {
+	public ViewHomepage(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		

@@ -80,7 +80,7 @@ public class ViewEvent extends Composite {
 		Epartedit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				EmanagerGUIjface.EventParticulars(cevent);
+				ViewMain.EventParticulars(cevent);
 			}
 		});
 		GridData gd_Epartedit = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
@@ -227,7 +227,7 @@ public class ViewEvent extends Composite {
 		Bookvenueedit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				EmanagerGUIjface.BookVenue();
+				ViewMain.BookVenue();
 			}
 		});
 		GridData gd_Bookvenueedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -268,7 +268,7 @@ public class ViewEvent extends Composite {
 		btnCalculate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				EmanagerGUIjface.CalcBudget();
+				ViewMain.CalcBudget();
 			}
 		});
 		GridData gd_btnCalculate = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -390,8 +390,8 @@ public class ViewEvent extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, cevent.getName());
 				if (confirm.open() == 1) {
-					MainModel.DeleteEvent(cevent);
-					EmanagerGUIjface.DeleteItem();
+					ModelEvent.DeleteEvent(cevent);
+					ViewMain.DeleteItem();
 				}
 
 			}

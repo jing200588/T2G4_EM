@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.graphics.Color;
 
 
-public class EmanagerGUIjface extends ApplicationWindow {
+public class ViewMain extends ApplicationWindow {
 	private Action exitaction;
 	private Action swtguiaction;
 	private Composite maincomposite;
@@ -45,18 +45,18 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private static int count = 0;
 	private static StackLayout layout = new StackLayout();
 	private static boolean delete = false;
-	private MainModel mm = new MainModel();
+	private ModelEvent mm = new ModelEvent();
 	private static Display display = new Display();
     private static Color red = display.getSystemColor(SWT.COLOR_RED);
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
     private static ViewEvent view;
-    private static HomepageGUI hp;
+    private static ViewHomepage hp;
     private static EMDB db;
     
 	/**
 	 * Create the application window.
 	 */
-	public EmanagerGUIjface() {
+	public ViewMain() {
 		super(null);
 		eventlist = new Vector<Eventitem>();
 		createActions();
@@ -101,7 +101,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	
 	//Method to update the table in c1
 	public static void UpdateTable () {
-		eventlist = MainModel.PullList();
+		eventlist = ModelEvent.PullList();
 
 		TableItem item;
 		int i;
@@ -152,7 +152,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	}
 	
 	public static void EventParticulars(Eventitem curevent) {
-		EventParticulars ep = new EventParticulars(c2, SWT.NONE, curevent, table.getSelectionIndex());
+		ViewEventParticulars ep = new ViewEventParticulars(c2, SWT.NONE, curevent, table.getSelectionIndex());
 		layout.topControl = ep;
 		c2.layout(true);
 	}
@@ -218,7 +218,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 						((Composite)children[i]).dispose();
 					}
 					
-					CreateEventGUI CreatePage = new CreateEventGUI(c2, SWT.NONE);
+					ViewCreateEvent CreatePage = new ViewCreateEvent(c2, SWT.NONE);
 		//			CreatePage.setBounds(c2.getBounds());
 		//			formToolkit.adapt(CreatePage);
 			//		formToolkit.paintBordersFor(CreatePage);
@@ -300,7 +300,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, tb.getText(0));
 					if (confirm.open() == 1) {
 //						System.out.println(table.getSelectionIndex());
-						MainModel.DeleteEvent(getEvent(tb.getText(0)));	//Finds the selected event and deletes it from vector
+						ModelEvent.DeleteEvent(getEvent(tb.getText(0)));	//Finds the selected event and deletes it from vector
 						DeleteItem();
 					}
 				}
@@ -348,7 +348,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 				c2.setLayoutData(gd_c2);
 				formToolkit.adapt(c2);
 				formToolkit.paintBordersFor(c2);
-				hp = new HomepageGUI(c2, SWT.NONE);
+				hp = new ViewHomepage(c2, SWT.NONE);
 				layout.topControl = hp;
 				
 			
@@ -436,7 +436,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	 */
 	public static void main(String args[]) {
 		try {
-			EmanagerGUIjface window = new EmanagerGUIjface();
+			ViewMain window = new ViewMain();
 			window.setBlockOnOpen(true);
 			window.open();
 			Display.getCurrent().dispose();
