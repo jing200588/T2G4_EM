@@ -96,6 +96,7 @@ public class Eventitem {
 	public String getEndTime () {
 		return _endtime.getTime();
 	}
+	
 	public int getID(){
 		return _id;
 	}

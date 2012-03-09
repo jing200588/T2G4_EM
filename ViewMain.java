@@ -44,7 +44,6 @@ public class ViewMain extends ApplicationWindow {
 	private static Vector<Eventitem> eventlist;
 	private static int count = 0;
 	private static StackLayout layout = new StackLayout();
-	private static boolean delete = false;
 	private ModelEvent mm = new ModelEvent();
 	private static Display display = new Display();
     private static Color red = display.getSystemColor(SWT.COLOR_RED);

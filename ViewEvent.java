@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
@@ -446,7 +445,7 @@ public class ViewEvent extends Composite {
 	}
 
 	public static Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
-		ControllerBudget bc = new ControllerBudget();	
+		//ControllerBudget bc = new ControllerBudget();	
 		//Vector<Item> item_list = bc.getCombinationList(curevent.getID());
 		Vector<Item> item_list = cevent.getitem_list();
 		
