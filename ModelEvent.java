@@ -12,7 +12,7 @@ public class ModelEvent {
 		db = new EMDB();
 		
 	
-		db.set_name(EMSettings.dbname());
+		db.set_name(EMSettings.DATABASE_NAME);
 		
 		
 		

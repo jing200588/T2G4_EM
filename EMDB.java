@@ -14,15 +14,33 @@ public class EMDB extends EMDB_sqlite{
 
 	
 	public void system_check(){
+		this.set_debug(EMSettings.DEVELOPMENT);
+		
 		this.connect();
 		//test file exists if not create
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("****************************************");
+			this.out("STARTING SYSTEM CHECK");
+		}
+		
 		if ( this.testFile() ){
+			if (this.EMDB_DEBUGGING){
+				this.out("DATABASE FILE FOUND");
+			}
+			
 			
 			
 			//test if correct database number 
 			//if not init
 			//TO DO: Test Schema
 			if (this.verify_table_count(false) == 0){
+				
+				if (this.EMDB_DEBUGGING){
+					this.out("DATABASE NOT INITIALIZED....");
+					this.out("INITIALIZING....");
+				}
+				
 				this.init();
 				
 				this.add_prepare("venue");
@@ -54,11 +72,12 @@ public class EMDB extends EMDB_sqlite{
 			
 			
 			
-		}else{
-			this.init();
 		}
 		this.disconnect();
-		
+		if (this.EMDB_DEBUGGING){
+			this.out("END SYSTEM CHECK");
+			this.out("****************************************");
+		}
 	}
 	
 	

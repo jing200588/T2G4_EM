@@ -52,7 +52,7 @@ public class EMDB_sqlite{
 	private PreparedStatement PREPSTATEM = null;
 	
 	
-	private boolean EMDB_DEBUGGING = false;
+	protected boolean EMDB_DEBUGGING = false;
 	
 	//Table names
 	private final String TABLE_venue 					= "EM_VENUE";
@@ -84,8 +84,7 @@ public class EMDB_sqlite{
 			
 			e.printStackTrace();
 		}
-		
-		this.set_debug(true);
+
 	}
 	
 	
@@ -105,7 +104,7 @@ public class EMDB_sqlite{
 	 */
 	private void set_default_db(){
 		if (this.DBNAME.isEmpty()){
-			this.set_name(EMSettings.dbname());
+			this.set_name(EMSettings.DATABASE_NAME);
 		}
 			
 	}
@@ -1080,8 +1079,6 @@ public class EMDB_sqlite{
 		}
 		
 		
-		
-		String query = "";
 		
 		Vector<BookedVenueInfo> list = new Vector<BookedVenueInfo>();
 		
