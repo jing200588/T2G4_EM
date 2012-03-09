@@ -55,15 +55,16 @@ public class ViewMain extends ApplicationWindow {
 	 * Create the application window.
 	 */
 	public ViewMain() {
+
 		super(null);
+		
 		eventlist = new Vector<Eventitem>();
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
 		addStatusLine();
 		
-		db = new EMDB();
-		db.system_check();
+
 		
 	}
 
@@ -402,6 +403,10 @@ public class ViewMain extends ApplicationWindow {
 	 */
 	public static void main(String args[]) {
 		try {
+			
+			db = new EMDB();
+			db.system_check();
+			
 			ViewMain window = new ViewMain();
 			window.setBlockOnOpen(true);
 			window.open();

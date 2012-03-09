@@ -1,26 +1,26 @@
+/* Matric Number: A0074006R
+ * Name: Chua Hong Jing
+ */
 import java.io.IOException;
 import java.util.*;
 
 import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
 public class ControllerBudget{
-	
-	/* @param ControllerBudget()*/
 
-	//private Vector<Item> list = new Vector<Item>();
-	private int number;
-	private double budget, recursive_fnc_budget;
+	private int number; //store the number of item to undergo permutation algorithm
+	private double budget, recursive_fnc_budget; 
 	private Solution soln;
-	private int differentResult;
-	private boolean hasSolnSet;
+	private int differentResult; //differentiate between the different cases that will happen in result printing
+	private boolean hasSolnSet; //check if the current list undergo permutation algorithm
 	private Eventitem event_object;
 
-	private Vector<Item> compute_list;
+	private Vector<Item> compute_list; //store the item(s) to undergo permutation algorithm
 	private Vector<Item> compulsory_list;
-	private Vector<Item> item_list; //for storing the input item
+	private Vector<Item> item_list; //store the initial item list input by the user
 	private int temp_budget, non_compulsory_cost, compulsory_cost, compulsory_satisfaction, non_compulsory_satisfaction;
-	private int totalCombination;
-	private Vector<Item> db_list;
+	private int totalCombination; 
+	private Vector<Item> db_list;//store the list to be send to database
 
 	private ModelBudget bm = new ModelBudget();
 
@@ -29,21 +29,20 @@ public class ControllerBudget{
 	}
 
 	/**
-	 *
-	 * @param hastype TEST
+	 * Description: Initial various variable required for permutation algorithm.
+	 * @param hastype
 	 * @param hassatisfaction
-	 * @return TEST
+	 * @return
 	 */
 	public String findOptimalShopList(int hastype, int hassatisfaction) {
 		soln = new Solution();
 		recursive_fnc_budget = ((double) temp_budget)/100;	
 		return analysis(hastype, hassatisfaction);
 	}
-	
-	
+
 	public ControllerBudget(String input, int budget, int type_c, int satisfaction_c, Eventitem ei) throws Exception {
 
-		if(input.length() == 0) throw new IOException("***Input list must not be empty.***");
+		if(input.length() == 0) throw new IOException("Input list must not be empty.");
 		item_list = new Vector<Item>();
 		event_object = ei;
 		Scanner sc = new Scanner(input);
@@ -66,7 +65,7 @@ public class ControllerBudget{
 						satisfaction = Integer.parseInt(component[2]);
 						type = component[3];
 					}
-					else {
+					else { //no satisfaction
 						satisfaction = -1;
 						type = component[2];
 					}
@@ -74,7 +73,7 @@ public class ControllerBudget{
 				}
 			}
 		}
-		else {
+		else { //no type
 			while(sc.hasNextLine()) {
 				line = sc.nextLine();
 				if(line.length() > 0) {
@@ -85,7 +84,7 @@ public class ControllerBudget{
 						throw new IOException("Cost should not be negative");
 					if(satisfaction_c == 1) //has satisfaction
 						satisfaction = Integer.parseInt(component[2]);
-					else 
+					else  //no satisfaction
 						satisfaction = -1;
 					item_list.add(new Item(name, cost, satisfaction));
 				}
@@ -95,12 +94,19 @@ public class ControllerBudget{
 		bm.received_item_list(event_object.getID(), item_list); //SEND TO DATABASE
 	}
 
+	/**
+	 * Description: Return item list.
+	 * @return
+	 */
+
 	public Vector<Item> getItemList() {
-		//return bm.return_item_list(id);
 		return item_list;
 	}
 
-	/*flag compulsory items*/
+	/**
+	 * Description: Change the compulsory field in item that has been checked.
+	 * @param com
+	 */
 	public void compulsory(Vector<Integer> com) {
 
 		temp_budget = (int) (budget*100);
@@ -122,11 +128,19 @@ public class ControllerBudget{
 		number = compute_list.size();
 	}
 
-	/*Return budget remain after checking the compulsory items*/
+	/**
+	 * Description: Return budget remain after deducting the compulsory items cost.
+	 * @return
+	 */
 	public String budgetleft() {
 		double left = ((double) temp_budget)/100;
 		return ""+left;
 	}
+
+	/**
+	 * Description: Differentiate the item list into compulsory list and compute list.
+	 * @param satisfaction_choice
+	 */
 
 	public void differentiateCompulsory(int satisfaction_choice) {
 		compulsory_cost = 0;
@@ -149,7 +163,12 @@ public class ControllerBudget{
 		}	
 	}
 
-
+	/**
+	 * Description: Calling the respective method according to type and satisfaction option.
+	 * @param type
+	 * @param satisfaction_choice
+	 * @return
+	 */
 	public String analysis(int type, int satisfaction_choice) {
 		String text = "";
 		double price;
@@ -264,9 +283,6 @@ public class ControllerBudget{
 			for(int i=0; i<soln.getSolnSetSize(); i++) {
 				BitSet bitmask = soln.getSolnSet().get(i);
 				if(bitmask.isEmpty() == false) {
-					System.out.println("bitmask is " + bitmask);
-
-					if(bitmask.isEmpty() == true) System.out.println("true");
 
 					text +="***********Combination "+(index+1)+"***********\n";
 					num = 1;
@@ -307,6 +323,10 @@ public class ControllerBudget{
 		return text;
 	}
 
+	/**
+	 * Description: Type choice is flag as false and it will call the respective method according to satisfaction option.
+	 * @param satisfaction_choice
+	 */
 	public  void generate(int satisfaction_choice) {
 		BitSet bitmask = new BitSet(number);
 		if(satisfaction_choice == 1) {
@@ -319,6 +339,13 @@ public class ControllerBudget{
 		}
 
 	}
+
+	/**
+	 * Description: Algorithm that will generate the list of item combination with no satisfaction and no type option.
+	 * @param cur
+	 * @param bitmask
+	 * @param subbudget
+	 */
 
 	public  void recurseNoSatisfaction (int cur, BitSet bitmask, double subbudget) {
 
@@ -334,6 +361,14 @@ public class ControllerBudget{
 			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
 		}
 	}
+
+	/**
+	 * Description: Algorithm that will generate the list of item combination with satisfaction but no type option.
+	 * @param cur
+	 * @param bitmask
+	 * @param subbudget
+	 * @param max
+	 */
 
 	public  void recurse (int cur, BitSet bitmask, double subbudget, int max) {
 
@@ -358,6 +393,11 @@ public class ControllerBudget{
 		}
 	}
 
+	/**
+	 * Description: Prevent duplicate item.
+	 * @param bitmask
+	 * @return
+	 */
 	public  int DupCheck(BitSet bitmask) {
 		for (int i=0; i<soln.getSolnSetSize(); i++) {
 			if (soln.getSolnSet().get(i).hashCode() == bitmask.hashCode())
@@ -366,12 +406,19 @@ public class ControllerBudget{
 		return 0;
 	}
 
+	/**
+	 * Description: Return the total combination generated.
+	 * @return
+	 */
 	public int noOfCombination() {
 
 		return totalCombination;
 	}
 
-	/*Swee Khoon's CE code*/
+	/**
+	 * Description: Type choice is flag as true and it will call the respective method according to satisfaction choice.
+	 * @param satisfaction_choice
+	 */
 
 	public void generateType(int satisfaction_choice) {
 		BitSet bitmask = new BitSet(number);
@@ -385,8 +432,14 @@ public class ControllerBudget{
 				recurseTypeNoSatisfaction(i, bitmask, recursive_fnc_budget);
 			}
 		}
-
 	}
+
+	/**
+	 * Description: Algorithm that will generate the list of item combination with type but no satisfaction option.
+	 * @param cur
+	 * @param bitmask
+	 * @param subbudget
+	 */
 
 	public  void recurseTypeNoSatisfaction (int cur, BitSet bitmask, double subbudget) {
 
@@ -400,6 +453,14 @@ public class ControllerBudget{
 		if (DupCheck(bitmask2) == 0)
 			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
 	}
+
+	/**
+	 * Description: Algorithm that will generate the list of item combination with type and satisfaction option.
+	 * @param cur
+	 * @param bitmask
+	 * @param subbudget
+	 * @param max
+	 */
 
 	public  void recurseType (int cur, BitSet bitmask, double subbudget, int max) {
 
@@ -422,6 +483,13 @@ public class ControllerBudget{
 			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
 	}
 
+	/**
+	 * Description: Prevent duplicated type.
+	 * @param bitmask
+	 * @param cur
+	 * @return
+	 */
+
 	public  int TypeChecker (BitSet bitmask, int cur) {
 		for (int i=0; i<number; i++) {
 			if (bitmask.get(i)) {
@@ -432,26 +500,30 @@ public class ControllerBudget{
 		return 0;
 	}
 
+	/**
+	 * Description: Send the confirm combination list to database.
+	 * @param select
+	 */
+
 	public void sendDBList(int select) {
 		db_list = new Vector<Item>();
-		int budgetLeftToDisplay = (int) (budget*100);
+		// int budgetLeftToDisplay = (int) (budget*100); To be use in v0.2
 
 		if(differentResult == 1) { //Budget is enough to buy all item (Regardless is compulsory or not). *Take whole item list*
 			for(int i=0; i<item_list.size(); i++) {
-				budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice();
+				// budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice(); To be use in v0.2
 				db_list.add(item_list.get(i));
-				System.out.println(" - " + item_list.get(i).getItem());
 			}
 		}
 		else if (differentResult == 2) { //Budget is only enough to buy compulsory item. Take compulsory list*
 			for(int i=0; i<compulsory_list.size(); i++) {
-				budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice();
+				// budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice(); To be use in v0.2
 				db_list.add(compulsory_list.get(i));
 			}
 		}
 		else if (differentResult == 3) { //There is solution set
 			for(int i=0; i<compulsory_list.size(); i++) {
-				budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice();
+				// budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice(); To be use in v0.2
 				db_list.add(compulsory_list.get(i));
 			}
 
@@ -460,29 +532,16 @@ public class ControllerBudget{
 				for(int i=0; i<number; i++) {
 					if(bitmask.get(i)) {
 						db_list.add(compute_list.get(i));
-						budgetLeftToDisplay = budgetLeftToDisplay - compute_list.get(i).getPrice();
+						//budgetLeftToDisplay = budgetLeftToDisplay - compute_list.get(i).getPrice(); To be use in v0.2
 					}
-						
+
 				}
 			}
 		}
 
 		bm.recevied_combination_list(event_object.getID(), db_list);
-		bm.update_budget(event_object.getID(), ((double)budgetLeftToDisplay)/100);
+		//bm.update_budget(event_object.getID(), ((double)budgetLeftToDisplay)/100); To be use in v0.2
 		event_object.setitem_list(db_list);
-		event_object.setBudget(((double)budgetLeftToDisplay)/100);
-		
-/*
-		System.out.println("TESTING START");
-		for(int i=0; i<bm.displayConfirm().size(); i++) {
-			System.out.print(bm.displayConfirm().get(i).getItem() + " " + bm.displayConfirm().get(i).getPrice());
-			System.out.println();
-		} */
+		//event_object.setBudget(((double)budgetLeftToDisplay)/100); To be use in v0.2
 	}
-/*
-	public Vector<Item> getCombinationList(int id) {
-		return db_list;
-		//return bm.return_item_optimized_list(id);
-	}
-*/
 }

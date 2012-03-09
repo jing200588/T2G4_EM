@@ -6,7 +6,7 @@ public class ModelBookingSystem {
 	//Construct
 	public ModelBookingSystem() {
 		db = new EMDB();
-		db.set_name(EMSettings.dbname());
+		db.set_name(EMSettings.DATABASE_NAME);
 	}
 	
 	
