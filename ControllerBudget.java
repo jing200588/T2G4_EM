@@ -13,6 +13,7 @@ public class ControllerBudget{
 	private Solution soln;
 	private int differentResult; //differentiate between the different cases that will happen in result printing
 	private boolean hasSolnSet; //check if the current list undergo permutation algorithm
+	private boolean hasEmptySet;
 	private Eventitem event_object;
 
 	private Vector<Item> compute_list; //store the item(s) to undergo permutation algorithm
@@ -177,6 +178,7 @@ public class ControllerBudget{
 		Collections.sort(compute_list);
 		differentResult = 0;
 		hasSolnSet = false;
+		hasEmptySet = false;
 		int non_compulsory_num=1;
 		if(compulsory_list.size() == item_list.size()){ //All items checked as compulsory and budget is enough to buy all.
 			differentResult = 1; // (Whole item list)
@@ -269,8 +271,11 @@ public class ControllerBudget{
 				totalCombination = soln.getSolnSetSize();
 				for(int i=0; i<soln.getSolnSetSize(); i++) {
 					BitSet bitmask = soln.getSolnSet().get(i);
-					if(bitmask.isEmpty() == true)
+					if(bitmask.isEmpty() == true) {
 						totalCombination--;
+						hasEmptySet = true;
+					}
+						
 				}
 				hasSolnSet = true; //There is combination.
 			}
@@ -282,12 +287,14 @@ public class ControllerBudget{
 			int index=0;
 			for(int i=0; i<soln.getSolnSetSize(); i++) {
 				BitSet bitmask = soln.getSolnSet().get(i);
+				System.out.println("Bit mask for " + i + " is " + bitmask);
 				if(bitmask.isEmpty() == false) {
 
 					text +="***********Combination "+(index+1)+"***********\n";
 					num = 1;
 					text +="Total cost: \t$" + (soln.getSolnCostSet().get(i)+((double) compulsory_cost)/100) +"\n";
 					for(int k=0; k<compulsory_list.size();k++) {
+						System.out.println("Print this compulsory?");
 						text+= num+"\t";
 						text+= compulsory_list.get(k).getItem() + " for $";
 						price = ((double) compulsory_list.get(k).getPrice())/100;
@@ -302,6 +309,7 @@ public class ControllerBudget{
 					}
 					for(int j=0; j<number; j++) {
 						if(bitmask.get(j)) {
+							System.out.println("Print this?");
 							text+= num+"\t";
 							text+= compute_list.get(j).getItem() + " for $";
 							price = ((double) compute_list.get(j).getPrice())/100;
@@ -506,6 +514,9 @@ public class ControllerBudget{
 	 */
 
 	public void sendDBList(int select) {
+		if(hasEmptySet == true) {
+			select++;
+		}
 		db_list = new Vector<Item>();
 		// int budgetLeftToDisplay = (int) (budget*100); To be use in v0.2
 
@@ -524,19 +535,27 @@ public class ControllerBudget{
 		else if (differentResult == 3) { //There is solution set
 			for(int i=0; i<compulsory_list.size(); i++) {
 				// budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice(); To be use in v0.2
+				System.out.println("SOME THING TO ADD FOR COMPULSORY?");
 				db_list.add(compulsory_list.get(i));
 			}
 
 			if(hasSolnSet == true) {
 				BitSet bitmask = soln.getSolnSet().get(select);
+				System.out.println("Bitmask: " + bitmask);
 				for(int i=0; i<number; i++) {
 					if(bitmask.get(i)) {
+						System.out.println("Add something");
 						db_list.add(compute_list.get(i));
 						//budgetLeftToDisplay = budgetLeftToDisplay - compute_list.get(i).getPrice(); To be use in v0.2
 					}
 
 				}
 			}
+		}
+		
+		System.out.println("List:");
+		for(int i=0; i<db_list.size(); i++) {
+			System.out.print(db_list.get(i).getItem() + " ");
 		}
 
 		bm.recevied_combination_list(event_object.getID(), db_list);
