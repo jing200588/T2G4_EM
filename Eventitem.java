@@ -129,13 +129,12 @@ public class Eventitem {
 
 
 	public void addBVI(BookedVenueInfo BVI) {
-		System.out.println("THis is addBVI and the BVI list is " + _BVI_list);
 		_BVI_list.add(BVI);
 	}
 	
 	public void addBVI(Vector<BookedVenueInfo> BVI){
-		System.out.println("THis is addBVI GERALD and BVI is" + BVI);
 		_BVI_list = BVI;
-	//	System.out.println(_BVI_list);
+		System.out.println(_BVI_list);
+
 	}
 }

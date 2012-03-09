@@ -785,8 +785,7 @@ public class EMDB_sqlite{
 		
 		//create empty event container here
 		Eventitem item = null;
-		Vector<Item> list = new Vector<Item>();
-		Vector<BookedVenueInfo> bvi= new Vector<BookedVenueInfo>();
+
 		try {
 			 
 			String query = this.select_all(
@@ -831,8 +830,6 @@ public class EMDB_sqlite{
 		
 		
 		Vector<Eventitem> list = new Vector<Eventitem>();
-		Vector<Item> budget = new Vector<Item>();
-		Vector<BookedVenueInfo> bvi;
 		
 		try {
 			String query = this.select_all(
@@ -845,7 +842,7 @@ public class EMDB_sqlite{
 			
 			
 			while (result.next()) {
-				bvi = new Vector<BookedVenueInfo>();
+	
 				 
 				Eventitem item = new Eventitem(
 						result.getString("name"),
@@ -898,7 +895,7 @@ public class EMDB_sqlite{
 					"venue_id="+ id, 
 					1);	
 	
-			System.out.println(query);
+			
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
 			
@@ -911,7 +908,7 @@ public class EMDB_sqlite{
 				place.updateMaxCapacity(result.getInt("capacity"));
 			}
 
-			System.out.println(place.getName());
+			
 			result.close();
 			
 			return place;
@@ -956,7 +953,7 @@ public class EMDB_sqlite{
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
 			while (result.next()) {
-				this.out(result.getString("name"));
+				
 				int cost = result.getInt("cost");
 				int capacity = result.getInt("capacity");
 				
@@ -1097,14 +1094,14 @@ public class EMDB_sqlite{
 		
 			
 			while (result.next()) {
-				this.out(""+result.getInt("venue_id"));
-				TimeSlot timing = new TimeSlot(new DateHour("10/12/2012/21"),new DateHour("10/12/2012/23"));
+			
+				TimeSlot timing = new TimeSlot(new DateHour(result.getString("time_start")),new DateHour(result.getString("time_end")));
 				Venue venue = this.get_venue(result.getInt("venue_id"));
 				BookedVenueInfo info = new BookedVenueInfo(venue, timing);
 				list.add(info);
-				this.out(result.getString("time_start"));
+				
 			}
-			System.out.print("before");
+	
 			result.close();
 			
 			return list;
@@ -1236,10 +1233,10 @@ public class EMDB_sqlite{
 		
 		
 		String sql = "";
-		this.out("DELETE: "+ id);
+		
 		try {
 			sql = "DELETE FROM " + this.TABLE_events + " WHERE event_id="+id;
-			this.out(sql);
+			
 			this.DBQUERY.execute(sql);
 			
 			this.delete_budget_list(id);
