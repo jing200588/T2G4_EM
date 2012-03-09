@@ -47,7 +47,8 @@ public class ControllerBookingSystem {
 		
 		int index = findIndex(listVenues, bookedVenueID);
 		// index is in valid range!!
-		event.addBVI(listVenues.get(index), wantedTimeSlot);
+		BookedVenueInfo newObj = new BookedVenueInfo(listVenues.get(index), wantedTimeSlot);
+		event.addBVI(newObj);
 		// If the booking is successful
 		return true;
 	}

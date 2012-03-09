@@ -146,7 +146,8 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	public static void BookVenue() {
-		ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
+		//ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
+		ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		layout.topControl = bookgui;
 		c2.layout(true);
 	}

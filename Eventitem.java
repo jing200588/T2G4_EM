@@ -7,7 +7,7 @@ public class Eventitem {
 	private String _description;
 	private Vector<Item> _item_list = new Vector<Item>();
 	private double _budget;
-	//private Vector<BookedVenueInfo> _BVI_list;
+	private Vector<BookedVenueInfo> _BVI_list;
 	private Date _startdate;
 	private Time _starttime;
 	private Date _enddate;
@@ -23,11 +23,11 @@ public class Eventitem {
 		_starttime = new Time (shour, smin);
 		_endtime = new Time (ehour, emin);
 		_description = "";
-		//_BVI_list = new Vector<BookedVenueInfo>();
+		_BVI_list = new Vector<BookedVenueInfo>();
 	}
 	
 	
-	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget) {//, BookedVenueInfo BVI_list){
+	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget, Vector<BookedVenueInfo> BVI_list){
 		_name = name;
 		_startdate = new Date(startdate);
 		_enddate = new Date(enddate);
@@ -35,7 +35,7 @@ public class Eventitem {
 		_endtime = new Time(endtime);
 		_item_list = item_list;
 		_budget = budget;
-		//_BVI_list = BVI_list;
+		_BVI_list = BVI_list;
 	}
 	
 	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime) {
@@ -122,8 +122,8 @@ public class Eventitem {
 		_budget = budget;
 	}
 
-/*
-	public Vector<Venue> getBVI_list() {
+
+	public Vector<BookedVenueInfo> getBVI_list() {
 		return _BVI_list;
 	}
 
@@ -132,5 +132,5 @@ public class Eventitem {
 		_BVI_list.add(BVI);
 	}
 	
-*/
+
 }
