@@ -1,3 +1,6 @@
+/* Matric Number: A0074006R
+ * Name: Chua Hong Jing
+ */
 import java.util.Locale;
 import java.util.Vector;
 
@@ -72,11 +75,11 @@ public class ViewBudget extends Composite {
 	private Combo combo_selection;
 	private Button btnFinish;
 	
-
 	/**
-	 * Create the composite.
+	 * Description: Initialize Budget Optimization GUI.
 	 * @param parent
 	 * @param style
+	 * @param ei Eventitem object pass from ViewEvent
 	 */
 	public ViewBudget(Composite parent, int style, final Eventitem ei) {
 		super(parent, style);
@@ -97,7 +100,10 @@ public class ViewBudget extends Composite {
 		formToolkit.paintBordersFor(BudgetViewForm);
 		BudgetViewForm.setText("Budget Optimization");
 		BudgetViewForm.getBody().setLayout(new FormLayout());
-
+		
+		/**********************************************************************************
+		 * Overview Budget optimization composite 
+		 **********************************************************************************/
 		Composite mainComposite = new Composite(BudgetViewForm.getBody(), SWT.NONE);
 		FormData fd_mainComposite = new FormData();
 		fd_mainComposite.top = new FormAttachment(50, -160);
@@ -108,12 +114,18 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(mainComposite);
 		formToolkit.paintBordersFor(mainComposite);
 
+		/**********************************************************************************
+		 * Composite that will display the content 
+		 **********************************************************************************/
 		BigContent = new Composite(mainComposite, SWT.NONE);
 		BigContent.setBounds(10, 76, 680, 264);
 		formToolkit.adapt(BigContent);
 		formToolkit.paintBordersFor(BigContent);
 		BigContent.setLayout(stackLayout);
 
+		/**********************************************************************************
+		 * Composite that will display the global navigation button
+		 **********************************************************************************/
 		Composite btnComposite = new Composite(mainComposite, SWT.NONE);
 		btnComposite.setBounds(10, 10, 680, 57);
 		formToolkit.adapt(btnComposite);
@@ -163,7 +175,10 @@ public class ViewBudget extends Composite {
 		btnStepConfirmResult.setBounds(510, 10, 170, 25);
 		formToolkit.adapt(btnStepConfirmResult, true, true);
 		btnStepConfirmResult.setText("Step3: Confirm Result");
-
+		
+		/**********************************************************************************
+		 * Composite that will that display fields for the user to input.
+		 **********************************************************************************/
 		Step1 = new Composite(BigContent, SWT.NONE);
 		Step1.setBounds(0, 0, 675, 260);
 		formToolkit.adapt(Step1);
@@ -241,22 +256,17 @@ public class ViewBudget extends Composite {
 		btnConfirm_S1 = new Button(Step1, SWT.NONE);
 		btnConfirm_S1.setBounds(108, 168, 75, 25);
 		btnConfirm_S1.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try 
 				{
 					budget = (int) (Double.parseDouble(txtBudget.getText().toString()) * 100);
 
-					/*Disable all option on the left*/
 					txtBudget.setEnabled(false);
 					btnWithoutType.setEnabled(false);
 					btnWithType.setEnabled(false);
 					btnWithoutSatisfaction.setEnabled(false);
 					btnWithSatisfaction.setEnabled(false);
 					btnConfirm_S1.setEnabled(false);
-
-
-					//Enable some button
 					btnChange.setEnabled(true);
 
 					if(btnWithoutType.getSelection() == true)
@@ -277,9 +287,9 @@ public class ViewBudget extends Composite {
 				}
 				catch (Exception ie) {
 					if(ie.getMessage().equals("empty String")) 
-						txt_error_S1.setText("***Please input an event budget.***");
+						txt_error_S1.setText("Please input an event budget.");
 					else
-						txt_error_S1.setText("***Event Budget can only be numeric.***");
+						txt_error_S1.setText("Event Budget can only be numeric.");
 					txt_error_S1.setVisible(true);
 				}
 			}
@@ -304,7 +314,6 @@ public class ViewBudget extends Composite {
 		btnResetInputList = new Button(Step1, SWT.NONE);
 		btnResetInputList.setBounds(418, 229, 128, 25);
 		btnResetInputList.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				txt_input_list.setText("");
 			}
@@ -323,9 +332,7 @@ public class ViewBudget extends Composite {
 		btnConfirm_S1_1 = new Button(Step1, SWT.NONE);
 		btnConfirm_S1_1.setBounds(595,  229, 75, 25);
 		btnConfirm_S1_1.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				selected_compulsory = new Vector<Integer>();
 
 				try {	
@@ -353,10 +360,10 @@ public class ViewBudget extends Composite {
 					btnStepInputDetails.setEnabled(true);	
 				}
 				catch (Exception ie) {
-					if(ie.getMessage().equals("***Input list must not be empty.***"))
-						txt_error_S1.setText("***Input list must not be empty.***");
+					if(ie.getMessage().equals("Input list must not be empty."))
+						txt_error_S1.setText("Input list must not be empty.");
 					else
-						txt_error_S1.setText("***Incorrect input format.***");
+						txt_error_S1.setText("Incorrect input format.");
 					txt_error_S1.setVisible(true);
 				}
 			}
@@ -365,9 +372,10 @@ public class ViewBudget extends Composite {
 		btnConfirm_S1_1.setEnabled(false);
 		formToolkit.adapt(btnConfirm_S1_1, true, true);
 		btnConfirm_S1_1.setText("Confirm");
-
-
-
+		
+		/**********************************************************************************
+		 * Composite that will that display the input by the user for he/she to select compulsory items.
+		 **********************************************************************************/
 		Step2 = new Composite(BigContent, SWT.NONE);
 		Step2.setBounds(0, 0, 675, 260);
 		formToolkit.adapt(Step2);
@@ -376,25 +384,18 @@ public class ViewBudget extends Composite {
 		table = new Table(Step2, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);			
 		table.setHeaderVisible(true);
 
-		/*for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
-			TableColumn column = new TableColumn(table, SWT.NULL);
-			column.setText(titles[loopIndex]);
-			column.setResizable(false);
-		}*/
-
 		TableColumn col0 = new TableColumn(table, SWT.NULL);
 		col0.setText("No.");
 		col0.setResizable(false);
 		col0.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				//sort name
+				//sort item number
 				TableItem[] items = table.getItems();
 				for (int i = 1; i<items.length; i++) {
 					int value1 = Integer.parseInt(items[i].getText(0).substring(5, items[i].getText(0).length()));
 					for(int j=0; j < i; j++) {
 						int value2 = Integer.parseInt(items[j].getText(0).substring(5, items[j].getText(0).length()));
 						if(value1 - value2 < 0) {
-							System.out.println(value1 + " " + value2);
 							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
 							items[i].dispose();
 							TableItem item = new TableItem(table, SWT.NONE, j);
@@ -485,7 +486,7 @@ public class ViewBudget extends Composite {
 		col4.setResizable(false);
 		col4.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				//sort name
+				//sort type
 				TableItem[] items = table.getItems();
 				Collator collator = Collator.getInstance(Locale.getDefault());
 				for (int i = 1; i<items.length; i++) {
@@ -504,7 +505,6 @@ public class ViewBudget extends Composite {
 				}
 			}
 			});
-
 
 		table.setBounds(25, 25, 645, 200);
 		selected_compulsory = new Vector<Integer>();
@@ -533,7 +533,6 @@ public class ViewBudget extends Composite {
 
 		btnNext = new Button(Step2, SWT.NONE);
 		btnNext.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				Collections.sort(selected_compulsory);
@@ -544,8 +543,7 @@ public class ViewBudget extends Composite {
 					lblError_S2.setVisible(false);
 					budgetPersonalAssistant.compulsory(selected_compulsory);
 					double budget_left = Double.parseDouble(budgetPersonalAssistant.budgetleft());
-					System.out.println("Budget left: " + budget_left);
-					if(budget_left < 0) throw new Exception("***Not enough money to buy all compulsory item(s).***");
+					if(budget_left < 0) throw new Exception("Not enough money to buy all compulsory item(s).");
 					stackLayout.topControl = Step3;
 					BigContent.layout();
 					budgetPersonalAssistant.differentiateCompulsory(satisfaction_choice);
@@ -587,6 +585,9 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(btnNext, true, true);
 		btnNext.setText("Next");
 
+		/**********************************************************************************
+		 * Composite that will that display the all the different optimize list.
+		 **********************************************************************************/
 		Step3 = new Composite(BigContent, SWT.NONE);
 		Step3.setBounds(0, 80, 700, 300);
 		formToolkit.adapt(Step3);
@@ -604,7 +605,6 @@ public class ViewBudget extends Composite {
 
 		btnFinish = new Button(Step3, SWT.NONE);
 		btnFinish.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int option = combo_selection.getSelectionIndex();
 				budgetPersonalAssistant.sendDBList(option);
@@ -626,6 +626,4 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");
 	}
-
-	
 }
