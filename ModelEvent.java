@@ -76,6 +76,15 @@ public class ModelEvent {
 	public static Vector<Eventitem> PullList() {
 		db.connect();
 		list = db.get_event_list();
+		
+		int size = list.size();
+		for (int i=0; i<size; i++){
+			list.get(i).addBVI(db.get_booking_info(list.get(i).getID()));	
+			list.get(i).setitem_list(db.get_budget_list(list.get(i).getID(), true));
+		}
+		
+		
+		
 		db.disconnect();
 		return list;
 	}

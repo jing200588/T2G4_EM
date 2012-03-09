@@ -895,13 +895,13 @@ public class EMDB_sqlite{
 			 
 			String query = this.select_all(
 					this.TABLE_venue, 
-					"venue_id="+ id , 
+					"venue_id="+ id, 
 					1);	
 	
-			
+			System.out.println(query);
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
-			System.out.println(result);
+			
 			
 			while (result.next()) {
 				place.updateName(result.getString("name"));
@@ -911,6 +911,7 @@ public class EMDB_sqlite{
 				place.updateMaxCapacity(result.getInt("capacity"));
 			}
 
+			System.out.println(place.getName());
 			result.close();
 			
 			return place;
@@ -1093,22 +1094,19 @@ public class EMDB_sqlite{
 		
 
 			ResultSet result = this.DBQUERY.executeQuery(query);
-			System.out.println(result);
+		
 			
 			while (result.next()) {
-				list.add(
-					new BookedVenueInfo(
-						this.get_venue(result.getInt("venue_id")),
-						new TimeSlot(
-								new DateHour(result.getString("time_start")),
-								new DateHour(result.getString("time_end"))
-							)
-						)
-					);
+				this.out(""+result.getInt("venue_id"));
+				TimeSlot timing = new TimeSlot(new DateHour("10/12/2012/21"),new DateHour("10/12/2012/23"));
+				Venue venue = this.get_venue(result.getInt("venue_id"));
+				BookedVenueInfo info = new BookedVenueInfo(venue, timing);
+				list.add(info);
+				this.out(result.getString("time_start"));
 			}
-			
+			System.out.print("before");
 			result.close();
-			System.out.println(list);
+			
 			return list;
 			
 		} catch (SQLException e) {
@@ -1158,13 +1156,13 @@ public class EMDB_sqlite{
 			
 			
 			ResultSet result = this.DBQUERY.executeQuery(query);
-			System.out.println(result);
+	
 		    while (result.next()) {
 			      Item current = new Item(result.getInt("event_id"), result.getString("name"), result.getInt("price"), result.getInt("satisfaction"), result.getString("type"));
 			      list.add(current);
 			}
 			result.close();
-			System.out.println(list);
+		
 			return list;
 			
 			
