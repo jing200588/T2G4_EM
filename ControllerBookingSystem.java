@@ -43,13 +43,19 @@ public class ControllerBookingSystem {
 	public static boolean bookVenue(Eventitem event, Vector<Venue> listVenues,
 			int bookedVenueID, TimeSlot wantedTimeSlot)
 	{	
+		System.out.println("Hi Inside BookVenue");
+		System.out.println("This is my EVENT: " + event);
+		System.out.println("This is my EVENT: " + listVenues);
+		System.out.println("This is my EVENT: " + listVenues.get(0));
 		mbs.add_booking_to_db(event.getID(), bookedVenueID, wantedTimeSlot);
 		
 		int index = findIndex(listVenues, bookedVenueID);
+		System.out.println("Inside BookVenue" + index);
 		// index is in valid range!!
 		BookedVenueInfo newObj = new BookedVenueInfo(listVenues.get(index), wantedTimeSlot);
 		event.addBVI(newObj);
 		// If the booking is successful
+		System.out.println("Hi! THis is the end of bookVenue");
 		return true;
 	}
 	

@@ -25,10 +25,10 @@ import com.ibm.icu.text.Collator;
 
 
 public class ViewEvent extends Composite {
-	private static Table BudgetResult;
-	private static boolean budgetflag;
+	private static Table BudgetResult, VenueResult;
+	private static boolean budgetflag, venueflag;
 	private static Eventitem cevent;
-	private static Composite Budgetcomp;
+	private static Composite Budgetcomp, Bookvenuecomp;
 	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
 	private Table table;
 	private static ScrolledComposite sc1;
@@ -49,6 +49,7 @@ public class ViewEvent extends Composite {
 		maincomp = new Composite(sc1, SWT.NONE);
 		maincomp.setLayout(new FormLayout());
 		budgetflag = false;
+		venueflag = false;
 		cevent = curevent;
 
 		Label Title = new Label(maincomp, SWT.NONE);
@@ -204,7 +205,7 @@ public class ViewEvent extends Composite {
 		lblNewLabel.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		lblNewLabel.setText("View Event:");
 
-		Composite Bookvenuecomp = new Composite(maincomp, SWT.NONE);
+		Bookvenuecomp = new Composite(maincomp, SWT.NONE);
 		Bookvenuecomp.setLayout(new GridLayout(3, false));
 		FormData fd_Bookvenuecomp = new FormData();
 		fd_Bookvenuecomp.right = new FormAttachment(80, 0);
@@ -444,11 +445,214 @@ public class ViewEvent extends Composite {
 
 	}
 
+	public static void RefreshVenue() {
+		if (venueflag)
+			VenueResult.dispose();
+		VenueResult = VenueTable(Bookvenuecomp);
+
+	}
+
+	public static Table VenueTable(Composite Budgetcomp) {
+		//ControllerBookingSystem bc = new ControllerBookingSystem();	
+		//Vector<Item> venue_list = bc.getCombinationList(curevent.getID());
+		Vector<BookedVenueInfo> venue_list = cevent.getBVI_list();
+
+
+		if (venue_list.isEmpty()) {
+			venueflag = false;	
+			System.out.println(cevent.getName() + "! OI NOTHING IN VENUE_LIST!!!!");
+			return null;
+		}
+
+
+		VenueResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
+		VenueResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		VenueResult.setHeaderVisible(true);
+
+		TableColumn col0 = new TableColumn(VenueResult, SWT.LEFT);
+		TableColumn col1 = new TableColumn(VenueResult, SWT.LEFT);
+		TableColumn col2 = new TableColumn(VenueResult, SWT.NULL);
+		TableColumn col3 = new TableColumn(VenueResult, SWT.NULL);
+		TableColumn col4 = new TableColumn(VenueResult, SWT.NULL);
+		TableColumn col5 = new TableColumn(VenueResult, SWT.NULL);
+		TableColumn col6 = new TableColumn(VenueResult, SWT.NULL);
+
+		col0.setText("Venue Name");
+		col1.setText("Capacity");
+		col2.setText("Cost");
+		col3.setText("Start Date");
+		col4.setText("Start Time");
+		col5.setText("End Date");
+		col6.setText("End Time");
+		/*
+		col0.setWidth(10);
+		col1.setWidth(400);
+		col2.setWidth(10);
+		col3.setWidth(10);
+		col4.setWidth(10);
+		 */
+		col0.setResizable(false);
+		col1.setResizable(false);
+		col2.setResizable(false);
+		col3.setResizable(false);
+		col4.setResizable(false);
+		col5.setResizable(false);
+		col6.setResizable(false);
+		/*
+		col0.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				//sort name
+				TableItem[] items = VenueResult.getItems();
+				for (int i = 1; i<items.length; i++) {
+					int value1 = Integer.parseInt(items[i].getText(0).substring(5, items[i].getText(0).length()));
+					for(int j=0; j < i; j++) {
+						int value2 = Integer.parseInt(items[j].getText(0).substring(5, items[j].getText(0).length()));
+						if(value1 - value2 < 0) {
+							System.out.println(value1 + " " + value2);
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(VenueResult, SWT.NONE, j);
+							item.setText(values);
+							items = VenueResult.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+
+	//	col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+
+		col1.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				//sort name
+				TableItem[] items = VenueResult.getItems();
+				Collator collator = Collator.getInstance(Locale.getDefault());
+				for (int i = 1; i<items.length; i++) {
+					String value1 = items[i].getText(1);
+					for(int j=0; j < i; j++) {
+						String value2 = items[j].getText(1);
+						if(collator.compare(value1, value2) < 0) {
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(VenueResult, SWT.NONE, j);
+							item.setText(values);
+							items = VenueResult.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+
+		col2.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				//sort price
+				TableItem[] items = VenueResult.getItems();
+				for (int i = 1; i<items.length; i++) {
+					double value1 = Double.parseDouble(items[i].getText(2).substring(1,items[i].getText(2).length()));
+					for(int j=0; j < i; j++) {
+						double value2 = Double.parseDouble(items[j].getText(2).substring(1,items[j].getText(2).length()));
+						if((value1 - value2) > 0) {
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(VenueResult, SWT.NONE, j);
+							item.setText(values);
+							items = VenueResult.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+
+		col3.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				//sort satisfaction
+				TableItem[] items = VenueResult.getItems();
+				for (int i = 1; i<items.length; i++) {
+					int value1 = Integer.parseInt(items[i].getText(3));
+					for(int j=0; j < i; j++) {
+						int value2 = Integer.parseInt(items[j].getText(3));
+						if((value1 - value2) > 0) {
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(VenueResult, SWT.NONE, j);
+							item.setText(values);
+							items = VenueResult.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+
+		col4.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				//sort name
+				TableItem[] items = VenueResult.getItems();
+				Collator collator = Collator.getInstance(Locale.getDefault());
+				for (int i = 1; i<items.length; i++) {
+					String value1 = items[i].getText(4);
+					for(int j=0; j < i; j++) {
+						String value2 = items[j].getText(4);
+						if(collator.compare(value1, value2) < 0) {
+							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
+							items[i].dispose();
+							TableItem item = new TableItem(VenueResult, SWT.NONE, j);
+							item.setText(values);
+							items = VenueResult.getItems();
+							break;
+						}
+					}
+				}
+			}
+			});
+		 */
+		VenueResult.removeAll();
+		for (int loopIndex = 0; loopIndex < venue_list.size(); loopIndex++) {
+			TableItem item = new TableItem(VenueResult, SWT.NULL);
+			item.setText(0, venue_list.get(loopIndex).getName());
+			item.setText(1, venue_list.get(loopIndex).getMaxCapacityString());
+			item.setText(2, venue_list.get(loopIndex).getCostInDollarString());
+			item.setText(3, venue_list.get(loopIndex).getStartDateString());
+			item.setText(4, venue_list.get(loopIndex).getStartHourString());
+			item.setText(5, venue_list.get(loopIndex).getEndHourString());		
+			item.setText(6, venue_list.get(loopIndex).getEndHourString());		
+		
+		}
+		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
+			VenueResult.getColumn(loopIndex).pack();
+		}							
+
+		/*	col0.setWidth(60);
+		col1.setWidth(300);
+		col2.setWidth(50);
+		col3.setWidth(50);
+		col4.setWidth(50);*/
+		col0.pack();
+		col1.pack();
+		col2.pack();
+		col3.pack();
+		col4.pack();
+		col5.pack();
+		col6.pack();
+		System.out.println(col0.getWidth());
+		System.out.println(col1.getWidth());
+		System.out.println(col2.getWidth());
+		System.out.println(col3.getWidth());
+		System.out.println(col4.getWidth());
+		System.out.println(col5.getWidth());
+		System.out.println(col6.getWidth());
+		venueflag = true;
+		return VenueResult;
+	}
+
 	public static Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
 		//ControllerBudget bc = new ControllerBudget();	
 		//Vector<Item> item_list = bc.getCombinationList(curevent.getID());
 		Vector<Item> item_list = curevent.getitem_list();
-		
+
 
 		if (item_list.isEmpty()) {
 			budgetflag = false;	
@@ -478,13 +682,13 @@ public class ViewEvent extends Composite {
 		col2.setWidth(10);
 		col3.setWidth(10);
 		col4.setWidth(10);
-		*/
+		 */
 		col0.setResizable(false);
 		col1.setResizable(false);
 		col2.setResizable(false);
 		col3.setResizable(false);
 		col4.setResizable(false);
-		
+
 		col0.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort name
@@ -505,10 +709,10 @@ public class ViewEvent extends Composite {
 					}
 				}
 			}
-			});
-		
-	//	col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
-		
+		});
+
+		//	col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+
 		col1.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort name
@@ -529,8 +733,8 @@ public class ViewEvent extends Composite {
 					}
 				}
 			}
-			});
-	
+		});
+
 		col2.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort price
@@ -550,8 +754,8 @@ public class ViewEvent extends Composite {
 					}
 				}
 			}
-			});
-		
+		});
+
 		col3.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort satisfaction
@@ -571,7 +775,7 @@ public class ViewEvent extends Composite {
 					}
 				}
 			}
-			});
+		});
 
 		col4.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
@@ -593,7 +797,7 @@ public class ViewEvent extends Composite {
 					}
 				}
 			}
-			});
+		});
 
 		BudgetResult.removeAll();
 		for (int loopIndex = 0; loopIndex < item_list.size(); loopIndex++) {
@@ -614,7 +818,7 @@ public class ViewEvent extends Composite {
 			BudgetResult.getColumn(loopIndex).pack();
 		}							
 
-	/*	col0.setWidth(60);
+		/*	col0.setWidth(60);
 		col1.setWidth(300);
 		col2.setWidth(50);
 		col3.setWidth(50);
@@ -629,7 +833,7 @@ public class ViewEvent extends Composite {
 		System.out.println(col2.getWidth());
 		System.out.println(col3.getWidth());
 		System.out.println(col4.getWidth());
-		
+
 		budgetflag = true;
 		return BudgetResult;
 	}
