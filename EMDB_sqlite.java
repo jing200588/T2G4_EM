@@ -784,6 +784,7 @@ public class EMDB_sqlite{
 		//create empty event container here
 		Eventitem item = null;
 		Vector<Item> list = new Vector<Item>();
+		Vector<BookedVenueInfo> bvi= new Vector<BookedVenueInfo>();
 		try {
 			 
 			String query = this.select_all(
@@ -802,11 +803,13 @@ public class EMDB_sqlite{
 						result.getString("starttime"),
 						result.getString("endtime"),
 						list,
-						result.getDouble("budget")
+						result.getDouble("budget"),
+						bvi
 						);
 				item.setDescription(result.getString("description"));
 				item.setID(result.getInt("event_id"));
 				item.setitem_list(this.get_budget_list(result.getInt("event_id"), true));
+				item.addBVI(this.get_booking_info(result.getInt("event_id")));
 			}
 			
 			return item;
@@ -831,6 +834,7 @@ public class EMDB_sqlite{
 		
 		Vector<Eventitem> list = new Vector<Eventitem>();
 		Vector<Item> budget = new Vector<Item>();
+		Vector<BookedVenueInfo> bvi= new Vector<BookedVenueInfo>();
 		
 		try {
 			String query = this.select_all(
@@ -840,8 +844,7 @@ public class EMDB_sqlite{
 			
 			ResultSet result;
 			result = this.DBQUERY.executeQuery(query);
-
-			budget = new Vector<Item>();
+			
 			
 			while (result.next()) {
 				
@@ -852,11 +855,13 @@ public class EMDB_sqlite{
 						result.getString("starttime"),
 						result.getString("endtime"),
 						budget,
-						result.getDouble("budget")
+						result.getDouble("budget"),
+						bvi
 						);
 				item.setDescription(result.getString("description"));
 				item.setID(result.getInt("event_id"));
 				item.setitem_list(this.get_budget_list(result.getInt("event_id"), true));
+				item.addBVI(this.get_booking_info(result.getInt("event_id")));
 				list.add(item);
 			}
 	
@@ -1061,6 +1066,66 @@ public class EMDB_sqlite{
 		
 		
 	}
+	
+	
+	/*
+	 * Getting a list of bookings from db
+	 */
+	public Vector<BookedVenueInfo> get_booking_info(int id){
+		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("GET BOOKINGS OF: " + 
+					" #" + id
+					);
+		}
+		
+		
+		
+		String query = "";
+		
+		Vector<BookedVenueInfo> list = new Vector<BookedVenueInfo>();
+		
+		 try {
+			 
+			
+				query = this.select_all(
+							this.TABLE_venue_bookings, 
+							"event_id="+ id , 
+							0);	
+		
+
+			ResultSet result = this.DBQUERY.executeQuery(query);
+			
+			while (result.next()) {
+			
+				
+				list.add(
+					new BookedVenueInfo(
+						this.get_venue(id),
+						new TimeSlot(
+								result.getInt("booking_id"),
+								new DateHour(result.getString("time_start")),
+								new DateHour(result.getString("time_end"))
+							)
+						)
+					);
+			}
+			
+			
+			result.close();
+			
+			
+			return list;
+			
+		} catch (SQLException e) {
+			
+			return null;
+			
+		}
+		
+	}
+	
 	
 	
 	

@@ -132,5 +132,7 @@ public class Eventitem {
 		_BVI_list.add(BVI);
 	}
 	
-
+	public void addBVI(Vector<BookedVenueInfo> BVI){
+		_BVI_list = BVI;
+	}
 }

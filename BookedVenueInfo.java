@@ -33,6 +33,18 @@ public class BookedVenueInfo {
 		m_cost = obj.getCost();
 		m_bookedTimeSlot = bookedTimeSlot; 		// Note that TimeSlot object is immutable!
 	}
+
+	
+	public BookedVenueInfo(String name, String address, String description, int capacity, int cost, TimeSlot bookedTimeSlot)
+	{
+		m_name = name;
+		m_address = address;
+		m_description = description;
+		m_maxCapacity = capacity;
+		m_cost = cost;
+		m_bookedTimeSlot = bookedTimeSlot; 		// Note that TimeSlot object is immutable!
+	}	
+	
 	
 	/************************************************************************
 	 * Methods that support extracting information
