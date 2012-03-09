@@ -140,7 +140,8 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	public static void CalcBudget () {		
-		ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
+		//ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
+		ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		layout.topControl = bv;
 		c2.layout(true);
 	}
@@ -236,11 +237,11 @@ public class ViewMain extends ApplicationWindow {
 			table = new Table(c1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 			table.setToolTipText("All Events");
 			table.setTouchEnabled(true);
+			
 			//Listener for table item select
 			table.addListener(SWT.Selection, new Listener() {
 		     public void handleEvent(Event event) {
-		        String string = event.detail == SWT.CHECK ? "Checked"
-		            : "Selected";
+		       
 		        //extract event name
 		        String itemname = "";
 		        itemname += event.item;
@@ -256,7 +257,7 @@ public class ViewMain extends ApplicationWindow {
 	//			if (view != null)
 		//			view.UpdateEvent(getEvent(itemname));
 			//	else
-					view = new ViewEvent(c2, SWT.NONE, getEvent(itemname));
+				view = new ViewEvent(c2, SWT.NONE, getEvent(itemname));
 		      //  view.setBounds(c2.getBounds());
 		   //     formToolkit.adapt(view);
 		//		formToolkit.paintBordersFor(view);

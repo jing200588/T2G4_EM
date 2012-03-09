@@ -5,15 +5,16 @@ public class Eventitem {
 	private int _id;
 	private String _name;
 	private String _description;
-//	private Vector<Venue> _venuelist;
-//	private Vector<Participants> _partlist;
-	//private eventflow??
-	//private budget
-	//private advertise
+	private Vector<Item> _item_list;
+	private double _budget;
+	//private Vector<BookedVenueInfo> _BVI_list;
 	private Date _startdate;
 	private Time _starttime;
 	private Date _enddate;
 	private Time _endtime;
+	//	private Vector<Participants> _partlist;
+	//private eventflow??
+	//private advertise
 	
 	public Eventitem (String name, int sy, int sm, int sd, int ey, int em, int ed, int shour, int smin, int ehour, int emin) {
 		_name = name;
@@ -25,12 +26,15 @@ public class Eventitem {
 	}
 	
 	
-	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime){
+	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget) {//, BookedVenueInfo BVI_list){
 		_name = name;
 		_startdate = new Date(startdate);
 		_enddate = new Date(enddate);
 		_starttime = new Time(starttime);
 		_endtime = new Time(endtime);
+		_item_list = item_list;
+		_budget = budget;
+		//_BVI_list = BVI_list;
 	}
 	
 	
@@ -88,4 +92,36 @@ public class Eventitem {
 	public int getID(){
 		return _id;
 	}
+
+
+	public Vector<Item> getitem_list() {
+		return _item_list;
+	}
+
+
+	public void setitem_list(Vector<Item> item_list) {
+		_item_list = item_list;
+	}
+
+
+	public double getBudget() {
+		return _budget;
+	}
+
+
+	public void setBudget(double budget) {
+		_budget = budget;
+	}
+
+/*
+	public Vector<Venue> getBookedVenueInfo_list() {
+		return _BVI_list;
+	}
+
+
+	public void setBVI_list(Vector<BookedVenueInfo> BVI_list) {
+		_BVI_list = BVI_list;
+	}
+	
+*/
 }

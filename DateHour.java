@@ -167,7 +167,7 @@ public class DateHour implements Comparable<DateHour> {
 	 * @return -1 if this object is smaller than comparedObj
 	 * @return 0 if this object is equal to comparedObj
 	 */
-	@Override
+	//@Override
 	public int compareTo(DateHour comparedObj) {
 		if(m_year < comparedObj.getYear())
 			return -1;
@@ -197,7 +197,7 @@ public class DateHour implements Comparable<DateHour> {
 		return "DateHour [m_year=" + m_year + ", m_month=" + m_month
 				+ ", m_day=" + m_day + ", m_hour=" + m_hour + "]";
 	}
-	
+	/*
 	// For testing purpose
 	public static void main(String[] args)
 	{
@@ -209,5 +209,5 @@ public class DateHour implements Comparable<DateHour> {
 		System.out.println(newObj.getDateHourRepresentation());
 		System.out.println(newObj.toString());
 		
-	}
+	}*/
 }

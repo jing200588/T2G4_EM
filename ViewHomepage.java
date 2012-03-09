@@ -18,6 +18,7 @@ public class ViewHomepage extends Composite {
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\Pictures\\b34wl.jpg"));
+		
 
 	}
 
