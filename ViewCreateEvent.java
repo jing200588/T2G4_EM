@@ -90,6 +90,11 @@ public class ViewCreateEvent extends Composite {
 		formToolkit.adapt(EndTime);
 		formToolkit.paintBordersFor(EndTime);
 		
+		/**********************************************************************************************
+		 * 
+		 * Create Event Button
+		 * 
+		 *********************************************************************************************/
 		Button btnCreate = new Button(CreateEventForm.getBody(), SWT.NONE);
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
