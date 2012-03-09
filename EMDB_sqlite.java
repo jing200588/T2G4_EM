@@ -80,6 +80,8 @@ public class EMDB_sqlite{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.set_debug(true);
 	}
 	
 	
@@ -801,15 +803,11 @@ public class EMDB_sqlite{
 						result.getString("startdate"),
 						result.getString("enddate"),
 						result.getString("starttime"),
-						result.getString("endtime"),
-						list,
-						result.getDouble("budget"),
-						bvi
+						result.getString("endtime")
 						);
 				item.setDescription(result.getString("description"));
-				item.setID(result.getInt("event_id"));
-				item.setitem_list(this.get_budget_list(result.getInt("event_id"), true));
 				item.addBVI(this.get_booking_info(result.getInt("event_id")));
+				item.setBudget(result.getDouble("budget"));
 			}
 			
 			return item;
@@ -834,7 +832,7 @@ public class EMDB_sqlite{
 		
 		Vector<Eventitem> list = new Vector<Eventitem>();
 		Vector<Item> budget = new Vector<Item>();
-		Vector<BookedVenueInfo> bvi= new Vector<BookedVenueInfo>();
+		Vector<BookedVenueInfo> bvi;
 		
 		try {
 			String query = this.select_all(
@@ -847,22 +845,20 @@ public class EMDB_sqlite{
 			
 			
 			while (result.next()) {
-				
+				bvi = new Vector<BookedVenueInfo>();
+				 
 				Eventitem item = new Eventitem(
 						result.getString("name"),
 						result.getString("startdate"),
 						result.getString("enddate"),
 						result.getString("starttime"),
-						result.getString("endtime"),
-						budget,
-						result.getDouble("budget"),
-						bvi
+						result.getString("endtime")
 						);
 				item.setDescription(result.getString("description"));
 				item.setID(result.getInt("event_id"));
-				item.setitem_list(this.get_budget_list(result.getInt("event_id"), true));
-				item.addBVI(this.get_booking_info(result.getInt("event_id")));
+				item.setBudget(result.getDouble("budget"));
 				list.add(item);
+				
 			}
 	
 			result.close();
@@ -904,6 +900,8 @@ public class EMDB_sqlite{
 	
 			
 			ResultSet result = this.DBQUERY.executeQuery(query);
+			
+			System.out.println(result);
 			
 			while (result.next()) {
 				place.updateName(result.getString("name"));
@@ -952,8 +950,7 @@ public class EMDB_sqlite{
 						this.TABLE_venue, 
 						"",
 						0);	
-			
-			this.out(query);
+		
 			
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
@@ -1089,22 +1086,20 @@ public class EMDB_sqlite{
 		 try {
 			 
 			
-				query = this.select_all(
+			query = this.select_all(
 							this.TABLE_venue_bookings, 
 							"event_id="+ id , 
 							0);	
 		
 
 			ResultSet result = this.DBQUERY.executeQuery(query);
+			System.out.println(result);
 			
 			while (result.next()) {
-			
-				
 				list.add(
 					new BookedVenueInfo(
-						this.get_venue(id),
+						this.get_venue(result.getInt("venue_id")),
 						new TimeSlot(
-								result.getInt("booking_id"),
 								new DateHour(result.getString("time_start")),
 								new DateHour(result.getString("time_end"))
 							)
@@ -1112,10 +1107,8 @@ public class EMDB_sqlite{
 					);
 			}
 			
-			
 			result.close();
-			
-			
+			System.out.println(list);
 			return list;
 			
 		} catch (SQLException e) {
@@ -1144,11 +1137,7 @@ public class EMDB_sqlite{
 					);
 		}
 		
-		
-		
-		
-		//create empty budget list vector here.
-		
+	
 		Vector<Item> list = new Vector<Item>();
 		
 		try {
@@ -1158,23 +1147,24 @@ public class EMDB_sqlite{
 			if (optimized){
 				query = this.select_all(
 						this.TABLE_budget_optimized, 
-						"event_id="+ id , 
+						"event_id="+ id, 
 						0);
 			}else{
 				query = this.select_all(
 						this.TABLE_budget, 
-						"event_id="+ id , 
+						"event_id="+ id, 
 						0);
 			}
 			
 			
 			ResultSet result = this.DBQUERY.executeQuery(query);
+			System.out.println(result);
 		    while (result.next()) {
 			      Item current = new Item(result.getInt("event_id"), result.getString("name"), result.getInt("price"), result.getInt("satisfaction"), result.getString("type"));
 			      list.add(current);
 			}
 			result.close();
-
+			System.out.println(list);
 			return list;
 			
 			
