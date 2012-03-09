@@ -3,8 +3,6 @@ import java.util.*;
 
 public class ModelEvent {
 	private static Vector<Eventitem> list;
-	
-	
 	private static EMDB db;
 
 	public ModelEvent() {
@@ -35,6 +33,7 @@ public class ModelEvent {
 		db.disconnect();
 		
 		/*
+		//Test Data.
 		list.add(new Eventitem("test event 1", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
 		list.add(new Eventitem("test event 2", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
 		list.add(new Eventitem("test event 3", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
@@ -45,6 +44,9 @@ public class ModelEvent {
 		
 	};
 	
+	/************************************************************
+	 * CREATE EVENT //Passes event to DB and local list.
+	 ***********************************************************/
 	public static void CreateEvent(Eventitem eitem) {
 		
 		
@@ -73,6 +75,9 @@ public class ModelEvent {
 	
 	}
 	
+	/************************************************************
+	 * PULL LIST //Returns local list.
+	 ***********************************************************/
 	public static Vector<Eventitem> PullList() {
 		db.connect();
 		list = db.get_event_list();
@@ -89,6 +94,9 @@ public class ModelEvent {
 		return list;
 	}
 	
+	/************************************************************
+	 * DELETE EVENT	//Deletes event from DB and local list.
+	 ***********************************************************/
 	public static void DeleteEvent(Eventitem eitem) {
 		
 		db.connect();
@@ -99,6 +107,9 @@ public class ModelEvent {
 		list.remove(eitem);
 	}
 	
+	/**********************************************************************
+	 * UPDATE PARTICULARS //Updates event particulars on DB and local list.
+	 **********************************************************************/
 	public static void 	UpdateParticulars(Eventitem eitem, int index) {
 		//update particulars
 

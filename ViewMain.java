@@ -42,7 +42,6 @@ public class ViewMain extends ApplicationWindow {
 	private static Table table;
 	private static Composite c2;
 	private static Vector<Eventitem> eventlist;
-	private static int count = 0;
 	private static StackLayout layout = new StackLayout();
 	private ModelEvent mm = new ModelEvent();
 	private static Display display = new Display();
@@ -68,37 +67,18 @@ public class ViewMain extends ApplicationWindow {
 		
 	}
 
-	public static void addEvent(Eventitem newevent) {
-		eventlist.add(newevent);
-		TableItem it1 = new TableItem(table,SWT.NONE);
-		 it1.setText(eventlist.get(count++).getName());
-		 it1.setText(1, "TEST");
-		 it1.setBackground(1, red);
-		 it1.setText(2, "C3");
-		 it1.setBackground(2,blue);
-		 
-		
-		/*
-	    //add event to db
-	    //query for db list and store as eventlist
-	    TableItem item;
-		for (int i=0; i<eventlist.size(); i++) {
-			item = new TableItem(table,SWT.NONE);
-			item.setText(eventlist.get(i).getName());
-		}
-		 */
-	}
+	/************************************************************
+	 * DELETE ITEM
+	 ***********************************************************/
 	public static void DeleteItem() {
-	//	System.out.println(table.getSelectionIndex());
 		table.remove(table.getSelectionIndices());
 		layout.topControl = hp;
 		c2.layout(true);
-	/*	testing purpose
-	  	for (int i=0; i<eventlist.size(); i++)
-			System.out.println(eventlist.get(i).getName());*/
 	}
 	
-	//Method to update the table in c1
+	/************************************************************
+	 * Method to update the table in c1
+	 ***********************************************************/
 	public static void UpdateTable () {
 		eventlist = ModelEvent.PullList();
 
@@ -107,11 +87,9 @@ public class ViewMain extends ApplicationWindow {
 		if (table.getItemCount() == 0)	//adds whole vector if table empty 
 			i=0;
 		
-		else if (table.getItemCount() == eventlist.size()) {	//updates vector list only
-			TableItem tb = table.getItem(table.getSelectionIndex());
-			tb.setText(0, eventlist.get(table.getSelectionIndex()).getName());
-			//ViewEvent.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
-			//view = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		else if (table.getItemCount() == eventlist.size()) {						//updates vector list (done when returning view)
+			item = table.getItem(table.getSelectionIndex());						//Gets current selected row in table
+			item.setText(0, eventlist.get(table.getSelectionIndex()).getName());	//Replace the String with new updated string 
 			layout.topControl = view;
 			c2.layout(true);
 			return;
@@ -119,7 +97,7 @@ public class ViewMain extends ApplicationWindow {
 		else
 			i = eventlist.size()-1;		//add the last item into table
 		
-		for (; i<eventlist.size(); i++) {
+		for (; i<eventlist.size(); i++) {			
 			item = new TableItem(table,SWT.NONE);
 			item.setText(eventlist.get(i).getName());
 			item.setText(1, "TEST");
@@ -128,50 +106,41 @@ public class ViewMain extends ApplicationWindow {
 	    	item.setBackground(2,blue);
 		}
 	}
-	
-	public static Eventitem getEvent (String event) {
-		for (int i=0; i<eventlist.size(); i++) {
-			if (eventlist.get(i).getName().equals(event))
-				return eventlist.get(i);
-		}
-		
-		return null;
-	}
-	
+
+	/************************************************************
+	 * CALCULATE BUDGET
+	 ***********************************************************/
 	public static void CalcBudget () {		
-		//ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
 		ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		layout.topControl = bv;
 		c2.layout(true);
 	}
 	
+	/************************************************************
+	 * BOOK VENUE
+	 ***********************************************************/
 	public static void BookVenue() {
-		//ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
 		ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		layout.topControl = bookgui;
 		c2.layout(true);
 	}
 	
+	/************************************************************
+	 * EVENT PARTICULARS
+	 ***********************************************************/
 	public static void EventParticulars(Eventitem curevent) {
 		ViewEventParticulars ep = new ViewEventParticulars(c2, SWT.NONE, curevent, table.getSelectionIndex());
 		layout.topControl = ep;
 		c2.layout(true);
 	}
-		
-	public static void ReturnView(int i) {
-		System.out.println(i);
-		if (i == 0);//budget
-			//ViewEvent.RefreshBudget();
-		if (i == 1) {	//particulars
-			UpdateTable();
-			System.out.println("UPDATING TABLE");
-			//ViewEvent.RefreshParticulars();
-		}
 	
+	/************************************************************
+	 * RETURN VIEW
+	 ***********************************************************/
+	public static void ReturnView() {	//for returning to view event page
 		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		System.out.println("test");
 		layout.topControl = newview;
-		//layout.topControl = view;
 		c2.layout(true);
 	}
 	
@@ -223,11 +192,6 @@ public class ViewMain extends ApplicationWindow {
 					}
 					
 					ViewCreateEvent CreatePage = new ViewCreateEvent(c2, SWT.NONE);
-		//			CreatePage.setBounds(c2.getBounds());
-		//			formToolkit.adapt(CreatePage);
-			//		formToolkit.paintBordersFor(CreatePage);
-	//				CreateEventGUI CreatePage = new CreateEventGUI(c2, SWT.NONE);
-		//			c2 = CreatePage;
 					layout.topControl = CreatePage;
 					c2.layout(true);	//refreshes c2
 					
@@ -241,33 +205,28 @@ public class ViewMain extends ApplicationWindow {
 			table.setToolTipText("All Events");
 			table.setTouchEnabled(true);
 			
-			//Listener for table item select
+			/************************************************************
+			 * TABLE ITEM SELECTION EVENT LISTENER
+			 ***********************************************************/
 			table.addListener(SWT.Selection, new Listener() {
 		     public void handleEvent(Event event) {
 		       
-		        //extract event name
+		/*        //extract event name
 		        String itemname = "";
 		        itemname += event.item;
 		        itemname = itemname.substring(11, itemname.length() -1);
-		 
+		 */
 		      //dispose of all children that currently is in c2
 				if (c2 != null && !c2.isDisposed()) {
 				Object[] children = c2.getChildren();
 				for (int i=0; i<children.length; i++)
 					((Composite)children[i]).dispose();
 				}
-				//view.UpdateEvent(getEvent(itemname));
-	//			if (view != null)
-		//			view.UpdateEvent(getEvent(itemname));
-			//	else
-				view = new ViewEvent(c2, SWT.NONE, getEvent(itemname));
-		      //  view.setBounds(c2.getBounds());
-		   //     formToolkit.adapt(view);
-		//		formToolkit.paintBordersFor(view);
+			
+				//	view = new ViewEvent(c2, SWT.NONE, getEvent(itemname));
+				view = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		        layout.topControl = view;
 				c2.layout(true);
-		        
-		     //   System.out.println(itemname + "hh " + string);
 		     }
 			});
 				
@@ -295,7 +254,9 @@ public class ViewMain extends ApplicationWindow {
 			Menu menu = new Menu(table);
 			table.setMenu(menu);
 			
-			//Delete event
+			/************************************************************
+			 * DELETE EVENT
+			 ***********************************************************/
 			MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
 			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -304,26 +265,13 @@ public class ViewMain extends ApplicationWindow {
 					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, tb.getText(0));
 					if (confirm.open() == 1) {
 //						System.out.println(table.getSelectionIndex());
-						ModelEvent.DeleteEvent(getEvent(tb.getText(0)));	//Finds the selected event and deletes it from vector
+					//	ModelEvent.DeleteEvent(getEvent(tb.getText(0)));	//Finds the selected event and deletes it from vector
+						ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
 						DeleteItem();
 					}
 				}
 			});
 			mntmDeleteEvent.setText("Delete Event");
-/*			
-			table.setItemCount(100);
-			table.addListener (SWT.SetData, new Listener () {
-				public void handleEvent (Event event) {
-					TableItem item = (TableItem) event.item;
-					int index = table.indexOf (item);
-					item.setText (eventlist.get(0).getName());
-					System.out.println (item.getText ());
-				}
-
-				
-			});		
-			
-	*/		
 			
 			DateTime Calender = new DateTime(c1, SWT.BORDER | SWT.CALENDAR | SWT.LONG);
 			Calender.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
