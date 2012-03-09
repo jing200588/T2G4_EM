@@ -1,7 +1,7 @@
 /**
  * @author Nguyen Truong Duy (Team 31 - CS2103)
  *
- * Class: TimeSlot
+ * Class: TimeSlot (immutable!)
  */
 public class TimeSlot {
 	/************************************************************************
@@ -16,17 +16,16 @@ public class TimeSlot {
 	 *************************************************************************/
 	public TimeSlot(DateHour start, DateHour end)
 	{
-		m_startDateHour = new DateHour(start);
-		m_endDateHour = new DateHour(end);
+		m_startDateHour = start;
+		m_endDateHour = end;
 	}
 
 	public TimeSlot(int id, DateHour start, DateHour end)
 	{
 		booking_id = id;
-		m_startDateHour = new DateHour(start);
-		m_endDateHour = new DateHour(end);
+		m_startDateHour = start;
+		m_endDateHour = end;
 	}
-	
 	
 	/**************************************************************************
 	 * Methods that support extracting information

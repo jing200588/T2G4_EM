@@ -1,6 +1,7 @@
 /**
  * @author Nguyen Truong Duy (Team 31 - CS2103)
- *
+ * 
+ * DateHour: immutable!
  */
 public class DateHour implements Comparable<DateHour> {
 	/*************************************************************************
@@ -94,6 +95,32 @@ public class DateHour implements Comparable<DateHour> {
 		}
 		return new String(charArr);
 	}
+	
+	// Return a String object that represents the date of DateHour object.
+	// The format is dd/mm/yyyy
+	public String getDateRepresentation()
+	{
+		char[] charArr = new char[10];
+		charArr[2] = charArr[5] = '/';
+		int day = m_day;
+		int month = m_month;
+		int year = m_year;
+	
+		for(int i = 0; i < 2; i++)
+		{
+			charArr[1 - i] = Character.forDigit(day % 10, 10);
+			charArr[4 - i] = Character.forDigit(month % 10, 10);
+			day /= 10;
+			month /= 10;
+ 		}
+		for(int i = 0; i < 4; i++)
+		{
+			charArr[9 - i] = Character.forDigit(year % 10, 10);
+			year /= 10;
+		}
+		return new String(charArr);
+	}
+	
 	/**************************************************************************
 	 * Methods that support querying
 	 *************************************************************************/
@@ -167,7 +194,7 @@ public class DateHour implements Comparable<DateHour> {
 	 * @return -1 if this object is smaller than comparedObj
 	 * @return 0 if this object is equal to comparedObj
 	 */
-	//@Override
+	@Override
 	public int compareTo(DateHour comparedObj) {
 		if(m_year < comparedObj.getYear())
 			return -1;
@@ -197,7 +224,7 @@ public class DateHour implements Comparable<DateHour> {
 		return "DateHour [m_year=" + m_year + ", m_month=" + m_month
 				+ ", m_day=" + m_day + ", m_hour=" + m_hour + "]";
 	}
-	/*
+	
 	// For testing purpose
 	public static void main(String[] args)
 	{
@@ -209,5 +236,5 @@ public class DateHour implements Comparable<DateHour> {
 		System.out.println(newObj.getDateHourRepresentation());
 		System.out.println(newObj.toString());
 		
-	}*/
+	}
 }

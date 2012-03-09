@@ -108,7 +108,7 @@ public class ViewBookingSystem extends Composite {
 	private DateTime BookDateTimeTo;
 	private DateTime BookDateTimeFrom;
 	private int chosenVenueID;
-	private int eventID;
+	private Eventitem event;
 	private Label BookLabel;
 	private Text text;
 	/**
@@ -116,7 +116,7 @@ public class ViewBookingSystem extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewBookingSystem(Composite parent, int style, int id) {
+	public ViewBookingSystem(Composite parent, int style, Eventitem eventObj) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -125,7 +125,7 @@ public class ViewBookingSystem extends Composite {
 		});
 		
 		// Initialize some variables
-		eventID = id;
+		event = eventObj;				// Assign reference
 		flagCapacityChoice = false;
 		flagCostChoice = false;
 		flagTimeSlotChoice = false;
@@ -1430,7 +1430,8 @@ public class ViewBookingSystem extends Composite {
 					
 					
 					// Do the booking (The chosen time slot is legal)
-					ControllerBookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
+					ControllerBookingSystem.bookVenue(event, searchResultList,
+							chosenVenueID, timeSlotChoiceInput);
 					
 					// Return to the main GUI
 					// Dummy input
@@ -1586,7 +1587,7 @@ public class ViewBookingSystem extends Composite {
 		ViewBookCompo.setVisible(false);
 	}
 	
-	public static void main(String[] args){
+/*	public static void main(String[] args){
 		Display display = new Display();
 		display = Display.getDefault();
 		Shell shell = new Shell();
@@ -1600,7 +1601,7 @@ public class ViewBookingSystem extends Composite {
 		shell.open();
 		while(!shell.isDisposed()){
 			if(!display.readAndDispatch()) display.sleep();
-		}
+		} 
 
-	} 
+	} */
 }

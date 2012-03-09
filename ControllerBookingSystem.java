@@ -14,16 +14,19 @@ public class ControllerBookingSystem {
 						CAPACITY_TIME, COST_CAPACITY, ALL_THREE}
 	public static final double THRESHOLD = Double.MIN_VALUE;
 	
-	public static ModelBookingSystem mbs = new ModelBookingSystem();
+	private static ModelBookingSystem mbs = new ModelBookingSystem();
 	
 	/**
 	 * 
-	 * @param eventID
-	 * @param bookedVenue
+	 * @param event
+	 * @param bookedVenueID
+	 * @param listVenues
 	 * @param wantedTimeSlot
 	 * 
-	 * Description: Book a venue with the specified time slot. Update the
-	 * 		new information in the database of venues.
+	 * Description: 
+	 * + Book a venue with the specified time slot. 
+	 * + Update the new information in the database of venues.
+	 * + Update the new information in the EventItem object itself.
 	 * 
 	 * Assumption: The venue is available within the time slot (i.e. The
 	 * 		availability checking should have been done before calling
@@ -37,10 +40,14 @@ public class ControllerBookingSystem {
 	 * 		+ A method to update booked time slot of a venue.
 	 * 		+ Do you think we need a venue ID in the class Venue?
 	 */
-	public static boolean bookVenue(int eventID, int bookedVenueID, TimeSlot wantedTimeSlot)
+	public static boolean bookVenue(Eventitem event, Vector<Venue> listVenues,
+			int bookedVenueID, TimeSlot wantedTimeSlot)
 	{	
-		mbs.add_booking_to_db(eventID, bookedVenueID, wantedTimeSlot);
+		mbs.add_booking_to_db(event.getID(), bookedVenueID, wantedTimeSlot);
 		
+		int index = findIndex(listVenues, bookedVenueID);
+		// index is in valid range!!
+		event.addBVI(listVenues.get(index), wantedTimeSlot);
 		// If the booking is successful
 		return true;
 	}
