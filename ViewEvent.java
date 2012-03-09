@@ -600,7 +600,7 @@ public class ViewEvent extends Composite {
 			TableItem item = new TableItem(BudgetResult, SWT.NULL);
 			item.setText(0, "Item " + (loopIndex+1));
 			item.setText(1, item_list.get(loopIndex).getItem());
-			item.setText(2, "$"+((double) item_list.get(loopIndex).getPrice())/10000);
+			item.setText(2, "$"+((double) item_list.get(loopIndex).getPrice())/100);
 			if(item_list.get(loopIndex).getSatisfaction_value() == -1)
 				item.setText(3, "");
 			else
