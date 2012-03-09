@@ -111,7 +111,9 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		else if (table.getItemCount() == eventlist.size()) {	//updates vector list only
 			TableItem tb = table.getItem(table.getSelectionIndex());
 			tb.setText(0, eventlist.get(table.getSelectionIndex()).getName());
-			ViewEventGUI3.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
+			//ViewEventGUI3.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
+			//view = new ViewEventGUI3(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+			layout.topControl = view;
 			c2.layout(true);
 			return;
 		}
@@ -157,13 +159,15 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		
 	public static void ReturnView(int i) {
 		if (i == 0)	//budget
-			ViewEventGUI3.RefreshBudget();
+			//ViewEventGUI3.RefreshBudget();
 		if (i == 1) {	//particulars
 			UpdateTable();
 			//ViewEventGUI3.RefreshParticulars();
 		}
+		ViewEventGUI3 newview = new ViewEventGUI3(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		System.out.println("test");
-		layout.topControl = view;
+		layout.topControl = newview;
+		//layout.topControl = view;
 		c2.layout(true);
 	}
 	

@@ -1431,9 +1431,9 @@ public class ViewBookingSystem extends Composite {
 					// Do the booking (The chosen time slot is legal)
 					ControllerBookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
 					
-					// Testing
-					ErrorBoardBooking.setText("The venue is successfully booked!");
-					ErrorBoardBooking.setVisible(true);
+					// Return to the main GUI
+					// Dummy input
+					EmanagerGUIjface.ReturnView(10);
 				}
 				catch(NumberFormatException exception)
 				{
