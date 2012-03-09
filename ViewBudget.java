@@ -34,7 +34,7 @@ public class ViewBudget extends Composite {
 	private final StackLayout stackLayout = new StackLayout();
 	private final String[] titles = { "No.", "Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", "Price\t\t\t\t", "Satisfaction", "Type\t\t\t\t\t\t\t\t\t\t"};
 	private ControllerBudget budgetPersonalAssistant;
-	private int event_id;
+	private Eventitem event_object;
 	private Vector<Item> item_list;
 	private Vector<Integer> selected_compulsory;
 	private int budget;
@@ -78,7 +78,7 @@ public class ViewBudget extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewBudget(Composite parent, int style, int id) {
+	public ViewBudget(Composite parent, int style, final Eventitem ei) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -89,7 +89,7 @@ public class ViewBudget extends Composite {
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		event_id = id;
+		event_object = ei;
 
 		Form BudgetViewForm = formToolkit.createForm(this);
 		BudgetViewForm.setBounds(0, 0, 700, 400);
@@ -330,8 +330,8 @@ public class ViewBudget extends Composite {
 
 				try {	
 					txt_error_S1.setVisible(false);
-					budgetPersonalAssistant  = new ControllerBudget(txt_input_list.getText(), budget, type_choice, satisfaction_choice, event_id);
-					item_list = budgetPersonalAssistant.getItemList(event_id);
+					budgetPersonalAssistant  = new ControllerBudget(txt_input_list.getText(), budget, type_choice, satisfaction_choice, ei);
+					//item_list = budgetPersonalAssistant.getItemList(event_object);
 					lblError_S2.setVisible(false);
 					stackLayout.topControl = Step2;
 					BigContent.layout();

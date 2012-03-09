@@ -112,7 +112,7 @@ public class ModelBudget {
 	
 	
 	
-	
+	/* TO BE DELETED
 	
 	public Vector<Item> return_item_optimized_list(int id) {
 		
@@ -128,11 +128,11 @@ public class ModelBudget {
 	
 	/*
 	 * TESTING SECTION
-	 */
+	 *//*
 	public Vector<Item> displayConfirm() { //for testing
 		return confirm_list;
 	}
 
-	
+	*/
 	
 }

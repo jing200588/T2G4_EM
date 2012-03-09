@@ -9,9 +9,9 @@ public class ControllerBudget{
 	private int number;
 	private double budget, recursive_fnc_budget;
 	private Solution soln;
-	private int event_id;
 	private int differentResult;
 	private boolean hasSolnSet;
+	private Eventitem event_object;
 
 	private Vector<Item> compute_list;
 	private Vector<Item> compulsory_list;
@@ -33,11 +33,11 @@ public class ControllerBudget{
 		return analysis(hastype, hassatisfaction);
 	}
 
-	public ControllerBudget(String input, int budget, int type_c, int satisfaction_c, int id) throws Exception {
+	public ControllerBudget(String input, int budget, int type_c, int satisfaction_c, Eventitem ei) throws Exception {
 
 		if(input.length() == 0) throw new IOException("***Input list must not be empty.***");
 		item_list = new Vector<Item>();
-		event_id=id;
+		event_object = ei;
 		Scanner sc = new Scanner(input);
 		String line;
 		String[] component;
@@ -84,13 +84,13 @@ public class ControllerBudget{
 			}
 
 		}
-		bm.received_item_list(event_id, item_list); //SEND TO DATABASE
+		bm.received_item_list(event_object.getID(), item_list); //SEND TO DATABASE
 	}
-
+/*
 	public Vector<Item> getItemList(int id) {
 		return bm.return_item_list(id);
 		//return item_list;
-	}
+	}*/
 
 	/*flag compulsory items*/
 	public void compulsory(Vector<Integer> com) {
@@ -109,7 +109,7 @@ public class ControllerBudget{
 				temp_budget = temp_budget - item_list.get(com.get(i)-1).getPrice();
 			}
 
-			bm.update_item_list(event_id, item_list); //update with compulsory flag
+			bm.update_item_list(event_object.getID(), item_list); //update with compulsory flag
 		}
 		number = compute_list.size();
 	}
@@ -452,18 +452,21 @@ public class ControllerBudget{
 			}
 		}
 
-		bm.recevied_combination_list(event_id, db_list);
-
+		bm.recevied_combination_list(event_object.getID(), db_list);
+		event_object.setitem_list(db_list);
+		event_object.setBudget(((double)budget)/100);
+		
+/*
 		System.out.println("TESTING START");
 		for(int i=0; i<bm.displayConfirm().size(); i++) {
 			System.out.print(bm.displayConfirm().get(i).getItem() + " " + bm.displayConfirm().get(i).getPrice());
 			System.out.println();
-		}
+		} */
 	}
-
+/*
 	public Vector<Item> getCombinationList(int id) {
-
-		return bm.return_item_optimized_list(id);
+		return db_list;
+		//return bm.return_item_optimized_list(id);
 	}
-
+*/
 }
