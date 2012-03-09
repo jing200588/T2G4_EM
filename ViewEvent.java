@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Listener;
 import com.ibm.icu.text.Collator;
 
 
-public class ViewEventGUI3 extends Composite {
+public class ViewEvent extends Composite {
 	private static Table BudgetResult;
 	private static boolean budgetflag;
 	private static Eventitem cevent;
@@ -39,7 +39,7 @@ public class ViewEventGUI3 extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEventGUI3(Composite parent, int style, Eventitem curevent) {
+	public ViewEvent(Composite parent, int style, Eventitem curevent) {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 

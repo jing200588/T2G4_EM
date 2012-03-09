@@ -49,7 +49,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	private static Display display = new Display();
     private static Color red = display.getSystemColor(SWT.COLOR_RED);
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
-    private static ViewEventGUI3 view;
+    private static ViewEvent view;
     private static HomepageGUI hp;
     private static EMDB db;
     
@@ -111,8 +111,8 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		else if (table.getItemCount() == eventlist.size()) {	//updates vector list only
 			TableItem tb = table.getItem(table.getSelectionIndex());
 			tb.setText(0, eventlist.get(table.getSelectionIndex()).getName());
-			//ViewEventGUI3.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
-			//view = new ViewEventGUI3(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+			//ViewEvent.UpdateEvent(eventlist.get(table.getSelectionIndex()));	//updates the event item passed in.
+			//view = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 			layout.topControl = view;
 			c2.layout(true);
 			return;
@@ -159,12 +159,12 @@ public class EmanagerGUIjface extends ApplicationWindow {
 		
 	public static void ReturnView(int i) {
 		if (i == 0)	//budget
-			//ViewEventGUI3.RefreshBudget();
+			//ViewEvent.RefreshBudget();
 		if (i == 1) {	//particulars
 			UpdateTable();
-			//ViewEventGUI3.RefreshParticulars();
+			//ViewEvent.RefreshParticulars();
 		}
-		ViewEventGUI3 newview = new ViewEventGUI3(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		System.out.println("test");
 		layout.topControl = newview;
 		//layout.topControl = view;
@@ -256,7 +256,7 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	//			if (view != null)
 		//			view.UpdateEvent(getEvent(itemname));
 			//	else
-					view = new ViewEventGUI3(c2, SWT.NONE, getEvent(itemname));
+					view = new ViewEvent(c2, SWT.NONE, getEvent(itemname));
 		      //  view.setBounds(c2.getBounds());
 		   //     formToolkit.adapt(view);
 		//		formToolkit.paintBordersFor(view);

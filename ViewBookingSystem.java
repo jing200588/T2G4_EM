@@ -196,6 +196,7 @@ public class ViewBookingSystem extends Composite {
 		SearchCriteriaButton.setText("Search venues with specified criteria");
 		
 		Button AddOutsideVenueButton = new Button(FunctionOptionCompo, SWT.RADIO);
+		AddOutsideVenueButton.setEnabled(false);
 		AddOutsideVenueButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
