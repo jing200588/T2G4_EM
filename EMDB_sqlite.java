@@ -29,6 +29,10 @@ import java.util.Vector;
  * Subactions will be appended after that.
  * 
  * 
+ * 
+ * 
+ * 
+ * 
  */
 
 
@@ -77,7 +81,7 @@ public class EMDB_sqlite{
 			this.set_default_db();
 			
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -1083,23 +1087,17 @@ public class EMDB_sqlite{
 		
 		 try {
 			 
-			
-			query = this.select_all(
-							this.TABLE_venue_bookings, 
-							"event_id="+ id , 
-							0);	
-		
+			this.PREPSTATEM = this.DBCON.prepareStatement("SELECT * FROM "+this.TABLE_venue_bookings + " WHERE event_id=?;", Statement.RETURN_GENERATED_KEYS);
+			this.PREPSTATEM.setInt(1, id);	
+			 
+			ResultSet result = this.PREPSTATEM.executeQuery();
+			System.out.println(result);
 
-			ResultSet result = this.DBQUERY.executeQuery(query);
-		
-			
 			while (result.next()) {
-			
 				TimeSlot timing = new TimeSlot(new DateHour(result.getString("time_start")),new DateHour(result.getString("time_end")));
 				Venue venue = this.get_venue(result.getInt("venue_id"));
 				BookedVenueInfo info = new BookedVenueInfo(venue, timing);
 				list.add(info);
-				
 			}
 	
 			result.close();
@@ -1450,7 +1448,6 @@ public class EMDB_sqlite{
 	 */
 	
 	private String select_all(String name, String where, int limit){
-		
 		
 		String query = "SELECT * FROM " + name; 
 		
