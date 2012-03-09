@@ -11,9 +11,6 @@ import java.io.File;
 
 public class EMDB extends EMDB_sqlite{
 	
-	
-	
-	
 
 	
 	public void system_check(){

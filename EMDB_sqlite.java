@@ -177,6 +177,7 @@ public class EMDB_sqlite{
 					"'event_id' INTEGER PRIMARY KEY AUTOINCREMENT,"+
 					"'name' TEXT NOT NULL," +
 					"'description' TEXT," +
+					"'budget' DOUBLE," +
 					"'startdate' TEXT," +
 					"'enddate' TEXT," +
 					"'starttime' TEXT," +
@@ -444,7 +445,7 @@ public class EMDB_sqlite{
 	public void add_prepare(String type){
 		try {
 				if (type.compareTo("event") == 0)		
-					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_events + " (name, description, startdate, enddate, starttime, endtime) VALUES (?, ?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_events + " (name, description, startdate, enddate, starttime, endtime, budget) VALUES (?, ?, ?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 				
 				else if (type.compareTo("venue") == 0)
 					this.PREPSTATEM = this.DBCON.prepareStatement("INSERT INTO " + this.TABLE_venue + " (name, address, description, capacity, cost) VALUES (?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
@@ -476,13 +477,14 @@ public class EMDB_sqlite{
 	
 	
 	// There is another method for batch
-	public int add_event(String name, String description, String startdate, String enddate, String starttime, String endtime){
+	public int add_event(String name, String description, double budget, String startdate, String enddate, String starttime, String endtime){
 		
 		
 		if (this.EMDB_DEBUGGING){
 			this.out("INSERTING EVENT:" + 
 					" \n + NAME: " + name +
 					" \n + DESCRIPTION: " + description +
+					" \n + BUDGET: " + budget +
 					" \n + START DATE: " + startdate +
 					" \n + END DATE: " + enddate +
 					" \n + START TIME: " + starttime +
@@ -503,6 +505,7 @@ public class EMDB_sqlite{
 			this.PREPSTATEM.setString(4, enddate);
 			this.PREPSTATEM.setString(5, starttime);
 			this.PREPSTATEM.setString(6, endtime);
+			this.PREPSTATEM.setDouble(7, budget);
 			this.PREPSTATEM.executeUpdate();
 			
 			result = this.PREPSTATEM.getGeneratedKeys();
@@ -669,7 +672,7 @@ public class EMDB_sqlite{
 
 	
 	//Overloaded Function
-	public void add_event(String name, String description, String startdate, String enddate, String starttime, String endtime, boolean batch){
+	public void add_event(String name, String description, double budget, String startdate, String enddate, String starttime, String endtime, boolean batch){
 		
 	   	try {
 			this.PREPSTATEM.setString(1, name);
@@ -678,6 +681,7 @@ public class EMDB_sqlite{
 			this.PREPSTATEM.setString(4, enddate);
 			this.PREPSTATEM.setString(5, starttime);
 			this.PREPSTATEM.setString(6, endtime);
+			this.PREPSTATEM.setDouble(7, budget);
 			this.PREPSTATEM.addBatch();
 			
 			
@@ -779,7 +783,7 @@ public class EMDB_sqlite{
 		
 		//create empty event container here
 		Eventitem item = null;
-		
+		Vector<Item> list = new Vector<Item>();
 		try {
 			 
 			String query = this.select_all(
@@ -789,15 +793,20 @@ public class EMDB_sqlite{
 			
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			while (result.next()) {
+			
+				
 				item = new Eventitem(
 						result.getString("name"),
 						result.getString("startdate"),
 						result.getString("enddate"),
 						result.getString("starttime"),
-						result.getString("endtime")
+						result.getString("endtime"),
+						list,
+						result.getDouble("budget")
 						);
 				item.setDescription(result.getString("description"));
 				item.setID(result.getInt("event_id"));
+				item.setitem_list(this.get_budget_list(result.getInt("event_id"), true));
 			}
 			
 			return item;
@@ -821,6 +830,8 @@ public class EMDB_sqlite{
 		
 		
 		Vector<Eventitem> list = new Vector<Eventitem>();
+		Vector<Item> budget = new Vector<Item>();
+		
 		try {
 			String query = this.select_all(
 					this.TABLE_events, 
@@ -830,13 +841,18 @@ public class EMDB_sqlite{
 			ResultSet result;
 			result = this.DBQUERY.executeQuery(query);
 
+			
+			budget = new Vector<Item>();
+			
 			while (result.next()) {
 				Eventitem item = new Eventitem(
 						result.getString("name"),
 						result.getString("startdate"),
 						result.getString("enddate"),
 						result.getString("starttime"),
-						result.getString("endtime")
+						result.getString("endtime"),
+						budget,
+						result.getDouble("budget")
 						);
 				item.setDescription(result.getString("description"));
 				item.setID(result.getInt("event_id"));
@@ -1268,7 +1284,7 @@ public class EMDB_sqlite{
 	 * 
 	 * ***********************************
 	 */
-	public int update_event(int id, String name, String description, String startdate, String enddate, String starttime, String endtime){
+	public int update_event(int id, String name, String description, double budget, String startdate, String enddate, String starttime, String endtime){
 		
 		
 		if (this.EMDB_DEBUGGING){
@@ -1276,6 +1292,7 @@ public class EMDB_sqlite{
 					" #"+ id +
 					" \n + NAME: " + name +
 					" \n + DESCRIPTION: " + description +
+					" \n + BUDGET: " + budget +
 					" \n + START DATE: " + startdate +
 					" \n + END DATE: " + enddate +
 					" \n + START TIME: " + starttime +
@@ -1293,6 +1310,7 @@ public class EMDB_sqlite{
 			query = "UPDATE " + this.TABLE_events +
 					" SET name='" + name + "'" 
 					+ ", description='" + description + "'"
+					+ ", budget='" + budget + "'"
 					+ ", startdate='" + startdate + "'"
 					+ ", enddate='" + enddate + "'"
 					+ ", starttime='" + starttime + "'"

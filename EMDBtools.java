@@ -25,10 +25,12 @@ public class EMDBtools {
 		out("   Database Tools	");
 		out("\n*****************************************\n");	
 	
-		
+		/*
 		out("Enter Database Name: ", true);
 		line = sc.next();
 		db.set_name(line);
+		*/
+		db.set_name(EMSettings.dbname());
 		db.connect();
 		
 		
@@ -121,11 +123,11 @@ public class EMDBtools {
 					db.add_venue("FASS1", "", "", 8, 0);
 					db.add_venue("lowercase", "", "", 8, 0);
 					
-					eid = db.add_event("NUS Hackers Friday Hacks", "", "5-2-2012", "7-2-2012", "10:2", "18:2");
-					db.add_event("NUS Symposium", "", "7-2-2012", "8-2-2012", "10:2", "18:2");
-					db.add_event("Rockfest", "", "8-2-2012", "9-2-2012", "10:2", "18:2");
-					db.add_event("Matriculation Fair", "", "10-2-2012", "12-2-2012", "11:2", "16:2");
-					db.add_event("Coding Marathon", "", "13-2-2012", "13-2-2012", "10:2", "18:2");
+					eid = db.add_event("NUS Hackers Friday Hacks", "", 0, "5-2-2012", "7-2-2012", "10:2", "18:2");
+					db.add_event("NUS Symposium", "", 0, "7-2-2012", "8-2-2012", "10:2", "18:2");
+					db.add_event("Rockfest", "", 0, "8-2-2012", "9-2-2012", "10:2", "18:2");
+					db.add_event("Matriculation Fair", "", 0, "10-2-2012", "12-2-2012", "11:2", "16:2");
+					db.add_event("Coding Marathon", "", 0, "13-2-2012", "13-2-2012", "10:2", "18:2");
 					
 					db.add_booking(eid, vid, "5/2/2012/10", "5/2/2012/12");
 					db.add_booking(eid, vid, "5/2/2012/14", "5/2/2012/16");
