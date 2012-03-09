@@ -455,14 +455,35 @@ public class ViewEventGUI3 extends Composite {
 		}
 
 
-		BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL);		
+		BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
 		BudgetResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		BudgetResult.setHeaderVisible(true);
-		BudgetResult.setBounds(25, 25, 645, 200);
+//		BudgetResult.setBounds(25, 25, 645, 200);
 
-		TableColumn col0 = new TableColumn(BudgetResult, SWT.NULL);
+		TableColumn col0 = new TableColumn(BudgetResult, SWT.LEFT);
+		TableColumn col1 = new TableColumn(BudgetResult, SWT.LEFT);
+		TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
+		TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
+		TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
+
 		col0.setText("No.");
+		col1.setText("Item Name");
+		col2.setText("Price\t\t\t\t\t");
+		col3.setText("Satisfaction");
+		col4.setText("Type\t\t\t\t\t\t\t\t\t\t\t");
+		/*
+		col0.setWidth(10);
+		col1.setWidth(400);
+		col2.setWidth(10);
+		col3.setWidth(10);
+		col4.setWidth(10);
+		*/
 		col0.setResizable(false);
+		col1.setResizable(false);
+		col2.setResizable(false);
+		col3.setResizable(false);
+		col4.setResizable(false);
+		
 		col0.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort name
@@ -485,9 +506,8 @@ public class ViewEventGUI3 extends Composite {
 			}
 			});
 		
-		TableColumn col1 = new TableColumn(BudgetResult, SWT.NULL);
-		col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
-		col1.setResizable(false);
+	//	col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+		
 		col1.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort name
@@ -509,10 +529,7 @@ public class ViewEventGUI3 extends Composite {
 				}
 			}
 			});
-		
-		TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
-		col2.setText("Price\t\t\t\t\t");
-		col2.setResizable(false);
+	
 		col2.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort price
@@ -534,9 +551,6 @@ public class ViewEventGUI3 extends Composite {
 			}
 			});
 		
-		TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
-		col3.setText("Satisfaction");
-		col3.setResizable(false);
 		col3.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort satisfaction
@@ -558,9 +572,6 @@ public class ViewEventGUI3 extends Composite {
 			}
 			});
 
-		TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
-		col4.setText("Type\t\t\t\t\t\t\t\t\t\t\t");
-		col4.setResizable(false);
 		col4.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort name
@@ -602,6 +613,22 @@ public class ViewEventGUI3 extends Composite {
 			BudgetResult.getColumn(loopIndex).pack();
 		}							
 
+	/*	col0.setWidth(60);
+		col1.setWidth(300);
+		col2.setWidth(50);
+		col3.setWidth(50);
+		col4.setWidth(50);*/
+		col0.pack();
+		col1.pack();
+		col2.pack();
+		col3.pack();
+		col4.pack();
+		System.out.println(col0.getWidth());
+		System.out.println(col1.getWidth());
+		System.out.println(col2.getWidth());
+		System.out.println(col3.getWidth());
+		System.out.println(col4.getWidth());
+		
 		budgetflag = true;
 		return BudgetResult;
 	}
