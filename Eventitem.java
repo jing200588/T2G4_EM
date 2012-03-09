@@ -5,7 +5,7 @@ public class Eventitem {
 	private int _id;
 	private String _name;
 	private String _description;
-	private Vector<Item> _item_list;
+	private Vector<Item> _item_list = new Vector<Item>();
 	private double _budget;
 	//private Vector<BookedVenueInfo> _BVI_list;
 	private Date _startdate;
