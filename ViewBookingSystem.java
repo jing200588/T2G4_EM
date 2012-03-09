@@ -172,6 +172,7 @@ public class ViewBookingSystem extends Composite {
 		lblChooseFunctionality.setText("Choose functionality:");
 		
 		Button SearchNameButton = new Button(FunctionOptionCompo, SWT.RADIO);
+		SearchNameButton.setSelection(true);
 		SearchNameButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -230,7 +231,7 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(lblEnterTheName, true, true);
 		lblEnterTheName.setText("Enter the name of the venue:");
 		
-		SearchNameErrorBoard = new Text(SearchNameCompo, SWT.BORDER);
+		SearchNameErrorBoard = new Text(SearchNameCompo, SWT.WRAP);
 		SearchNameErrorBoard.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 		SearchNameErrorBoard.setEditable(false);
 		SearchNameErrorBoard.setBounds(70, 86, 409, 80);
@@ -842,7 +843,7 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(TimeConfirmButton, true, true);
 		TimeConfirmButton.setText("Confirm");
 		
-		ChoiceErrorBoard = new Text(SearchCriteriaCompo, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
+		ChoiceErrorBoard = new Text(SearchCriteriaCompo, SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
 		ChoiceErrorBoard.setBounds(349, 214, 321, 66);
 		ChoiceErrorBoard.setVisible(false);
 		ChoiceErrorBoard.setEditable(false);
@@ -1292,7 +1293,7 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(BookVenueButton, true, true);
 		BookVenueButton.setText("Book Venue");
 		
-		ErrorBoardViewBook = new Text(ViewDetails, SWT.BORDER | SWT.MULTI);
+		ErrorBoardViewBook = new Text(ViewDetails, SWT.MULTI);
 		ErrorBoardViewBook.setBounds(20, 86, 381, 51);
 		toolkit.adapt(ErrorBoardViewBook, true, true);
 		
@@ -1308,7 +1309,7 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(btnNewButton, true, true);
 		btnNewButton.setText("Back ");
 		
-		NoResultTextBox = new Text(SearchResult, SWT.BORDER);
+		NoResultTextBox = new Text(SearchResult, SWT.NONE);
 		NoResultTextBox.setEditable(false);
 		NoResultTextBox.setBounds(110, 10, 311, 21);
 		toolkit.adapt(NoResultTextBox, true, true);
@@ -1428,25 +1429,25 @@ public class ViewBookingSystem extends Composite {
 						}
 					}
 					
-					
+					System.out.println("HI");
 					// Do the booking (The chosen time slot is legal)
 					ControllerBookingSystem.bookVenue(event, searchResultList,
 							chosenVenueID, timeSlotChoiceInput);
 					
 					// Return to the main GUI
 					// Dummy input
-					ViewMain.ReturnView(10);
+					ViewMain.ReturnView(1);
 				}
 				catch(NumberFormatException exception)
 				{
 					ErrorBoardBooking.setText("Hour should be an integer!");
 					ErrorBoardBooking.setVisible(true);
 				}
-				catch(NullPointerException exception)
-				{
-					ErrorBoardBooking.setText(exception.toString());
-					ErrorBoardBooking.setVisible(true);
-				}
+//				catch(NullPointerException exception)
+//				{
+//					ErrorBoardBooking.setText(exception.toString());
+//					ErrorBoardBooking.setVisible(true);
+	//			}
 				catch(Exception exception)
 				{
 					ErrorBoardBooking.setText(exception.getMessage());
@@ -1458,7 +1459,7 @@ public class ViewBookingSystem extends Composite {
 		btnBook.setBounds(161, 115, 75, 25);
 		toolkit.adapt(btnBook, true, true);
 		
-		ErrorBoardBooking = new Text(BookCompo, SWT.BORDER);
+		ErrorBoardBooking = new Text(BookCompo, SWT.WRAP);
 		ErrorBoardBooking.setEditable(false);
 		ErrorBoardBooking.setBounds(10, 146, 226, 71);
 		toolkit.adapt(ErrorBoardBooking, true, true);

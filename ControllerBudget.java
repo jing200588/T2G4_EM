@@ -4,6 +4,8 @@ import java.util.*;
 import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
 public class ControllerBudget{
+	
+	/* @param ControllerBudget()*/
 
 	//private Vector<Item> list = new Vector<Item>();
 	private int number;
@@ -26,13 +28,19 @@ public class ControllerBudget{
 
 	}
 
-
+	/**
+	 *
+	 * @param hastype TEST
+	 * @param hassatisfaction
+	 * @return TEST
+	 */
 	public String findOptimalShopList(int hastype, int hassatisfaction) {
 		soln = new Solution();
 		recursive_fnc_budget = ((double) temp_budget)/100;	
 		return analysis(hastype, hassatisfaction);
 	}
-
+	
+	
 	public ControllerBudget(String input, int budget, int type_c, int satisfaction_c, Eventitem ei) throws Exception {
 
 		if(input.length() == 0) throw new IOException("***Input list must not be empty.***");
@@ -426,36 +434,43 @@ public class ControllerBudget{
 
 	public void sendDBList(int select) {
 		db_list = new Vector<Item>();
+		int budgetLeftToDisplay = (int) (budget*100);
 
 		if(differentResult == 1) { //Budget is enough to buy all item (Regardless is compulsory or not). *Take whole item list*
 			for(int i=0; i<item_list.size(); i++) {
+				budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice();
 				db_list.add(item_list.get(i));
 				System.out.println(" - " + item_list.get(i).getItem());
 			}
 		}
 		else if (differentResult == 2) { //Budget is only enough to buy compulsory item. Take compulsory list*
 			for(int i=0; i<compulsory_list.size(); i++) {
+				budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice();
 				db_list.add(compulsory_list.get(i));
 			}
 		}
 		else if (differentResult == 3) { //There is solution set
 			for(int i=0; i<compulsory_list.size(); i++) {
+				budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice();
 				db_list.add(compulsory_list.get(i));
 			}
 
 			if(hasSolnSet == true) {
 				BitSet bitmask = soln.getSolnSet().get(select);
 				for(int i=0; i<number; i++) {
-					if(bitmask.get(i))
+					if(bitmask.get(i)) {
 						db_list.add(compute_list.get(i));
+						budgetLeftToDisplay = budgetLeftToDisplay - compute_list.get(i).getPrice();
+					}
+						
 				}
 			}
 		}
 
 		bm.recevied_combination_list(event_object.getID(), db_list);
-		bm.update_budget(event_object.getID(), ((double)budget)/100);
+		bm.update_budget(event_object.getID(), ((double)budgetLeftToDisplay)/100);
 		event_object.setitem_list(db_list);
-		event_object.setBudget(((double)budget)/100);
+		event_object.setBudget(((double)budgetLeftToDisplay)/100);
 		
 /*
 		System.out.println("TESTING START");
