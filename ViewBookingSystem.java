@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.Spinner;
 import java.lang.NumberFormatException;
 
 
-public class VenueView extends Composite {
+public class ViewBookingSystem extends Composite {
 	private final StackLayout stackLayout = new StackLayout();
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 	private final StackLayout sl_ResultPageCompo = new StackLayout();
@@ -116,7 +116,7 @@ public class VenueView extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public VenueView(Composite parent, int style, int id) {
+	public ViewBookingSystem(Composite parent, int style, int id) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -257,7 +257,7 @@ public class VenueView extends Composite {
 					resetResultPageView();
 					
 					// Ask the logic component to do the searching
-					searchResultList = BookingSystem.findVenueByName(venueName);
+					searchResultList = ControllerBookingSystem.findVenueByName(venueName);
 					
 					// If user chooses this option, he / she has not decided the time slot
 					chooseTimeSlotYet = false;
@@ -669,8 +669,8 @@ public class VenueView extends Composite {
 				
 				// Ask the logic component to do the searching
 				// Determine the criteria chosen
-				BookingSystem.SearchCriteria type = determineCriteriaChoice();
-				searchResultList = BookingSystem.findVenueByCriteria(costChoiceInput, 
+				ControllerBookingSystem.SearchCriteria type = determineCriteriaChoice();
+				searchResultList = ControllerBookingSystem.findVenueByCriteria(costChoiceInput, 
 						capacityChoiceInput, timeSlotChoiceInput, type);
 				
 				chooseTimeSlotYet = flagTimeSlotChoice;
@@ -1040,7 +1040,7 @@ public class VenueView extends Composite {
 					Venue outside = new Venue(address, address, description, capacity, cost);
 					
 					// ADD DUMMY VALUE 0. NEED TO CHANGE WHEN YOU HAVE EVENT ID!
-					BookingSystem.chooseOutsideVenue(0, outside, wanted);
+					ControllerBookingSystem.chooseOutsideVenue(0, outside, wanted);
 					// DO WE NEED TO INFORM THAT THE ADDING IS SUCCESSFUL?
 				}
 				catch(NumberFormatException exception)
@@ -1195,7 +1195,7 @@ public class VenueView extends Composite {
 					if(venueID < 0)
 						throw new Exception("Venue ID must be nonnegative!");
 					
-					String detail = BookingSystem.getVenueDetail(searchResultList, venueID);
+					String detail = ControllerBookingSystem.getVenueDetail(searchResultList, venueID);
 					VenueDetailTextbox.setText(detail);
 					
 					sl_ViewBookCompo.topControl = ViewCompo;
@@ -1234,7 +1234,7 @@ public class VenueView extends Composite {
 					int venueID = Integer.parseInt(idString);
 					if(venueID < 0)
 						throw new Exception("Venue ID must be nonnegative!");
-					if(BookingSystem.isInTheList(searchResultList, venueID) == false)
+					if(ControllerBookingSystem.isInTheList(searchResultList, venueID) == false)
 						throw new Exception("There is no venue with such an ID in the table above!");
 					
 					// Venue ID is legal
@@ -1419,7 +1419,7 @@ public class VenueView extends Composite {
 						
 						timeSlotChoiceInput = new TimeSlot(dateHourFrom, dateHourTo);
 				
-						if(BookingSystem.isAvailable(searchResultList, chosenVenueID, 
+						if(ControllerBookingSystem.isAvailable(searchResultList, chosenVenueID, 
 								timeSlotChoiceInput) == false)
 						{
 							throw new Exception("The venue is not available at your time slot. Please choose"
@@ -1429,7 +1429,7 @@ public class VenueView extends Composite {
 					
 					
 					// Do the booking (The chosen time slot is legal)
-					BookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
+					ControllerBookingSystem.bookVenue(eventID, chosenVenueID, timeSlotChoiceInput);
 					
 					// Testing
 					ErrorBoardBooking.setText("The venue is successfully booked!");
@@ -1527,7 +1527,7 @@ public class VenueView extends Composite {
 	 * 
 	 * @return the search criteria that a user chooses. 
 	 */
-	private BookingSystem.SearchCriteria determineCriteriaChoice()
+	private ControllerBookingSystem.SearchCriteria determineCriteriaChoice()
 	{
 		if(flagCapacityChoice == true)
 		{
@@ -1535,21 +1535,21 @@ public class VenueView extends Composite {
 			{
 				if(flagTimeSlotChoice == true)
 				{
-					return BookingSystem.SearchCriteria.ALL_THREE;
+					return ControllerBookingSystem.SearchCriteria.ALL_THREE;
 				}
 				
 				// Now flagTimeSlotChoice == false
-				return BookingSystem.SearchCriteria.COST_CAPACITY;
+				return ControllerBookingSystem.SearchCriteria.COST_CAPACITY;
 			}
 			
 			// Reach this point. That means flagCostChoice == false
 			if(flagTimeSlotChoice == true)
 			{
-				return BookingSystem.SearchCriteria.CAPACITY_TIME;
+				return ControllerBookingSystem.SearchCriteria.CAPACITY_TIME;
 			}
 			
 			// Now flagTimeSlotChoice == false
-			return BookingSystem.SearchCriteria.CAPACITY;
+			return ControllerBookingSystem.SearchCriteria.CAPACITY;
 			
 		}
 		
@@ -1558,16 +1558,16 @@ public class VenueView extends Composite {
 		{
 			if(flagTimeSlotChoice == true)
 			{
-				return BookingSystem.SearchCriteria.COST_TIME;
+				return ControllerBookingSystem.SearchCriteria.COST_TIME;
 			}
 			
 			// Now flagTimeSlotChoice == false
-			return BookingSystem.SearchCriteria.COST;
+			return ControllerBookingSystem.SearchCriteria.COST;
 		}
 		
 		// Reach this point. That means flagCostChoice == false = flagCostChoice
 		// Thus flagTimeSlotChoice == true (since at least 1 criterion made)
-		return BookingSystem.SearchCriteria.TIME;
+		return ControllerBookingSystem.SearchCriteria.TIME;
 	}
 	
 	/**
@@ -1592,7 +1592,7 @@ public class VenueView extends Composite {
 		shell.setLayout(new FillLayout());
 		shell.setText("Booking System");
 		shell.setSize(629, 606);
-		VenueView calc = new VenueView(shell, SWT.NONE, 0);
+		ViewBookingSystem calc = new ViewBookingSystem(shell, SWT.NONE, 0);
 		calc.pack();
 
 		shell.pack();

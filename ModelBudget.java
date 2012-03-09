@@ -2,7 +2,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 
-public class BudgetModel {
+public class ModelBudget {
 	private int event_id;
 	private Vector<Item> item_list;
 	private Vector<Item> confirm_list;
@@ -10,7 +10,7 @@ public class BudgetModel {
 	EMDB db;
 
 	//Construct
-	public BudgetModel() {
+	public ModelBudget() {
 		db = new EMDB();
 		db.set_name(EMSettings.dbname());
 	}

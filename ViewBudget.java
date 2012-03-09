@@ -29,11 +29,11 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import com.ibm.icu.text.Collator;
 
-public class BudgetView extends Composite {
+public class ViewBudget extends Composite {
 	/*My declaration start here.*/
 	private final StackLayout stackLayout = new StackLayout();
 	private final String[] titles = { "No.", "Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", "Price\t\t\t\t", "Satisfaction", "Type\t\t\t\t\t\t\t\t\t\t"};
-	private BudgetController budgetPersonalAssistant;
+	private ControllerBudget budgetPersonalAssistant;
 	private int event_id;
 	private Vector<Item> item_list;
 	private Vector<Integer> selected_compulsory;
@@ -78,7 +78,7 @@ public class BudgetView extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public BudgetView(Composite parent, int style, int id) {
+	public ViewBudget(Composite parent, int style, int id) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -328,7 +328,7 @@ public class BudgetView extends Composite {
 
 				try {	
 					txt_error_S1.setVisible(false);
-					budgetPersonalAssistant  = new BudgetController(txt_input_list.getText(), budget, type_choice, satisfaction_choice, event_id);
+					budgetPersonalAssistant  = new ControllerBudget(txt_input_list.getText(), budget, type_choice, satisfaction_choice, event_id);
 					item_list = budgetPersonalAssistant.getItemList(event_id);
 					lblError_S2.setVisible(false);
 					stackLayout.topControl = Step2;

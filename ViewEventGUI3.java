@@ -446,7 +446,7 @@ public class ViewEventGUI3 extends Composite {
 	}
 
 	public static Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
-		BudgetController bc = new BudgetController();
+		ControllerBudget bc = new ControllerBudget();
 		Vector<Item> item_list = bc.getCombinationList(curevent.getID());
 
 		if (item_list.isEmpty()) {

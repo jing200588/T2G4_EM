@@ -3,7 +3,7 @@ import java.util.*;
 
 import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
-public class BudgetController{
+public class ControllerBudget{
 
 	//private Vector<Item> list = new Vector<Item>();
 	private int number;
@@ -20,9 +20,9 @@ public class BudgetController{
 	private int totalCombination;
 	private Vector<Item> db_list;
 
-	private BudgetModel bm = new BudgetModel();
+	private ModelBudget bm = new ModelBudget();
 
-	public BudgetController() {
+	public ControllerBudget() {
 
 	}
 
@@ -33,7 +33,7 @@ public class BudgetController{
 		return analysis(hastype, hassatisfaction);
 	}
 
-	public BudgetController(String input, int budget, int type_c, int satisfaction_c, int id) throws Exception {
+	public ControllerBudget(String input, int budget, int type_c, int satisfaction_c, int id) throws Exception {
 
 		if(input.length() == 0) throw new IOException("***Input list must not be empty.***");
 		item_list = new Vector<Item>();

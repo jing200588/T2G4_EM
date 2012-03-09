@@ -8,7 +8,7 @@
  */
 import java.util.Vector;
 
-public class BookingSystem {
+public class ControllerBookingSystem {
 	
 	public static enum SearchCriteria{COST, CAPACITY, TIME, COST_TIME,
 						CAPACITY_TIME, COST_CAPACITY, ALL_THREE}

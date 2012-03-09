@@ -138,13 +138,13 @@ public class EmanagerGUIjface extends ApplicationWindow {
 	}
 	
 	public static void CalcBudget () {		
-		BudgetView bv = new BudgetView(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
+		ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
 		layout.topControl = bv;
 		c2.layout(true);
 	}
 	
 	public static void BookVenue() {
-		VenueView bookgui = new VenueView(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
+		ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()).getID());
 		layout.topControl = bookgui;
 		c2.layout(true);
 	}
