@@ -301,7 +301,19 @@ public class EMDB_sqlite{
 		}	
 	}
 	
-	
+
+	private int truncate_table(String name){
+		
+		try {
+			this.DBQUERY.executeUpdate("TRUNCATE TABLE IF EXISTS " + name + ";");
+			
+			return 1;
+			
+		} catch (SQLException e) {
+			
+			return 0;
+		}	
+	}
 	
 	
 	
@@ -324,7 +336,14 @@ public class EMDB_sqlite{
 	
 	
 	
-	
+	public void reset_clear(){
+		this.truncate_table(TABLE_venue);
+		this.truncate_table(TABLE_events);
+		this.truncate_table(TABLE_venue_bookings);
+		this.truncate_table(TABLE_budget);
+		this.truncate_table(TABLE_budget_optimized);
+		
+	}
 	
 
 
@@ -733,7 +752,6 @@ public class EMDB_sqlite{
 		
 		}
 	}
-	
 	
 	
 	
