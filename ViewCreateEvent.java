@@ -129,6 +129,7 @@ public class ViewCreateEvent extends Composite {
 		btnBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				ViewMain.Homepage();
 			}
 		});
 		FormData fd_btnBack = new FormData();

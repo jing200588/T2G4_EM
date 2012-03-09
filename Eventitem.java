@@ -16,6 +16,20 @@ public class Eventitem {
 	//private eventflow??
 	//private advertise
 	
+	/**
+	 * Description: Constructs the Event item object with the respective parameters 
+	 * @param name
+	 * @param sy
+	 * @param sm
+	 * @param sd
+	 * @param ey
+	 * @param em
+	 * @param ed
+	 * @param shour
+	 * @param smin
+	 * @param ehour
+	 * @param emin
+	 */
 	public Eventitem (String name, int sy, int sm, int sd, int ey, int em, int ed, int shour, int smin, int ehour, int emin) {
 		_name = name;
 		_startdate = new Date (sy, sm, sd);
@@ -26,7 +40,17 @@ public class Eventitem {
 		_BVI_list = new Vector<BookedVenueInfo>();
 	}
 	
-	
+	/**
+	 * Description: Constructs the Event item object with the respective parameters
+	 * @param name
+	 * @param startdate
+	 * @param enddate
+	 * @param starttime
+	 * @param endtime
+	 * @param item_list
+	 * @param budget
+	 * @param BVI_list
+	 */
 	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget, Vector<BookedVenueInfo> BVI_list){
 		_name = name;
 		_startdate = new Date(startdate);
@@ -38,6 +62,14 @@ public class Eventitem {
 		_BVI_list = BVI_list;
 	}
 	
+	/**
+	 * Description: Constructs the Event item object with the respective parameters
+	 * @param name
+	 * @param startdate
+	 * @param enddate
+	 * @param starttime
+	 * @param endtime
+	 */
 	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime) {
 		_name = name;
 		_startdate = new Date(startdate);
