@@ -23,6 +23,7 @@ public class Eventitem {
 		_starttime = new Time (shour, smin);
 		_endtime = new Time (ehour, emin);
 		_description = "";
+		//_BVI_list = new Vector<BookedVenueInfo>();
 	}
 	
 	
@@ -37,6 +38,12 @@ public class Eventitem {
 		//_BVI_list = BVI_list;
 	}
 	
+	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime) {
+		_name = name;
+		_startdate = new Date(startdate);
+		_enddate = new Date(enddate);
+		_starttime = new Time(starttime);
+	}
 	
 	public void setDescription (String descript) {
 		_description = descript;
@@ -114,13 +121,13 @@ public class Eventitem {
 	}
 
 /*
-	public Vector<Venue> getBookedVenueInfo_list() {
+	public Vector<Venue> getBVI_list() {
 		return _BVI_list;
 	}
 
 
-	public void setBVI_list(Vector<BookedVenueInfo> BVI_list) {
-		_BVI_list = BVI_list;
+	public void addBVI(BookedVenueInfo BVI) {
+		_BVI_list.add(BVI);
 	}
 	
 */
