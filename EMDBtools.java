@@ -115,7 +115,11 @@ public class EMDBtools {
 				case 3: // Populate Test Tables (Event, Bookings);
 		
 					int eid, vid;
-					vid = db.add_venue("TEST VENUE", "", "", 8, 0);
+					vid = db.add_venue("COM1", "", "", 8, 0);
+					db.add_venue("COM2", "", "", 8, 0);
+					db.add_venue("BIZ1", "", "", 8, 0);
+					db.add_venue("FASS1", "", "", 8, 0);
+					db.add_venue("lowercase", "", "", 8, 0);
 					
 					eid = db.add_event("NUS Hackers Friday Hacks", "", "5-2-2012", "7-2-2012", "10:2", "18:2");
 					db.add_event("NUS Symposium", "", "7-2-2012", "8-2-2012", "10:2", "18:2");
