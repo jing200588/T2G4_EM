@@ -72,10 +72,10 @@ public class EMDBtools {
 					
 					if(db.testFile()){
 						db.add_prepare("venue");
-						db.add_venue("DR1 (COM1-B-14B)", "", "", 8, 0, true);
-						db.add_venue("DR2 (COM1-B-14A)", "", "", 8, 0, true);
-						db.add_venue("DR3 (COM1-B-07)", "", "", 8, 0, true);
-						db.add_venue("DR4 (COM1-B-06)", "", "", 8, 0, true);
+						db.add_venue("DR1 (COM1-B-14B)", "", "", 6, 0, true);
+						db.add_venue("DR2 (COM1-B-14A)", "", "", 6, 0, true);
+						db.add_venue("DR3 (COM1-B-07)", "", "", 5, 0, true);
+						db.add_venue("DR4 (COM1-B-06)", "", "", 5, 0, true);
 						db.add_venue("DR5 (ICUBE-03-18)", "", "", 8, 0, true);
 						db.add_venue("DR6 (COM2-02-12)", "", "", 8, 0, true);
 						db.add_venue("DR7 (COM2-03-14)", "", "", 8, 0, true);
@@ -83,17 +83,17 @@ public class EMDBtools {
 						db.add_venue("DR9 (COM2-04-06)", "", "", 8, 0, true);
 						db.add_venue("DR10 (COM2-02-24)", "", "", 8, 0, true);
 						db.add_venue("DR11 (COM2-02-23)", "", "", 8, 0, true);
-						db.add_venue("Executive Classroom (COM2-04-02)", "", "", 8, 0, true);
-						db.add_venue("MR1 (COM1-03-19)", "", "", 8, 0, true);
-						db.add_venue("MR2 (COM1-03-28)", "", "", 8, 0, true);
-						db.add_venue("MR3 (COM2-02-26)", "", "", 8, 0, true);
-						db.add_venue("MR4 (COM1-01-22)", "", "", 8, 0, true);
-						db.add_venue("MR5 (COM1-01-18)", "", "", 8, 0, true);
+						db.add_venue("Executive Classroom (COM2-04-02)", "", "", 25, 0, true);
+						db.add_venue("MR1 (COM1-03-19)", "", "", 7, 0, true);
+						db.add_venue("MR2 (COM1-03-28)", "", "", 7, 0, true);
+						db.add_venue("MR3 (COM2-02-26)", "", "", 7, 0, true);
+						db.add_venue("MR4 (COM1-01-22)", "", "", 7, 0, true);
+						db.add_venue("MR5 (COM1-01-18)", "", "", 7, 0, true);
 						db.add_venue("MR6 (AS6-05-10)", "", "", 8, 0, true);
-						db.add_venue("MR7 (ICUBE-03-01)", "", "", 8, 0, true);
-						db.add_venue("MR8 (ICUBE-03-48)", "", "", 8, 0, true);
-						db.add_venue("MR9 (ICUBE-03-49)", "", "", 8, 0, true);
-						db.add_venue("Video Conferencing Room (COM1-02-13)", "", "", 8, 0, true);
+						db.add_venue("MR7 (ICUBE-03-01)", "", "", 12, 0, true);
+						db.add_venue("MR8 (ICUBE-03-48)", "", "", 12, 0, true);
+						db.add_venue("MR9 (ICUBE-03-49)", "", "", 12, 0, true);
+						db.add_venue("Video Conferencing Room (COM1-02-13)", "", "", 30, 0, true);
 						db.add_batch_commit();
 	
 						out("\n Done \n");
@@ -115,7 +115,11 @@ public class EMDBtools {
 				case 3: // Populate Test Tables (Event, Bookings);
 		
 					int eid, vid;
-					vid = db.add_venue("TEST VENUE", "", "", 8, 0);
+					vid = db.add_venue("COM1", "", "", 8, 0);
+					db.add_venue("COM2", "", "", 8, 0);
+					db.add_venue("BIZ1", "", "", 8, 0);
+					db.add_venue("FASS1", "", "", 8, 0);
+					db.add_venue("lowercase", "", "", 8, 0);
 					
 					eid = db.add_event("NUS Hackers Friday Hacks", "", "5-2-2012", "7-2-2012", "10:2", "18:2");
 					db.add_event("NUS Symposium", "", "7-2-2012", "8-2-2012", "10:2", "18:2");
