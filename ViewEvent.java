@@ -403,6 +403,7 @@ public class ViewEvent extends Composite {
 		btnDeleteEvent.setText("DELETE EVENT");
 
 		RefreshBudget();
+		RefreshVenue();
 		sc1.setContent(maincomp);
 		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
@@ -422,6 +423,7 @@ public class ViewEvent extends Composite {
 		cevent = event;
 		RefreshParticulars();
 		RefreshBudget();
+		RefreshVenue();
 		sc1.layout(true);
 		sc1.setContent(maincomp);
 		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -610,6 +612,7 @@ public class ViewEvent extends Composite {
 			});
 		 */
 		VenueResult.removeAll();
+		System.out.println("Venue_list_size = " + venue_list.size());
 		for (int loopIndex = 0; loopIndex < venue_list.size(); loopIndex++) {
 			TableItem item = new TableItem(VenueResult, SWT.NULL);
 			item.setText(0, venue_list.get(loopIndex).getName());
@@ -617,7 +620,7 @@ public class ViewEvent extends Composite {
 			item.setText(2, venue_list.get(loopIndex).getCostInDollarString());
 			item.setText(3, venue_list.get(loopIndex).getStartDateString());
 			item.setText(4, venue_list.get(loopIndex).getStartHourString());
-			item.setText(5, venue_list.get(loopIndex).getEndHourString());		
+			item.setText(5, venue_list.get(loopIndex).getEndDateString());		
 			item.setText(6, venue_list.get(loopIndex).getEndHourString());		
 		
 		}

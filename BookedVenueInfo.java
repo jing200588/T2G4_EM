@@ -111,7 +111,7 @@ public class BookedVenueInfo {
 	
 	public String getEndDateString()
 	{
-		return m_bookedTimeSlot.getEndDateHour().getDateHourRepresentation();
+		return m_bookedTimeSlot.getEndDateHour().getDateRepresentation();
 	}
 	
 	public String getStartHourString()
