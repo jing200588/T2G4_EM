@@ -159,12 +159,15 @@ public class ViewMain extends ApplicationWindow {
 	}
 		
 	public static void ReturnView(int i) {
-		if (i == 0)	//budget
+		System.out.println(i);
+		if (i == 0);//budget
 			//ViewEvent.RefreshBudget();
 		if (i == 1) {	//particulars
 			UpdateTable();
+			System.out.println("UPDATING TABLE");
 			//ViewEvent.RefreshParticulars();
 		}
+		System.out.println("RETURN VIEW");
 		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		System.out.println("test");
 		layout.topControl = newview;

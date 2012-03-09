@@ -447,11 +447,12 @@ public class ViewEvent extends Composite {
 	public static Table OptimizedTable(Eventitem curevent, Composite Budgetcomp) {
 		//ControllerBudget bc = new ControllerBudget();	
 		//Vector<Item> item_list = bc.getCombinationList(curevent.getID());
-		Vector<Item> item_list = cevent.getitem_list();
+		Vector<Item> item_list = curevent.getitem_list();
 		
 
 		if (item_list.isEmpty()) {
 			budgetflag = false;	
+			System.out.println(cevent.getName() + "! OI NOTHING IN ITEM_LIST!!!!");
 			return null;
 		}
 

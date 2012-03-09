@@ -99,6 +99,7 @@ public class ViewEventParticulars extends Composite {
 				curevent.setEndDate(EndDate.getDay() + "-" + (EndDate.getMonth()+1) + "-" + EndDate.getYear());
 				
 				ModelEvent.UpdateParticulars(curevent, eventindex);
+				//ViewMain.UpdateTable();
 				ViewMain.ReturnView(1);
 			}
 		});

@@ -1,4 +1,5 @@
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
@@ -23,7 +24,7 @@ import org.eclipse.swt.custom.CLabel;
 public class EmanagerGUI {
 
 	protected Shell shell;
-
+	
 	/**
 	 * Launch the application.
 	 * @param args
@@ -60,6 +61,7 @@ public class EmanagerGUI {
 		shell.setSize(629, 606);
 		shell.setText("SWT Application");
 		shell.setLayout(new FillLayout());
+		//Display display2 = new Display();
 		
 		Menu menu = new Menu(shell, SWT.BAR);
 		shell.setMenuBar(menu);
@@ -201,7 +203,16 @@ public class EmanagerGUI {
 		// Experiment
 		System.out.println(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
+		Button btnNewButton = new Button(composite, SWT.NONE);
+		FormData fd_btnNewButton = new FormData();
+		fd_btnNewButton.top = new FormAttachment(label_16, 76);
+		fd_btnNewButton.left = new FormAttachment(0, 116);
+		btnNewButton.setLayoutData(fd_btnNewButton);
+		btnNewButton.setText("New Button");
+		
+	//	btnNewButton.setImage(Display.getDefault().getSystemImage(SWT.ICON_WORKING));
+		btnNewButton.setImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\Documents\\Spongebob.jpg"));
 	//	ViewEventGUI view = new ViewEventGUI(shell, SWT.NONE, EmanagerGUIjface.getEvent("abc"));
-		BudgetView bv = new BudgetView(shell, SWT.NONE, 0);
+	//	BudgetView bv = new BudgetView(shell, SWT.NONE, 0);
 	}
 }
