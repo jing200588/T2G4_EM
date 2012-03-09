@@ -3,16 +3,18 @@ import java.util.Vector;
 
 
 /**
- * @author Nguyen Truong Duy (Team 31 - CS2103T)
- * 
  * An object of type BookedVenueInfo contains all information of a venue (like name, address, etc.)
  * 		and a list of time slots that a particular event books for this venue.
+ * 
+ * @author Nguyen Truong Duy (Team 31 - CS2103T)
+ *
  */
 public class BookedVenueInfo {
 	
 	/***********************************************************************************************
 	 * Class member variables
 	 **********************************************************************************************/
+	
 	private String m_name;
 	private String m_address;
 	private String m_description;
@@ -49,36 +51,72 @@ public class BookedVenueInfo {
 	/************************************************************************
 	 * Methods that support extracting information
 	 ***********************************************************************/
+	
+	/**
+	 * Returns the name of the BookedVenueInfo object
+	 * 
+	 * @return m_name - String
+	 */
 	public String getName()
 	{
 		return m_name;
 	}
 	
+	/**
+	 * Returns the address of the BookedVenueInfo object
+	 * 
+	 * @return m_address - String
+	 */
 	public String getAddress()
 	{
 		return m_address;
 	}
 	
+	/**
+	 * Returns the address of the BookedVenueInfo object
+	 * 
+	 * @return m_address - String
+	 */
 	public String getDescription()
 	{
 		return m_description;
 	}
 	
+	/**
+	 * Returns the maximum capacity of the BookedVenueInfo object
+	 * 
+	 * @return m_maxCapacity - int
+	 */
 	public int getMaxCapacity()
 	{
 		return m_maxCapacity;
 	}
 	
+	/**
+	 * Returns the maximum capacity of the BookedVenueInfo object
+	 * 
+	 * @return m_maxCapacity - String
+	 */
 	public String getMaxCapacityString()
 	{
 		return Integer.toString(m_maxCapacity);
 	}
 	
+	/**
+	 * Returns the price / cost (in cents) of the BookedVenueInfo object
+	 * 
+	 * @return m_cost - int
+	 */
 	public int getCostInCent()
 	{
 		return m_cost;
 	}
 	
+	/**
+	 * Returns the price / cost (in cents) of the BookedVenueInfo object
+	 * 
+	 * @return m_cost - String
+	 */
 	public String getCostInCentString()
 	{
 		return Integer.toString(m_cost);

@@ -33,8 +33,7 @@ import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.swt.widgets.Spinner;
-
-
+import org.eclipse.swt.graphics.Color;
 import java.lang.NumberFormatException;
 
 
@@ -43,6 +42,8 @@ public class ViewBookingSystem extends Composite {
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 	private final StackLayout sl_ResultPageCompo = new StackLayout();
 	private final StackLayout sl_ViewBookCompo = new StackLayout();
+	private final Display display = Display.getCurrent();
+	private Color RED = display.getSystemColor(SWT.COLOR_RED);
 	
 	private Text LowerBoundCapacity;
 	private Text UpperBoundCapacity;
@@ -232,7 +233,9 @@ public class ViewBookingSystem extends Composite {
 		lblEnterTheName.setText("Enter the name of the venue:");
 		
 		SearchNameErrorBoard = new Text(SearchNameCompo, SWT.WRAP);
-		SearchNameErrorBoard.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		SearchNameErrorBoard.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
+		//SearchNameErrorBoard.setForeground(RED);
+//		SearchNameErrorBoard.setBackground(RED);
 		SearchNameErrorBoard.setEditable(false);
 		SearchNameErrorBoard.setBounds(70, 86, 409, 80);
 		toolkit.adapt(SearchNameErrorBoard, true, true);
@@ -1474,6 +1477,8 @@ public class ViewBookingSystem extends Composite {
 		VenueDetailTextbox.setEditable(false);
 		VenueDetailTextbox.setBounds(10, 10, 221, 222);
 		toolkit.adapt(VenueDetailTextbox, true, true);
+		
+		SearchNameErrorBoard.setForeground(RED);
 	}	
 	
 	
