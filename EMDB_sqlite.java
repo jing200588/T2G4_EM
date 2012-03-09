@@ -841,10 +841,10 @@ public class EMDB_sqlite{
 			ResultSet result;
 			result = this.DBQUERY.executeQuery(query);
 
-			
 			budget = new Vector<Item>();
 			
 			while (result.next()) {
+				
 				Eventitem item = new Eventitem(
 						result.getString("name"),
 						result.getString("startdate"),
@@ -856,6 +856,7 @@ public class EMDB_sqlite{
 						);
 				item.setDescription(result.getString("description"));
 				item.setID(result.getInt("event_id"));
+				item.setitem_list(this.get_budget_list(result.getInt("event_id"), true));
 				list.add(item);
 			}
 	
