@@ -1,30 +1,51 @@
 import java.io.File;
 
-/*
+
+/**
  * 
- * CLASS NAME: 				EMDB
- * CLASS DESCRIPTION: 		Wrapper class for different Database implementation.
- * 							
+ * @author JunZhi
+ * 
+ * Description: Wrapper class which extends the main database class. 
  * 
  */
-
-
 public class EMDB extends EMDB_sqlite{
 	
 
-	
+	/**
+	 * Description: Checking if database file exists. If it does, check if the database tables exist.
+	 */
 	public void system_check(){
+		this.set_debug(EMSettings.DEVELOPMENT);
+		
 		this.connect();
 		//test file exists if not create
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("****************************************");
+			this.out("STARTING SYSTEM CHECK");
+		}
+		
 		if ( this.testFile() ){
+			if (this.EMDB_DEBUGGING){
+				this.out("DATABASE FILE FOUND");
+			}
+			
 			
 			
 			//test if correct database number 
 			//if not init
 			//TO DO: Test Schema
 			if (this.verify_table_count(false) == 0){
+				
+				if (this.EMDB_DEBUGGING){
+					this.out("DATABASE NOT INITIALIZED....");
+					this.out("INITIALIZING....");
+				}
+				
 				this.init();
 				
+				
+				//TEMP: Initial hardcoded venue details.
 				this.add_prepare("venue");
 				this.add_venue("DR1 (COM1-B-14B)", "", "", 6, 0, true);
 				this.add_venue("DR2 (COM1-B-14A)", "", "", 6, 0, true);
@@ -54,11 +75,12 @@ public class EMDB extends EMDB_sqlite{
 			
 			
 			
-		}else{
-			this.init();
 		}
 		this.disconnect();
-		
+		if (this.EMDB_DEBUGGING){
+			this.out("END SYSTEM CHECK");
+			this.out("****************************************");
+		}
 	}
 	
 	

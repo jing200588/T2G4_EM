@@ -1,41 +1,21 @@
 import java.sql.*;
 import java.util.Vector;
 
-//import org.sqlite.SQLiteJDBCLoader;
 
-
-
-
-/*
- * 
- * CLASS NAME: 				EMDB SQLite
- * CLASS DESCRIPTION: 		This is the database class for EMan. It provides the set,get,update and delete abilities of the program.
+/**
  * 
  * 
+ * @author JunZhi
  * 
-
+ * Description: Layer/Bridge between application and SQLite database.
  * 
  * *******************************************
- * 
  * NAMING CONVENTIONS
- * 
  * *******************************************
- * 
- * 
  * PRIVATE variables are in CAPS for the first word in the name
  * eg: TABLE_one, DBQUERY
  * 
- * DB related functions are prefixed db_
- * Subactions will be appended after that.
- * 
- * 
- * 
- * 
- * 
- * 
  */
-
-
 
 public class EMDB_sqlite{
 	
@@ -52,7 +32,7 @@ public class EMDB_sqlite{
 	private PreparedStatement PREPSTATEM = null;
 	
 	
-	private boolean EMDB_DEBUGGING = false;
+	protected boolean EMDB_DEBUGGING = false;
 	
 	//Table names
 	private final String TABLE_venue 					= "EM_VENUE";
@@ -66,14 +46,9 @@ public class EMDB_sqlite{
 	
 	
 	
-	/*
-	 * ***********************************
-	 * 
-	 * CONSTRUCTOR
-	 * 
-	 * ***********************************
+	/**
+	 * Description: Constructor.
 	 */
-
 	public EMDB_sqlite(){	
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -84,8 +59,7 @@ public class EMDB_sqlite{
 			
 			e.printStackTrace();
 		}
-		
-		this.set_debug(true);
+
 	}
 	
 	
@@ -96,29 +70,34 @@ public class EMDB_sqlite{
 	
 	
 	
-	/*
-	 * ***********************************
-	 * 
-	 * SETUP
-	 * 
-	 * ***********************************
+	/**
+	 * Description: Setting database name to default if DBNAME variable is not set.
 	 */
 	private void set_default_db(){
 		if (this.DBNAME.isEmpty()){
-			this.set_name(EMSettings.dbname());
+			this.set_name(EMSettings.DATABASE_NAME);
 		}
 			
 	}
 
 	
 	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Description: Initialization and creation of Tables on the database.
+	 * @return
+	 */
 	public int init(){
 		
 		
 		//for status reply
 		int state = 0;
-			
-		
+
 		
 		//DB Drops
 		state = this.drop_all_table();
@@ -127,14 +106,12 @@ public class EMDB_sqlite{
 		//check if some drop table command failed.
 		if (state < 3){
 			return 0;
-
-			
+	
 		}else{	
 			//DB Creation
 			state = create_all_table();
 		}
 		
-	
 		
 		//final state reply
 		if (state == 0)
@@ -153,8 +130,9 @@ public class EMDB_sqlite{
 	
 	
 	
-	/*
-	 * Dropping of all Tables
+	/**
+	 * Description: Drops all current database tables.
+	 * @return
 	 */
 	private int drop_all_table(){
 		int state = 0;
@@ -171,8 +149,13 @@ public class EMDB_sqlite{
 	
 	
 	
-	/*
-	 * Creating the DB tables
+	
+	
+	
+	
+	/**
+	 * Description: Creates all required tables on the database for the program.
+	 * @return
 	 */
 	private int create_all_table(){
 		
@@ -253,7 +236,15 @@ public class EMDB_sqlite{
 	
 	
 	
-	/* Verifying table creations*/
+	
+	
+	
+	
+	/**
+	 * Description: Gets the number of tables within the database.
+	 * @param num
+	 * @return
+	 */
 	public int verify_table_count(boolean num){
 		int count = 0;
 		try {
@@ -292,8 +283,14 @@ public class EMDB_sqlite{
 	
 	
 	
-	/* 
-	 * Dropping a single table
+	
+	
+	
+	
+	/**
+	 * Description: Dropping the named table.
+	 * @param name
+	 * @return
 	 */
 	private int drop_table(String name){
 		
@@ -308,7 +305,17 @@ public class EMDB_sqlite{
 		}	
 	}
 	
-
+	
+	
+	
+	
+	
+	
+	/**
+	 * Description: Clears the named table.
+	 * @param name
+	 * @return
+	 */
 	private int truncate_table(String name){
 		
 		try {
@@ -325,12 +332,11 @@ public class EMDB_sqlite{
 	
 	
 	
-	/*
-	 * - reset all variables
-	 * - 
+
+	/**
+	 * Description: Resets variables and the database to default.
 	 */
 	public void reset(){
-		this.DBNAME = "";
 		this.DBCON = null;
 		this.DBQUERY = null;	
 		this.PREPSTATEM = null;
@@ -343,6 +349,9 @@ public class EMDB_sqlite{
 	
 	
 	
+	/**
+	 * Description: Resets database to default.
+	 */
 	public void reset_clear(){
 		this.truncate_table(TABLE_venue);
 		this.truncate_table(TABLE_events);
@@ -1081,8 +1090,6 @@ public class EMDB_sqlite{
 		
 		
 		
-		String query = "";
-		
 		Vector<BookedVenueInfo> list = new Vector<BookedVenueInfo>();
 		
 		 try {
@@ -1333,6 +1340,20 @@ public class EMDB_sqlite{
 	 * 
 	 * ***********************************
 	 */
+	
+	
+	/**
+	 * Description: Updating details of event to database.
+	 * @param id
+	 * @param name
+	 * @param description
+	 * @param budget
+	 * @param startdate
+	 * @param enddate
+	 * @param starttime
+	 * @param endtime
+	 * @return
+	 */
 	public int update_event(int id, String name, String description, double budget, String startdate, String enddate, String starttime, String endtime){
 		
 		
@@ -1352,9 +1373,6 @@ public class EMDB_sqlite{
 		
 		String query = "";
 		try{
-			
-			
-			
 			
 			query = "UPDATE " + this.TABLE_events +
 					" SET name='" + name + "'" 
@@ -1389,6 +1407,13 @@ public class EMDB_sqlite{
 	 * - SEARCH
 	 * 
 	 * ***********************************
+	 */
+	
+	
+	/**
+	 * Description: Search venue database by name.
+	 * @param name
+	 * @return
 	 */
 	public Vector<Venue> find_venue_by_name(String name){
 		
@@ -1447,6 +1472,13 @@ public class EMDB_sqlite{
 	 * ***********************************
 	 */
 	
+	/**
+	 * Description: SQLite "SELECT ALL" query helper.
+	 * @param name
+	 * @param where
+	 * @param limit
+	 * @return
+	 */
 	private String select_all(String name, String where, int limit){
 		
 		String query = "SELECT * FROM " + name; 
@@ -1483,14 +1515,30 @@ public class EMDB_sqlite{
 	 * 
 	 * ***********************************
 	 */
+	
+	
+	/**
+	 * Description: Println helper.
+	 * @param msg
+	 */
 	public void out(String msg){
 		System.out.println(msg);
 	}
 	
+	
+	/**
+	 * Description: Test for the running mode of the SQLite library.
+	 * @return
+	 */
 	public String testNative(){
 		return String.format("SQLite running in %s mode", org.sqlite.SQLiteJDBCLoader.isNativeMode() ? "native" : "pure-java");
 	}
 
+	
+	/**
+	 * Description: Determines if debug messages shown and other debug helpers are executed.
+	 * @param state
+	 */
 	public void set_debug(boolean state){
 		this.EMDB_DEBUGGING = state;
 	}

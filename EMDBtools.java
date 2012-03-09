@@ -30,7 +30,7 @@ public class EMDBtools {
 		line = sc.next();
 		db.set_name(line);
 		*/
-		db.set_name(EMSettings.dbname());
+		db.set_name(EMSettings.DATABASE_NAME);
 		db.connect();
 		
 		
