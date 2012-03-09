@@ -86,11 +86,11 @@ public class ControllerBudget{
 		}
 		bm.received_item_list(event_object.getID(), item_list); //SEND TO DATABASE
 	}
-/*
-	public Vector<Item> getItemList(int id) {
-		return bm.return_item_list(id);
-		//return item_list;
-	}*/
+
+	public Vector<Item> getItemList() {
+		//return bm.return_item_list(id);
+		return item_list;
+	}
 
 	/*flag compulsory items*/
 	public void compulsory(Vector<Integer> com) {

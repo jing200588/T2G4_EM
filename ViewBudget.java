@@ -331,7 +331,7 @@ public class ViewBudget extends Composite {
 				try {	
 					txt_error_S1.setVisible(false);
 					budgetPersonalAssistant  = new ControllerBudget(txt_input_list.getText(), budget, type_choice, satisfaction_choice, ei);
-					//item_list = budgetPersonalAssistant.getItemList(event_object);
+					item_list = budgetPersonalAssistant.getItemList();
 					lblError_S2.setVisible(false);
 					stackLayout.topControl = Step2;
 					BigContent.layout();
