@@ -112,6 +112,10 @@ public class ModelBudget {
 	
 	
 	
+	public void update_budget(int id, double budget) {
+		//event_object.getID(), ((double)budget)/100);
+	}
+	
 	/* TO BE DELETED
 	
 	public Vector<Item> return_item_optimized_list(int id) {

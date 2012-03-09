@@ -453,6 +453,7 @@ public class ControllerBudget{
 		}
 
 		bm.recevied_combination_list(event_object.getID(), db_list);
+		bm.update_budget(event_object.getID(), ((double)budget)/100);
 		event_object.setitem_list(db_list);
 		event_object.setBudget(((double)budget)/100);
 		
