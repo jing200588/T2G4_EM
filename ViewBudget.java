@@ -609,7 +609,7 @@ public class ViewBudget extends Composite {
 				int option = combo_selection.getSelectionIndex();
 				budgetPersonalAssistant.sendDBList(option);
 				
-				ViewMain.ReturnView(0);
+				ViewMain.ReturnView();
 			}
 		});
 		btnFinish.setBounds(595, 234, 75, 25);

@@ -1436,7 +1436,7 @@ public class ViewBookingSystem extends Composite {
 					
 					// Return to the main GUI
 					// Dummy input
-					ViewMain.ReturnView(1);
+					ViewMain.ReturnView();
 				}
 				catch(NumberFormatException exception)
 				{
