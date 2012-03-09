@@ -43,6 +43,7 @@ public class Eventitem {
 		_startdate = new Date(startdate);
 		_enddate = new Date(enddate);
 		_starttime = new Time(starttime);
+		_endtime = new Time(endtime);
 	}
 	
 	public void setDescription (String descript) {
