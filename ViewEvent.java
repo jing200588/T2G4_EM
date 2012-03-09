@@ -460,7 +460,6 @@ public class ViewEvent extends Composite {
 		BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
 		BudgetResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		BudgetResult.setHeaderVisible(true);
-//		BudgetResult.setBounds(25, 25, 645, 200);
 
 		TableColumn col0 = new TableColumn(BudgetResult, SWT.LEFT);
 		TableColumn col1 = new TableColumn(BudgetResult, SWT.LEFT);

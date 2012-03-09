@@ -167,7 +167,7 @@ public class ViewMain extends ApplicationWindow {
 			System.out.println("UPDATING TABLE");
 			//ViewEvent.RefreshParticulars();
 		}
-		System.out.println("RETURN VIEW");
+	
 		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		System.out.println("test");
 		layout.topControl = newview;
