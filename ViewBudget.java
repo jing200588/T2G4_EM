@@ -314,8 +314,10 @@ public class ViewBudget extends Composite {
 		btnResetInputList.setText("Reset Input List");
 
 		txt_error_S1 = new Text(Step1, SWT.READ_ONLY | SWT.MULTI);
+
 		txt_error_S1.setBounds(229, 4, 441, 29);
 		txt_error_S1.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
+		txt_error_S1.setEnabled(false);
 		formToolkit.adapt(txt_error_S1, true, true);
 
 		btnConfirm_S1_1 = new Button(Step1, SWT.NONE);
@@ -519,6 +521,7 @@ public class ViewBudget extends Composite {
 		});	
 
 		lblError_S2 = new Label(Step2, SWT.NONE);
+		lblError_S2.setEnabled(false);
 		lblError_S2.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
 		lblError_S2.setBounds(25, 226, 512, 28);
 		formToolkit.adapt(lblError_S2, true, true);
