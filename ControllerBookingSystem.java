@@ -35,8 +35,10 @@ public class ControllerBookingSystem {
 		System.out.println("Hi Inside BookVenue");
 		System.out.println("This is my EVENT: " + event);
 		System.out.println("This is my EVENT: " + listVenues);
-		System.out.println("This is my EVENT: " + listVenues.get(0));
-		mbs.add_booking_to_db(event.getID(), bookedVenueID, wantedTimeSlot); */
+		System.out.println("This is my EVENT: " + listVenues.get(0)); */
+		
+		
+		mbs.add_booking_to_db(event.getID(), bookedVenueID, wantedTimeSlot);
 		
 		int index = findIndex(listVenues, bookedVenueID);
 		
@@ -292,7 +294,7 @@ public class ControllerBookingSystem {
 		{
 			// For debugging: System.out.println(index);
 			if(listVenue.get(index) == null)
-			//	System.out.println("null");
+				System.out.println("null");
 			/* For debugging
 			else
 			{
