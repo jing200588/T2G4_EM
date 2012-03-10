@@ -136,6 +136,7 @@ public class ControllerBookingSystem {
 						// In either case, we still need to short list by time.
 						Vector<Venue> shortListTime = shortListByTimeSlot(
 								firstRoundCapacity, preferredTime);
+				
 						if(type == SearchCriteria.CAPACITY_TIME)
 						{
 							returnList = shortListTime;
@@ -317,8 +318,8 @@ public class ControllerBookingSystem {
 		Vector<Venue> returnList = new Vector<Venue>();
 		
 		for(int index = 0; index < listVenue.size(); index++)
-			if(listVenue.get(index).getCost() > lower &&
-				listVenue.get(index).getCost() < upper)
+			if(listVenue.get(index).getCost() >= lower &&
+				listVenue.get(index).getCost() <= upper)
 				returnList.add(listVenue.get(index));
 		
 		return returnList;
