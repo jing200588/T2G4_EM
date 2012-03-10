@@ -421,6 +421,7 @@ public class ViewBudget extends Composite {
 		col1.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort name
+				selected_compulsory = new Vector<Integer>();
 				TableItem[] items = table.getItems();
 				Collator collator = Collator.getInstance(Locale.getDefault());
 				for (int i = 1; i<items.length; i++) {
@@ -446,6 +447,7 @@ public class ViewBudget extends Composite {
 		col2.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort price
+				selected_compulsory = new Vector<Integer>();
 				TableItem[] items = table.getItems();
 				for (int i = 1; i<items.length; i++) {
 					double value1 = Double.parseDouble(items[i].getText(2).substring(1,items[i].getText(2).length()));
@@ -470,8 +472,10 @@ public class ViewBudget extends Composite {
 		col3.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort satisfaction
+				selected_compulsory = new Vector<Integer>();
 				TableItem[] items = table.getItems();
 				for (int i = 1; i<items.length; i++) {
+					
 					int value1 = Integer.parseInt(items[i].getText(3));
 					for(int j=0; j < i; j++) {
 						int value2 = Integer.parseInt(items[j].getText(3));
@@ -494,6 +498,7 @@ public class ViewBudget extends Composite {
 		col4.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				//sort type
+				selected_compulsory = new Vector<Integer>();
 				TableItem[] items = table.getItems();
 				Collator collator = Collator.getInstance(Locale.getDefault());
 				for (int i = 1; i<items.length; i++) {
