@@ -14,12 +14,15 @@ public class Time {
 		_hours = h;
 		_mins = m;
 		
-		_time = "" + h + ":";
-		
-		if (m == 0)
-			_time += "00";
-		else 
+		if (h < 10)
+			_time = "0" + h + ":";
+		else
+			_time = "" + h + ":";
+		if (m < 10)
+			_time += "0" + m;
+		else
 			_time += m;
+			
 	}
 	
 	/**

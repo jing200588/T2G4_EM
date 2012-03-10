@@ -13,11 +13,23 @@ public class Date {
 		_year = y;
 		_month = m;
 		_day = d;
-		_date = "" + d + "-" + m + "-" + y;
+		String day, month, hour, min;
+		
+		if (d < 10)
+			day = "0" + d;
+		else
+			day = "" + d;
+		if (m < 10)
+			month = "0" + m;
+		else
+			month = "" + m;
+		
+			
+		_date = "" + day + "-" + month + "-" + y;
 	}
 	
 	/**
-	 * Description: Splits the Date value in String format into integer year, month and day
+	 * Description: Splits the date value in String format into integer year, month and day
 	 * @param date
 	 */
 	public Date(String date) {

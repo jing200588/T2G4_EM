@@ -101,16 +101,53 @@ public class ViewEventParticulars extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				curevent.setName(txtNewText.getText());
 				curevent.setDescription(text.getText());
-				if (StartTime.getMinutes() == 0)
-					curevent.setStartTime(StartTime.getHours() + ":" + StartTime.getMinutes()+0);
-				else 
-					curevent.setStartTime(StartTime.getHours() + ":" + StartTime.getMinutes());
-				if (EndTime.getMinutes() == 0)
-					curevent.setEndTime(EndTime.getHours() + ":" + EndTime.getMinutes()+0);
+				String Stime, Etime, Sdate, Edate;
+				
+				//format time
+				if (StartTime.getHours() < 10)
+					Stime = "0" + StartTime.getHours() + ":";
 				else
-					curevent.setEndTime(EndTime.getHours() + ":" + EndTime.getMinutes());
-				curevent.setStartDate(StartDate.getDay() + "-" + (StartDate.getMonth()+1) + "-" + StartDate.getYear());
-				curevent.setEndDate(EndDate.getDay() + "-" + (EndDate.getMonth()+1) + "-" + EndDate.getYear());
+					Stime = "" + StartTime.getHours() + ":";
+				if (StartTime.getMinutes() < 10)
+					Stime += "0" + StartTime.getMinutes();
+				else
+					Stime += StartTime.getMinutes();
+				
+				if (EndTime.getHours() < 10)
+					Etime = "0" + EndTime.getHours() + ":";
+				else
+					Etime = "" + EndTime.getHours() + ":";
+				if (EndTime.getMinutes() < 10)
+					Etime += "0" + EndTime.getMinutes();
+				else
+					Etime += EndTime.getMinutes();
+				
+				//format date
+				if (StartDate.getDay() < 10)
+					Sdate = "0" + StartDate.getDay() + "-";
+				else
+					Sdate = "" + StartDate.getDay() + "-";
+				if (StartDate.getMonth()+1 < 10)
+					Sdate += "0" + (StartDate.getMonth()+1) + "-";
+				else
+					Sdate += (StartDate.getMonth()+1) + "-";
+				Sdate += StartDate.getYear();
+				
+				if (EndDate.getDay() < 10)
+					Edate = "0" + EndDate.getDay() + "-";
+				else
+					Edate = "" + EndDate.getDay() + "-";
+				if (EndDate.getMonth()+1 < 10)
+					Edate += "0" + (EndDate.getMonth()+1) + "-";
+				else
+					Edate += (EndDate.getMonth()+1) + "-";
+				Edate += EndDate.getYear();
+				System.out.println(Sdate);
+				System.out.println(Edate);
+				curevent.setStartTime(Stime);
+				curevent.setEndTime(Etime);
+				curevent.setStartDate(Sdate);
+				curevent.setEndDate(Edate);
 				
 				ModelEvent.UpdateParticulars(curevent, eventindex);
 				ViewMain.UpdateTable();

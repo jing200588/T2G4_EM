@@ -102,8 +102,8 @@ public class ViewCreateEvent extends Composite {
 		Button btnCreate = new Button(CreateEventForm.getBody(), SWT.NONE);
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Eventitem newevent = new Eventitem(txtNewText.getText(), StartDate.getYear(), StartDate.getMonth(), StartDate.getDay(),
-						EndDate.getYear(), EndDate.getMonth(), EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes());
+				Eventitem newevent = new Eventitem(txtNewText.getText(), StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(),
+						EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes());
 				ModelEvent.CreateEvent(newevent);
 				ViewMain.UpdateTable();
 			}
