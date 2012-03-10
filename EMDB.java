@@ -1,11 +1,15 @@
 import java.io.File;
 
 
+
+/*
+ *  Description: Wrapper class which extends the main database class. 
+ */
+
 /**
+ *  
  * 
  * @author JunZhi
- * 
- * Description: Wrapper class which extends the main database class. 
  * 
  */
 public class EMDB extends EMDB_sqlite{
@@ -85,6 +89,10 @@ public class EMDB extends EMDB_sqlite{
 	
 	
 
+	/**
+	 * Description: Testing for the file and creation of the file.
+	 * @return
+	 */
 	public boolean testFile(){
 		File findFile = new File(this.DBNAME);
 		return findFile.isFile();

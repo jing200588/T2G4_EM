@@ -1,13 +1,11 @@
 import java.sql.*;
 import java.util.Vector;
 
-
-/**
- * 
- * 
- * @author JunZhi
+/*
  * 
  * Description: Layer/Bridge between application and SQLite database.
+ * 
+ * 
  * 
  * *******************************************
  * NAMING CONVENTIONS
@@ -17,6 +15,15 @@ import java.util.Vector;
  * 
  */
 
+
+
+
+/**
+ 
+ * 
+ * @author JunZhi
+ * 
+ */
 public class EMDB_sqlite{
 	
 	/*
