@@ -9,8 +9,8 @@ import java.util.Scanner;
  */
 public class EMDBtools {
 
-	private static EMDB db = new EMDB();
-	private static Scanner sc = new Scanner(System.in);
+	public static EMDB db = new EMDB();
+	public static Scanner sc = new Scanner(System.in);
 
 	
 	
@@ -30,13 +30,15 @@ public class EMDBtools {
 		
 		set_dbname();
 		
+		db.connect();
+		
 		cont = check_file();
 		
 		check_tables(cont);
 		
 		option = show_options();
 		
-		while (option != 7){
+		while (option != 6){
 			
 			switch(option){
 				case 1:
@@ -66,28 +68,13 @@ public class EMDBtools {
 					
 					
 				case 4:
-					System.out.print("Confirm Clear? (y/n) : ");
-					String temp4 = sc.next();
-					
-					if (temp4.compareTo("Y") == 0 || temp4.compareTo("y") == 0){
-						db.out("***Clear Tables***");
-						db.reset_clear();
-					}else{
-						db.out("***Cancelled***");
-					}
-					
-					
-					break;
-					
-					
-					
-				case 5:
 					System.out.print("Confirm Reset? (y/n) : ");
 					String temp5 = sc.next();
 					
 					if (temp5.compareTo("Y") == 0 || temp5.compareTo("y") == 0){
 						db.out("***Deleting All Tables***");
 						db.reset();
+						
 					}else{
 						db.out("***Cancelled***");
 					}
@@ -95,11 +82,25 @@ public class EMDBtools {
 					break;
 					
 					
-				case 6:
+				case 5:
+					db.out("WARNING: Database will be wiped out for the test..  Backup first before using on a live database.\n");
+					System.out.print("Confirm Running of Test? (y/n) : ");
+					String temp6 = sc.next();
+					
+					if (temp6.compareTo("Y") == 0 || temp6.compareTo("y") == 0){
+						db.out("***STARTING Test Suite***");
+						testsuite();
+						db.out("***ENDING Test Suite***");
+						
+					}else{
+						db.out("***Cancelled***");
+					}
+					
+
 					break;
 					
 					
-				case 7:	
+				case 6:	
 				default: break;	
 			}
 		
@@ -108,7 +109,7 @@ public class EMDBtools {
 		}
 		
 		
-		
+		db.disconnect();
 		db.out("\n\n\n*****************************************\n");
 		db.out("Thank You for Using the Test Suite");
 		db.out("End");
@@ -123,7 +124,7 @@ public class EMDBtools {
 	
 	
 	
-	private static int show_options(){
+	public static int show_options(){
 		
 		int option = 0;
 		
@@ -132,10 +133,9 @@ public class EMDBtools {
 		db.out("1 : Re-Initialize Database");
 		db.out("2 : Populate Venues Only");
 		db.out("3 : Populate Sample Test Data for GUI (Events, Bookings, Budget only)");
-		db.out("4 : Clear Tables");
-		db.out("5 : Delete Tables");
-		db.out("6 : Run Test Suite");
-		db.out("7 : Exit");
+		db.out("4 : Drop Tables");
+		db.out("5 : Run Test Suite");
+		db.out("6 : Exit");
 	
 		System.out.print("Enter your option : ");
 		option = sc.nextInt();
@@ -162,7 +162,7 @@ public class EMDBtools {
 	/**
 	 * Setting the database name
 	 */
-	private static void set_dbname(){
+	public static void set_dbname(){
 		String option;
 		
 		/*
@@ -184,10 +184,8 @@ public class EMDBtools {
 	 * Connect to Database
 	 * Print current System State
 	 */
-	private static boolean check_file(){
+	public static boolean check_file(){
 
-		db.connect();
-		
 		System.out.print(" + Creating/Retrieving Database: ");
 		if (db.testFile()){
 			db.out("- DONE");
@@ -213,7 +211,7 @@ public class EMDBtools {
 	/**
 	 * Checking the database for tables.
 	 */
-	private static void check_tables(boolean cont){
+	public static void check_tables(boolean cont){
 		if (cont){
 			if(db.verify_table_count(false) == 1){
 				db.out(" +Check Tables: - OK");
@@ -230,39 +228,43 @@ public class EMDBtools {
 	
 	
 	
-
-	private static void populate_venue(){
+	/**
+	 * Populating venue data (Real Locations, Fake capacity and Cost)
+	 */
+	public static void populate_venue(){
 		db.add_prepare("venue");
-		db.add_venue("DR1 (COM1-B-14B)", "", "", 6, 0, true);
-		db.add_venue("DR2 (COM1-B-14A)", "", "", 6, 0, true);
-		db.add_venue("DR3 (COM1-B-07)", "", "", 5, 0, true);
-		db.add_venue("DR4 (COM1-B-06)", "", "", 5, 0, true);
-		db.add_venue("DR5 (ICUBE-03-18)", "", "", 8, 0, true);
-		db.add_venue("DR6 (COM2-02-12)", "", "", 8, 0, true);
-		db.add_venue("DR7 (COM2-03-14)", "", "", 8, 0, true);
-		db.add_venue("DR8 (COM2-03-15)", "", "", 8, 0, true);
-		db.add_venue("DR9 (COM2-04-06)", "", "", 8, 0, true);
-		db.add_venue("DR10 (COM2-02-24)", "", "", 8, 0, true);
-		db.add_venue("DR11 (COM2-02-23)", "", "", 8, 0, true);
-		db.add_venue("Executive Classroom (COM2-04-02)", "", "", 25, 0, true);
-		db.add_venue("MR1 (COM1-03-19)", "", "", 7, 0, true);
-		db.add_venue("MR2 (COM1-03-28)", "", "", 7, 0, true);
-		db.add_venue("MR3 (COM2-02-26)", "", "", 7, 0, true);
-		db.add_venue("MR4 (COM1-01-22)", "", "", 7, 0, true);
-		db.add_venue("MR5 (COM1-01-18)", "", "", 7, 0, true);
-		db.add_venue("MR6 (AS6-05-10)", "", "", 8, 0, true);
-		db.add_venue("MR7 (ICUBE-03-01)", "", "", 12, 0, true);
-		db.add_venue("MR8 (ICUBE-03-48)", "", "", 12, 0, true);
-		db.add_venue("MR9 (ICUBE-03-49)", "", "", 12, 0, true);
-		db.add_venue("Video Conferencing Room (COM1-02-13)", "", "", 30, 0, true);
+		db.add_venue("DR1 (COM1-B-14B)", "", "", 6, 1000, true);
+		db.add_venue("DR2 (COM1-B-14A)", "", "", 6, 1200, true);
+		db.add_venue("DR3 (COM1-B-07)", "", "", 5, 1000, true);
+		db.add_venue("DR4 (COM1-B-06)", "", "", 5, 1951, true);
+		db.add_venue("DR5 (ICUBE-03-18)", "", "", 8, 1639, true);
+		db.add_venue("DR6 (COM2-02-12)", "", "", 8, 4754, true);
+		db.add_venue("DR7 (COM2-03-14)", "", "", 8, 35, true);
+		db.add_venue("DR8 (COM2-03-15)", "", "", 8, 325, true);
+		db.add_venue("DR9 (COM2-04-06)", "", "", 8, 72, true);
+		db.add_venue("DR10 (COM2-02-24)", "", "", 8, 963, true);
+		db.add_venue("DR11 (COM2-02-23)", "", "", 8, 43, true);
+		db.add_venue("Executive Classroom (COM2-04-02)", "", "", 25, 10000, true);
+		db.add_venue("MR1 (COM1-03-19)", "", "", 7, 48, true);
+		db.add_venue("MR2 (COM1-03-28)", "", "", 7, 753, true);
+		db.add_venue("MR3 (COM2-02-26)", "", "", 7, 2625, true);
+		db.add_venue("MR4 (COM1-01-22)", "", "", 7, 2452, true);
+		db.add_venue("MR5 (COM1-01-18)", "", "", 7, 25, true);
+		db.add_venue("MR6 (AS6-05-10)", "", "", 8, 436, true);
+		db.add_venue("MR7 (ICUBE-03-01)", "", "", 12, 425, true);
+		db.add_venue("MR8 (ICUBE-03-48)", "", "", 12, 234, true);
+		db.add_venue("MR9 (ICUBE-03-49)", "", "", 12, 242, true);
+		db.add_venue("Video Conferencing Room (COM1-02-13)", "", "", 30, 15000, true);
 		db.add_batch_commit();
 	}
 	
 	
 	
 	
-	
-	private static void populate_sample(){
+	/**
+	 * Populate tables with sample data (fake) for testing purposes
+	 */
+	public static void populate_sample(){
 		int eid1,
 			eid2,
 			vid1, 
@@ -312,7 +314,7 @@ public class EMDBtools {
 		
 		db.add_prepare("budget");
 		db.add_budget(eid2, "Windows_7_Basic", 600000, 1, null, true);
-		db.add_budget(eid2, "World_of_WarcraftK", 1300, 1000, null, true);
+		db.add_budget(eid2, "World_of_Warcraft", 1300, 1000, null, true);
 		db.add_budget(eid2, "OCZ_120GB_SSD", 32088, 8, null, true);
 		db.add_budget(eid2, "Western_Digital_HD_50GB", 18060, 5, null, true);
 		db.add_batch_commit();
@@ -326,9 +328,40 @@ public class EMDBtools {
 	
 	
 	
-	
-	private static void testsuite(){
+	/**
+	 * A Series of test consisting of most of the functions from EMDB. INSERTS, DELETES and UPDATES
+	 */
+	public static void testsuite(){
+
+		check_tables(true);
+		check_file();
+		db.reset();
 		
+		
+		
+		
+		/*
+		 * Add Event
+		 */
+		db.out("******Adding Events******");
+		int eid1 = db.add_event("NUS Hackers Friday Hacks", "", 0, "5-2-2012", "7-2-2012", "10:2", "18:2");
+		int eid2 = db.add_event("Matriculation Fair", "", 0, "10-2-2012", "12-2-2012", "11:2", "16:2");
+		db.out("Events of ID #"+eid1 +"& #"+eid2 +" are created");
+		
+		
+		
+		
+		/*
+		 * Deleting Event
+		 */
+		db.out("******Delete Event******");
+		db.out("******Show Budget (Should be Empty)******");
+		db.out("******Show Event (Should be Empty)******");
+		db.out("******Show Venues (Should be Empty)******");
+
+		
+		
+		db.reset();
 		
 	}
 	
