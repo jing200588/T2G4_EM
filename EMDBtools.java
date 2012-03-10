@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Vector;
 
 
 /**
@@ -262,15 +263,16 @@ public class EMDBtools {
 	
 	
 	/**
-	 * Populate tables with sample data (fake) for testing purposes
+	 * Populate tables with sample data (fake) for testing purposes. Returns the first event_id;
 	 */
-	public static void populate_sample(){
+	public static int populate_sample(){
 		int eid1,
 			eid2,
 			vid1, 
 			vid2;
 
 		
+		db.out("\n******Adding Venue (Single)******");
 		vid1 = db.add_venue("COM1", "", "", 10, 100000);
 		db.add_venue("SCIENCE2", "", "", 20, 2041);
 		vid2 = db.add_venue("BIZ1", "", "", 1, 30);
@@ -279,12 +281,17 @@ public class EMDBtools {
 		db.add_venue("STARBUCKS", "", "", 21, 5000);
 		db.add_venue("UTOWN", "", "", 400, 20000);
 
+		
+		db.out("\n******Adding Events (Single)******");
 		eid1 = db.add_event("NUS Hackers Friday Hacks", "", 0, "5-2-2012", "7-2-2012", "10:2", "18:2");
 		db.add_event("NUS Symposium", "", 0, "7-2-2012", "8-2-2012", "10:2", "18:2");
 		db.add_event("Rockfest", "", 0, "8-2-2012", "9-2-2012", "10:2", "18:2");
 		eid2 = db.add_event("Matriculation Fair", "", 0, "10-2-2012", "12-2-2012", "11:2", "16:2");
 		db.add_event("Coding Marathon", "", 0, "13-2-2012", "13-2-2012", "10:2", "18:2");
 		
+		
+		
+		db.out("\n******Adding Booking******");
 		db.add_booking(eid1, vid1, "5/2/2012/10", "5/2/2012/12");
 		db.add_booking(eid1, vid2, "5/2/2012/14", "5/2/2012/16");
 		db.add_booking(eid1, vid1, "6/2/2012/11", "7/2/2012/18");
@@ -295,6 +302,8 @@ public class EMDBtools {
 		db.add_booking(eid2, vid2, "22/5/2013/11", "7/6/2013/18");	
 		
 		
+		
+		db.out("\n******Adding Budget (Batch)******");
 		db.add_prepare("budget");
 		db.add_budget(eid1, "Apple_Ipad", 60000, 7, null, true);
 		db.add_budget(eid1, "ACER_NETBOOK", 130080, 10, null, true);
@@ -304,6 +313,18 @@ public class EMDBtools {
 		db.add_budget(eid1, "Canon_DSLR", 100050, 11, null, true);
 		db.add_batch_commit();
 		
+		
+		db.add_prepare("budget");
+		db.add_budget(eid2, "Windows_7_Basic", 600000, 1, null, true);
+		db.add_budget(eid2, "World_of_Warcraft", 1300, 1000, null, true);
+		db.add_budget(eid2, "OCZ_120GB_SSD", 32088, 8, null, true);
+		db.add_budget(eid2, "Western_Digital_HD_50GB", 18060, 5, null, true);
+		db.add_batch_commit();
+		
+		
+		
+		
+		db.out("\n******Adding Budget Optimized (Batch)******");
 		db.add_prepare("budgetOptimized");
 		db.add_budget_optimized(eid1, "Apple_Ipad", 60000, 7, null, true);
 		db.add_budget_optimized(eid1, "ACER_NETBOOK", 130080, 10, null, true);
@@ -312,18 +333,16 @@ public class EMDBtools {
 		db.add_budget_optimized(eid1, "OCZ_120GB_SSD", 32088, 8, null, true);
 		db.add_batch_commit();	
 		
-		db.add_prepare("budget");
-		db.add_budget(eid2, "Windows_7_Basic", 600000, 1, null, true);
-		db.add_budget(eid2, "World_of_Warcraft", 1300, 1000, null, true);
-		db.add_budget(eid2, "OCZ_120GB_SSD", 32088, 8, null, true);
-		db.add_budget(eid2, "Western_Digital_HD_50GB", 18060, 5, null, true);
-		db.add_batch_commit();
+
 	
 		db.add_prepare("budgetOptimized");
 		db.add_budget_optimized(eid2, "Windows_7_Basic", 600000, 1, null, true);
 		db.add_budget_optimized(eid2, "World_of_Warcraft", 1300, 1000, null, true);
 		db.add_budget_optimized(eid2, "OCZ_120GB_SSD", 32088, 8, null, true);
 		db.add_batch_commit();		
+		
+		
+		return eid1;
 	}
 	
 	
@@ -338,32 +357,121 @@ public class EMDBtools {
 		db.reset();
 		
 		
+		int eid = populate_sample();
 		
-		
+	
 		/*
-		 * Add Event
+		 * Displaying an event
 		 */
-		db.out("******Adding Events******");
-		int eid1 = db.add_event("NUS Hackers Friday Hacks", "", 0, "5-2-2012", "7-2-2012", "10:2", "18:2");
-		int eid2 = db.add_event("Matriculation Fair", "", 0, "10-2-2012", "12-2-2012", "11:2", "16:2");
-		db.out("Events of ID #"+eid1 +"& #"+eid2 +" are created");
+		db.out("\n******Get Event #"+eid+"******");
+		Eventitem item = db.get_event(eid);
 		
-		
-		
+		if (item != null){
+			try{
+				item.addBVI(db.get_booking_info(eid));	
+			}catch(Exception e){
+				db.out(e.getMessage());
+			}
+			
+			try{
+				item.setitem_list(db.get_budget_list(eid, true));
+			}catch(Exception e){
+				db.out(e.getMessage());
+			}
+			
+			db.out("\n******Display Event #"+eid+" Details******");
+			db.out(" +Name : "+item.getName());
+			db.out(" +Time : "+item.getStartTime() + "-" + item.getEndTime());
+			db.out(" +Date : "+item.getStartDate() + "-" + item.getEndDate());
+			
+			
+			db.out(" +Booked Venue List :");
+			
+				Vector<BookedVenueInfo> info = item.getBVI_list();
+				for (int i=0; i<info.size(); i++){
+					db.out("++venue : " + 
+							info.get(i).getName() + 
+							"(" + 
+								"Cost - " + info.get(i).getCostInDollar()  +
+								"Capacity - " +info.get(i).getMaxCapacity() +
+							")");
+				}
+			db.out(" +Budget List :");
+				Vector<Item> bitem = item.getitem_list();
+				for (int i=0; i<info.size(); i++){
+					db.out("++item : " +
+							bitem.get(i).getItem() + 
+							" ( $" + bitem.get(i).getPrice() 
+							+ ")");
+				}
+			
+		}	
+			
+			
 		
 		/*
 		 * Deleting Event
 		 */
+			
+			
+			
+			
+			
 		db.out("******Delete Event******");
-		db.out("******Show Budget (Should be Empty)******");
-		db.out("******Show Event (Should be Empty)******");
-		db.out("******Show Venues (Should be Empty)******");
+		db.delete_event(eid);
 
+		db.out("******Show Event (Exception / Should be Empty)******");
+		try{
+			item = db.get_event(eid);
+			db.out(item.toString());
+		}catch (Exception e){
+			db.out(e.getMessage());
+		}
 		
+		db.out("******Show Budget (Exception / Should be Empty)******");
+		try{
+			Vector<BookedVenueInfo> list1 = db.get_booking_info(eid);
+			db.out(list1.toString());
+		}catch (Exception e){
+			db.out(e.getMessage());
+		}
+		
+		
+		db.out("******Show Venues (Exception / Should be Empty)******");
+		try{
+			Vector<Item> list2 = db.get_budget_list(eid, false);
+			db.out(list2.toString());
+		}catch (Exception e){
+			db.out(e.getMessage());
+		}
 		
 		db.reset();
 		
-	}
+		
+		
+		db.out("******Display Event List******");
+		Vector<Eventitem> elist = db.get_event_list();
+		
+		try{
+			db.out(elist.toString());
+		}catch(Exception e){
+			db.out(e.getMessage());
+		}
+		
+		db.out("******Reset******");
+		db.reset();
+		
+		
+		db.out("******Display Event List (Should be empty)******");
+		Vector<Eventitem> elist2 = db.get_event_list();
+		
+		try{
+			db.out(elist2.toString());
+		}catch(Exception e){
+			db.out(e.getMessage());
+		}	
+		
+	} //end test suite
 	
 	
 	
