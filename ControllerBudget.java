@@ -287,14 +287,12 @@ public class ControllerBudget{
 			int index=0;
 			for(int i=0; i<soln.getSolnSetSize(); i++) {
 				BitSet bitmask = soln.getSolnSet().get(i);
-				System.out.println("Bit mask for " + i + " is " + bitmask);
 				if(bitmask.isEmpty() == false) {
 
 					text +="***********Combination "+(index+1)+"***********\n";
 					num = 1;
 					text +="Total cost: \t$" + (soln.getSolnCostSet().get(i)+((double) compulsory_cost)/100) +"\n";
 					for(int k=0; k<compulsory_list.size();k++) {
-						System.out.println("Print this compulsory?");
 						text+= num+"\t";
 						text+= compulsory_list.get(k).getItem() + " for $";
 						price = ((double) compulsory_list.get(k).getPrice())/100;
@@ -309,7 +307,6 @@ public class ControllerBudget{
 					}
 					for(int j=0; j<number; j++) {
 						if(bitmask.get(j)) {
-							System.out.println("Print this?");
 							text+= num+"\t";
 							text+= compute_list.get(j).getItem() + " for $";
 							price = ((double) compute_list.get(j).getPrice())/100;
@@ -535,27 +532,19 @@ public class ControllerBudget{
 		else if (differentResult == 3) { //There is solution set
 			for(int i=0; i<compulsory_list.size(); i++) {
 				// budgetLeftToDisplay = budgetLeftToDisplay - item_list.get(i).getPrice(); To be use in v0.2
-				System.out.println("SOME THING TO ADD FOR COMPULSORY?");
 				db_list.add(compulsory_list.get(i));
 			}
 
 			if(hasSolnSet == true) {
 				BitSet bitmask = soln.getSolnSet().get(select);
-				System.out.println("Bitmask: " + bitmask);
 				for(int i=0; i<number; i++) {
 					if(bitmask.get(i)) {
-						System.out.println("Add something");
 						db_list.add(compute_list.get(i));
 						//budgetLeftToDisplay = budgetLeftToDisplay - compute_list.get(i).getPrice(); To be use in v0.2
 					}
 
 				}
 			}
-		}
-		
-		System.out.println("List:");
-		for(int i=0; i<db_list.size(); i++) {
-			System.out.print(db_list.get(i).getItem() + " ");
 		}
 
 		bm.recevied_combination_list(event_object.getID(), db_list);
