@@ -142,8 +142,6 @@ public class ViewEventParticulars extends Composite {
 				else
 					Edate += (EndDate.getMonth()+1) + "-";
 				Edate += EndDate.getYear();
-				System.out.println(Sdate);
-				System.out.println(Edate);
 				curevent.setStartTime(Stime);
 				curevent.setEndTime(Etime);
 				curevent.setStartDate(Sdate);

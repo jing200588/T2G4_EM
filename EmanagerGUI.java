@@ -106,7 +106,7 @@ public class EmanagerGUI {
 		scrolledComposite.setContent(composite);
 		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
 		// Experiment
-		System.out.println(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		//System.out.println(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		Label label_13 = new Label(composite_2, SWT.NONE);
 		label_13.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		label_13.setText("Event Program Flow");

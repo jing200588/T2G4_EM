@@ -292,7 +292,7 @@ public class ControllerBookingSystem {
 		{
 			// For debugging: System.out.println(index);
 			if(listVenue.get(index) == null)
-				System.out.println("null");
+			//	System.out.println("null");
 			/* For debugging
 			else
 			{

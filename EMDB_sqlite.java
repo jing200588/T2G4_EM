@@ -1576,8 +1576,6 @@ public class EMDB_sqlite{
 		Vector<Venue> list = new Vector<Venue>();
 		
 		try {
-
-			this.out(query);
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
 			
