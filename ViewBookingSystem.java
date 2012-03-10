@@ -1468,7 +1468,10 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(VenueDetailTextbox, true, true);
 		
 		SearchNameErrorBoard.setForeground(RED);
-		
+		ErrorBoardBooking.setForeground(RED);
+		ErrorBoardViewBook.setForeground(RED);
+		NoResultTextBox.setForeground(RED);
+		ChoiceErrorBoard.setForeground(RED);
 	}	
 	
 	

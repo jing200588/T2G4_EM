@@ -44,11 +44,12 @@ public class ViewBudget extends Composite {
 	private int budget;
 	private int type_choice;
 	private int satisfaction_choice;
-	//private static Display display = new Display();
-   // private static Color red = display.getSystemColor(SWT.COLOR_RED);
+
 	/*My declaration end here.*/
 
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
+	private final Display display = Display.getCurrent();
+	private Color RED = display.getSystemColor(SWT.COLOR_RED);
 	private Button btnStepInputDetails;
 	private Button btnStepSelectCompulsoy;
 	private Button btnStepConfirmResult;
@@ -77,20 +78,24 @@ public class ViewBudget extends Composite {
 	private Text txt_result;
 	private Combo combo_selection;
 	private Button btnFinish;
-	
+	private Eventitem ei;
 	/**
 	 * Description: Initialize Budget Optimization GUI.
 	 * @param parent
 	 * @param style
 	 * @param ei Eventitem object pass from ViewEvent
 	 */
-	public ViewBudget(Composite parent, int style, final Eventitem ei) {
+	public ViewBudget(Composite parent, int style,  Eventitem input_ei) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				formToolkit.dispose();
 			}
 		});
+		
+		/* Initialize variables */
+		ei = input_ei;
+		
 		formToolkit.adapt(this);
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -310,9 +315,9 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(txt_input_list, true, true);
 
 		Label lblInputList = new Label(Step1, SWT.NONE);
-		lblInputList.setBounds(229, 34, 55, 15);
+		lblInputList.setBounds(229, 34, 441, 15);
 		formToolkit.adapt(lblInputList, true, true);
-		lblInputList.setText("Input List:");
+		lblInputList.setText("Input format: [itemname] [price] [satisfaction] [type]");
 
 		btnResetInputList = new Button(Step1, SWT.NONE);
 		btnResetInputList.setBounds(418, 229, 128, 25);
@@ -326,10 +331,8 @@ public class ViewBudget extends Composite {
 		btnResetInputList.setText("Reset Input List");
 
 		txt_error_S1 = new Text(Step1, SWT.READ_ONLY | SWT.MULTI);
-
 		txt_error_S1.setBounds(229, 4, 441, 29);
 		txt_error_S1.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
-		txt_error_S1.setEnabled(false);
 
 		formToolkit.adapt(txt_error_S1, true, true);
 
@@ -525,7 +528,6 @@ public class ViewBudget extends Composite {
 		});	
 
 		lblError_S2 = new Label(Step2, SWT.NONE);
-		lblError_S2.setEnabled(false);
 		lblError_S2.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
 		lblError_S2.setBounds(25, 226, 512, 28);
 		formToolkit.adapt(lblError_S2, true, true);
@@ -630,6 +632,7 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");
 		
-	
+		txt_error_S1.setForeground(RED);
+		lblError_S2.setForeground(RED);
 	}
 }
