@@ -415,7 +415,7 @@ public class ViewEvent extends Composite {
 
 		return divider;
 	}
-/*
+/*	//For use in version 0.2
 	public static void UpdateEvent(Eventitem event) {
 		cevent = event;
 		RefreshParticulars();
@@ -459,7 +459,7 @@ public class ViewEvent extends Composite {
 	}
 
 	/**
-	 * Description: Creates a sortable table that is populated with the details of the event's list of booked venues
+	 * Description: Creates a table that is populated with the details of the event's list of booked venues
 	 * @return A table is returned if there are entries in the list, else null is returned
 	 */
 	public static Table VenueTable() {
@@ -468,7 +468,6 @@ public class ViewEvent extends Composite {
 		//Checks if there is any entry before creating the table
 		if (venue_list.isEmpty()) {
 			venueflag = false;	
-			System.out.println(cevent.getName() + "! OI NOTHING IN VENUE_LIST!!!!");
 			return null;
 		}
 
@@ -525,13 +524,7 @@ public class ViewEvent extends Composite {
 		col4.pack();
 		col5.pack();
 		col6.pack();
-		System.out.println(col0.getWidth());
-		System.out.println(col1.getWidth());
-		System.out.println(col2.getWidth());
-		System.out.println(col3.getWidth());
-		System.out.println(col4.getWidth());
-		System.out.println(col5.getWidth());
-		System.out.println(col6.getWidth());
+
 		venueflag = true;
 		return VenueResult;
 	}
@@ -546,7 +539,6 @@ public class ViewEvent extends Composite {
 		//Checks if there is any entry before creating the table
 		if (item_list.isEmpty()) {
 			budgetflag = false;	
-			System.out.println(cevent.getName() + "! OI NOTHING IN ITEM_LIST!!!!");
 			return null;
 		}
 
@@ -563,16 +555,10 @@ public class ViewEvent extends Composite {
 
 		col0.setText("No.");
 		col1.setText("Item Name");
-		col2.setText("Price\t\t\t\t\t");
+		col2.setText("Price");
 		col3.setText("Satisfaction");
-		col4.setText("Type\t\t\t\t\t\t\t\t\t\t\t");
-		/*
-		col0.setWidth(10);
-		col1.setWidth(400);
-		col2.setWidth(10);
-		col3.setWidth(10);
-		col4.setWidth(10);
-		 */
+		col4.setText("Type");
+
 		col0.setResizable(false);
 		col1.setResizable(false);
 		col2.setResizable(false);
@@ -601,7 +587,6 @@ public class ViewEvent extends Composite {
 			}
 		});
 
-		//	col1.setText("Item Name\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
 		//Sorting algorithm of each column
 		col1.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
@@ -718,11 +703,6 @@ public class ViewEvent extends Composite {
 		col2.pack();
 		col3.pack();
 		col4.pack();
-		System.out.println(col0.getWidth());
-		System.out.println(col1.getWidth());
-		System.out.println(col2.getWidth());
-		System.out.println(col3.getWidth());
-		System.out.println(col4.getWidth());
 
 		budgetflag = true;
 		return BudgetResult;

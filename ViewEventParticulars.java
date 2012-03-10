@@ -22,7 +22,7 @@ public class ViewEventParticulars extends Composite {
 	private DateTime EndTime;
 	private Text text;
 	/**
-	 * Create the composite.
+	 * Description: Create the composite.
 	 * @param parent
 	 * @param style
 	 */
@@ -33,6 +33,7 @@ public class ViewEventParticulars extends Composite {
 		/************************************************************
 		 * MAIN COMPOSITE
 		 ***********************************************************/
+		//formToolkit is for use in version 0.2
 		Composite maincomp = new Composite(this, SWT.NONE);
 		FormData fd_maincomp = new FormData();
 		fd_maincomp.top = new FormAttachment(50, -100);
@@ -173,6 +174,15 @@ public class ViewEventParticulars extends Composite {
 	/************************************************************
 	 * SET PARTICULARS to event item
 	 ***********************************************************/
+	/**
+	 * Description: Stores the event particulars into the event item
+	 * @param name
+	 * @param startdate
+	 * @param starttime
+	 * @param enddate
+	 * @param endtime
+	 * @param descript
+	 */
 	public void setParticulars(String name, String startdate, String starttime, String enddate, String endtime, String descript) {
 		txtNewText.setText(name);
 		String arr[] = startdate.split("-");

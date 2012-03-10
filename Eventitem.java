@@ -12,23 +12,20 @@ public class Eventitem {
 	private Time _starttime;
 	private Date _enddate;
 	private Time _endtime;
-	//	private Vector<Participants> _partlist;
-	//private eventflow??
-	//private advertise
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters 
-	 * @param name
-	 * @param sy
-	 * @param sm
-	 * @param sd
-	 * @param ey
-	 * @param em
-	 * @param ed
-	 * @param shour
-	 * @param smin
-	 * @param ehour
-	 * @param emin
+	 * @param name Event Name 
+	 * @param sy Start Year
+	 * @param sm Start Month
+	 * @param sd Start Day 
+	 * @param ey End Year
+	 * @param em End Month
+	 * @param ed End Day
+ 	 * @param shour Start Hour 
+	 * @param smin Start Minute
+	 * @param ehour End Hour
+	 * @param emin End Minute
 	 */
 	public Eventitem (String name, int sy, int sm, int sd, int ey, int em, int ed, int shour, int smin, int ehour, int emin) {
 		_name = name;
@@ -47,9 +44,9 @@ public class Eventitem {
 	 * @param enddate
 	 * @param starttime
 	 * @param endtime
-	 * @param item_list
+	 * @param item_list List of items according to budget
 	 * @param budget
-	 * @param BVI_list
+	 * @param BVI_list List of booked venue information
 	 */
 	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget, Vector<BookedVenueInfo> BVI_list){
 		_name = name;
@@ -78,6 +75,11 @@ public class Eventitem {
 		_endtime = new Time(endtime);
 	}
 	
+	/**********************************************************************************************
+	 * 
+	 * GETTER AND SETTERS
+	 * 
+	 *********************************************************************************************/
 	public void setDescription (String descript) {
 		_description = descript;
 	}

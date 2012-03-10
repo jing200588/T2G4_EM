@@ -10,15 +10,13 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.DateTime;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
+
 
 public class ViewCreateEvent extends Composite {
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
@@ -27,7 +25,7 @@ public class ViewCreateEvent extends Composite {
 	private DateTime EndDate;
 
 	/**
-	 * Create the composite.
+	 * Description: Create the composite.
 	 * @param parent
 	 * @param style
 	 */

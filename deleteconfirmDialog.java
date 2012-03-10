@@ -20,7 +20,7 @@ public class deleteconfirmDialog extends Dialog {
 	protected String name;
 
 	/**
-	 * Create the dialog.
+	 * Description: Create the dialog.
 	 * @param parent
 	 * @param style
 	 */
@@ -31,7 +31,7 @@ public class deleteconfirmDialog extends Dialog {
 	}
 
 	/**
-	 * Open the dialog.
+	 * Description: Open the dialog.
 	 * @return the result
 	 */
 	public int open() {
@@ -48,7 +48,7 @@ public class deleteconfirmDialog extends Dialog {
 	}
 
 	/**
-	 * Create contents of the dialog.
+	 * Description: Create contents of the dialog.
 	 */
 	private void createContents() {
 		shell = new Shell(getParent(), getStyle());

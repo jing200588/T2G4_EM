@@ -1,9 +1,15 @@
 
 
+
 public class Time {
 	private int _hours, _mins;
 	private String _time;
 	
+	/**
+	 * Constructs the Time object with the respective parameters
+	 * @param h
+	 * @param m
+	 */
 	public Time (int h, int m) {
 		_hours = h;
 		_mins = m;
@@ -16,6 +22,10 @@ public class Time {
 			_time += m;
 	}
 	
+	/**
+	 * Description: Splits the Time value in String format into integer hours and minutes
+	 * @param time
+	 */
 	public Time(String time) {
 		String hm[] = time.split(":");
 		_hours = Integer.parseInt(hm[0]);;

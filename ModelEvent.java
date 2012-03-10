@@ -47,6 +47,10 @@ public class ModelEvent {
 	/************************************************************
 	 * CREATE EVENT //Passes event to DB and local list.
 	 ***********************************************************/
+	/**
+	 * Description: Passes event into database and local list.
+	 * @param eitem Event Item
+	 */
 	public static void CreateEvent(Eventitem eitem) {
 		
 		
@@ -78,6 +82,10 @@ public class ModelEvent {
 	/************************************************************
 	 * PULL LIST //Returns local list.
 	 ***********************************************************/
+	/**
+	 * Description: Returns the local list of event items
+	 * @return
+	 */
 	public static Vector<Eventitem> PullList() {
 		db.connect();
 		list = db.get_event_list();
@@ -97,6 +105,10 @@ public class ModelEvent {
 	/************************************************************
 	 * DELETE EVENT	//Deletes event from DB and local list.
 	 ***********************************************************/
+	/**
+	 * Description: Deletes the event from the database and local list
+	 * @param eitem Event Item
+	 */
 	public static void DeleteEvent(Eventitem eitem) {
 		
 		db.connect();
@@ -110,6 +122,11 @@ public class ModelEvent {
 	/**********************************************************************
 	 * UPDATE PARTICULARS //Updates event particulars on DB and local list.
 	 **********************************************************************/
+	/**
+	 * Description: Updates event particulars in the database and local list
+	 * @param eitem Event Item
+	 * @param index 
+	 */
 	public static void 	UpdateParticulars(Eventitem eitem, int index) {
 		//update particulars
 

@@ -35,7 +35,6 @@ import org.eclipse.swt.graphics.Color;
 
 public class ViewMain extends ApplicationWindow {
 	private Action exitaction;
-	private Action swtguiaction;
 	private Composite maincomposite;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Composite c1;
@@ -71,6 +70,9 @@ public class ViewMain extends ApplicationWindow {
 	/************************************************************
 	 * DELETE ITEM
 	 ***********************************************************/
+	/**
+	 * Description: Deletes the selected item from the table and set the current page to Homepage by calling Homepage()
+	 */
 	public static void DeleteItem() {
 		table.remove(table.getSelectionIndices());
 		Homepage();
@@ -79,6 +81,9 @@ public class ViewMain extends ApplicationWindow {
 	/************************************************************
 	 * Method to update the table in c1
 	 ***********************************************************/
+	/**
+	 * Description: Pulls the list from ModelEvent and updates the event table in composite c1
+	 */
 	public static void UpdateTable () {
 		eventlist = ModelEvent.PullList();
 
@@ -110,6 +115,9 @@ public class ViewMain extends ApplicationWindow {
 	/************************************************************
 	 * HOMEPAGE
 	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewHomepage and set the page of composite c2 to ViewHomepage
+	 */
 	public static void Homepage () {		
 		hp = new ViewHomepage(c2, SWT.NONE);
 		layout.topControl = hp;
@@ -119,6 +127,9 @@ public class ViewMain extends ApplicationWindow {
 	/************************************************************
 	 * CALCULATE BUDGET
 	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewBudget and set the page of composite c2 to ViewBudget
+	 */
 	public static void CalcBudget () {		
 		ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		layout.topControl = bv;
@@ -128,6 +139,9 @@ public class ViewMain extends ApplicationWindow {
 	/************************************************************
 	 * BOOK VENUE
 	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewBookingSystem and set the page of composite c2 to ViewBookingSystem
+	 */
 	public static void BookVenue() {
 		ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		layout.topControl = bookgui;
@@ -138,8 +152,8 @@ public class ViewMain extends ApplicationWindow {
 	 * EVENT PARTICULARS
 	 ***********************************************************/
 	/**
-	 * Description: 
-	 * @param curevent
+	 * Description: Initialize ViewEventParticulars and set the page of composite c2 to ViewEventParticulars
+	 * @param curevent The event item of the particulars that is to be edited
 	 */
 	public static void EventParticulars(Eventitem curevent) {
 		ViewEventParticulars ep = new ViewEventParticulars(c2, SWT.NONE, curevent, table.getSelectionIndex());
@@ -150,9 +164,11 @@ public class ViewMain extends ApplicationWindow {
 	/************************************************************
 	 * RETURN VIEW
 	 ***********************************************************/
-	public static void ReturnView() {	//for returning to view event page
+	/**
+	 * Description: Sets the page of composite c2 to ViewEvent
+	 */
+	public static void ReturnView() {
 		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
-		System.out.println("test");
 		layout.topControl = newview;
 		c2.layout(true);
 		
@@ -160,7 +176,7 @@ public class ViewMain extends ApplicationWindow {
 	
 
 	/**
-	 * Create contents of the application window.
+	 * Description: Create contents of the application window.
 	 * @param parent
 	 */
 	protected Control createContents(Composite parent) {
@@ -194,6 +210,9 @@ public class ViewMain extends ApplicationWindow {
 			formToolkit.adapt(c1);
 			formToolkit.paintBordersFor(c1);
 			
+			/************************************************************
+			 * CREATE EVENT BUTTON EVENT LISTENER
+			 ***********************************************************/
 			Button btnCreateEvent = formToolkit.createButton(c1, "Create Event", SWT.NONE);
 			btnCreateEvent.setFont(SWTResourceManager.getFont("Tekton Pro Ext", 16, SWT.BOLD));
 			btnCreateEvent.addSelectionListener(new SelectionAdapter() {
@@ -225,12 +244,7 @@ public class ViewMain extends ApplicationWindow {
 			 ***********************************************************/
 			table.addListener(SWT.Selection, new Listener() {
 		     public void handleEvent(Event event) {
-		       
-		/*        //extract event name
-		        String itemname = "";
-		        itemname += event.item;
-		        itemname = itemname.substring(11, itemname.length() -1);
-		 */
+
 		      //dispose of all children that currently is in c2
 				if (c2 != null && !c2.isDisposed()) {
 				Object[] children = c2.getChildren();
@@ -238,7 +252,6 @@ public class ViewMain extends ApplicationWindow {
 					((Composite)children[i]).dispose();
 				}
 			
-				//	view = new ViewEvent(c2, SWT.NONE, getEvent(itemname));
 				view = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
 		        layout.topControl = view;
 				c2.layout(true);
@@ -330,10 +343,10 @@ public class ViewMain extends ApplicationWindow {
 	}
 
 	/**
-	 * Create the actions.
+	 * Description: Create the actions for the menu bar.
 	 */
 	private void createActions() {
-		// Create the actions
+		
 		//exit action
 		{
 			exitaction = new Action("Exit") {					public void run() {
@@ -349,23 +362,11 @@ public class ViewMain extends ApplicationWindow {
 			});
 		
 		}
-		{
-			new Action("New Action") {
-			};
-		}
-		//swtguiaction
-		{
-			swtguiaction = new Action("SWT") {				public void run() {
-					EmanagerGUI window = new EmanagerGUI();
-					window.open();
-				}
-			};
-			swtguiaction.setAccelerator(SWT.CTRL | SWT.F1);
-		}
+		
 	}
 
 	/**
-	 * Create the menu manager.
+	 * Description: Create the menu manager.
 	 * @return the menu manager
 	 */
 	protected MenuManager createMenuManager() {
@@ -373,14 +374,13 @@ public class ViewMain extends ApplicationWindow {
 		{
 			MenuManager FileMenu = new MenuManager("File");
 			menuManager.add(FileMenu);
-			FileMenu.add(swtguiaction);
 			FileMenu.add(exitaction);
 		}
 		return menuManager;
 	}
 
 	/**
-	 * Create the toolbar manager.
+	 * Description: Create the toolbar manager.
 	 * @return the toolbar manager
 	 */
 	protected ToolBarManager createToolBarManager(int style) {
@@ -389,7 +389,7 @@ public class ViewMain extends ApplicationWindow {
 	}
 
 	/**
-	 * Create the status line manager.
+	 * Description: Create the status line manager.
 	 * @return the status line manager
 	 */
 	protected StatusLineManager createStatusLineManager() {
@@ -398,7 +398,7 @@ public class ViewMain extends ApplicationWindow {
 	}
 
 	/**
-	 * Launch the application.
+	 * Description: Launch the application.
 	 * @param args
 	 */
 	public static void main(String args[]) {
@@ -417,7 +417,7 @@ public class ViewMain extends ApplicationWindow {
 	}
 
 	/**
-	 * Configure the shell.
+	 * Description: Configure the shell.
 	 * @param newShell
 	 */
 	protected void configureShell(Shell newShell) {
@@ -428,7 +428,7 @@ public class ViewMain extends ApplicationWindow {
 	}
 
 	/**
-	 * Return the initial size of the window.
+	 * Description: Return the initial size of the window.
 	 */
 	protected Point getInitialSize() {
 		return new Point(1034, 526);
