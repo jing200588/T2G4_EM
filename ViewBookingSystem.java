@@ -1404,7 +1404,9 @@ public class ViewBookingSystem extends Composite {
 						// DateHour month is from 1 to 12!
 						DateHour dateHourFrom = new DateHour(BookDateTimeFrom.getYear(),
 								BookDateTimeFrom.getMonth() + 1, BookDateTimeFrom.getDay(), hourFrom);
-						System.out.println(dateHourFrom.toString());
+						
+						// For debugging: System.out.println(dateHourFrom.toString());
+						
 						DateHour dateHourTo = new DateHour(BookDateTimeTo.getYear(),
 								BookDateTimeTo.getMonth() + 1, BookDateTimeTo.getDay(), hourTo);
 						if(dateHourFrom.compareTo(dateHourTo) >= 0)
@@ -1422,7 +1424,8 @@ public class ViewBookingSystem extends Composite {
 						}
 					}
 					
-					System.out.println("HI");
+					// For debugging: System.out.println("HI");
+					
 					// Do the booking (The chosen time slot is legal)
 					ControllerBookingSystem.bookVenue(event, searchResultList,
 							chosenVenueID, timeSlotChoiceInput);
