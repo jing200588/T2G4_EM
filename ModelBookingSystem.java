@@ -11,6 +11,12 @@ public class ModelBookingSystem {
 	
 	
 	
+	/**
+	 * Description: Gets a list of available venues within the cost range. (includes booked timeslots)
+	 * @param upper
+	 * @param lower
+	 * @return
+	 */
 	public Vector<Venue> get_venue_by_cost(int upper, int lower){
 		db.connect();
 		Vector<Venue> venues = db.get_venue_list("cost", upper, lower);
@@ -27,6 +33,13 @@ public class ModelBookingSystem {
 	}
 	
 
+	
+	/**
+	 * Description: Gets a list of venues within the capacity range. (includes booked timeslots)
+	 * @param upper
+	 * @param lower
+	 * @return
+	 */
 	public Vector<Venue> get_venue_by_capacity(int upper, int lower){
 		db.connect();
 		Vector<Venue> venues = db.get_venue_list("capacity", upper, lower);
@@ -43,6 +56,11 @@ public class ModelBookingSystem {
 	}	
 	
 	
+	
+	/**
+	 * Description: Gets a list of venues without limitations. (includes booked timeslots)
+	 * @return
+	 */
 	public Vector<Venue> get_all_venue(){
 		
 		db.connect();
@@ -62,6 +80,13 @@ public class ModelBookingSystem {
 
 	}
 	
+	
+	/**
+	 * Description: Saving a booking to database
+	 * @param eventID
+	 * @param venueID
+	 * @param wantedTimeSlot
+	 */
 	public void add_booking_to_db(int eventID, int venueID, TimeSlot wantedTimeSlot){
 		db.out("booking now");
 		db.connect();
@@ -69,8 +94,13 @@ public class ModelBookingSystem {
 		db.disconnect();
 	}
 	
+
 	
-	
+	/**
+	 * Description: Finding a venue by its name (Allows substrings of names).
+	 * @param name
+	 * @return
+	 */
 	public Vector<Venue> find_venue_by_name(String name){
 		Vector<Venue> venues;
 		
