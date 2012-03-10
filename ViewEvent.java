@@ -534,7 +534,7 @@ public class ViewEvent extends Composite {
 	 */
 	public static Table OptimizedTable() {
 		Vector<Item> item_list = cevent.getitem_list();
-
+		
 		//Checks if there is any entry before creating the table
 		if (item_list.isEmpty()) {
 			budgetflag = false;	
