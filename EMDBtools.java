@@ -84,7 +84,7 @@ public class EMDBtools {
 					
 					
 				case 5:
-					db.out("WARNING: Database will be wiped out for the test..  Backup first before using on a live database.\n");
+					db.out("WARNING: Database will be replaced with test data..  Backup first before using on a live database.\n");
 					System.out.print("Confirm Running of Test? (y/n) : ");
 					String temp6 = sc.next();
 					
@@ -458,18 +458,8 @@ public class EMDBtools {
 			db.out(e.getMessage());
 		}
 		
-		db.out("******Reset******");
-		db.reset();
-		
-		
-		db.out("******Display Event List (Should be empty)******");
-		Vector<Eventitem> elist2 = db.get_event_list();
-		
-		try{
-			db.out(elist2.toString());
-		}catch(Exception e){
-			db.out(e.getMessage());
-		}	
+		db.init();
+	
 		
 	} //end test suite
 	
