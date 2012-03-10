@@ -1,7 +1,3 @@
-import java.util.Vector;
-
-
-
 /**
  * An object of type BookedVenueInfo contains all information of a venue (like name, address, etc.)
  * 		and a list of time slots that a particular event books for this venue.
@@ -73,9 +69,9 @@ public class BookedVenueInfo {
 	}
 	
 	/**
-	 * Returns the address of the BookedVenueInfo object
+	 * Returns the description of the BookedVenueInfo object
 	 * 
-	 * @return m_address - String
+	 * @return m_description - String
 	 */
 	public String getDescription()
 	{
@@ -95,7 +91,7 @@ public class BookedVenueInfo {
 	/**
 	 * Returns the maximum capacity of the BookedVenueInfo object
 	 * 
-	 * @return m_maxCapacity - String
+	 * @return maxCapacity - String
 	 */
 	public String getMaxCapacityString()
 	{
@@ -115,48 +111,94 @@ public class BookedVenueInfo {
 	/**
 	 * Returns the price / cost (in cents) of the BookedVenueInfo object
 	 * 
-	 * @return m_cost - String
+	 * @return cost - String
 	 */
 	public String getCostInCentString()
 	{
 		return Integer.toString(m_cost);
 	}
 	
+	/**
+	 * Returns the price / cost (in dollars) of the BookedVenueInfo object.
+	 * The cost has at most two decimal digits
+	 * 
+	 * @return cost - double
+	 */
 	public double getCostInDollar()
 	{
 		return m_cost / 100.0;
 	}
 	
+	/**
+	 * Returns the price / cost (in dollars) of the BookedVenueInfo object.
+	 * The cost has at most two decimal digits
+	 * 
+	 * @return cost - String
+	 */
 	public String getCostInDollarString()
 	{
 		return Double.toString(m_cost / 100.0);
 	}
 	
+	/**
+	 * Returns the identification number (ID) of the BookedVenueInfo object.
+	 * 
+	 * @return m_venueID - int
+	 */
 	public int getVenueID()
 	{
 		return m_venueID;
 	}
 	
+	/**
+	 * Returns the identification number (ID) of the BookedVenueInfo object.
+	 * 
+	 * @return m_venueID - String
+	 */
 	public String getVenueIDString()
 	{
 		return Integer.toString(m_venueID);
 	}
 	
+	/**
+	 * Returns the starting date of the booked time slot of the BookedVenueInfo object. The
+	 * date is in the format dd/mm/yyyy.
+	 * 
+	 * @return startDate - String
+	 */
 	public String getStartDateString()
 	{
 		return m_bookedTimeSlot.getStartDateHour().getDateRepresentation();
 	}
 	
+	/**
+	 * Returns the ending date of the booked time slot of the BookedVenueInfo object. The
+	 * date is in the format dd/mm/yyyy.
+	 * 
+	 * @return endDate - String
+	 */
 	public String getEndDateString()
 	{
 		return m_bookedTimeSlot.getEndDateHour().getDateRepresentation();
 	}
 	
+	/**
+	 * Returns the starting hour of the booked time slot of the BookedVenueInfo object. The
+	 * date is in the format h:00 (e.g. 9:00, 17:00, etc).
+	 * 
+	 * @return startHour - String
+	 */
 	public String getStartHourString()
 	{
 		return Integer.toString(m_bookedTimeSlot.getStartDateHour().getHour()) + ":00";
 	}
 	
+	/**
+	 * Returns the ending hour of the booked time slot of the BookedVenueInfo object. The
+	 * date is in the format h:00 (e.g. 9:00, 17:00, etc).
+	 * 
+	 * @return endHour - String
+	 */
 	public String getEndHourString()
 	{
 		return Integer.toString(m_bookedTimeSlot.getEndDateHour().getHour()) + ":00";

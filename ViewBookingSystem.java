@@ -1477,8 +1477,8 @@ public class ViewBookingSystem extends Composite {
 	
 	/**
 	 * This method is to decide if the button "Find All Suitable Venues" can be turned on. If
-	 * 	so, then the method turns it on so that users can request the service. Otherwise, nothing
-	 *  is done.
+	 * so, then the method turns it on so that users can request the service. Otherwise, nothing
+	 * is done.
 	 */
 	private void turnOnFindCriteriaButton()
 	{
@@ -1494,17 +1494,13 @@ public class ViewBookingSystem extends Composite {
 	}
 	
 	/**
+	 * Checks if the given string representing an amount of money (in dollars) is valid. The string
+	 * is in the correct format of currency if and only if whenever it has a decimal point, the
+	 * number of decimal digits must be at least 1 and at most 2.
 	 * 
-	 * @param money
+	 * @param money - String
 	 * @return true if money is in the correct format of currency.
 	 * @return false otherwise.
-	 * 
-	 * money is in the correct format of currency if and only if
-	 * 	+ It may not have a decimal point.
-	 *  + If it has a decimal point, the number of decimal digits must be at least 1
-	 *  	and at most 2.
-	 * 
-	 * Other cases will be checked by the function Double.parseDouble().
  	 */	
 	private boolean correctMoneyFormat(String money)
 	{
@@ -1525,8 +1521,9 @@ public class ViewBookingSystem extends Composite {
 	}
 	
 	/**
+	 * Determine the search criteria that a user chooses. 
 	 * 
-	 * @return the search criteria that a user chooses. 
+	 * @return searchType - ControllerBookingSystem.SearchCriteria 
 	 */
 	private ControllerBookingSystem.SearchCriteria determineCriteriaChoice()
 	{

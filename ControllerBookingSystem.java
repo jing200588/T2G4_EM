@@ -1,8 +1,4 @@
 /**
- * 
- */
-
-/**
  * @author Nguyen Truong Duy (Team 31 - CS2103)
  *
  */
@@ -17,28 +13,20 @@ public class ControllerBookingSystem {
 	private static ModelBookingSystem mbs = new ModelBookingSystem();
 	
 	/**
+	 * Books a venue with bookedVenueID from a list of venues for an event with a specified time
+	 * slot. It is assumed that the venue is available at the give time slot. Therefore, The
+	 * availability checking should have been done before calling this method.
+	 * The method update the new booking information in the database of venues and in the 
+	 * 		Eventitem object itself.
 	 * 
-	 * @param event
-	 * @param bookedVenueID
-	 * @param listVenues
-	 * @param wantedTimeSlot
-	 * 
-	 * Description: 
-	 * + Book a venue with the specified time slot. 
-	 * + Update the new information in the database of venues.
-	 * + Update the new information in the EventItem object itself.
-	 * 
-	 * Assumption: The venue is available within the time slot (i.e. The
-	 * 		availability checking should have been done before calling
-	 * 		this function).
+	 * @param event - Eventitem
+	 * @param listVenues - Vector<Venue>
+	 * @param bookedVenueID - int
+	 * @param wantedTimeSlot - TimeSlot
 	 * 
 	 * @return true if the booking is successful.
 	 * @return false if there is an error during the booking process.
 	 * 
-	 * (DATABASE):
-	 * 		+ A method to update a venue of an event object with event ID.
-	 * 		+ A method to update booked time slot of a venue.
-	 * 		+ Do you think we need a venue ID in the class Venue?
 	 */
 	public static boolean bookVenue(Eventitem event, Vector<Venue> listVenues,
 			int bookedVenueID, TimeSlot wantedTimeSlot)
@@ -60,18 +48,17 @@ public class ControllerBookingSystem {
 	}
 	
 	/**
+	 * Adds a venue which is not in the database of venues. It is provided by the user. However, such
+	 * a venue is not supported by the system. That is, the system will not book the venue. Event 
+	 * manager has to do the booking and time checking on his / her own.
+	 * The method updates the information about the outside venue in the record of an event specified by eventID.
+	 * Currently, this method is under heavy construction.
 	 * 
-	 * @param eventID
-	 * @param outside
-	 * @param wanted
+	 * @param eventID - int
+	 * @param outside - Venue
+	 * @param wanted - TimeSlot
 	 * @return true if the information is updated in the database successfully.
 	 * @return false if the updating cannot be done.
-	 * 
-	 * Description: 
-	 *    + Update the information about a venue that is not in the venue 
-	 *      database in the record of an event specified by eventID.
-	 *    + The system will not book such a venue. Event manager has to do
-	 *    	the booking and time checking on his / her own.
 	 */
 	public static boolean chooseOutsideVenue(int eventID, Venue outside, TimeSlot wanted)
 	{
@@ -79,23 +66,17 @@ public class ControllerBookingSystem {
 		
 		return true;
 	}
+	
 	/**
-	 * Description:
-	 * 	+ Look up in the database and return the venue with the specified
-	 * 		name. 
-	 * @param venueName
-	 * @return the venue object with the specified name.
-	 * @return null if such a venue does not exist.
-	 * 
-	 * (DATABASE):
-	 * 	+ A method to return a venue with the specific name.
+	 * Looks up in the database and returns the venues whose names contain the input string as a
+	 * substring.
+	 *  
+	 * @param venueName - String
+	 * @return list - Vector<Venue>
+	 * list will be empty if there is no venue with such a name.
 	 */
 	public static Vector<Venue> findVenueByName(String venueName)
 	{
-		// look up in the database.
-		// Search venue by Name
-		//return null;
-		
 		Vector<Venue> list = new Vector<Venue>();
 		list = mbs.find_venue_by_name(venueName);
 		
@@ -103,22 +84,15 @@ public class ControllerBookingSystem {
 	}
 	
 	/**
+	 * Searches venues that satisfy the specified criteria in terms of cost, capacity and time slot.
+	 * It is assumed the inputs are correct.
 	 * 
-	 * @param costRange (a pair of double numbers (a, b) where a <= b)
-	 * @param capacityRange (a pair of integers (a, b) where a <= b)
-	 * @param preferredTime (a TimeSlot object)
-	 * @param type
-	 * @return a list of venues satisfying the specified criteria.
+	 * @param costRange - int[] (a pair of double numbers (a, b) where a <= b)
+	 * @param capacityRange - int[] (a pair of integers (a, b) where a <= b)
+	 * @param preferredTime - TimeSlot
+	 * @param type - ControllerBokkingSystem.SearchCriteria
 	 * 
-	 * Assumption: The input is correct.
-	 * 
-	 * (DATABASE):
-	 * 	1) A method to return a list of venues such that their costs 
-	 * 		are in the range [A, B]
-	 * 	2) A method to return a list of venues such that their capacity
-	 * 		are in the range [A, B]
-	 * 	3) A method to return a list of venues such that they are available
-	 * 			(not clashed) at the specified time slot.
+	 * @return satisfiedVenueList - Vector<Venue>
 	 */
 	public static Vector<Venue> findVenueByCriteria(int[] costRange, int[] capacityRange,
 			TimeSlot preferredTime, SearchCriteria type)
@@ -211,14 +185,15 @@ public class ControllerBookingSystem {
 	}
 
 	/**
+	 * Checks a venue with venueID from a list of venues is available at a specified time
+	 * slot.
 	 * 
-	 * @param listVenue
-	 * @param venueID
-	 * @param preferredTime
+	 * @param listVenue - Vector<Venue>
+	 * @param venueID - int
+	 * @param preferredTime - TimeSlot
 	 * @return true if a venue with venueID in the list of venues is available at the given
-	 * 				time slot. 
+	 * time slot. 
 	 * @return false otherwise.
-	 * 
 	 * @throws Exception If there does exist a venue with venueID in the list.
 	 */
 	public static boolean isAvailable(Vector<Venue> listVenue, int venueID, TimeSlot preferredTime) throws Exception
@@ -232,11 +207,11 @@ public class ControllerBookingSystem {
 	}
 	
 	/**
+	 * Returns a string that contains all information about a venue with venueID in the list of venues.
 	 * 
-	 * @param listVenue
-	 * @param venueID
-	 * @return a string containing the details of a venue with venueID in the list of venues.
-	 * 
+	 * @param listVenue - Vector<Venue>
+	 * @param venueID - int
+	 * @return venueDetail - String
 	 * @throws Exception if there does not exist such a venue with venueID in the list.
 	 */
 	public static String getVenueDetail(Vector<Venue> listVenue, int venueID) throws Exception
@@ -255,9 +230,10 @@ public class ControllerBookingSystem {
 	}
 	
 	/**
+	 * Checks if a venue with venueID is in the input list of venues.
 	 * 
-	 * @param listVenue
-	 * @param venueID
+	 * @param listVenue - Vector<Venue>
+	 * @param venueID - int
 	 * @return true if there exists a venue with venueID in the list.
 	 * @return false otherwise
 	 */
@@ -269,6 +245,7 @@ public class ControllerBookingSystem {
 	}
 	
 	/**
+	 * Returns the index of a venue with venueID in the input list of venues.
 	 * 
 	 * @param listVenue
 	 * @param venueID
@@ -285,11 +262,13 @@ public class ControllerBookingSystem {
 	}
 	
 	/** 
+	 * Selects venues in the given list of venues such that they are available at the specified
+	 * time slot.
 	 * 
-	 * @param listVenue
-	 * @param preferTime
-	 * @return a subset of listVenue such that all the venues in the subset
-	 * 		is available at the given time slot.
+	 * @param listVenue - Vector<Venue>
+	 * @param preferTime - TimeSlot
+	 * @return satisfiedList - Vector<Venue> (a subset of listVenue such that all the venues in the subset
+	 * 	is available at the given time slot)
 	 */
 	private static Vector<Venue> shortListByTimeSlot(Vector<Venue> listVenue,
 						TimeSlot preferTime)
@@ -323,21 +302,23 @@ public class ControllerBookingSystem {
 		return returnList;
 	}
 	/**
+	 * Selects venues in the given list of venues such that their cost (in cents) is in
+	 * the specified range.
 	 * 
-	 * @param listVenue
-	 * @param lower
-	 * @param upper
-	 * @return a subset of listVenue such that all the venues in the subset 
-	 * 		has cost in the range [lower upper]
+	 * @param listVenue - Vector<Venue>
+	 * @param lower - int
+	 * @param upper - int
+	 * @return satisfiedList - Vetor<Venue> (a subset of listVenue such that all the venues in the subset 
+	 * 		has cost in the range [lower upper])
 	 */
 	private static Vector<Venue> shortListByCost(Vector<Venue> listVenue,
-						double lower, double upper)
+						int lower, int upper)
 	{
 		Vector<Venue> returnList = new Vector<Venue>();
 		
 		for(int index = 0; index < listVenue.size(); index++)
-			if(listVenue.get(index).getCost() > lower - THRESHOLD &&
-				listVenue.get(index).getCost() < upper + THRESHOLD)
+			if(listVenue.get(index).getCost() > lower &&
+				listVenue.get(index).getCost() < upper)
 				returnList.add(listVenue.get(index));
 		
 		return returnList;
