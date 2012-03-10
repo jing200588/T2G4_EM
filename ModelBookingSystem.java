@@ -97,7 +97,7 @@ public class ModelBookingSystem {
 
 	
 	/**
-	 * Description: Finding a venue by its name (Allow substrings).
+	 * Description: Finding a venue by its name (Allows substrings of names).
 	 * @param name
 	 * @return
 	 */
