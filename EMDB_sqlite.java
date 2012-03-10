@@ -1221,7 +1221,6 @@ public class EMDB_sqlite{
 			this.PREPSTATEM.setInt(1, id);	
 			 
 			ResultSet result = this.PREPSTATEM.executeQuery();
-			System.out.println(result);
 
 			while (result.next()) {
 				TimeSlot timing = new TimeSlot(new DateHour(result.getString("time_start")),new DateHour(result.getString("time_end")));
