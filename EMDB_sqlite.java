@@ -748,6 +748,20 @@ public class EMDB_sqlite{
 	 * @param batch
 	 */
 	public void add_event(String name, String description, double budget, String startdate, String enddate, String starttime, String endtime, boolean batch){
+
+
+		if (this.EMDB_DEBUGGING){
+			this.out("INSERTING EVENT:" + 
+					" \n + NAME: " + name +
+					" \n + DESCRIPTION: " + description +
+					" \n + BUDGET: " + budget +
+					" \n + START DATE: " + startdate +
+					" \n + END DATE: " + enddate +
+					" \n + START TIME: " + starttime +
+					" \n + END TIME: " + endtime
+					);
+		}
+		
 		
 	   	try {
 			this.PREPSTATEM.setString(1, name);
@@ -776,6 +790,19 @@ public class EMDB_sqlite{
 	 * @param batch
 	 */
 	public void add_venue(String name, String address, String description, int capacity, int cost, boolean batch){
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("INSERTING VENUE:" + 
+					" \n + NAME: " + name  +
+					" \n + ADDRESS: " + address +
+					" \n + DESCRIPTION: " + description +
+					" \n + CAPACITY: " + capacity +
+					" \n + COST: " + cost
+					);
+		}
+		
+		
+		
 	   	try {
 			this.PREPSTATEM.setString(1, name);
 			this.PREPSTATEM.setString(2, address);
@@ -801,7 +828,20 @@ public class EMDB_sqlite{
 	 * @param batch
 	 */
 	public void add_budget(int event_id, String name, int price, int satisfaction, String type, boolean batch){
-	   	try {
+	   	
+		if (this.EMDB_DEBUGGING){
+			this.out("INSERTING BUDGET:" + 
+					" \n + EVENT ID:" + event_id  +
+					" \n + NAME: " + name +
+					" \n + PRICE: " + price +
+					" \n + SATISFACTION: " + satisfaction +
+					" \n + TYPE: " + type
+					);
+		}
+		
+		
+		
+		try {
 			this.PREPSTATEM.setInt(1, event_id);
 			this.PREPSTATEM.setString(2, name);
 			this.PREPSTATEM.setInt(3, price);
@@ -827,6 +867,19 @@ public class EMDB_sqlite{
 	 * @param batch
 	 */
 	public void add_budget_optimized(int event_id, String name, int price, int satisfaction, String type, boolean batch){
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("INSERTING BUDGET OPTIMIZED:" + 
+					" \n + EVENT ID:" + event_id  +
+					" \n + NAME: " + name +
+					" \n + PRICE: " + price +
+					" \n + SATISFACTION: " + satisfaction +
+					" \n + TYPE: " + type
+					);
+		}
+		
+		
+		
 	   	try {
 			this.PREPSTATEM.setInt(1, event_id);
 			this.PREPSTATEM.setString(2, name);
@@ -847,6 +900,12 @@ public class EMDB_sqlite{
 	 * Description: Batch commit previous additions queued.
 	 */
 	public void add_batch_commit(){
+		
+		
+		if (this.EMDB_DEBUGGING){
+			this.out("RUNNING BATCH COMMIT");
+		}
+		
 		
 	    try {
 			this.DBCON.setAutoCommit(false);
