@@ -4,7 +4,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -17,22 +16,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.layout.TableColumnLayout;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.jface.layout.TreeColumnLayout;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.graphics.Color;
 import java.lang.NumberFormatException;
 
@@ -234,8 +225,6 @@ public class ViewBookingSystem extends Composite {
 		
 		SearchNameErrorBoard = new Text(SearchNameCompo, SWT.WRAP);
 		SearchNameErrorBoard.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-		//SearchNameErrorBoard.setForeground(RED);
-//		SearchNameErrorBoard.setBackground(RED);
 		SearchNameErrorBoard.setEditable(false);
 		SearchNameErrorBoard.setBounds(70, 86, 409, 80);
 		toolkit.adapt(SearchNameErrorBoard, true, true);
@@ -1479,6 +1468,7 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(VenueDetailTextbox, true, true);
 		
 		SearchNameErrorBoard.setForeground(RED);
+		
 	}	
 	
 	
