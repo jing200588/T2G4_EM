@@ -59,43 +59,58 @@ public class deleteconfirmDialog extends Dialog {
 		Composite composite = new Composite(shell, SWT.NONE);
 		composite.setLayout(new FormLayout());
 		
-		Label Prompt = new Label(composite, SWT.WRAP);
+		//Prompt label
+		Label Prompt = new Label(composite, SWT.WRAP | SWT.CENTER);
 		FormData fd_Prompt = new FormData();
 		fd_Prompt.top = new FormAttachment(30, 0);
-		fd_Prompt.left = new FormAttachment(10, 0);
+		fd_Prompt.left = new FormAttachment(20, 0);
 		fd_Prompt.right = new FormAttachment(90, 0);
 		Prompt.setLayoutData(fd_Prompt);
 		Prompt.setText("Are you sure you want to permanently delete " + name + "?" );
 		
-		Button btnNewButton = new Button(composite, SWT.NONE);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
+		/************************************************************
+		 * 'NO' BUTTON EVENT LISTENER
+		 ***********************************************************/
+		Button btnNo = new Button(composite, SWT.NONE);
+		btnNo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				result = 0;
 				shell.close();
 			}
 		});
-		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.left = new FormAttachment(70, -50);
-		fd_btnNewButton.right = new FormAttachment(70, 0);
-		fd_btnNewButton.top = new FormAttachment(Prompt, 50);
-		btnNewButton.setLayoutData(fd_btnNewButton);
-		btnNewButton.setText("No");
+		FormData fd_btnNo = new FormData();
+		fd_btnNo.left = new FormAttachment(70, -50);
+		fd_btnNo.right = new FormAttachment(70, 0);
+		fd_btnNo.top = new FormAttachment(Prompt, 50);
+		btnNo.setLayoutData(fd_btnNo);
+		btnNo.setText("No");
 		
-		Button btnCancel = new Button(composite, SWT.NONE);
-		btnCancel.addSelectionListener(new SelectionAdapter() {
+		/************************************************************
+		 * 'YES' BUTTON EVENT LISTENER
+		 ***********************************************************/
+		Button btnYes = new Button(composite, SWT.NONE);
+		btnYes.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				result = 1;
 				shell.close();
 			}
 		});
-		FormData fd_btnCancel = new FormData();
-		fd_btnCancel.right = new FormAttachment(30, 50);
-		fd_btnCancel.top = new FormAttachment(Prompt, 50);
-		fd_btnCancel.left = new FormAttachment(30, 0);
-		btnCancel.setLayoutData(fd_btnCancel);
-		btnCancel.setText("Yes");
+		FormData fd_btnYes = new FormData();
+		fd_btnYes.right = new FormAttachment(30, 50);
+		fd_btnYes.top = new FormAttachment(Prompt, 50);
+		fd_btnYes.left = new FormAttachment(30, 0);
+		btnYes.setLayoutData(fd_btnYes);
+		btnYes.setText("Yes");
+		
+		//warning sign label
+		Label warningsign = new Label(composite, SWT.NONE);
+		warningsign.setImage(Display.getDefault().getSystemImage(SWT.ICON_WARNING));
+		FormData fd_warningsign = new FormData();
+		fd_warningsign.top = new FormAttachment(25, 0);
+		fd_warningsign.right = new FormAttachment(Prompt, -6);
+		warningsign.setLayoutData(fd_warningsign);
 		
 
 	}
