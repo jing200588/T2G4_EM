@@ -1,13 +1,8 @@
 import java.io.File;
 
-
-
-/*
- *  Description: Wrapper class which extends the main database class. 
- */
-
 /**
  *  
+ * Wrapper class which extends any main database bridge/layer.
  * 
  * @author JunZhi
  * 

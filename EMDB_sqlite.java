@@ -1,11 +1,18 @@
 import java.sql.*;
 import java.util.Vector;
 
+/**
+ * 
+ * The bridge and layer between the application models and the database engine/driver.
+ * 
+ * @author JunZhi
+ * 
+ */
+public class EMDB_sqlite{
+	
+	
+	 
 /*
- * 
- * Description: Layer/Bridge between application and SQLite database.
- * 
- * 
  * 
  * *******************************************
  * NAMING CONVENTIONS
@@ -14,17 +21,9 @@ import java.util.Vector;
  * eg: TABLE_one, DBQUERY
  * 
  */
-
-
-
-
-/**
- 
- * 
- * @author JunZhi
- * 
- */
-public class EMDB_sqlite{
+	 
+	 
+	
 	
 	/*
 	 * ***********************************
