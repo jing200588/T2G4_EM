@@ -1,7 +1,8 @@
 /**
- * @author Nguyen Truong Duy (Team 31 - CS2103)
+ * A DateHour object keeps track of the date and time regarding year, month, day
+ * and hour. A DateHour object is immutable!
  * 
- * DateHour: immutable!
+ * @author Nguyen Truong Duy (Team 31 - CS2103)
  */
 public class DateHour implements Comparable<DateHour> {
 	/*************************************************************************
@@ -17,6 +18,16 @@ public class DateHour implements Comparable<DateHour> {
 	 * 
 	 * Assumption: The validity of the date and hour were checked
 	 ************************************************************************/
+	
+	/**
+	 * Constructor: Creates a DateHour object. It is assumed that the input
+	 * 		year, month, day and hour are valid.
+	 * 
+	 * @param year - int
+	 * @param month - int
+	 * @param day - int
+	 * @param hour - int
+	 */
 	public DateHour(int year, int month, int day, int hour)
 	{
 		m_year = year;
@@ -25,6 +36,11 @@ public class DateHour implements Comparable<DateHour> {
 		m_hour = hour;
 	}
 	
+	/**
+	 * Constructor: Creates a DateHour object from another DateHour object.
+	 * 
+	 * @param anotherObj - DateHour
+	 */
 	public DateHour(DateHour anotherObj)
 	{
 		m_year = anotherObj.getYear();
@@ -33,10 +49,13 @@ public class DateHour implements Comparable<DateHour> {
 		m_hour = anotherObj.getHour();
 	}
 	
-	// Create a DateHour object from the input string which has the format:
-	//			<day>/<month>/<year>/<hour>
-	// That is the 4 fields (day, month, year, hour) are separated by '/'
-	// Assumption: the input string is in the correct format
+	/**
+	 * Constructor: Creates a DateHour object from the input string which has the format:
+	 * <day>/<month>/<year>/<hour>. The 4 fields (day, month, year, hour) are separated by '/'.
+	 * It is assumed the input string is in the correct format.
+	 * 
+	 * @param dateHourRepresentation - String
+	 */
 	public DateHour(String dateHourRepresentation)
 	{
 		String[] arrString = dateHourRepresentation.split("/");
@@ -49,28 +68,48 @@ public class DateHour implements Comparable<DateHour> {
 	/************************************************************************
 	 * Methods that support extracting information
 	 ************************************************************************/
+	
+	/**
+	 * 
+	 * @return m_year - int
+	 */
 	public int getYear()
 	{
 		return m_year;
 	}
 	
+	/**
+	 * 
+	 * @return m_month - int
+	 */
 	public int getMonth()
 	{
 		return m_month;
 	}
 	
+	/**
+	 * 
+	 * @return m_day - int
+	 */
 	public int getDay()
 	{
 		return m_day;
 	}
 	
+	/**
+	 * 
+	 * @return m_hour - int
+	 */
 	public int getHour()
 	{
 		return m_hour;
 	}
 	
-	// Return a String object that represent the DateHour object.
-	// The format is dd/mm/yyyy/hh
+	/**
+	 * Returns a String object that represents the DateHour object. The string is dd/mm/yyyy/hh
+	 * 
+	 * @return dateHourRepresentation - String
+	 */
 	public String getDateHourRepresentation()
 	{
 		char[] charArr = new char[13];
@@ -96,8 +135,12 @@ public class DateHour implements Comparable<DateHour> {
 		return new String(charArr);
 	}
 	
-	// Return a String object that represents the date of DateHour object.
-	// The format is dd/mm/yyyy
+	/**
+	 * Returns a String object that represents the date of a DateHour object. 
+	 * The string format is dd/mm/yyyy
+	 * 
+	 * @return dateRepresentation - String
+	 */
 	public String getDateRepresentation()
 	{
 		char[] charArr = new char[10];
@@ -124,10 +167,13 @@ public class DateHour implements Comparable<DateHour> {
 	/**************************************************************************
 	 * Methods that support querying
 	 *************************************************************************/
+	
 	/**
-	 * @param year
-	 * @return true if the given input is a valid leap year. It returns false
-	 * 		   otherwise.
+	 * Checks if an input year is a leap year.
+	 * 
+	 * @param year - int
+	 * @return true if the given input is a valid leap year.
+	 * @return false otherwise.
 	 */
 	public static boolean isLeapYear(int year)
 	{
@@ -141,17 +187,15 @@ public class DateHour implements Comparable<DateHour> {
 	}
 	
 	/**
+	 * Checks if a given input (year, month, day, hour) represents the valid date and time.
+	 * Month should be from 1 to 12. Day should be from 1 to 31. Hour should be from 0 to 23.
 	 * 
-	 * @param year
-	 * @param month
-	 * @param day
-	 * @param hour
-	 * @return true if the given parameters are of a valid date and hour. It
-	 * 		   returns false otherwise
-	 * 
-	 * month: 1 - 12
-	 * day: 1 - 31
-	 * hour: 0 - 23
+	 * @param year - int
+	 * @param month - int
+	 * @param day - int
+	 * @param hour - int
+	 * @return true if the given parameters are of a valid date and hour.
+	 * @return false otherwise
 	 */
 	public static boolean isValidDateHour(int year, int month, int day, int hour)
 	{
@@ -188,8 +232,9 @@ public class DateHour implements Comparable<DateHour> {
 	}
 
 	/**
+	 * Compares two DateHour objects according to the chronological order.
 	 * 
-	 * @param comparedObj
+	 * @param comparedObj - DateHour
 	 * @return 1 if this object is larger than comparedObj
 	 * @return -1 if this object is smaller than comparedObj
 	 * @return 0 if this object is equal to comparedObj
@@ -220,12 +265,13 @@ public class DateHour implements Comparable<DateHour> {
 	}
 
 	@Override
+	
 	public String toString() {
 		return "DateHour [m_year=" + m_year + ", m_month=" + m_month
 				+ ", m_day=" + m_day + ", m_hour=" + m_hour + "]";
 	}
 	
-	// For testing purpose
+	/* For testing purpose
 	public static void main(String[] args)
 	{
 		DateHour myDate = new DateHour(850, 12, 1, 12);
@@ -236,5 +282,5 @@ public class DateHour implements Comparable<DateHour> {
 		System.out.println(newObj.getDateHourRepresentation());
 		System.out.println(newObj.toString());
 		
-	}
+	} */
 }
