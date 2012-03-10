@@ -29,6 +29,7 @@ import java.util.Collections;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.graphics.Color;
 
 import com.ibm.icu.text.Collator;
 
@@ -43,6 +44,8 @@ public class ViewBudget extends Composite {
 	private int budget;
 	private int type_choice;
 	private int satisfaction_choice;
+	//private static Display display = new Display();
+   // private static Color red = display.getSystemColor(SWT.COLOR_RED);
 	/*My declaration end here.*/
 
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
@@ -327,6 +330,7 @@ public class ViewBudget extends Composite {
 		txt_error_S1.setBounds(229, 4, 441, 29);
 		txt_error_S1.setFont(SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL));
 		txt_error_S1.setEnabled(false);
+
 		formToolkit.adapt(txt_error_S1, true, true);
 
 		btnConfirm_S1_1 = new Button(Step1, SWT.NONE);
@@ -625,5 +629,7 @@ public class ViewBudget extends Composite {
 		lblListOfAll.setBounds(10, 10, 249, 15);
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");
+		
+	
 	}
 }

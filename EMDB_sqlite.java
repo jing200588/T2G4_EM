@@ -350,7 +350,7 @@ public class EMDB_sqlite{
 	
 	
 	/**
-	 * Description: Resets database to default.
+	 * Description: Reset the database to default.
 	 */
 	public void reset_clear(){
 		this.truncate_table(TABLE_venue);
@@ -376,6 +376,10 @@ public class EMDB_sqlite{
 	 * ***********************************
 	 */
 	
+	/**
+	 * Description: Connecting to the database.
+	 * @return
+	 */
 	public int connect(){
 		
 		try {
@@ -394,7 +398,10 @@ public class EMDB_sqlite{
 	
 	
 	
-	
+	/**
+	 * Description: Disconnecting from the database.
+	 * @return
+	 */
 	public int disconnect(){
 
 		try {
@@ -432,6 +439,10 @@ public class EMDB_sqlite{
 	 */
 	
 
+	/**
+	 * Description: Setting of the database name.
+	 * @param name
+	 */
 	public void set_name(String name){
 		DBNAME = name;
 	}
@@ -454,8 +465,9 @@ public class EMDB_sqlite{
 	 */
 
 
-	/*
-	 * Single and Batch helpers
+	/**
+	 * Description: Prepare required statements for query (generic). 
+	 * @param type
 	 */
 	public void add_prepare(String type){
 		try {
@@ -491,7 +503,17 @@ public class EMDB_sqlite{
 	
 	
 	
-	// There is another method for batch
+	/**
+	 * Description: Add an event.
+	 * @param name
+	 * @param description
+	 * @param budget
+	 * @param startdate
+	 * @param enddate
+	 * @param starttime
+	 * @param endtime
+	 * @return
+	 */
 	public int add_event(String name, String description, double budget, String startdate, String enddate, String starttime, String endtime){
 		
 		
@@ -543,8 +565,15 @@ public class EMDB_sqlite{
 	
 	
 	
-	
-	// There is another method for batch
+	/**
+	 * Description: Add a venue.
+	 * @param name
+	 * @param address
+	 * @param description
+	 * @param capacity
+	 * @param cost
+	 * @return
+	 */
 	public int add_venue(String name, String address, String description, int capacity, int cost){
 		if (this.EMDB_DEBUGGING){
 			this.out("INSERTING VENUE:" + 
@@ -587,7 +616,14 @@ public class EMDB_sqlite{
 	
 	
 	
-	// There is another method for batch
+	/**
+	 * Description: Add a venue booking.
+	 * @param event_id
+	 * @param venue_id
+	 * @param time_start
+	 * @param time_end
+	 * @return
+	 */
 	public int add_booking(int event_id, int venue_id, String time_start , String time_end){
 		
 		if (this.EMDB_DEBUGGING){
@@ -629,7 +665,15 @@ public class EMDB_sqlite{
 	
 	
 	
-	// There is another method for batch
+	/**
+	 * Description: Add a budget list in relation to an event.
+	 * @param event_id
+	 * @param name
+	 * @param price
+	 * @param satisfaction
+	 * @param type
+	 * @return
+	 */
 	public int add_budget(int event_id, String name, int price, int satisfaction, String type){
 		
 		if (this.EMDB_DEBUGGING){
@@ -686,7 +730,17 @@ public class EMDB_sqlite{
 	 */
 
 	
-	//Overloaded Function
+	/**
+	 * Description: Add an event. This is an overloaded function for batch processes.
+	 * @param name
+	 * @param description
+	 * @param budget
+	 * @param startdate
+	 * @param enddate
+	 * @param starttime
+	 * @param endtime
+	 * @param batch
+	 */
 	public void add_event(String name, String description, double budget, String startdate, String enddate, String starttime, String endtime, boolean batch){
 		
 	   	try {
@@ -706,7 +760,15 @@ public class EMDB_sqlite{
 	   	
 	}
 	
-	//Overloaded Function
+	/**
+	 * Description: Add a venue. This is an overloaded function for batch processes.
+	 * @param name
+	 * @param address
+	 * @param description
+	 * @param capacity
+	 * @param cost
+	 * @param batch
+	 */
 	public void add_venue(String name, String address, String description, int capacity, int cost, boolean batch){
 	   	try {
 			this.PREPSTATEM.setString(1, name);
@@ -723,9 +785,15 @@ public class EMDB_sqlite{
 	   	
 	}
 	
-	//Overloaded Function
-	//public void add_bookings(){
-	//}
+	/**
+	 * Description: Add a budget list in relation to an event. This is an overloaded function for batch processes.
+	 * @param event_id
+	 * @param name
+	 * @param price
+	 * @param satisfaction
+	 * @param type
+	 * @param batch
+	 */
 	public void add_budget(int event_id, String name, int price, int satisfaction, String type, boolean batch){
 	   	try {
 			this.PREPSTATEM.setInt(1, event_id);
@@ -740,7 +808,18 @@ public class EMDB_sqlite{
 			
 		}
 	}
+
 	
+	
+	/**
+	 * Description: Add an optimized budget list in relation to an event. This is an overloaded function for batch processes.
+	 * @param event_id
+	 * @param name
+	 * @param price
+	 * @param satisfaction
+	 * @param type
+	 * @param batch
+	 */
 	public void add_budget_optimized(int event_id, String name, int price, int satisfaction, String type, boolean batch){
 	   	try {
 			this.PREPSTATEM.setInt(1, event_id);
@@ -757,6 +836,10 @@ public class EMDB_sqlite{
 	}
 
 	
+	
+	/**
+	 * Description: Batch commit previous additions queued.
+	 */
 	public void add_batch_commit(){
 		
 	    try {
@@ -784,8 +867,10 @@ public class EMDB_sqlite{
 	 */
 	
 
-	/*
-	 * Getting an event by the event id as set in the database
+	/**
+	 * Description: Getting an event.
+	 * @param id
+	 * @return
 	 */
 	public Eventitem get_event(int id){
 		
@@ -835,6 +920,11 @@ public class EMDB_sqlite{
 	
 	
 	
+	
+	/**
+	 * Description: Getting the event list.
+	 * @return
+	 */
 	public Vector<Eventitem> get_event_list(){
 
 		if (this.EMDB_DEBUGGING){
@@ -885,8 +975,11 @@ public class EMDB_sqlite{
 	
 	
 	
-	/*
-	 * Getting a venue by the venue id as set in the database
+
+	/**
+	 * Description: Getting a single venue.
+	 * @param id
+	 * @return
 	 */
 	public Venue get_venue(int id){
 		
@@ -939,9 +1032,12 @@ public class EMDB_sqlite{
 	
 	
 	
-	/* 
-	 * Get a list of venues. 
-	 * The clause is optional
+	/**
+	 * Description: Getting a list of venue. Clause is optional.
+	 * @param clause
+	 * @param upper
+	 * @param lower
+	 * @return
 	 */
 	public Vector<Venue> get_venue_list(String clause, int upper, int lower){
 
@@ -1006,8 +1102,11 @@ public class EMDB_sqlite{
 	
 	
 	
-	/*
-	 * Getting a list of bookings from db
+	/**
+	 * Description: Retrieving venue bookings, by event or by venue.
+	 * @param id
+	 * @param type
+	 * @return
 	 */
 	public Vector<TimeSlot> get_bookings(int id, String type){
 		
@@ -1076,8 +1175,12 @@ public class EMDB_sqlite{
 	}
 	
 	
-	/*
-	 * Getting a list of bookings from db
+
+
+	/**
+	 * Description: Getting a list of venue booking information in relation to an event.
+	 * @param id
+	 * @return
 	 */
 	public Vector<BookedVenueInfo> get_booking_info(int id){
 		
@@ -1122,9 +1225,12 @@ public class EMDB_sqlite{
 	
 	
 	
-	
-	/*
-	 * Get a budget list attached to the event by it's id
+
+	/**
+	 * Description: Getting a budget list by event. Option to select if it is the optimized list or not.
+	 * @param id
+	 * @param optimized
+	 * @return
 	 */
 	public Vector<Item> get_budget_list(int id, boolean optimized){
 
@@ -1195,6 +1301,10 @@ public class EMDB_sqlite{
 	 */
 
 
+	/**
+	 * Description: Deleting a budget least related to an event.
+	 * @param id
+	 */
 	public void delete_budget_list(int id){
 		
 		
@@ -1226,7 +1336,10 @@ public class EMDB_sqlite{
 	
 	
 	
-	
+	/**
+	 * Description: Deleting and event. Will delete the budget and bookings related to it as well
+	 * @param id
+	 */
 	public void delete_event(int id){
 		
 		
@@ -1257,7 +1370,10 @@ public class EMDB_sqlite{
 	
 
 	
-	
+	/**
+	 * Description: Deleting a venue. Will Delete all bookings at that venue as well.
+	 * @param id
+	 */
 	public void delete_venue(int id){
 		
 		
@@ -1282,7 +1398,10 @@ public class EMDB_sqlite{
 
 	
 	
-	
+	/**
+	 * Description: Deleting a venue booking
+	 * @param id
+	 */
 	public void delete_booking(int id){
 		
 		if (this.EMDB_DEBUGGING){
@@ -1305,6 +1424,12 @@ public class EMDB_sqlite{
 	}
 	
 	
+	
+	/**
+	 * Description: Deleting a bookings of a venue related to an event or venue
+	 * @param id
+	 * @param type
+	 */
 	public void delete_all_bookings(int id, String type){
 		
 		if (this.EMDB_DEBUGGING){
@@ -1411,7 +1536,7 @@ public class EMDB_sqlite{
 	
 	
 	/**
-	 * Description: Search venue database by name.
+	 * Description: Search the venue database by name.
 	 * @param name
 	 * @return
 	 */

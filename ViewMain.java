@@ -73,8 +73,7 @@ public class ViewMain extends ApplicationWindow {
 	 ***********************************************************/
 	public static void DeleteItem() {
 		table.remove(table.getSelectionIndices());
-		layout.topControl = hp;
-		c2.layout(true);
+		Homepage();
 	}
 	
 	/************************************************************
@@ -107,7 +106,16 @@ public class ViewMain extends ApplicationWindow {
 	    	item.setBackground(2,blue);
 		}
 	}
-
+	
+	/************************************************************
+	 * HOMEPAGE
+	 ***********************************************************/
+	public static void Homepage () {		
+		hp = new ViewHomepage(c2, SWT.NONE);
+		layout.topControl = hp;
+		c2.layout(true);
+	}
+	
 	/************************************************************
 	 * CALCULATE BUDGET
 	 ***********************************************************/
@@ -129,6 +137,10 @@ public class ViewMain extends ApplicationWindow {
 	/************************************************************
 	 * EVENT PARTICULARS
 	 ***********************************************************/
+	/**
+	 * Description: 
+	 * @param curevent
+	 */
 	public static void EventParticulars(Eventitem curevent) {
 		ViewEventParticulars ep = new ViewEventParticulars(c2, SWT.NONE, curevent, table.getSelectionIndex());
 		layout.topControl = ep;
@@ -143,8 +155,10 @@ public class ViewMain extends ApplicationWindow {
 		System.out.println("test");
 		layout.topControl = newview;
 		c2.layout(true);
+		
 	}
 	
+
 	/**
 	 * Create contents of the application window.
 	 * @param parent
