@@ -389,8 +389,9 @@ public class ViewBookingSystem extends Composite {
 					{
 						LowerBoundCapacity.setText("");
 						UpperBoundCapacity.setText("");
-						CapacityConfirmButton.setText("Confirm");
+						
 					}
+					CapacityConfirmButton.setText("Confirm");
 					
 					if(flagCostChoice == true)
 					{
@@ -402,8 +403,8 @@ public class ViewBookingSystem extends Composite {
 					{
 						LowerBoundCost.setText("");
 						UpperBoundCost.setText("");
-						CostConfirmButton.setText("Confirm");
 					}
+					CostConfirmButton.setText("Confirm");
 					
 					if(flagTimeSlotChoice == true)
 					{
@@ -416,9 +417,9 @@ public class ViewBookingSystem extends Composite {
 					else
 					{
 						HourFromChoice.setText("");
-						HourToChoice.setText("");
-						TimeConfirmButton.setText("Confirm");
+						HourToChoice.setText("");	
 					}
+					TimeConfirmButton.setText("Confirm");
 				}
 				else
 				{
