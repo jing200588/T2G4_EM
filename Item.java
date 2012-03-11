@@ -47,10 +47,10 @@ public class Item implements Comparable {
 	 * @param input_value
 	 * @param type
 	 */
-	public Item(int id, String input_item, double input_price, int input_value, String type) {
+	public Item(int id, String input_item, int input_price, int input_value, String type) {
 		this.id = id;
 		this.item = input_item;
-		this.price = (int) (input_price*100);
+		this.price = input_price;
 		this.satisfaction_value = input_value;
 		this.type = type;
 		this.compulsory = 'N';

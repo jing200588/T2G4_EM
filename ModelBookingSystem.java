@@ -88,7 +88,7 @@ public class ModelBookingSystem {
 	 * @param wantedTimeSlot
 	 */
 	public void add_booking_to_db(int eventID, int venueID, TimeSlot wantedTimeSlot){
-		db.out("booking now");
+		//db.out("booking now");
 		db.connect();
 		db.add_booking(eventID, venueID, wantedTimeSlot.getStartDateHour().getDateHourRepresentation(), wantedTimeSlot.getEndDateHour().getDateHourRepresentation());
 		db.disconnect();

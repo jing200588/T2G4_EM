@@ -31,19 +31,26 @@ public class ControllerBookingSystem {
 	public static boolean bookVenue(Eventitem event, Vector<Venue> listVenues,
 			int bookedVenueID, TimeSlot wantedTimeSlot)
 	{	
+		/* For testing purpose
 		System.out.println("Hi Inside BookVenue");
 		System.out.println("This is my EVENT: " + event);
 		System.out.println("This is my EVENT: " + listVenues);
-		System.out.println("This is my EVENT: " + listVenues.get(0));
+		System.out.println("This is my EVENT: " + listVenues.get(0)); */
+		
+		
 		mbs.add_booking_to_db(event.getID(), bookedVenueID, wantedTimeSlot);
 		
 		int index = findIndex(listVenues, bookedVenueID);
-		System.out.println("Inside BookVenue" + index);
+		
+		/* For testing purpose 
+		System.out.println("Inside BookVenue" + index); */
+		
 		// index is in valid range!!
 		BookedVenueInfo newObj = new BookedVenueInfo(listVenues.get(index), wantedTimeSlot);
 		event.addBVI(newObj);
+		
+		// For testing purpose: System.out.println("Hi! THis is the end of bookVenue");
 		// If the booking is successful
-		System.out.println("Hi! THis is the end of bookVenue");
 		return true;
 	}
 	
@@ -200,10 +207,17 @@ public class ControllerBookingSystem {
 	public static boolean isAvailable(Vector<Venue> listVenue, int venueID, TimeSlot preferredTime) throws Exception
 	{
 		int index = findIndex(listVenue, venueID);
+		
+		/* For testing purpose:
 		System.out.println("I'm here. Venue ID: " + venueID + " Index: " + index + " Time: " + preferredTime);
+		*/
+		
 		if(index < 0)		// A venue with venueID does not exist
 			throw new Exception("There is no venue with such an ID in the table above!");
-		System.out.println(listVenue.get(index));
+		
+		/* For testing purpose:
+		System.out.println(listVenue.get(index)); */
+		
 		return listVenue.get(index).isAvailable(preferredTime);
 	}
 	

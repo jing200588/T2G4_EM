@@ -168,7 +168,6 @@ public class Eventitem {
 	
 	public void addBVI(Vector<BookedVenueInfo> BVI){
 		_BVI_list = BVI;
-		System.out.println(_BVI_list);
 
 	}
 }

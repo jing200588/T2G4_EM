@@ -69,13 +69,13 @@ public class ModelEvent {
 				eitem.getEndDate(),
 				eitem.getStartTime(),
 				eitem.getEndTime());
-		db.out("Create: " + id);
+		//db.out("Create: " + id);
 		eitem.setID(id);
 		list.add(eitem);
 		
 		db.disconnect();
 		
-		db.out("Returned: " + eitem.getID());
+		//db.out("Returned: " + eitem.getID());
 	
 	}
 	
@@ -112,7 +112,7 @@ public class ModelEvent {
 	public static void DeleteEvent(Eventitem eitem) {
 		
 		db.connect();
-		db.out("Passing: " + eitem.getID() + "-" + eitem.getName());
+		//db.out("Passing: " + eitem.getID() + "-" + eitem.getName());
 		
 		db.delete_event(eitem.getID());
 		db.disconnect();
@@ -134,7 +134,7 @@ public class ModelEvent {
 		list.add(index, eitem);
 		
 		
-		db.out("testing start");
+		//db.out("testing start");
 		db.connect();
 		db.update_event(
 				eitem.getID(), 
@@ -147,8 +147,8 @@ public class ModelEvent {
 				eitem.getEndTime());
 		
 		db.disconnect();
-		db.out("index:" + index);
-		db.out("testing end");
+	//	db.out("index:" + index);
+	//	db.out("testing end");
 		
 		
 	}

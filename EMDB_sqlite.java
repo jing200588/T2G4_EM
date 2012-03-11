@@ -314,64 +314,19 @@ public class EMDB_sqlite{
 	
 	
 	
-	
-	
-	
-	/**
-	 * Description: Clears the named table.
-	 * @param name
-	 * @return
-	 */
-	private int truncate_table(String name){
-		
-		try {
-			this.DBQUERY.executeUpdate("TRUNCATE TABLE IF EXISTS " + name + ";");
-			
-			return 1;
-			
-		} catch (SQLException e) {
-			
-			return 0;
-		}	
-	}
-	
-	
-	
-	
 
 	/**
 	 * Description: Resets variables and the database to default.
 	 */
 	public void reset(){
-		this.DBCON = null;
-		this.DBQUERY = null;	
+
 		this.PREPSTATEM = null;
-		
-		
 		this.init();
 		
 	}
 	
 	
-	
-	
-	/**
-	 * Description: Reset the database to default.
-	 */
-	public void reset_clear(){
-		this.truncate_table(TABLE_venue);
-		this.truncate_table(TABLE_events);
-		this.truncate_table(TABLE_venue_bookings);
-		this.truncate_table(TABLE_budget);
-		this.truncate_table(TABLE_budget_optimized);
-		
-	}
-	
 
-
-	
-	
-	
 	/*
 	 * ***********************************
 	 * 
@@ -1266,7 +1221,6 @@ public class EMDB_sqlite{
 			this.PREPSTATEM.setInt(1, id);	
 			 
 			ResultSet result = this.PREPSTATEM.executeQuery();
-			System.out.println(result);
 
 			while (result.next()) {
 				TimeSlot timing = new TimeSlot(new DateHour(result.getString("time_start")),new DateHour(result.getString("time_end")));
@@ -1621,8 +1575,6 @@ public class EMDB_sqlite{
 		Vector<Venue> list = new Vector<Venue>();
 		
 		try {
-
-			this.out(query);
 			ResultSet result = this.DBQUERY.executeQuery(query);
 			
 			

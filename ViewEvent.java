@@ -501,7 +501,6 @@ public class ViewEvent extends Composite {
 		col6.setResizable(false);
 
 		VenueResult.removeAll();
-		System.out.println("Venue_list_size = " + venue_list.size());
 		for (int loopIndex = 0; loopIndex < venue_list.size(); loopIndex++) {
 			TableItem item = new TableItem(VenueResult, SWT.NULL);
 			item.setText(0, venue_list.get(loopIndex).getName());
@@ -535,7 +534,7 @@ public class ViewEvent extends Composite {
 	 */
 	public static Table OptimizedTable() {
 		Vector<Item> item_list = cevent.getitem_list();
-
+		
 		//Checks if there is any entry before creating the table
 		if (item_list.isEmpty()) {
 			budgetflag = false;	
@@ -574,7 +573,6 @@ public class ViewEvent extends Composite {
 					for(int j=0; j < i; j++) {
 						int value2 = Integer.parseInt(items[j].getText(0).substring(5, items[j].getText(0).length()));
 						if(value1 - value2 < 0) {
-							System.out.println(value1 + " " + value2);
 							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
 							items[i].dispose();
 							TableItem item = new TableItem(BudgetResult, SWT.NONE, j);
