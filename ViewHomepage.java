@@ -20,13 +20,13 @@ public class ViewHomepage extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setForeground(SWTResourceManager.getColor(SWT.COLOR_LIST_FOREGROUND));
+		composite.setForeground(SWTResourceManager.getColor(SWT.COLOR_INFO_FOREGROUND));
 		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Label lblWelcomeToEman = new Label(composite, SWT.CENTER);
-		lblWelcomeToEman.setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
-		lblWelcomeToEman.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
+		lblWelcomeToEman.setForeground(SWTResourceManager.getColor(SWT.COLOR_TITLE_FOREGROUND));
+		lblWelcomeToEman.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//lblWelcomeToEman.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\Pictures\\b34wl.jpg"));
 		lblWelcomeToEman.setFont(SWTResourceManager.getFont("Tekton Pro", 32, SWT.NORMAL));
 		lblWelcomeToEman.setText("\n\n\n\nWelcome to E-MAN!");
