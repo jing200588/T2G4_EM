@@ -2,12 +2,14 @@
  * Name: Chua Hong Jing
  */
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
 public class ControllerBudget{
-
+	
+	private DecimalFormat myFormatter = new DecimalFormat("##.##");
 	private int number; //store the number of item to undergo permutation algorithm
 	private double budget, recursive_fnc_budget; 
 	private Solution soln;
@@ -184,9 +186,9 @@ public class ControllerBudget{
 			differentResult = 1; // (Whole item list)
 			totalCombination = 1;
 			if(satisfaction_choice == 1)
-				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: \t$" + ((double) (compulsory_cost))/100 +"\n";
+				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: \t$" + myFormatter.format(((double) (compulsory_cost))/100) +"\n";
 			else
-				text = "Total combination:\t"+totalCombination+"\nTotal cost: \t$" + ((double) (compulsory_cost))/100 +"\n";	
+				text = "Total combination:\t"+totalCombination+"\nTotal cost: \t$" + myFormatter.format(((double) (compulsory_cost))/100) +"\n";	
 			text +="***********Combination 1***********\n";
 			for(int i=0; i<item_list.size(); i++) {
 				text +=non_compulsory_num+"\t";
@@ -206,9 +208,9 @@ public class ControllerBudget{
 			differentResult = 1; // (Whole item list)
 			totalCombination = 1;
 			if(satisfaction_choice == 1)
-				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (compulsory_satisfaction+non_compulsory_satisfaction) + "\nTotal cost: \t$" + ((double) (compulsory_cost+non_compulsory_cost))/100 +"\n";
+				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + (compulsory_satisfaction+non_compulsory_satisfaction) + "\nTotal cost: \t$" + myFormatter.format(((double) (compulsory_cost+non_compulsory_cost))/100) +"\n";
 			else
-				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + "\nTotal cost: \t$" + ((double) (compulsory_cost+non_compulsory_cost))/100 +"\n";
+				text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + "\nTotal cost: \t$" + myFormatter.format(((double) (compulsory_cost+non_compulsory_cost))/100) +"\n";
 
 			text +="***********Combination 1***********\n";
 			for(int i=0; i<item_list.size(); i++) {
@@ -236,9 +238,9 @@ public class ControllerBudget{
 				differentResult = 2; // (Take Compulsory List only)
 				totalCombination = 1;
 				if (satisfaction_choice == 1) 
-					text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: $\t" + ((double) compulsory_cost)/100 +"\n";
+					text = "Total combination:\t"+totalCombination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: $\t" + myFormatter.format(((double) compulsory_cost)/100) +"\n";
 				else
-					text = "Total combination:\t"+totalCombination+"\nTotal cost: $\t" + ((double) compulsory_cost)/100 +"\n";
+					text = "Total combination:\t"+totalCombination+"\nTotal cost: $\t" + myFormatter.format(((double) compulsory_cost)/100) +"\n";
 				text +="***********Combination 1***********\n";
 				for(int i=0; i<item_list.size(); i++) {
 					if(item_list.get(i).getCompulsory() == 'Y') 
@@ -291,7 +293,7 @@ public class ControllerBudget{
 
 					text +="***********Combination "+(index+1)+"***********\n";
 					num = 1;
-					text +="Total cost: \t$" + (soln.getSolnCostSet().get(i)+((double) compulsory_cost)/100) +"\n";
+					text +="Total cost: \t$" + myFormatter.format((soln.getSolnCostSet().get(i)+((double) compulsory_cost)/100)) +"\n";
 					for(int k=0; k<compulsory_list.size();k++) {
 						text+= num+"\t";
 						text+= compulsory_list.get(k).getItem() + " for $";
