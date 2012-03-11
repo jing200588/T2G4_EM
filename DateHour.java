@@ -239,7 +239,7 @@ public class DateHour implements Comparable<DateHour> {
 	 * @return -1 if this object is smaller than comparedObj
 	 * @return 0 if this object is equal to comparedObj
 	 */
-	@Override
+//	@Override
 	public int compareTo(DateHour comparedObj) {
 		if(m_year < comparedObj.getYear())
 			return -1;
