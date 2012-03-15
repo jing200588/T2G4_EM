@@ -35,7 +35,9 @@ public class ViewCreateEvent extends Composite {
 		
 		//Create Event form
 		Form CreateEventForm = formToolkit.createForm(this);
-		CreateEventForm.getBody().setBackground(SWTResourceManager.getColor(255, 255, 255));
+		CreateEventForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_INFO_FOREGROUND));
+		CreateEventForm.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		CreateEventForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		CreateEventForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		formToolkit.paintBordersFor(CreateEventForm);
 		CreateEventForm.setText("Create Event");
@@ -43,6 +45,7 @@ public class ViewCreateEvent extends Composite {
 		
 		//Body Composite
 		Composite composite = new Composite(CreateEventForm.getBody(), SWT.NONE);
+		//composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(50, -100);
 		fd_composite.bottom = new FormAttachment (50, -10);
@@ -52,9 +55,11 @@ public class ViewCreateEvent extends Composite {
 		formToolkit.adapt(composite);
 		formToolkit.paintBordersFor(composite);
 		composite.setLayout(new GridLayout(3, false));
+		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		
 		//Event name label
 		Label lblNewLabel = formToolkit.createLabel(composite, "Event Title:", SWT.NONE);
+		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblNewLabel.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
 		
@@ -67,6 +72,7 @@ public class ViewCreateEvent extends Composite {
 		
 		//Start Date label
 		Label lblStartDate = formToolkit.createLabel(composite, "Start Date and Time:", SWT.NONE);
+		lblStartDate.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblStartDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblStartDate.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
 		StartDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
@@ -82,6 +88,7 @@ public class ViewCreateEvent extends Composite {
 		
 		//End Date label
 		Label lblEndDate = formToolkit.createLabel(composite, "End Date and Time:", SWT.NONE);
+		lblEndDate.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblEndDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEndDate.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
 		EndDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
