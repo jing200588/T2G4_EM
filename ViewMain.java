@@ -1,3 +1,5 @@
+import com.ibm.icu.text.Collator;
+import java.util.Locale;
 import java.util.Vector;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
@@ -334,7 +336,28 @@ public class ViewMain extends ApplicationWindow {
 	 	    tc2.setResizable(false);
 	 	    tc3.setResizable(false);
 	 	    
-	 	    
+			tc1.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event e) {
+					//sort name
+					TableItem[] items = table.getItems();
+					Collator collator = Collator.getInstance(Locale.getDefault());
+					for (int i = 1; i<items.length; i++) {
+						String value1 = items[i].getText(0);
+						for(int j=0; j < i; j++) {
+							String value2 = items[j].getText(0);
+							if(collator.compare(value1, value2) < 0) {
+								String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2)};
+								items[i].dispose();
+								TableItem item = new TableItem(table, SWT.NONE, j);	//j could be the final index
+								item.setText(values);
+								items = table.getItems();
+								break;
+							}
+						}
+					}
+				}
+			});
+			
 			//Column Resize with table fix
 			 c1.addControlListener(new ControlAdapter() {
 				    public void controlResized(ControlEvent e) {
