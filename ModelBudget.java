@@ -26,7 +26,7 @@ public class ModelBudget {
 	 * @param id
 	 * @param i_list
 	 */
-	public void received_item_list(int id, Vector<Item> i_list) { 
+	public void saveNonOptimizedList(int id, Vector<Item> i_list) { 
 		event_id = id;
 		item_list = i_list;
 
@@ -50,7 +50,7 @@ public class ModelBudget {
 	 * @param id
 	 * @param i_list
 	 */
-	public void recevied_combination_list(int id, Vector<Item> i_list) { 
+	public void saveOptimizedList(int id, Vector<Item> i_list) { 
 		event_id = id;
 		confirm_list = i_list;
 
@@ -71,12 +71,12 @@ public class ModelBudget {
 	 * @param id
 	 * @param i_list
 	 */
-	public void update_item_list(int id, Vector<Item> i_list) {
+	public void updateNonOptimizeItemListwithCompulsory(int id, Vector<Item> i_list) {
 
 		item_list = i_list;
 
-		this.delete_item_list(id);
-		this.received_item_list(id, i_list);
+		this.deleteNonOptimizeItemList(id);
+		this.saveNonOptimizedList(id, i_list);
 
 	}
 	
@@ -85,7 +85,7 @@ public class ModelBudget {
 	 * @param id
 	 */
 
-	public void delete_item_list(int id){
+	public void deleteNonOptimizeItemList(int id){
 		db.connect();
 		db.delete_budget_list(id);
 		db.disconnect();
@@ -97,7 +97,7 @@ public class ModelBudget {
 	 * @param id
 	 * @return
 	 */
-	public Vector<Item> return_item_list(int id) {
+	public Vector<Item> getNonOptimizeItemList(int id) {
 
 		db.connect();
 		item_list = db.get_budget_list(id, false);
