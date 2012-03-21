@@ -91,6 +91,13 @@ public class ViewEvent extends Composite {
 		 * 
 		 *********************************************************************************************/
 		Button Epartedit = new Button(EparticularsComp, SWT.NONE);
+		/*
+		Epartedit.addMouseTrackListener(new MouseTrackAdapter() {
+			@Override
+			public void mouseHover(MouseEvent e) {
+				ViewMain.
+			}
+		});*/
 		Epartedit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -123,12 +130,12 @@ public class ViewEvent extends Composite {
 		Startdate = new Label(EparticularsComp, SWT.NONE);
 		Startdate.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Startdate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Startdate.setText(cevent.getStartDate());
+		Startdate.setText(cevent.getStartDate().getDate());
 
 		Starttime = new Label(EparticularsComp, SWT.NONE);
 		Starttime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Starttime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Starttime.setText(cevent.getStartTime()+"HRS");
+		Starttime.setText(cevent.getStartTime().getTime()+"HRS");
 
 		Label Enddntlabel = new Label(EparticularsComp, SWT.NONE);
 		Enddntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
@@ -138,12 +145,12 @@ public class ViewEvent extends Composite {
 		Enddate = new Label(EparticularsComp, SWT.NONE);
 		Enddate.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Enddate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Enddate.setText(cevent.getEndDate());
+		Enddate.setText(cevent.getEndDate().getDate());
 
 		Endtime = new Label(EparticularsComp, SWT.NONE);
 		Endtime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Endtime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Endtime.setText(cevent.getEndTime()+"HRS");
+		Endtime.setText(cevent.getEndTime().getTime()+"HRS");
 
 		Label Edescriptionlabel = new Label(EparticularsComp, SWT.NONE);
 		Edescriptionlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
@@ -330,6 +337,12 @@ public class ViewEvent extends Composite {
 		 * 
 		 *********************************************************************************************/
 		Button btnEdit = new Button(Plistcomp, SWT.NONE);
+		btnEdit.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ViewMain.ParticipantList(cevent);
+			}
+		});
 		GridData gd_btnEdit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_btnEdit.widthHint = 85;
 		btnEdit.setLayoutData(gd_btnEdit);
@@ -379,7 +392,7 @@ public class ViewEvent extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, cevent.getName());
-				if (confirm.open() == 1) {
+				if ((Integer) confirm.open() == 1) {
 					ModelEvent.DeleteEvent(cevent);
 					ViewMain.DeleteItem();
 				}

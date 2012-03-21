@@ -1,246 +1,163 @@
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.wb.swt.SWTResourceManager;
-
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.widgets.Button;
 
 public class ViewEventParticulars extends Composite {
-	private Text txtNewText;
-	private DateTime StartDate;
-	private DateTime EndDate;
-	private DateTime StartTime;
-	private DateTime EndTime;
-	private Text text;
+	protected FormToolkit formToolkit = new FormToolkit(Display.getDefault());
+	protected Text txtEventTitle;
+	protected DateTime StartDate;
+	protected DateTime EndDate;
+	protected DateTime StartTime;
+	protected DateTime EndTime;
+	protected Text txtDescription;
+	protected Button btnConfirm;
+	protected Button btnBack;
+	protected Label lblStartDate;
+	protected Label lblEndDate;
+	protected Label lblNewLabel;
+	protected Label lblDescription;
+	protected Form EventParticularsForm;
+	
+	
+	protected errormessageDialog errordiag;
+	
 	/**
 	 * Description: Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEventParticulars(Composite parent, int style, final Eventitem curevent, final int eventindex) {
+	public ViewEventParticulars(Composite parent, int style) {
 		super(parent, style);
-		setLayout(new FormLayout());
-
-		/************************************************************
-		 * MAIN COMPOSITE
-		 ***********************************************************/
-		//formToolkit is for use in version 0.2
-		Composite maincomp = new Composite(this, SWT.NONE);
-		FormData fd_maincomp = new FormData();
-		fd_maincomp.top = new FormAttachment(50, -100);
-		fd_maincomp.left = new FormAttachment(50, -200);
-		fd_maincomp.right = new FormAttachment(50, 200);
-		maincomp.setLayoutData(fd_maincomp);
-		//formToolkit.adapt(composite);
-		//formToolkit.paintBordersFor(composite);
-		maincomp.setLayout(new GridLayout(3, false));
+		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		//Event Name label
-		Label lblNewLabel = new Label(maincomp, SWT.NONE);
-		lblNewLabel.setText("Event Title:");
+		//Create Event form
+		EventParticularsForm = formToolkit.createForm(this);
+		EventParticularsForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_INFO_FOREGROUND));
+		EventParticularsForm.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		EventParticularsForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		EventParticularsForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		formToolkit.paintBordersFor(EventParticularsForm);
+//		CreateEventForm.setText("Create Event");
+		EventParticularsForm.getBody().setLayout(new FormLayout());
+		
+		//Body Composite
+		Composite composite = new Composite(EventParticularsForm.getBody(), SWT.NONE);
+		FormData fd_composite = new FormData();
+		fd_composite.top = new FormAttachment(50, -100);
+		fd_composite.left = new FormAttachment(50, -200);
+		fd_composite.right = new FormAttachment(50, 200);
+		composite.setLayoutData(fd_composite);
+		formToolkit.adapt(composite);
+		formToolkit.paintBordersFor(composite);
+		composite.setLayout(new GridLayout(3, false));
+		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		
+		//Event name label
+		lblNewLabel = formToolkit.createLabel(composite, "Event Title:", SWT.NONE);
+		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblNewLabel.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
 		
-		//Event Name textbox
-		txtNewText = new Text(maincomp, SWT.BORDER);
-		txtNewText.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
-		GridData gd_txtNewText = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
-		gd_txtNewText.widthHint = 219;
-		txtNewText.setLayoutData(gd_txtNewText);
-		txtNewText.setText("");
+		//Event name textbox
+		txtEventTitle = formToolkit.createText(composite, "New Text", SWT.NONE);
+		txtEventTitle.setText("");
+		txtEventTitle.setMessage("eg. Fundraising Bazzar");
+		GridData gd_txtEventTitle = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
+		gd_txtEventTitle.widthHint = 219;
+		txtEventTitle.setLayoutData(gd_txtEventTitle);
 		
 		//Start Date label
-		Label lblStartDate = new Label(maincomp, SWT.NONE);
-		lblStartDate.setText("Start Date and Time:");
+		lblStartDate = formToolkit.createLabel(composite, "Start Date and Time:", SWT.NONE);
+		lblStartDate.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblStartDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblStartDate.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
-		
-		//Start Date widget
-		StartDate = new DateTime(maincomp, SWT.BORDER | SWT.DROP_DOWN);
-		//formToolkit.adapt(StartDate);
-		//formToolkit.paintBordersFor(StartDate);
+		StartDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
+		formToolkit.adapt(StartDate);
+		formToolkit.paintBordersFor(StartDate);
 		
 		//Start Time widget
-		StartTime = new DateTime(maincomp, SWT.BORDER | SWT.TIME | SWT.SHORT);		
+		StartTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);		
 		StartTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		StartTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		//formToolkit.adapt(StartTime);
-		//formToolkit.paintBordersFor(StartTime);
+		formToolkit.adapt(StartTime);
+		formToolkit.paintBordersFor(StartTime);
 		
 		//End Date label
-		Label lblEndDate = new Label(maincomp, SWT.NONE);
-		lblEndDate.setText("End Date and Time:");
+		lblEndDate = formToolkit.createLabel(composite, "End Date and Time:", SWT.NONE);
+		lblEndDate.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblEndDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEndDate.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
+		EndDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
+		formToolkit.adapt(EndDate);
+		formToolkit.paintBordersFor(EndDate);
 		
 		//End Date widget
-		EndDate = new DateTime(maincomp, SWT.BORDER | SWT.DROP_DOWN);
-		//formToolkit.adapt(EndDate);
-		//formToolkit.paintBordersFor(EndDate);
-		
-		//End time widget
-		EndTime = new DateTime(maincomp, SWT.BORDER | SWT.TIME | SWT.SHORT);
+		EndTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);
 		EndTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		//formToolkit.adapt(EndTime);
-		//formToolkit.paintBordersFor(EndTime);
-		
-		/************************************************************
-		 * CONFIRM EDIT EVENT LISTENER
-		 ***********************************************************/
-		Button btnConfirm = new Button(this, SWT.NONE);
-		btnConfirm.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				curevent.setName(txtNewText.getText());
-				curevent.setDescription(text.getText());
-				String Stime, Etime, Sdate, Edate;
-				
-				//format time
-				if (StartTime.getHours() < 10)
-					Stime = "0" + StartTime.getHours() + ":";
-				else
-					Stime = "" + StartTime.getHours() + ":";
-				if (StartTime.getMinutes() < 10)
-					Stime += "0" + StartTime.getMinutes();
-				else
-					Stime += StartTime.getMinutes();
-				
-				if (EndTime.getHours() < 10)
-					Etime = "0" + EndTime.getHours() + ":";
-				else
-					Etime = "" + EndTime.getHours() + ":";
-				if (EndTime.getMinutes() < 10)
-					Etime += "0" + EndTime.getMinutes();
-				else
-					Etime += EndTime.getMinutes();
-				
-				//format date
-				if (StartDate.getDay() < 10)
-					Sdate = "0" + StartDate.getDay() + "-";
-				else
-					Sdate = "" + StartDate.getDay() + "-";
-				if (StartDate.getMonth()+1 < 10)
-					Sdate += "0" + (StartDate.getMonth()+1) + "-";
-				else
-					Sdate += (StartDate.getMonth()+1) + "-";
-				Sdate += StartDate.getYear();
-				
-				if (EndDate.getDay() < 10)
-					Edate = "0" + EndDate.getDay() + "-";
-				else
-					Edate = "" + EndDate.getDay() + "-";
-				if (EndDate.getMonth()+1 < 10)
-					Edate += "0" + (EndDate.getMonth()+1) + "-";
-				else
-					Edate += (EndDate.getMonth()+1) + "-";
-				Edate += EndDate.getYear();
-				curevent.setStartTime(Stime);
-				curevent.setEndTime(Etime);
-				curevent.setStartDate(Sdate);
-				curevent.setEndDate(Edate);
-				
-				ModelEvent.UpdateParticulars(curevent, eventindex);
-				ViewMain.UpdateTable();
-				ViewMain.ReturnView();
-			}
-		});
-
-		
-		btnConfirm.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
-		FormData fd_btnConfirm = new FormData();
-		fd_btnConfirm.top = new FormAttachment(maincomp, 30);
-		fd_btnConfirm.right = new FormAttachment(50, 70);
-		fd_btnConfirm.left = new FormAttachment(maincomp, 0, SWT.LEFT);
-		btnConfirm.setLayoutData(fd_btnConfirm);
-		//formToolkit.adapt(btnCreate, true, true);
-		btnConfirm.setText("Confirm");
-		
-		/************************************************************
-		 * GO BACK EVENT LISTENER
-		 ***********************************************************/
-		Button btnBack = new Button(this, SWT.NONE);
-		btnBack.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ViewMain.ReturnView();
-			}
-		});
-		FormData fd_btnBack = new FormData();
-		fd_btnBack.top = new FormAttachment(maincomp, 30);
-		fd_btnBack.right = new FormAttachment(maincomp, 0, SWT.RIGHT);
-		fd_btnBack.left = new FormAttachment(btnConfirm, 26);
+		formToolkit.adapt(EndTime);
+		formToolkit.paintBordersFor(EndTime);
 		
 		//Description label
-		Label lblDescription = new Label(maincomp, SWT.NONE);
+		lblDescription = new Label(composite, SWT.NONE);
 		lblDescription.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblDescription.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
 		lblDescription.setText("Description:");
 		
 		//Description textbox
-		text = new Text(maincomp, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
-		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
-		gd_text.heightHint = 79;
-		gd_text.widthHint = 250;
-		text.setLayoutData(gd_text);
+		txtDescription = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+		GridData gd_txtDescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
+		gd_txtDescription.heightHint = 79;
+		gd_txtDescription.widthHint = 250;
+		txtDescription.setLayoutData(gd_txtDescription);
+		
+		
+		/**********************************************************************************************
+		 * 
+		 * CREATE EVENT BUTTON
+		 * 
+		 *********************************************************************************************/
+		btnConfirm = new Button(EventParticularsForm.getBody(), SWT.NONE);
+
+		btnConfirm.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
+		FormData fd_btnConfirm = new FormData();
+		fd_btnConfirm.top = new FormAttachment(composite, 16);
+		fd_btnConfirm.right = new FormAttachment(50, 70);
+		fd_btnConfirm.left = new FormAttachment(composite, 0, SWT.LEFT);
+		btnConfirm.setLayoutData(fd_btnConfirm);
+		formToolkit.adapt(btnConfirm, true, true);
+
+		/************************************************************
+		 *
+		 *GO BACK BUTTON
+		 *
+		 ***********************************************************/
+		btnBack = new Button(EventParticularsForm.getBody(), SWT.NONE);
+		
+		FormData fd_btnBack = new FormData();
+		fd_btnBack.top = new FormAttachment(composite, 16);
+		fd_btnBack.right = new FormAttachment(composite, 0, SWT.RIGHT);
+		fd_btnBack.left = new FormAttachment(btnConfirm, 26);
 		btnBack.setLayoutData(fd_btnBack);
-		//formToolkit.adapt(btnBack, true, true);
 		btnBack.setText("Back");
-		
-		//Event Particulars label
-		Label lblEventParticulars = new Label(this, SWT.NONE);
-		lblEventParticulars.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
-		FormData fd_lblEventParticulars = new FormData();
-		fd_lblEventParticulars.top = new FormAttachment(0, 10);
-		fd_lblEventParticulars.left = new FormAttachment(0, 10);
-		lblEventParticulars.setLayoutData(fd_lblEventParticulars);
-		lblEventParticulars.setText("Event Particulars");
-				
-		setParticulars(curevent.getName(), curevent.getStartDate(), curevent.getStartTime(), curevent.getEndDate(), curevent.getEndTime(), curevent.getDescription());
-	}
-	
-	/************************************************************
-	 * SET PARTICULARS to event item
-	 ***********************************************************/
-	/**
-	 * Description: Stores the event particulars into the event item
-	 * @param name
-	 * @param startdate
-	 * @param starttime
-	 * @param enddate
-	 * @param endtime
-	 * @param descript
-	 */
-	public void setParticulars(String name, String startdate, String starttime, String enddate, String endtime, String descript) {
-		txtNewText.setText(name);
-		String arr[] = startdate.split("-");
-		String arr1[] = starttime.split(":");
-		StartDate.setYear(Integer.parseInt(arr[2]));
-		StartDate.setMonth(Integer.parseInt(arr[1])-1);
-		StartDate.setDay(Integer.parseInt(arr[0]));
-		StartTime.setHours(Integer.parseInt(arr1[0]));
-		StartTime.setMinutes(Integer.parseInt(arr1[1]));
-		
-		String arr2[] = enddate.split("-");
-		String arr3[] = endtime.split(":");
-		EndDate.setYear(Integer.parseInt(arr2[2]));
-		EndDate.setMonth(Integer.parseInt(arr2[1])-1);
-		EndDate.setDay(Integer.parseInt(arr2[0]));
-		EndTime.setHours(Integer.parseInt(arr3[0]));
-		EndTime.setMinutes(Integer.parseInt(arr3[1]));
-		text.setText(descript);	
+		formToolkit.adapt(btnBack, true, true);
 	}
 
-	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
+
 }
 

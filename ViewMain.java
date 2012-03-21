@@ -198,8 +198,21 @@ public class ViewMain extends ApplicationWindow {
 	 * @param curevent The event item of the particulars that is to be edited
 	 */
 	public static void EventParticulars(Eventitem curevent) {
-		ViewEventParticulars ep = new ViewEventParticulars(c2, SWT.NONE, curevent, table.getSelectionIndex());
+		ViewEditEventParticulars ep = new ViewEditEventParticulars(c2, SWT.NONE, curevent);
 		layout.topControl = ep;
+		c2.layout(true);
+	}
+	
+	/************************************************************
+	 * PARTICIPANT LIST
+	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewParticipantList and set the page of composite c2 to ViewParticipantList
+	 * @param curevent The event item of the particulars that is to be edited
+	 */
+	public static void ParticipantList(Eventitem curevent) {
+		ViewParticipantList pl = new ViewParticipantList(c2, SWT.NONE, curevent);
+		layout.topControl = pl;
 		c2.layout(true);
 	}
 	
@@ -216,7 +229,6 @@ public class ViewMain extends ApplicationWindow {
 		
 	}
 	
-
 	/**
 	 * Description: Create contents of the application window.
 	 * @param parent
@@ -224,7 +236,7 @@ public class ViewMain extends ApplicationWindow {
 	protected Control createContents(Composite parent) {
 		setStatus("Welcome!");
 		ScrolledComposite container = new ScrolledComposite(parent, SWT.V_SCROLL);
-
+		
 		container.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		container.setExpandHorizontal(true);
 		container.setExpandVertical(true);
@@ -465,7 +477,7 @@ public class ViewMain extends ApplicationWindow {
 				public void widgetSelected(SelectionEvent e) {
 					TableItem tb = table.getItem(table.getSelectionIndex());
 					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, tb.getText(0));
-					if (confirm.open() == 1) {
+					if ((Integer) confirm.open() == 1) {
 //						System.out.println(table.getSelectionIndex());
 					//	ModelEvent.DeleteEvent(getEvent(tb.getText(0)));	//Finds the selected event and deletes it from vector
 						ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
@@ -511,8 +523,6 @@ public class ViewMain extends ApplicationWindow {
 		}
 		container.setContent(maincomposite);
 		container.setMinSize(maincomposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-
 		return container;
 	}
 

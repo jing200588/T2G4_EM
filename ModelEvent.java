@@ -56,19 +56,19 @@ public class ModelEvent {
 		
 		db.out(eitem.getName());
 		db.out(eitem.getDescription());
-		db.out(eitem.getStartDate()); 
-		db.out(eitem.getEndDate());
-		db.out(eitem.getStartTime());
-		db.out(eitem.getEndTime());
+		db.out(eitem.getStartDate().getDate()); 
+		db.out(eitem.getEndDate().getDate());
+		db.out(eitem.getStartTime().getTime());
+		db.out(eitem.getEndTime().getTime());
 		
 		db.connect();
 		int id = db.add_event(eitem.getName(), 
 				"", 
 				eitem.getBudget(),
-				eitem.getStartDate(), 
-				eitem.getEndDate(),
-				eitem.getStartTime(),
-				eitem.getEndTime());
+				eitem.getStartDate().getDate(), 
+				eitem.getEndDate().getDate(),
+				eitem.getStartTime().getTime(),
+				eitem.getEndTime().getTime());
 		//db.out("Create: " + id);
 		eitem.setID(id);
 		list.add(eitem);
@@ -127,13 +127,8 @@ public class ModelEvent {
 	 * @param eitem Event Item
 	 * @param index 
 	 */
-	public static void 	UpdateParticulars(Eventitem eitem, int index) {
-		//update particulars
+	public static void 	UpdateParticulars(Eventitem eitem) {
 
-		list.remove(index);
-		list.add(index, eitem);
-		
-		
 		//db.out("testing start");
 		db.connect();
 		db.update_event(
@@ -141,10 +136,10 @@ public class ModelEvent {
 				eitem.getName(), 
 				eitem.getDescription(), 
 				eitem.getBudget(),
-				eitem.getStartDate(),
-				eitem.getEndDate(), 
-				eitem.getStartTime(), 
-				eitem.getEndTime());
+				eitem.getStartDate().getDate(),
+				eitem.getEndDate().getDate(), 
+				eitem.getStartTime().getTime(), 
+				eitem.getEndTime().getTime());
 		
 		db.disconnect();
 	//	db.out("index:" + index);

@@ -25,6 +25,22 @@ public class Time {
 			
 	}
 	
+	public int get_hours() {
+		return _hours;
+	}
+
+	public void set_hours(int _hours) {
+		this._hours = _hours;
+	}
+
+	public int get_mins() {
+		return _mins;
+	}
+
+	public void set_mins(int _mins) {
+		this._mins = _mins;
+	}
+
 	/**
 	 * Description: Splits the Time value in String format into integer hours and minutes
 	 * @param time
