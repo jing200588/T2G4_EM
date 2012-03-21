@@ -476,10 +476,8 @@ public class ViewMain extends ApplicationWindow {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					TableItem tb = table.getItem(table.getSelectionIndex());
-					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, tb.getText(0));
+					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 					if ((Integer) confirm.open() == 1) {
-//						System.out.println(table.getSelectionIndex());
-					//	ModelEvent.DeleteEvent(getEvent(tb.getText(0)));	//Finds the selected event and deletes it from vector
 						ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
 						DeleteItem();
 					}

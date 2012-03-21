@@ -8,15 +8,16 @@ import org.eclipse.swt.events.SelectionEvent;
 
 
 public class deleteconfirmDialog extends errormessageDialog {
-	
+	String state;
 	/**
 	 * Description: Create the dialog.
 	 * @param parent
 	 * @param style
 	 */
-	public deleteconfirmDialog(Shell parent, int style, String Ename) {
+	public deleteconfirmDialog(Shell parent, String type, String Ename) {
 		super(parent, Ename);
 		setText("Confirmation");
+		state = type;
 	}
 
 	/**
@@ -24,7 +25,10 @@ public class deleteconfirmDialog extends errormessageDialog {
 	 */
 	protected void createContents() {
 		super.createContents();
-		Prompt.setText("Are you sure you want to permanently delete " + string + "?" );
+		
+		if (state.compareToIgnoreCase("delconfirm") == 0)
+			Prompt.setText("Are you sure you want to permanently delete " + string + "?" );
+			
 		
 		/************************************************************
 		 * 'NO' BUTTON arrangement

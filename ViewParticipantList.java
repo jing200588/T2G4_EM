@@ -12,7 +12,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -20,6 +22,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.ui.part.ViewPart;
 
@@ -35,6 +38,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 
 public class ViewParticipantList extends Composite {
 	private Eventitem cevent;
@@ -64,12 +68,13 @@ public class ViewParticipantList extends Composite {
 		lblEventParticulars.setLayoutData(fd_lblEventParticulars);
 		lblEventParticulars.setText("Participant List");
 		
+		//main composite
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayout(new FormLayout());
 		FormData fd_composite = new FormData();
-		fd_composite.bottom = new FormAttachment(100, 0);
+		fd_composite.bottom = new FormAttachment(100);
 		fd_composite.left = new FormAttachment(0, 0);
-		fd_composite.top = new FormAttachment(15, 0);
+		fd_composite.top = new FormAttachment(15);
 		fd_composite.right = new FormAttachment(100, 0);
 		composite.setLayoutData(fd_composite);
 		
@@ -81,6 +86,7 @@ public class ViewParticipantList extends Composite {
 				btnDelete.setEnabled(true);
 			}
 		});
+		
 		FormData fd_table = new FormData();
 		fd_table.bottom = new FormAttachment(0, 282);
 		fd_table.right = new FormAttachment(0, 727);
@@ -89,13 +95,147 @@ public class ViewParticipantList extends Composite {
 		table.setLayoutData(fd_table);
 		table.setHeaderVisible(true);
 		
+		//Bottom composite
+		Composite compositebottom = new Composite(composite, SWT.NONE);
+		FormData fd_compositebottom = new FormData();
+		fd_compositebottom.right = new FormAttachment(100, -131);
+		fd_compositebottom.left = new FormAttachment(0, 10);
+		fd_compositebottom.bottom = new FormAttachment(0, 352);
+		fd_compositebottom.top = new FormAttachment(0, 288);
+		compositebottom.setLayoutData(fd_compositebottom);
+		compositebottom.setLayout(new GridLayout(4, false));
+		
+		Label lblInputFile = new Label(compositebottom, SWT.NONE);
+		lblInputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblInputFile.setText("Input File:");
+		
+		txtimportfile = new Text(compositebottom, SWT.BORDER);
+		txtimportfile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtimportfile.setText("/temp/myfile.csv");
+
+		/************************************************************
+		 * 
+		 * IMPORT BROWSE EVENT LISTENER
+		 * 
+		 ***********************************************************/
+		Button btnInputBrowse = new Button(compositebottom, SWT.NONE);
+		GridData gd_btnInputBrowse = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnInputBrowse.widthHint = 70;
+		btnInputBrowse.setLayoutData(gd_btnInputBrowse);
+		btnInputBrowse.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fsd = new FileDialog(new Shell());
+				String[] extension = {"*.csv"};
+				fsd.setFilterExtensions(extension);
+				
+				String input = fsd.open();
+				if (input != null)
+					txtimportfile.setText(input);
+			}
+		});
+		btnInputBrowse.setText("Browse");
+		
+		/************************************************************
+		 * 
+		 * IMPORT CSV EVENT LISTENER
+		 * 
+		 ***********************************************************/
+		Button btnImportFile = new Button(compositebottom, SWT.NONE);
+		GridData gd_btnImportFile = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_btnImportFile.widthHint = 70;
+		btnImportFile.setLayoutData(gd_btnImportFile);
+		btnImportFile.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (table.getColumnCount() != 0) {
+					deleteconfirmDialog dialog = new deleteconfirmDialog(new Shell(), "confirm",
+							"Importing a new file will replace the current table. Do you want to continue?");
+					if ((Integer) dialog.open() == 1) {
+						//Clears the tables b4 import.
+						table.setRedraw(false);
+						table.removeAll();
+						while (table.getColumnCount() > 0)
+							table.getColumns()[0].dispose();
+						table.setRedraw(true);
+						
+						ImportCSV(txtimportfile.getText());
+					}
+				}
+				
+				else
+					ImportCSV(txtimportfile.getText());
+			}
+		});
+		btnImportFile.setText("Import File");
+		
+		Label lblOutputFile = new Label(compositebottom, SWT.NONE);
+		lblOutputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblOutputFile.setText("Output File:");
+		
+		txtexportfile = new Text(compositebottom, SWT.BORDER);
+		txtexportfile.setMessage("/temp/myfile.csv");
+		txtexportfile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		/************************************************************
+		 * 
+		 * EXPORT BROWSE EVENT LISTENER
+		 * 
+		 ***********************************************************/
+		Button btnOutputBrowse = new Button(compositebottom, SWT.NONE);
+		GridData gd_btnOutputBrowse = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnOutputBrowse.widthHint = 70;
+		btnOutputBrowse.setLayoutData(gd_btnOutputBrowse);
+		btnOutputBrowse.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fsd = new FileDialog(new Shell());
+				String[] extension = {"*.csv"};
+				fsd.setFilterExtensions(extension);
+				
+				String input = fsd.open();
+				if (input != null) {
+					if (!input.toLowerCase().endsWith(".csv"))
+						input+= ".csv";
+					txtexportfile.setText(input);
+				}
+			}
+			
+		});
+		btnOutputBrowse.setText("Browse");
+		
+		/************************************************************
+		 * 
+		 * EXPORT CSV EVENT LISTENER
+		 * 
+		 ***********************************************************/
+		Button btnExportFile = new Button(compositebottom, SWT.NONE);
+		GridData gd_btnExportFile = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_btnExportFile.widthHint = 70;
+		btnExportFile.setLayoutData(gd_btnExportFile);
+		btnExportFile.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ExportCSV(txtexportfile.getText());
+			}
+		});
+		btnExportFile.setText("Export File");
+		
+		//Side Composite
+		Composite compositeside = new Composite(composite, SWT.NONE);
+		compositeside.setLayout(new GridLayout(1, false));
+		FormData fd_compositeside = new FormData();
+		fd_compositeside.right = new FormAttachment(table, 96, SWT.RIGHT);
+		fd_compositeside.bottom = new FormAttachment(table, 0, SWT.BOTTOM);
+		fd_compositeside.top = new FormAttachment(table, 0, SWT.TOP);
+		fd_compositeside.left = new FormAttachment(table, 6);
+		compositeside.setLayoutData(fd_compositeside);
+		
 		//Add New button
-		Button btnAddNew = new Button(composite, SWT.NONE);
-		FormData fd_btnAddNew = new FormData();
-		fd_btnAddNew.right = new FormAttachment(0, 808);
-		fd_btnAddNew.top = new FormAttachment(0, 10);
-		fd_btnAddNew.left = new FormAttachment(0, 733);
-		btnAddNew.setLayoutData(fd_btnAddNew);
+		Button btnAddNew = new Button(compositeside, SWT.NONE);
+		GridData gd_btnAddNew = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_btnAddNew.widthHint = 80;
+		btnAddNew.setLayoutData(gd_btnAddNew);
 		btnAddNew.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -106,54 +246,15 @@ public class ViewParticipantList extends Composite {
 		});
 		btnAddNew.setText("Add New");
 		
-		Composite composite_1 = new Composite(composite, SWT.NONE);
-		FormData fd_composite_1 = new FormData();
-		fd_composite_1.right = new FormAttachment(table, 0, SWT.RIGHT);
-		fd_composite_1.bottom = new FormAttachment(0, 352);
-		fd_composite_1.top = new FormAttachment(0, 288);
-		fd_composite_1.left = new FormAttachment(0, 10);
-		composite_1.setLayoutData(fd_composite_1);
-		composite_1.setLayout(new GridLayout(3, false));
-		
-		Label lblInputFile = new Label(composite_1, SWT.NONE);
-		lblInputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblInputFile.setText("Input File:");
-		
-		txtimportfile = new Text(composite_1, SWT.BORDER);
-		txtimportfile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtimportfile.setText("/temp/myfile.csv");
-		
-		Button btnImportFile = new Button(composite_1, SWT.NONE);
-		btnImportFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		btnImportFile.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ImportCSV(txtimportfile.getText());
-			}
-		});
-		btnImportFile.setText("Import File");
-		
-		Label lblOutputFile = new Label(composite_1, SWT.NONE);
-		lblOutputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblOutputFile.setText("Output File:");
-		
-		txtexportfile = new Text(composite_1, SWT.BORDER);
-		txtexportfile.setMessage("/temp/myfile.csv");
-		txtexportfile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		Button btnExportFile = new Button(composite_1, SWT.NONE);
-		GridData gd_btnExportFile = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_btnExportFile.widthHint = 68;
-		btnExportFile.setLayoutData(gd_btnExportFile);
-		btnExportFile.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ExportCSV(txtexportfile.getText());
-			}
-		});
-		btnExportFile.setText("Export File");
-		
-		btnDelete = new Button(composite, SWT.NONE);
+		/************************************************************
+		 * 
+		 * DELETE ROW EVENT LISTENER
+		 * 
+		 ***********************************************************/
+		btnDelete = new Button(compositeside, SWT.NONE);
+		GridData gd_btnDelete = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_btnDelete.widthHint = 60;
+		btnDelete.setLayoutData(gd_btnDelete);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -161,13 +262,33 @@ public class ViewParticipantList extends Composite {
 				table.remove(table.getSelectionIndices());
 			}
 		});
-		FormData fd_btnDelete = new FormData();
-		fd_btnDelete.right = new FormAttachment(btnAddNew, 0, SWT.RIGHT);
-		fd_btnDelete.top = new FormAttachment(btnAddNew, 6);
-		fd_btnDelete.left = new FormAttachment(table, 6);
-		btnDelete.setLayoutData(fd_btnDelete);
 		btnDelete.setText("Delete");
 		btnDelete.setEnabled(false);
+		new Label(compositeside, SWT.NONE);
+		new Label(compositeside, SWT.NONE);
+		new Label(compositeside, SWT.NONE);
+		new Label(compositeside, SWT.NONE);
+		new Label(compositeside, SWT.NONE);
+		new Label(compositeside, SWT.NONE);
+		new Label(compositeside, SWT.NONE);
+		new Label(compositeside, SWT.NONE);
+		new Label(compositeside, SWT.NONE);
+		
+		/************************************************************
+		 * 
+		 * SAVE LIST EVENT LISTENER
+		 * 
+		 ***********************************************************/
+		Button btnSaveList = new Button(compositeside, SWT.NONE);
+		btnSaveList.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnSaveList.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//save list into DB and event item
+				
+			}
+		});
+		btnSaveList.setText("Save List");
 		
 		
 		
@@ -207,7 +328,7 @@ public void ExportCSV (String filepath) {
 			writer.writeNext(entries);
 		}
 		writer.close();
-		
+		new errormessageDialog(new Shell(), "The file was exported successfully!").open();
 		/*
 	     String[] entries = "first#second#third".split("#");
 	     writer.writeNext(entries);
@@ -216,6 +337,7 @@ public void ExportCSV (String filepath) {
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		System.out.println("Error exporting");
+		new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
 		e.printStackTrace();
 	}
 }
@@ -225,6 +347,10 @@ public void ImportCSV (String filepath) {
 		CSVReader reader = new CSVReader(new FileReader(filepath));
 		
 		List<String[]> myEntries = reader.readAll();
+		
+//		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+//		tableViewer.setInput(myEntries);
+		
 		Vector<TableColumn> tc = new Vector<TableColumn>();
 		
 		String[] headers = myEntries.get(0);
@@ -263,6 +389,7 @@ public void ImportCSV (String filepath) {
 	} catch (FileNotFoundException e) {
 		// TODO Auto-generated catch block
 		System.out.println("File not found.");
+		new errormessageDialog(new Shell(), "The file specified cannot be found.").open();
 		e.printStackTrace();
 	} catch (IOException e) {
 		// TODO Auto-generated catch block

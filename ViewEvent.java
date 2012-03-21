@@ -391,7 +391,7 @@ public class ViewEvent extends Composite {
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), SWT.APPLICATION_MODAL, cevent.getName());
+				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", cevent.getName());
 				if ((Integer) confirm.open() == 1) {
 					ModelEvent.DeleteEvent(cevent);
 					ViewMain.DeleteItem();

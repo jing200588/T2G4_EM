@@ -32,6 +32,7 @@ public class errormessageDialog extends Dialog {
 		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		setText("Error");
 		string = msg;
+		result = 0;
 	}
 
 	/**
@@ -79,7 +80,6 @@ public class errormessageDialog extends Dialog {
 		btnOne.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				result = 0;
 				shell.close();
 			}
 		});
