@@ -512,11 +512,6 @@ public class ControllerBudget {
 			}
 		}
 
-		for(int i =0; i<db_list.size(); i++)
-		{
-			System.out.println(db_list.get(i).getItem());
-		}
-
 		bm.saveOptimizedList(event_object.getID(), db_list);
 		event_object.setitem_list(db_list);
 	}
