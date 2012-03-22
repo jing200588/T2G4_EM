@@ -55,8 +55,8 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 					curevent.setDescription(txtDescription.getText());
 					curevent.setStartTime(StartTime.getHours(), StartTime.getMinutes());
 					curevent.setEndTime(EndTime.getHours(), EndTime.getMinutes());
-					curevent.setStartDate(StartDate.getYear(), StartDate.getMonth(), StartDate.getDay());
-					curevent.setEndDate(EndDate.getYear(), EndDate.getMonth(), EndDate.getDay());
+					curevent.setStartDate(StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay());
+					curevent.setEndDate(EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay());
 					
 					ModelEvent.UpdateParticulars(curevent);
 					ViewMain.UpdateTable();
