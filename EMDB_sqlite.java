@@ -33,9 +33,9 @@ public class EMDB_sqlite{
 	 * ***********************************
 	 */
 	protected String DBNAME = "";
-	private Connection DBCON = null;
-	private Statement DBQUERY = null;
-	private PreparedStatement PREPSTATEM = null;
+	protected Connection DBCON = null;
+	protected Statement DBQUERY = null;
+	protected PreparedStatement PREPSTATEM = null;
 	
 	
 	protected boolean EMDB_DEBUGGING = false;
@@ -81,7 +81,7 @@ public class EMDB_sqlite{
 	 */
 	private void set_default_db(){
 		if (this.DBNAME.isEmpty()){
-			this.set_name(EMSettings.DATABASE_NAME);
+			this.set_name(EMDBSettings.DATABASE_NAME);
 		}
 			
 	}

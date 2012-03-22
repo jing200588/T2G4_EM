@@ -38,7 +38,7 @@ public class EMDBunit {
 		option = sc.next();
 		
 		if (option.compareTo("Y") == 0)
-			db.set_name(EMSettings.DATABASE_NAME);
+			db.set_name(EMDBSettings.DATABASE_NAME);
 		else
 			db.set_name(option);
 		

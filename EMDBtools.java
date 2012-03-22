@@ -174,7 +174,7 @@ public class EMDBtools {
 		
 		//See if use default DB Name
 		if (option.compareTo("y") == 0 || option.compareTo("Y") == 0)
-			db.set_name(EMSettings.DATABASE_NAME);
+			db.set_name(EMDBSettings.DATABASE_NAME);
 		else
 			db.set_name(option);	
 		
