@@ -63,7 +63,7 @@ public class ModelEvent {
 		
 		db.connect();
 		int id = db.add_event(eitem.getName(), 
-				"", 
+				eitem.getDescription(), 
 				eitem.getBudget(),
 				eitem.getStartDate().getDate(), 
 				eitem.getEndDate().getDate(),

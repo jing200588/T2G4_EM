@@ -25,6 +25,7 @@ public class ViewHomepage extends Composite {
 		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Label lblWelcomeToEman = new Label(composite, SWT.CENTER);
+		lblWelcomeToEman.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\workspace\\E-MAN\\Images\\logo.jpg"));
 		lblWelcomeToEman.setForeground(SWTResourceManager.getColor(SWT.COLOR_TITLE_FOREGROUND));
 		lblWelcomeToEman.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	//	lblWelcomeToEman.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\Pictures\\b34wl.jpg"));

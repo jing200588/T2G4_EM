@@ -377,7 +377,14 @@ public class ViewEvent extends Composite {
 		GridData gd_Advertedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_Advertedit.widthHint = 85;
 		Advertedit.setLayoutData(gd_Advertedit);
-		Advertedit.setText("Edit");
+		Advertedit.setText("E-Mail");
+		
+		Button Advertfb = new Button(Advertcomp, SWT.NONE);
+		GridData gd_Advertfb = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+		gd_Advertfb.widthHint = 85;
+		Advertfb.setLayoutData(gd_Advertfb);
+		Advertfb.setText("Facebook");
+		new Label(Advertcomp, SWT.NONE);
 		/**********************************************************************************************
 		 * END OF ADVERTISING
 		 *********************************************************************************************/
@@ -615,6 +622,7 @@ public class ViewEvent extends Composite {
 		final TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
 		final TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
 		final TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
+		col4.setWidth(177);
 
 		col0.setText("No.");
 		col1.setText("Item Name");
