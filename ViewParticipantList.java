@@ -21,6 +21,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -41,14 +42,16 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 
 public class ViewParticipantList extends Composite {
+	public static String[] HEADERS = new String[0];
 	private Eventitem cevent;
 	private Table table;
 	private Text txtimportfile;
 	private TableViewer tableViewer;
 	private Text txtexportfile;
 	private Button btnDelete;
-	
-	
+	private int columnNo;
+	private int index;
+	private List<String[]> myEntries;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -86,6 +89,7 @@ public class ViewParticipantList extends Composite {
 				btnDelete.setEnabled(true);
 			}
 		});
+	//	tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 		
 		FormData fd_table = new FormData();
 		fd_table.bottom = new FormAttachment(0, 282);
@@ -159,7 +163,7 @@ public class ViewParticipantList extends Composite {
 							table.getColumns()[0].dispose();
 						table.setRedraw(true);
 						
-						ImportCSV(txtimportfile.getText());
+						//ImportCSV(txtimportfile.getText());
 					}
 				}
 				
@@ -259,7 +263,9 @@ public class ViewParticipantList extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//Delete row
-				table.remove(table.getSelectionIndices());
+				int currentindex = table.getSelectionIndex();
+				table.remove(currentindex);	
+				myEntries.remove(currentindex);	
 			}
 		});
 		btnDelete.setText("Delete");
@@ -346,13 +352,55 @@ public void ImportCSV (String filepath) {
 	try {
 		CSVReader reader = new CSVReader(new FileReader(filepath));
 		
-		List<String[]> myEntries = reader.readAll();
+		myEntries = reader.readAll();
+		String[] headers = myEntries.get(0);
+		TableViewerColumn[] tvc= new TableViewerColumn[headers.length];
+		HEADERS = headers;
+		columnNo = headers.length;
+
+		index =0;
+		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+		for (int i=0; i<headers.length; i++) {
+			tvc[i] = new TableViewerColumn (tableViewer, SWT.NONE);
+			tvc[i].getColumn().setText(headers[i]);
+			tvc[i].setLabelProvider(new ColumnLabelProvider() {
+				public String getText(Object element)
+				{
+					if (index == columnNo)
+						index = 0;
+					System.out.println(index);
+					String[] arr = (String[]) element;
+					return arr[index++];
+				}
+			});
+			tvc[i].getColumn().pack();
+		}
+	/*	
+		TableViewerColumn tvc2 = new TableViewerColumn (tableViewer, SWT.NONE);
+		tvc2.getColumn().setText(myEntries.get(0)[1]);
+		tvc2.setLabelProvider(new ColumnLabelProvider() {
+			public String getText(Object element)
+			{
+				String[] arr = (String[]) element;
+				return arr[1];
+			}
+		});
+		tvc2.getColumn().pack();
+		*/
+		myEntries.remove(0);
+		tableViewer.setInput(myEntries);
 		
-//		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-//		tableViewer.setInput(myEntries);
+		CellEditor[] editors = new CellEditor[headers.length];
+		//set headers for the table. set cell editors for each column.
+				for (int i=0; i<headers.length; i++) 	
+					editors[i] = new TextCellEditor(table);
+		
+		tableViewer.setColumnProperties(headers);
+		tableViewer.setCellModifier(new ParticipantListCellModifier(tableViewer));
+		tableViewer.setCellEditors(editors);
 		
 		Vector<TableColumn> tc = new Vector<TableColumn>();
-		
+		/*
 		String[] headers = myEntries.get(0);
 		
 	    CellEditor[] editors = new CellEditor[headers.length];
@@ -376,7 +424,7 @@ public void ImportCSV (String filepath) {
 		
 		tableViewer.setCellModifier(new ParticipantListModifier(tableViewer));
 		tableViewer.setCellEditors(editors);
-		
+		*/
 	/*	
 		ColumnPositionMappingStrategy strat = new ColumnPositionMappingStrategy();
 		strat.setType(String.class);

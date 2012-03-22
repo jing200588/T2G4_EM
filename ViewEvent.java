@@ -373,17 +373,33 @@ public class ViewEvent extends Composite {
 		 * ADVERTISE BUTTON
 		 * 
 		 *********************************************************************************************/
-		Button Advertedit = new Button(Advertcomp, SWT.NONE);
+		Button Advertemail = new Button(Advertcomp, SWT.NONE);
+		Advertemail.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ViewMain.EmailAds(cevent);
+			}
+		});
 		GridData gd_Advertedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_Advertedit.widthHint = 85;
-		Advertedit.setLayoutData(gd_Advertedit);
-		Advertedit.setText("E-Mail");
+		Advertemail.setLayoutData(gd_Advertedit);
+		Advertemail.setText("E-Mail");
 		
+		new Label(Advertcomp, SWT.NONE);
+		new Label(Advertcomp, SWT.NONE);
 		Button Advertfb = new Button(Advertcomp, SWT.NONE);
+		Advertfb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ViewMain.FaceBookAds();
+			}
+		});
 		GridData gd_Advertfb = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 		gd_Advertfb.widthHint = 85;
 		Advertfb.setLayoutData(gd_Advertfb);
 		Advertfb.setText("Facebook");
+		new Label(Advertcomp, SWT.NONE);
+		new Label(Advertcomp, SWT.NONE);
 		new Label(Advertcomp, SWT.NONE);
 		/**********************************************************************************************
 		 * END OF ADVERTISING

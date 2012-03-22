@@ -6,34 +6,10 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Item;
 
-class ParticipantListContentProvider implements IStructuredContentProvider {
-  /**
-   * Returns the Person objects
-   */
-  public Object[] getElements(Object inputElement) {
-    return ((List) inputElement).toArray();
-  }
-
-  /**
-   * Disposes any created resources
-   */
-  public void dispose() {
-    // Do nothing
-  }
-
-  /**
-   * Called when the input changes
-   */
-  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-    // Ignore
-  }
-
-}
-
-class ParticipantListModifier implements ICellModifier {
+class ParticipantListCellModifier implements ICellModifier {
 	  private Viewer viewer;
 
-	  public ParticipantListModifier(Viewer viewer) {
+	  public ParticipantListCellModifier(Viewer viewer) {
 	    this.viewer = viewer;
 	  }
 
@@ -60,8 +36,8 @@ class ParticipantListModifier implements ICellModifier {
 	   *            the property
 	   * @return Object
 	   */
-/*	  public Object getValue(Object element, String property) {
-	    Person p = (Person) element;
+	  public Object getValue(Object element, String property) {
+	/*    Person p = (Person) element;
 	    if (PersonEditor.NAME.equals(property))
 	      return p.getName();
 	    else if (PersonEditor.MALE.equals(property))
@@ -71,9 +47,15 @@ class ParticipantListModifier implements ICellModifier {
 	    else if (PersonEditor.SHIRT_COLOR.equals(property))
 	      return p.getShirtColor();
 	    else
-	      return null;
-	  }
 */
+		  String[] obj = (String[]) element;
+		  
+		  for(int i = 0; i < ViewParticipantList.HEADERS.length; i++)
+			  if(ViewParticipantList.HEADERS[i].equals(property))
+				  return obj[i];
+		  return null;
+	  }
+
 	  /**
 	   * Modifies the element
 	   * 
@@ -85,9 +67,9 @@ class ParticipantListModifier implements ICellModifier {
 	   *            the value
 	   */
 	  public void modify(Object element, String property, Object value) {
-	    if (element instanceof Item)
+/*	    if (element instanceof Item)
 	      element = ((Item) element).getData();
-/*
+
 	    Person p = (Person) element;
 	    if (PersonEditor.NAME.equals(property))
 	      p.setName((String) value);
@@ -98,12 +80,15 @@ class ParticipantListModifier implements ICellModifier {
 	    else if (PersonEditor.SHIRT_COLOR.equals(property))
 	      p.setShirtColor((RGB) value);
 */
-	    // Force the viewer to refresh
-	    viewer.refresh();
+		  if (element instanceof Item)
+		      element = ((Item) element).getData();
+		  
+		  String[] obj = (String[]) element;
+		  
+		  for(int i = 0; i < ViewParticipantList.HEADERS.length; i++)
+			  if(ViewParticipantList.HEADERS[i].equals(property))
+				 obj[i] = (String) value;
+		  // Force the viewer to refresh
+		  viewer.refresh();
 	  }
-
-	public Object getValue(Object arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return "hello";
-	}
-	}
+}
