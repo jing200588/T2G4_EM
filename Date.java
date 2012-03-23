@@ -13,7 +13,7 @@ public class Date {
 		_year = y;
 		_month = m;
 		_day = d;
-		String day, month, hour, min;
+		String day, month;
 		
 		if (d < 10)
 			day = "0" + d;
@@ -38,6 +38,30 @@ public class Date {
 		_month = Integer.parseInt(hm[1]);
 		_day = Integer.parseInt(hm[0]);
 		_date = date;
+	}
+
+	public int get_year() {
+		return _year;
+	}
+
+	public void set_year(int _year) {
+		this._year = _year;
+	}
+
+	public int get_month() {
+		return _month;
+	}
+
+	public void set_month(int _month) {
+		this._month = _month;
+	}
+
+	public int get_day() {
+		return _day;
+	}
+
+	public void set_day(int _day) {
+		this._day = _day;
 	}
 
 	public String getDate () {

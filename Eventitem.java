@@ -104,32 +104,49 @@ public class Eventitem {
 		_startdate = new Date(start);
 	}
 	
-	public String getStartDate () {
-		return _startdate.getDate();
+	public void setStartDate (int y, int m, int d) {
+		_startdate = new Date(y, m, d);
+	}
+	
+	
+	public Date getStartDate () {
+		return _startdate;
 	}
 	
 	public void setEndDate (String end) {
 		_enddate = new Date(end);
 	}
 	
-	public String getEndDate () {
-		return _enddate.getDate();
+	public void setEndDate (int y, int m, int d) {
+		_enddate = new Date(y, m, d);
+	}
+	
+	public Date getEndDate () {
+		return _enddate;
 	}	
 	
 	public void setStartTime (String start) {
 		_starttime = new Time(start);
 	}
 	
-	public String getStartTime () {
-		return _starttime.getTime();
+	public void setStartTime (int hr, int min) {
+		_starttime = new Time(hr, min);
+	}
+	
+	public Time getStartTime () {
+		return _starttime;
 	}
 	
 	public void setEndTime (String end) {
 		_endtime = new Time(end);
 	}
 	
-	public String getEndTime () {
-		return _endtime.getTime();
+	public void setEndTime (int hr, int min) {
+		_endtime = new Time(hr, min);
+	}
+	
+	public Time getEndTime () {
+		return _endtime;
 	}
 	
 	public int getID(){

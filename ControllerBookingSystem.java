@@ -229,12 +229,10 @@ public class ControllerBookingSystem {
 	 * @return venueDetail - String
 	 * @throws Exception if there does not exist such a venue with venueID in the list.
 	 */
-	public static String getVenueDetail(Vector<Venue> listVenue, int venueID) throws Exception
+	public static String getVenueDetail(Vector<Venue> listVenue, int venueID)
 	{
 		int index = findIndex(listVenue, venueID);
-		
-		if(index < 0)		// A venue with venueID does not exist
-			throw new Exception("There is no venue with such an ID in the table above!");
+	
 		String[] infoPieces = listVenue.get(index).getAllVenueInformation();
 		
 		String output = "Name: " + infoPieces[0] + "\nAddress: " + infoPieces[1] + 
