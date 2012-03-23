@@ -8,7 +8,7 @@ import java.util.Vector;
  * @author JunZhi
  *
  */
-public class EMDBtools {
+public class EMDBTools {
 
 	public static EMDB db = new EMDB();
 	public static Scanner sc = new Scanner(System.in);
@@ -178,6 +178,7 @@ public class EMDBtools {
 		else
 			db.set_name(option);	
 		
+		db.out(db.DBNAME);
 	}
 
 	
