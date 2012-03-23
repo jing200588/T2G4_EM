@@ -112,13 +112,13 @@ public class EMDBunit {
 			
 			
 			db.out("\n\nAdding Events\n--------------------------------------------");
-			id = db.add_event("test", "", 10.0,  "7-2-2012", "7-2-2012", "18:2", "18:2");
-			eid = db.add_event("test", "", 10.0,  "5-2-2012", "7-6-2012", "18:2", "18:2");
+			id = db.add_event("test", "", 10.0,  "7/2/2012", "7/2/2012", "18:2", "18:2");
+			eid = db.add_event("test", "", 10.0,  "5/2/2012", "7/6/2012", "18:2", "18:2");
 			db.out("id: "+ eid);
-			db.out("id: "+ db.add_event("test", "", 10.0, "7-2-2012", "7-2-2012", "18:2", "18:2"));
-			db.out("id: "+ db.add_event("test", "", 10.0,  "5-2-2012", "7-6-2012", "18:2", "18:2"));
-			db.out("id: "+ db.add_event("test", "", 10.0,  "7-2-2012", "7-2-2012", "18:2", "18:2"));
-			db.out("id: "+ db.add_event("test", "", 10.0,  "5-2-2012", "7-6-2012", "18:2", "18:2"));
+			db.out("id: "+ db.add_event("test", "", 10.0, "7/2/2012", "7/2/2012", "18:2", "18:2"));
+			db.out("id: "+ db.add_event("test", "", 10.0,  "5/2/2012", "7/6/2012", "18:2", "18:2"));
+			db.out("id: "+ db.add_event("test", "", 10.0,  "7/2/2012", "7/2/2012", "18:2", "18:2"));
+			db.out("id: "+ db.add_event("test", "", 10.0,  "5/2/2012", "7/6/2012", "18:2", "18:2"));
 			
 			
 			
@@ -131,10 +131,10 @@ public class EMDBunit {
 			db.out(eitem.toString());
 			db.out(" + NAME: "+ eitem.getName());
 			db.out(" + DESCRIPTION: "+ eitem.getDescription());
-			db.out(" + START DATE: "+ eitem.getStartDate());
-			db.out(" + END: DATE"+ eitem.getEndDate());
-			db.out(" + START TIME: "+ eitem.getStartTime());
-			db.out(" + END: TIME"+ eitem.getEndTime());
+			db.out(" + START DATE: "+ eitem.getStartDateTime().getDateRepresentation());
+			db.out(" + END: DATE"+ eitem.getEndDateTime().getDateRepresentation());
+			db.out(" + START TIME: "+ eitem.getStartDateTime().getTimeRepresentation());
+			db.out(" + END: TIME"+ eitem.getEndDateTime().getTimeRepresentation());
 			
 			/*
 			 * BUDGET
@@ -273,12 +273,12 @@ public class EMDBunit {
 			
 			
 			
-			bid = db.add_booking(eid, vid, "10/12/2100/11", "10/12/2100/12");
+			bid = db.add_booking(eid, vid, "10/12/2100/11/00", "10/12/2100/12/00");
 			db.out("bid:" + bid);
-			db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/12", "10/12/2100/13"));
-			db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/13", "10/12/2100/14"));
-			db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/14", "10/12/2100/15"));
-			db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/15", "10/12/2100/16"));
+			db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/12/00", "10/12/2100/13/00"));
+			db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/13/00", "10/12/2100/14/00"));
+			db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/14/00", "10/12/2100/15/00"));
+			db.out("bid:" + db.add_booking(eid, vid, "10/12/2100/15/00", "10/12/2100/16/00"));
 			
 			
 			
@@ -292,9 +292,9 @@ public class EMDBunit {
 				db.out( timing.toString()
 						+ timing.getBookingID()
 						+ ":" 
-						+ timing.getStartDateHour().getDateHourRepresentation()
+						+ timing.getStartDateTime().getDateTimeRepresentation()
 						+ "-" 
-						+ timing.getEndDateHour().getDateHourRepresentation()
+						+ timing.getEndDateTime().getDateTimeRepresentation()
 						);
 			}
 			
@@ -316,9 +316,9 @@ public class EMDBunit {
 				db.out( timing.toString()
 						+ timing.getBookingID()
 						+ ":" 
-						+ timing.getStartDateHour().getDateHourRepresentation() 
+						+ timing.getStartDateTime().getDateTimeRepresentation() 
 						+ "-" 
-						+ timing.getEndDateHour().getDateHourRepresentation()
+						+ timing.getEndDateTime().getDateTimeRepresentation()
 						);
 			}	
 			

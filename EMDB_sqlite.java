@@ -1173,8 +1173,8 @@ public class EMDB_sqlite{
 				list.add(
 					new TimeSlot(
 						result.getInt("booking_id"),
-						new DateHour(result.getString("time_start")),
-						new DateHour(result.getString("time_end"))
+						new MyDateTime(result.getString("time_start")),
+						new MyDateTime(result.getString("time_end"))
 						)
 					);
 			}
@@ -1223,7 +1223,7 @@ public class EMDB_sqlite{
 			ResultSet result = this.PREPSTATEM.executeQuery();
 
 			while (result.next()) {
-				TimeSlot timing = new TimeSlot(new DateHour(result.getString("time_start")),new DateHour(result.getString("time_end")));
+				TimeSlot timing = new TimeSlot(new MyDateTime(result.getString("time_start")),new MyDateTime(result.getString("time_end")));
 				Venue venue = this.get_venue(result.getInt("venue_id"));
 				BookedVenueInfo info = new BookedVenueInfo(venue, timing);
 				list.add(info);

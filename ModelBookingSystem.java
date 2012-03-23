@@ -90,7 +90,7 @@ public class ModelBookingSystem {
 	public void add_booking_to_db(int eventID, int venueID, TimeSlot wantedTimeSlot){
 		//db.out("booking now");
 		db.connect();
-		db.add_booking(eventID, venueID, wantedTimeSlot.getStartDateHour().getDateHourRepresentation(), wantedTimeSlot.getEndDateHour().getDateHourRepresentation());
+		db.add_booking(eventID, venueID, wantedTimeSlot.getStartDateTime().getDateTimeRepresentation(), wantedTimeSlot.getEndDateTime().getDateTimeRepresentation());
 		db.disconnect();
 	}
 	

@@ -10,8 +10,8 @@ public class TimeSlot {
 	 * Class member variables
 	 ************************************************************************/
 	private int booking_id; 
-	private DateHour m_startDateHour;
-	private DateHour m_endDateHour;
+	private MyDateTime m_startDateTime;
+	private MyDateTime m_endDateTime;
 	
 	/*************************************************************************
 	 * Constructor
@@ -21,13 +21,13 @@ public class TimeSlot {
 	 * Constructor: Creates a TimeSlot object with inputs are the starting date and hour
 	 * and the ending date and hour. It is assumed the inputs are valid and not null.
 	 * 
-	 * @param start - DateHour
-	 * @param end - DateHour
+	 * @param start - MyDateTime
+	 * @param end - MyDateTime
 	 */
-	public TimeSlot(DateHour start, DateHour end)
+	public TimeSlot(MyDateTime start, MyDateTime end)
 	{
-		m_startDateHour = start;
-		m_endDateHour = end;
+		m_startDateTime = start;
+		m_endDateTime = end;
 	}
 
 	/**
@@ -35,14 +35,14 @@ public class TimeSlot {
 	 * booking ID.
 	 * 
 	 * @param id - int
-	 * @param start - DateHour
-	 * @param end - DateHour
+	 * @param start - MyDateTime
+	 * @param end - MyDateTime
 	 */
-	public TimeSlot(int id, DateHour start, DateHour end)
+	public TimeSlot(int id, MyDateTime start, MyDateTime end)
 	{
 		booking_id = id;
-		m_startDateHour = start;
-		m_endDateHour = end;
+		m_startDateTime = start;
+		m_endDateTime = end;
 	}
 	
 	/**************************************************************************
@@ -51,20 +51,20 @@ public class TimeSlot {
 	
 	/**
 	 * 
-	 * @return m_startDateHour - DateHour
+	 * @return m_startDateTime - MyDateTime
 	 */
-	public DateHour getStartDateHour()
+	public MyDateTime getStartDateTime()
 	{
-		return m_startDateHour;
+		return m_startDateTime;
 	}
 	
 	/**
 	 * 
-	 * @return m_endDateHour - DateHour
+	 * @return m_endDateTime - MyDateTime
 	 */
-	public DateHour getEndDateHour()
+	public MyDateTime getEndDateTime()
 	{
-		return m_endDateHour;
+		return m_endDateTime;
 	}
 	
 	
@@ -85,9 +85,39 @@ public class TimeSlot {
 	 */
 	public boolean isOverlapping(TimeSlot comparedObj)
 	{
-		if(m_startDateHour.compareTo(comparedObj.getEndDateHour()) >= 0 ||
-				m_endDateHour.compareTo(comparedObj.getStartDateHour()) <= 0)
+		if(m_startDateTime.compareTo(comparedObj.getEndDateTime()) >= 0 ||
+				m_endDateTime.compareTo(comparedObj.getStartDateTime()) <= 0)
 			return false;
 		return true;
+	}
+	
+	/**
+	 * Checks if this time slot precedes the specified point of time (inputDateTime) according to
+	 * chronological order.
+	 * 
+	 * @param inputDateTime
+	 * @return true if this time slot precedes inputDateTime in chronological order.
+	 * @return false otherwise
+	 */
+	public boolean happenBefore(MyDateTime inputDateTime)
+	{
+		if(m_startDateTime.compareTo(inputDateTime) >= 0)
+			return false;
+		return true;
+	}
+	
+	/**
+	 * Checks if this time slot is contained in the input TimeSlot object (anotherObj)
+	 *  
+	 * @param anotherObj
+	 * @return true of this time slot is contained in anotherObj
+	 * @return false otherwise.
+	 */
+	public boolean isContained(TimeSlot anotherObj)
+	{
+		if(anotherObj.getStartDateTime().compareTo(m_startDateTime) <= 0 &&
+				anotherObj.getEndDateTime().compareTo(m_endDateTime) >= 0)
+			return true;
+		return false;
 	}
 }

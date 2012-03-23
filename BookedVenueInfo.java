@@ -168,7 +168,7 @@ public class BookedVenueInfo {
 	 */
 	public String getStartDateString()
 	{
-		return m_bookedTimeSlot.getStartDateHour().getDateRepresentation();
+		return m_bookedTimeSlot.getStartDateTime().getDateRepresentation();
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public class BookedVenueInfo {
 	 */
 	public String getEndDateString()
 	{
-		return m_bookedTimeSlot.getEndDateHour().getDateRepresentation();
+		return m_bookedTimeSlot.getEndDateTime().getDateRepresentation();
 	}
 	
 	/**
@@ -188,9 +188,9 @@ public class BookedVenueInfo {
 	 * 
 	 * @return startHour - String
 	 */
-	public String getStartHourString()
+	public String getStartTimeString()
 	{
-		return Integer.toString(m_bookedTimeSlot.getStartDateHour().getHour()) + ":00";
+		return m_bookedTimeSlot.getStartDateTime().getTimeRepresentation();
 	}
 	
 	/**
@@ -199,8 +199,8 @@ public class BookedVenueInfo {
 	 * 
 	 * @return endHour - String
 	 */
-	public String getEndHourString()
+	public String getEndTimeString()
 	{
-		return Integer.toString(m_bookedTimeSlot.getEndDateHour().getHour()) + ":00";
+		return m_bookedTimeSlot.getEndDateTime().getTimeRepresentation();
 	}
 }

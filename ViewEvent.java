@@ -130,12 +130,12 @@ public class ViewEvent extends Composite {
 		Startdate = new Label(EparticularsComp, SWT.NONE);
 		Startdate.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Startdate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Startdate.setText(cevent.getStartDate().getDate());
+		Startdate.setText(cevent.getStartDateTime().getDateRepresentation());
 
 		Starttime = new Label(EparticularsComp, SWT.NONE);
 		Starttime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Starttime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Starttime.setText(cevent.getStartTime().getTime()+"HRS");
+		Starttime.setText(cevent.getStartDateTime().getTimeRepresentation()+"HRS");
 
 		Label Enddntlabel = new Label(EparticularsComp, SWT.NONE);
 		Enddntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
@@ -145,12 +145,12 @@ public class ViewEvent extends Composite {
 		Enddate = new Label(EparticularsComp, SWT.NONE);
 		Enddate.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Enddate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Enddate.setText(cevent.getEndDate().getDate());
+		Enddate.setText(cevent.getEndDateTime().getDateRepresentation());
 
 		Endtime = new Label(EparticularsComp, SWT.NONE);
 		Endtime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Endtime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Endtime.setText(cevent.getEndTime().getTime()+"HRS");
+		Endtime.setText(cevent.getEndDateTime().getTimeRepresentation()+"HRS");
 
 		Label Edescriptionlabel = new Label(EparticularsComp, SWT.NONE);
 		Edescriptionlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
@@ -536,9 +536,9 @@ public class ViewEvent extends Composite {
 			item.setText(1, venue_list.get(loopIndex).getMaxCapacityString());
 			item.setText(2, "$" + venue_list.get(loopIndex).getCostInDollarString());
 			item.setText(3, venue_list.get(loopIndex).getStartDateString());
-			item.setText(4, venue_list.get(loopIndex).getStartHourString());
+			item.setText(4, venue_list.get(loopIndex).getStartTimeString());
 			item.setText(5, venue_list.get(loopIndex).getEndDateString());		
-			item.setText(6, venue_list.get(loopIndex).getEndHourString());		
+			item.setText(6, venue_list.get(loopIndex).getEndTimeString());		
 		
 		}
 		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {

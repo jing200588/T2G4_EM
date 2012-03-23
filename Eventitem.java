@@ -8,10 +8,8 @@ public class Eventitem {
 	private Vector<Item> _item_list = new Vector<Item>();
 	private double _budget;
 	private Vector<BookedVenueInfo> _BVI_list;
-	private Date _startdate;
-	private Time _starttime;
-	private Date _enddate;
-	private Time _endtime;
+	private MyDateTime _startDateTime;
+	private MyDateTime _endDateTime;
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters 
@@ -29,10 +27,8 @@ public class Eventitem {
 	 */
 	public Eventitem (String name, int sy, int sm, int sd, int ey, int em, int ed, int shour, int smin, int ehour, int emin) {
 		_name = name;
-		_startdate = new Date (sy, sm, sd);
-		_enddate = new Date (ey, em, ed);
-		_starttime = new Time (shour, smin);
-		_endtime = new Time (ehour, emin);
+		_startDateTime = new MyDateTime (sy, sm, sd, shour, smin);
+		_endDateTime = new MyDateTime(ey, em, ed, ehour, emin);
 		_description = "";
 		_BVI_list = new Vector<BookedVenueInfo>();
 	}
@@ -50,10 +46,8 @@ public class Eventitem {
 	 */
 	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget, Vector<BookedVenueInfo> BVI_list){
 		_name = name;
-		_startdate = new Date(startdate);
-		_enddate = new Date(enddate);
-		_starttime = new Time(starttime);
-		_endtime = new Time(endtime);
+		_startDateTime = new MyDateTime(startdate, starttime);
+		_endDateTime = new MyDateTime(enddate, endtime);
 		_item_list = item_list;
 		_budget = budget;
 		_BVI_list = BVI_list;
@@ -69,10 +63,8 @@ public class Eventitem {
 	 */
 	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime) {
 		_name = name;
-		_startdate = new Date(startdate);
-		_enddate = new Date(enddate);
-		_starttime = new Time(starttime);
-		_endtime = new Time(endtime);
+		_startDateTime = new MyDateTime(startdate, starttime);
+		_endDateTime = new MyDateTime(enddate, endtime);
 	}
 	
 	/**********************************************************************************************
@@ -100,54 +92,50 @@ public class Eventitem {
 		return _name;
 	}
 	
-	public void setStartDate (String start) {
-		_startdate = new Date(start);
-	}
+//	public void setStartDate (String start) {
+//		_startdate = new Date(start);
+//	}
 	
 	public void setStartDate (int y, int m, int d) {
-		_startdate = new Date(y, m, d);
+		_startDateTime = new MyDateTime(y, m, d, _startDateTime.getHour(), _startDateTime.getMinute());
 	}
 	
 	
-	public Date getStartDate () {
-		return _startdate;
+	public MyDateTime getStartDateTime () {
+		return _startDateTime;
 	}
 	
-	public void setEndDate (String end) {
-		_enddate = new Date(end);
-	}
+//	public void setEndDate (String end) {
+//		_enddate = new Date(end);
+//	}
 	
 	public void setEndDate (int y, int m, int d) {
-		_enddate = new Date(y, m, d);
+		_endDateTime = new MyDateTime(y, m, d, _endDateTime.getHour(), _endDateTime.getMinute());
 	}
 	
-	public Date getEndDate () {
-		return _enddate;
+	public MyDateTime getEndDateTime () {
+		return _endDateTime;
 	}	
 	
-	public void setStartTime (String start) {
-		_starttime = new Time(start);
-	}
+//	public void setStartTime (String start) {
+//		_starttime = new Time(start);
+//	}
 	
 	public void setStartTime (int hr, int min) {
-		_starttime = new Time(hr, min);
+		_startDateTime = new MyDateTime(_startDateTime.getYear(), _startDateTime.getMonth(),
+				_startDateTime.getDay(), hr, min);
 	}
 	
-	public Time getStartTime () {
-		return _starttime;
-	}
 	
-	public void setEndTime (String end) {
-		_endtime = new Time(end);
-	}
+//	public void setEndTime (String end) {
+//		_endtime = new Time(end);
+//	}
 	
 	public void setEndTime (int hr, int min) {
-		_endtime = new Time(hr, min);
+		_endDateTime = new MyDateTime(_endDateTime.getYear(), _endDateTime.getMonth(),
+				_endDateTime.getDay(), hr, min);
 	}
 	
-	public Time getEndTime () {
-		return _endtime;
-	}
 	
 	public int getID(){
 		return _id;

@@ -56,19 +56,19 @@ public class ModelEvent {
 		
 		db.out(eitem.getName());
 		db.out(eitem.getDescription());
-		db.out(eitem.getStartDate().getDate()); 
-		db.out(eitem.getEndDate().getDate());
-		db.out(eitem.getStartTime().getTime());
-		db.out(eitem.getEndTime().getTime());
+		db.out(eitem.getStartDateTime().getDateRepresentation()); 
+		db.out(eitem.getEndDateTime().getDateRepresentation());
+		db.out(eitem.getStartDateTime().getTimeRepresentation());
+		db.out(eitem.getEndDateTime().getTimeRepresentation());
 		
 		db.connect();
 		int id = db.add_event(eitem.getName(), 
 				eitem.getDescription(), 
 				eitem.getBudget(),
-				eitem.getStartDate().getDate(), 
-				eitem.getEndDate().getDate(),
-				eitem.getStartTime().getTime(),
-				eitem.getEndTime().getTime());
+				eitem.getStartDateTime().getDateRepresentation(), 
+				eitem.getEndDateTime().getDateRepresentation(),
+				eitem.getStartDateTime().getTimeRepresentation(),
+				eitem.getEndDateTime().getTimeRepresentation());
 		//db.out("Create: " + id);
 		eitem.setID(id);
 		list.add(eitem);
@@ -136,10 +136,10 @@ public class ModelEvent {
 				eitem.getName(), 
 				eitem.getDescription(), 
 				eitem.getBudget(),
-				eitem.getStartDate().getDate(),
-				eitem.getEndDate().getDate(), 
-				eitem.getStartTime().getTime(), 
-				eitem.getEndTime().getTime());
+				eitem.getStartDateTime().getDateRepresentation(),
+				eitem.getEndDateTime().getDateRepresentation(), 
+				eitem.getStartDateTime().getTimeRepresentation(), 
+				eitem.getEndDateTime().getTimeRepresentation());
 		
 		db.disconnect();
 	//	db.out("index:" + index);

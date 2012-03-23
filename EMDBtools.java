@@ -283,23 +283,23 @@ public class EMDBtools {
 
 		
 		db.out("\n******Adding Events (Single)******");
-		eid1 = db.add_event("NUS Hackers Friday Hacks", "", 0, "05-02-2012", "06-02-2012", "10:02", "12:02");
-		db.add_event("NUS Symposium", "", 0, "07-02-2012", "08-02-2012", "10:02", "18:02");
-		db.add_event("Rockfest", "", 0, "09-02-2012", "09-02-2012", "10:02", "18:02");
-		eid2 = db.add_event("Matriculation Fair", "", 0, "10-02-2012", "12-02-2012", "11:02", "16:02");
-		db.add_event("Coding Marathon", "", 0, "13-02-2012", "13-02-2012", "10:02", "18:02");
+		eid1 = db.add_event("NUS Hackers Friday Hacks", "", 0, "05/02/2012", "06/02/2012", "10:02", "12:02");
+		db.add_event("NUS Symposium", "", 0, "07/02/2012", "08/02/2012", "10:02", "18:02");
+		db.add_event("Rockfest", "", 0, "09/02/2012", "09/02/2012", "10:02", "18:02");
+		eid2 = db.add_event("Matriculation Fair", "", 0, "10/02/2012", "12/02/2012", "11:02", "16:02");
+		db.add_event("Coding Marathon", "", 0, "13/02/2012", "13/02/2012", "10:02", "18:02");
 		
 		
 		
 		db.out("\n******Adding Booking******");
-		db.add_booking(eid1, vid1, "05/02/2012/10", "05/02/2012/12");
-		db.add_booking(eid1, vid2, "05/02/2012/14", "05/02/2012/16");
-		db.add_booking(eid1, vid1, "06/02/2012/11", "07/02/2012/18");
+		db.add_booking(eid1, vid1, "05/02/2012/10/00", "05/02/2012/12/00");
+		db.add_booking(eid1, vid2, "05/02/2012/14/00", "05/02/2012/16/00");
+		db.add_booking(eid1, vid1, "06/02/2012/11/00", "07/02/2012/18/00");
 		
 		
-		db.add_booking(eid2, vid1, "20/03/2013/10", "05/04/2013/12");
-		db.add_booking(eid2, vid2, "21/04/2013/14", "05/05/2013/16");
-		db.add_booking(eid2, vid2, "22/05/2013/11", "07/06/2013/18");	
+		db.add_booking(eid2, vid1, "20/03/2013/10/00", "05/04/2013/12/00");
+		db.add_booking(eid2, vid2, "21/04/2013/14/00", "05/05/2013/16/00");
+		db.add_booking(eid2, vid2, "22/05/2013/11/00", "07/06/2013/18/00");	
 		
 		
 		
@@ -381,8 +381,8 @@ public class EMDBtools {
 			
 			db.out("\n******Display Event #"+eid+" Details******");
 			db.out(" +Name : "+item.getName());
-			db.out(" +Time : "+item.getStartTime() + "-" + item.getEndTime());
-			db.out(" +Date : "+item.getStartDate() + "-" + item.getEndDate());
+			db.out(" +Time : "+item.getStartDateTime().getTimeRepresentation() + "-" + item.getEndDateTime().getTimeRepresentation());
+			db.out(" +Date : "+item.getStartDateTime().getDateRepresentation() + "-" + item.getEndDateTime().getDateRepresentation());
 			
 			
 			db.out(" +Booked Venue List :");

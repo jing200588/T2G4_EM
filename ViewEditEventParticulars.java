@@ -76,7 +76,7 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 			}
 		});
 				
-		setParticulars(curevent.getName(), curevent.getStartDate(), curevent.getStartTime(), curevent.getEndDate(), curevent.getEndTime(), curevent.getDescription());
+		setParticulars(curevent.getName(), curevent.getStartDateTime(), curevent.getEndDateTime(), curevent.getDescription());
 	}
 	
 	/************************************************************
@@ -91,22 +91,22 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 	 * @param endtime
 	 * @param descript
 	 */
-	public void setParticulars(String name, Date startdate, Time starttime, Date enddate, Time endtime, String descript) {
+	public void setParticulars(String name, MyDateTime startDateTime, MyDateTime endDateTime, String descript) {
 		txtEventTitle.setText(name);
 		
-		StartDate.setYear(startdate.get_year());
-		StartDate.setMonth(startdate.get_month()-1);
-		StartDate.setDay(startdate.get_day());
+		StartDate.setYear(startDateTime.getYear());
+		StartDate.setMonth(startDateTime.getMonth() - 1);
+		StartDate.setDay(startDateTime.getDay());
 		
-		StartTime.setHours(starttime.get_hours());
-		StartTime.setMinutes(starttime.get_mins());
+		StartTime.setHours(startDateTime.getHour());
+		StartTime.setMinutes(startDateTime.getMinute());
 		
-		EndDate.setYear(enddate.get_year());
-		EndDate.setMonth(enddate.get_month()-1);
-		EndDate.setDay(enddate.get_day());
+		EndDate.setYear(endDateTime.getYear());
+		EndDate.setMonth(endDateTime.getMonth() - 1);
+		EndDate.setDay(endDateTime.getDay());
 		
-		EndTime.setHours(endtime.get_hours());
-		EndTime.setMinutes(endtime.get_mins());
+		EndTime.setHours(endDateTime.getHour());
+		EndTime.setMinutes(endDateTime.getMinute());
 		
 		txtDescription.setText(descript);	
 	}
