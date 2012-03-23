@@ -2,6 +2,7 @@ import java.io.File;
 import java.sql.*;
 import java.util.Vector;
 
+import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
 
 
@@ -36,9 +37,9 @@ public class EMDBBase{
 	 * 
 	 * ***********************************
 	 */
-	protected String DBNAME = "";
-	protected Connection DBCON = null;
-	protected Statement DBQUERY = null;
+	protected String dbName = "";
+	protected Connection dbCon = null;
+	protected Statement dbQuery = null;
 	
 
 	//Specifications and extended tables
@@ -50,7 +51,7 @@ public class EMDBBase{
 	//Processing
    	//Batch Processing
    	Vector<String> queue = new Vector<String>();
-	
+   	private final String jsonResult = "{\"ResultSet\":{\"Query\":\"ppb\"}}";
 
 	
 	
@@ -67,7 +68,7 @@ public class EMDBBase{
 	}
 
 	public EMDBBase(String name){	
-		this.DBNAME = name;
+		this.dbName = name;
 		this.setDefaultDB();
 		this.loadLibrary();
 	}
@@ -97,10 +98,10 @@ public class EMDBBase{
 	 * Starting a connection
 	 * @return
 	 */
-	private void connect(){
+	public void connect(){
 		try {
-			this.DBCON = DriverManager.getConnection("jdbc:sqlite:"+DBNAME);
-			this.DBQUERY = this.DBCON.createStatement();
+			this.dbCon = DriverManager.getConnection("jdbc:sqlite:"+dbName);
+			this.dbQuery = this.dbCon.createStatement();
 			
 		} catch (SQLException e) {}
 	}
@@ -112,9 +113,9 @@ public class EMDBBase{
 	 * Disconnecting from the database.
 	 * @return
 	 */
-	private void disconnect(){
+	public void disconnect(){
 		try {
-			this.DBCON.close();
+			this.dbCon.close();
 			
 		} catch (SQLException e) {}
 	}
@@ -137,8 +138,8 @@ public class EMDBBase{
 	 * Setting database name to default if DBNAME variable is not set.
 	 */
 	private void setDefaultDB(){
-		if (this.DBNAME.isEmpty()){
-			this.set_name(EMDBSettings.DATABASE_NAME);
+		if (this.dbName.isEmpty()){
+			this.setName(EMDBSettings.DATABASE_NAME);
 		}	
 		this.setFile();
 	}
@@ -152,104 +153,14 @@ public class EMDBBase{
 	 * Setting of the database name.
 	 * @param name
 	 */
-	public void set_name(String name){
-		DBNAME = name;
+	public void setName(String name){
+		dbName = name;
 	}
 	
 
 	
 	
-	
-	/**
-	 * Initialization of the database.
-	 * @return
-	 */
-	/*
-	public int init(){
-		//DB Schema
-		//Creating table for EVENTS
-		String CT_events =	"CREATE TABLE " + this.TABLE_events + " ("+
-							"'event_id' INTEGER PRIMARY KEY AUTOINCREMENT,"+
-							"'name' TEXT NOT NULL," +
-							"'description' TEXT," +
-							"'budget' DOUBLE," +
-							"'startdate' TEXT," +
-							"'enddate' TEXT," +
-							"'starttime' TEXT," +
-							"'endtime' TEXT" +
-							")";
-		
-		
-		//Creating table for VENUEs
-		String CT_venue = 	"CREATE TABLE " + this.TABLE_venue + " ("+
-							"'venue_id' INTEGER PRIMARY KEY AUTOINCREMENT,"+
-							"'name' TEXT NOT NULL," +
-							"'address' TEXT," +
-							"'description' TEXT," +
-							"'capacity' INTEGER NOT NULL DEFAULT (0)," +
-							"'cost' INTEGER NOT NULL DEFAULT (0)"+
-							")";
-	
 
-		
-		//Creating table for the Booking of Venues
-		//This table saves the list of booked venue timings.
-		String CT_bookings = 	"CREATE TABLE " + this.TABLE_venue_bookings + " ("+
-								"'booking_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
-								"'event_id' INTEGER NOT NULL," +
-								"'venue_id' INTEGER NOT NULL,"+
-								"'time_start' TEXT," +
-								"'time_end' TEXT"+
-								")";	
-
-	
-	
-		//Creating table for the Budget Optimization function
-		//This table saves the initial list of items
-		String CT_budget = 	"CREATE TABLE " + this.TABLE_budget + " ("+
-							"'budget_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
-							"'event_id' INTEGER NOT NULL DEFAULT (-1),"+
-							"'name' TEXT," +
-							"'price' INTEGER," +
-							"'satisfaction' INTEGER," +
-							"'type' TEXT" +
-							")";	
-		
-		
-
-		
-		//Creating table for the Budget Optimization function
-		//This table saves the optimized list of items
-		String CT_budget_optimized = 	"CREATE TABLE " + this.TABLE_budget_optimized + " ("+
-										"'budget_id' INTEGER PRIMARY KEY AUTOINCREMENT," +
-										"'event_id' INTEGER NOT NULL DEFAULT (-1),"+
-										"'name' TEXT," +
-										"'price' INTEGER," +
-										"'satisfaction' INTEGER," +
-										"'type' TEXT" +
-										")";	
-	
-		
-		
-		try{
-			this.DBQUERY.addBatch(CT_events);
-			this.DBQUERY.addBatch(CT_venue);
-			this.DBQUERY.addBatch(CT_bookings);
-			this.DBQUERY.addBatch(CT_budget);
-			this.DBQUERY.addBatch(CT_budget_optimized);
-			
-			this.DBCON.setAutoCommit(false);
-			this.DBQUERY.executeBatch();
-			this.DBCON.setAutoCommit(true);
-			
-			
-			return 1;
-		}catch (Exception e){
-			return 0;
-		}
-		
-		
-	}*/
 	
 	
 	
@@ -268,13 +179,10 @@ public class EMDBBase{
 	 * @param sql
 	 * @return
 	 */
-	protected int query(String sql){
-		try {
-			this.connect();
-			this.DBQUERY.execute(sql);
-			this.disconnect();
-			
-			
+	protected int runQuery(String sql){
+		try {	
+			PreparedStatement pstm = this.dbCon.prepareStatement(sql);
+			pstm.executeQuery();
 			return 1;
 			
 		} catch (SQLException e) {
@@ -282,8 +190,22 @@ public class EMDBBase{
 		}
 	}
 	
+
+
 	
 	
+	
+	protected ResultSet runQueryResults(String sql){
+		try {	
+
+			PreparedStatement pstm = this.dbCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ResultSet result = pstm.executeQuery();
+			return result;
+			
+		} catch (SQLException e) {
+			return null;
+		}	
+	}
 	
 	
 	
@@ -311,19 +233,22 @@ public class EMDBBase{
 	protected int commit(){
 		try {
 
-			
 			if(!this.queue.isEmpty()){
+							
 				this.connect();
-				
+							
+				//insert all the batch queries.
 				int size = this.queue.size();
 				for (int i=0; i< size; i++){
-					this.DBQUERY.addBatch(this.queue.get(i));
+					this.dbQuery.addBatch(this.queue.get(i));
 				}
 				
-				this.DBCON.setAutoCommit(false);
-				this.DBQUERY.executeBatch();
-				this.DBCON.setAutoCommit(true);
+				//run the batch queries
+				this.dbCon.setAutoCommit(false);
+				this.dbQuery.executeBatch();
+				this.dbCon.setAutoCommit(true);
 
+				//DC and clear the temp vector queue.
 				this.disconnect();
 				this.queue.clear();
 				
@@ -358,11 +283,12 @@ public class EMDBBase{
 	 * @return
 	 */
 	protected boolean setFile(){
-		File findFile = new File(this.DBNAME);
+		File findFile = new File(this.dbName);
 		return findFile.isFile();
 	}
 	
-	
+
+
 	/**
 	 * Shortcut to print out strings.
 	 * @param msg

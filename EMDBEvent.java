@@ -1,3 +1,6 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.healthmarketscience.sqlbuilder.*;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
 
@@ -42,10 +45,10 @@ class EMDBEvent extends EMDBBase{
 	private void setTable(){
 		
 		this.eventsTable 		= 	this.schema.addTable(EMDBSettings.TABLE_EVENTS);
-		this.eventsID 			= 	this.eventsTable.addColumn("events_id", "INTEGER PRIMARY KEY AUTOINCREMENT", null);
+		this.eventsID 			= 	this.eventsTable.addColumn("event_id", "INTEGER PRIMARY KEY AUTOINCREMENT", null);
 		this.eventsName 		= 	this.eventsTable.addColumn("name", "TEXT NOT NULL", null);
 		this.eventsDescription	= 	this.eventsTable.addColumn("description", "TEXT", null);
-		this.eventsBudget		= 	this.eventsTable.addColumn("budget", "TEXT", null);
+		this.eventsBudget		= 	this.eventsTable.addColumn("budget", "DOUBLE", null);
 		this.eventsStartDate	= 	this.eventsTable.addColumn("startdate", "TEXT", null);
 		this.eventsEndDate		= 	this.eventsTable.addColumn("enddate", "TEXT", null);
 		this.eventsStartTime	= 	this.eventsTable.addColumn("starttime", "TEXT", null);
@@ -66,6 +69,10 @@ class EMDBEvent extends EMDBBase{
 	 * ******************************************************
 	 */
 	
+	
+	/**
+	 * CREATE the database tables
+	 */
 	public void setup(){
 		String sql 	=	new CreateTableQuery(this.eventsTable, true)
 						.validate().toString();
@@ -74,11 +81,14 @@ class EMDBEvent extends EMDBBase{
 			this.dMsg("Setup Event: "+ sql);
 		
 		
-		this.query(sql);
+		this.runQuery(sql);
 	}
 	
 	
 	
+	/**
+	 * DROP the database tables
+	 */
 	public void cleanup(){
 		String sql 	=	DropQuery.dropTable(this.eventsTable)
 						.validate().toString();
@@ -107,8 +117,27 @@ class EMDBEvent extends EMDBBase{
 	/**
 	 * Creates an Event.
 	 */
-	public void addEvent(){
+	public void addEvent(
+			String aName, 
+			String aDescription, 
+			double aBudget, 
+			String aStartDate, 
+			String aEndDate,
+			String aStartTime, 
+			String aEndTime
+			)
+	{
+		String sql	=	new InsertQuery(this.eventsTable)
+			      		.addColumn(this.eventsName, aName)
+			      		.addColumn(this.eventsDescription, aDescription)
+			      		.addColumn(this.eventsBudget, aBudget)
+			      		.addColumn(this.eventsStartDate, aStartDate)
+			      		.addColumn(this.eventsEndDate, aEndDate)
+			      		.addColumn(this.eventsStartTime, aStartTime)
+			      		.addColumn(this.eventsEndTime, aEndTime)
+			      		.validate().toString();
 		
+		this.runQuery(sql);
 	}
 	
 	
@@ -118,8 +147,32 @@ class EMDBEvent extends EMDBBase{
 	/**
 	 * Get details of an event
 	 */
-	public void getEvent(){
+	public Eventitem getEvent(int aEventID){
+		String sql = new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.eventsTable)
+						.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
+						.validate().toString();
 		
+		Eventitem item = null;
+		
+		try {
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+	
+			while(result.next()){
+				//item = new Eventitem();
+			}
+		
+
+			this.disconnect();
+			
+			return null;
+			
+		} catch (SQLException e) {
+			return null;
+		}
+
 	}
 	
 	
@@ -129,8 +182,29 @@ class EMDBEvent extends EMDBBase{
 	/**
 	 * Modifies details of an event
 	 */
-	public void updateEvent(){
+	public int updateEvent(
+			int aEventID,
+			String aName, 
+			String aDescription, 
+			double aBudget, 
+			String aStartDate, 
+			String aEndDate,
+			String aStartTime, 
+			String aEndTime
+			)
+	{
+		String sql	=	new UpdateQuery(this.eventsTable)
+						.addSetClause(this.eventsName, aName)
+						.addSetClause(this.eventsDescription, aDescription)
+						.addSetClause(this.eventsBudget, aBudget)
+						.addSetClause(this.eventsStartDate, aStartDate)
+						.addSetClause(this.eventsEndDate, aEndDate)
+						.addSetClause(this.eventsStartTime, aStartTime)
+						.addSetClause(this.eventsEndTime, aEndTime)	
+						.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
+						.validate().toString();
 		
+		return this.runQuery(sql);
 	}
 	
 	
@@ -139,7 +213,7 @@ class EMDBEvent extends EMDBBase{
 	/**
 	 * Deletes an Event
 	 */
-	public void deleteEvent(){
+	public void deleteEvent(int aEventID){
 		
 	}
 	

@@ -9,23 +9,28 @@ class EMDBBudget extends EMDBBase{
 
 
     
-    private DbTable 	budgetTable;
-    private DbTable 	budgetTableOpt;
-    
+    private DbTable 	budgetTable;  
     private DbColumn 	budgetID;
-    private DbColumn 	eventsID;
+    private DbColumn 	budgetEventsID;
     private DbColumn 	budgetName;
     private DbColumn 	budgetPrice;
     private DbColumn 	budgetSatisfaction;
     private DbColumn 	budgetType;
 
-    private DbColumn 	budgetIDOpt;
-    private DbColumn 	eventsIDOpt;
-    private DbColumn 	budgetNameOpt;
-    private DbColumn 	budgetPriceOpt;
-    private DbColumn 	budgetSatisfactionOpt;
-    private DbColumn 	budgetTypeOpt;  
+    
+    
+    private DbTable 	optBudgetTable;
+    private DbColumn 	optBudgetID;
+    private DbColumn 	optBudgetEventsID;
+    private DbColumn 	optBudgetName;
+    private DbColumn 	optBudgetPrice;
+    private DbColumn 	optBudgetSatisfaction;
+    private DbColumn 	optBudgetType;  
 	
+    
+    
+    
+     
     /**
      * Constructor
      */
@@ -41,14 +46,12 @@ class EMDBBudget extends EMDBBase{
 	 */
 	private void setTable(){
 		
-		this.budgetTable 				= 	this.schema.addTable(EMDBSettings.TABLE_BUDGET);
-		this.budgetTableOpt 			= 	this.schema.addTable(EMDBSettings.TABLE_BUDGET_OPTIMIZED);
-		
 		/*
 		 * Budget (Normal)
 		 */
+		this.budgetTable 				= 	this.schema.addTable(EMDBSettings.TABLE_BUDGET);
 		this.budgetID 					= 	this.budgetTable.addColumn("budget_id", "INTEGER PRIMARY KEY AUTOINCREMENT", null);
-		this.eventsID					= 	this.budgetTable.addColumn("events_id", "INTEGER NOT NULL DEFAULT (-1)", null);
+		this.budgetEventsID				= 	this.budgetTable.addColumn("events_id", "INTEGER NOT NULL DEFAULT (-1)", null);
 		this.budgetName					= 	this.budgetTable.addColumn("name", "TEXT", null);
 		this.budgetPrice				= 	this.budgetTable.addColumn("price", "INTEGER", null);
 		this.budgetSatisfaction			= 	this.budgetTable.addColumn("satisfaction", "INTEGER", null);
@@ -58,12 +61,13 @@ class EMDBBudget extends EMDBBase{
 		/*
 		 * Budget (Optimized)
 		 */
-		this.budgetIDOpt 				= 	this.budgetTableOpt.addColumn("budget_id", "INTEGER PRIMARY KEY AUTOINCREMENT", null);
-		this.eventsIDOpt 				= 	this.budgetTableOpt.addColumn("events_id", "INTEGER NOT NULL DEFAULT (-1)", null);
-		this.budgetNameOpt 				= 	this.budgetTableOpt.addColumn("name", "TEXT", null);
-		this.budgetPriceOpt 			= 	this.budgetTableOpt.addColumn("price", "INTEGER", null);
-		this.budgetSatisfactionOpt 		= 	this.budgetTableOpt.addColumn("satisfaction", "INTEGER", null);
-		this.budgetTypeOpt 				= 	this.budgetTableOpt.addColumn("type", "TEXT", null);
+		this.optBudgetTable 			= 	this.schema.addTable(EMDBSettings.TABLE_BUDGET_OPTIMIZED);
+		this.optBudgetID 				= 	this.optBudgetTable.addColumn("budget_id", "INTEGER PRIMARY KEY AUTOINCREMENT", null);
+		this.optBudgetEventsID 			= 	this.optBudgetTable.addColumn("events_id", "INTEGER NOT NULL DEFAULT (-1)", null);
+		this.optBudgetName 				= 	this.optBudgetTable.addColumn("name", "TEXT", null);
+		this.optBudgetPrice 			= 	this.optBudgetTable.addColumn("price", "INTEGER", null);
+		this.optBudgetSatisfaction 		= 	this.optBudgetTable.addColumn("satisfaction", "INTEGER", null);
+		this.optBudgetType 				= 	this.optBudgetTable.addColumn("type", "TEXT", null);
 		
 	}
 	
@@ -78,12 +82,16 @@ class EMDBBudget extends EMDBBase{
 	 * 
 	 * ******************************************************
 	 */
+
 	
+	/**
+	 * CREATE the database tables
+	 */
 	public void setup(){
 		String sql 	=	new CreateTableQuery(this.budgetTable, true)
 						.validate().toString();
 		
-		String sql2 =	new CreateTableQuery(this.budgetTableOpt, true)
+		String sql2 =	new CreateTableQuery(this.optBudgetTable, true)
 						.validate().toString();	
 		
 		
@@ -103,12 +111,19 @@ class EMDBBudget extends EMDBBase{
 	
 	
 	
+	/**
+	 * DROP the database tables
+	 */
 	public void cleanup(){
 		String sql 	=	DropQuery.dropTable(this.budgetTable)
 						.validate().toString();
+		String sql2 =	DropQuery.dropTable(this.optBudgetTable)
+						.validate().toString();
 		
-		if (EMDBSettings.DEVELOPMENT)
-			this.dMsg("Budget Cleanup: "+ sql);
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("Cleanup Budget: "+ sql);
+			this.dMsg("Cleanup Budget Optimized: "+ sql2);
+		}
 	}
 	
 	
