@@ -343,9 +343,9 @@ public class MyDateTime implements Comparable<MyDateTime> {
 		if(m_hour > comparedObj.getHour())
 			return 1;
 		
-		if(m_minute < comparedObj.getHour())
+		if(m_minute < comparedObj.getMinute())
 			return -1;
-		if(m_minute > comparedObj.getHour())
+		if(m_minute > comparedObj.getMinute())
 			return 1;
 		
 		return 0;

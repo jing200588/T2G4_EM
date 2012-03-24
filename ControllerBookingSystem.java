@@ -92,7 +92,7 @@ public class ControllerBookingSystem {
 	
 	/**
 	 * Looks up in the database and returns the venues whose names contain the input string as a
-	 * substring.
+	 * substring. Case-insensitivity is considered.
 	 *  
 	 * @param venueName - String
 	 * @return list - Vector<Venue>
@@ -386,7 +386,7 @@ public class ControllerBookingSystem {
 	
 	/**
 	 * Selects venues in the given list of venues such that their name contains
-	 * 		the given input string as a substring.
+	 * 		the given input string as a substring. Case-insensitivity is considered.
 	 * 
 	 * @param listVenue - Vector<Venue>
 	 * @param subString - String
@@ -398,7 +398,7 @@ public class ControllerBookingSystem {
 		
 		for(int index = 0; index < listVenue.size(); index++)
 			// Check if subString is a substring of the name of the venue.
-			if(listVenue.get(index).getName().indexOf(subString) >= 0)
+			if(listVenue.get(index).getName().toUpperCase().indexOf(subString.toUpperCase()) >= 0)
 				returnList.add(listVenue.get(index));
 		
 		return returnList;
