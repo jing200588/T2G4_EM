@@ -11,10 +11,8 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
 
 /**
  * Database Extended Class - Events
- * 
  * @author JunZhi
- * @version 1.0
- * @param <Eventitem>
+ *
  */
 class EMDBEvent extends EMDBBase{
     
@@ -27,6 +25,7 @@ class EMDBEvent extends EMDBBase{
     private DbColumn 	eventsEndDate;
     private DbColumn 	eventsStartTime;
     private DbColumn 	eventsEndTime;
+    private DbColumn	eventsSchedule;
 	
 
     
@@ -38,7 +37,10 @@ class EMDBEvent extends EMDBBase{
 		this.setTable();
 	}
 
-	
+	public EMDBEvent(String aName){
+		super(aName);
+		this.setTable();
+	}	
 	
 	
 	/**
@@ -55,6 +57,7 @@ class EMDBEvent extends EMDBBase{
 		this.eventsEndDate		= 	this.eventsTable.addColumn("enddate", "TEXT", null);
 		this.eventsStartTime	= 	this.eventsTable.addColumn("starttime", "TEXT", null);
 		this.eventsEndTime		= 	this.eventsTable.addColumn("endtime", "TEXT", null);
+		this.eventsSchedule		=	this.eventsTable.addColumn("schdeule", "TEXT", null);
 		
 	}
 	
@@ -104,7 +107,44 @@ class EMDBEvent extends EMDBBase{
 	
 	
 	
-	
+	/**
+	 * VERIFY the database tables
+	 * @return
+	 */
+	public boolean verify(){
+		
+		int tableTotal = 1;
+		
+		String sql = new SelectQuery()
+						.addCustomColumns("rowid")
+						.addCustomFromTable("sqlite_master")
+						.addCondition(
+									BinaryCondition.equalTo("name", EMDBSettings.TABLE_EVENTS)
+						)
+						.validate().toString();
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("VERIFICATION - EVEMT TABLES");
+			this.dMsg(sql);
+		}
+		
+		try {
+			
+			ResultSet result = this.runQueryResults(sql);
+			int count = 0;
+			
+			if (result.next())
+				count++;
+
+			if (count == tableTotal)
+				return true;
+			
+			return false;
+			
+		} catch (SQLException e) {
+			return false;
+		}
+	}
 	
 	
 	
@@ -140,7 +180,8 @@ class EMDBEvent extends EMDBBase{
 			String aStartDate, 
 			String aEndDate,
 			String aStartTime, 
-			String aEndTime
+			String aEndTime,
+			String aSchedule
 			)
 	{
 		String sql	=	new InsertQuery(this.eventsTable)
@@ -151,6 +192,7 @@ class EMDBEvent extends EMDBBase{
 					      		.addColumn(this.eventsEndDate, aEndDate)
 					      		.addColumn(this.eventsStartTime, aStartTime)
 					      		.addColumn(this.eventsEndTime, aEndTime)
+					      		.addColumn(this.eventsSchedule, aSchedule)
 					      		.validate().toString();
 		
 		
@@ -364,7 +406,8 @@ class EMDBEvent extends EMDBBase{
 			String aStartDate, 
 			String aEndDate,
 			String aStartTime, 
-			String aEndTime
+			String aEndTime,
+			String aSchedule
 			)
 	{
 		String sql	=	new UpdateQuery(this.eventsTable)
@@ -375,6 +418,7 @@ class EMDBEvent extends EMDBBase{
 								.addSetClause(this.eventsEndDate, aEndDate)
 								.addSetClause(this.eventsStartTime, aStartTime)
 								.addSetClause(this.eventsEndTime, aEndTime)	
+								.addSetClause(this.eventsSchedule, aSchedule)
 								.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 								.validate().toString();
 		
@@ -390,6 +434,27 @@ class EMDBEvent extends EMDBBase{
 	
 	
 	
+	
+	
+	
+	/**
+	 * Update Event Schedule Only.
+	 * @param aEventID
+	 * @param aSchedule
+	 * @return
+	 */
+	public int updateSchedule(int aEventID, String aSchedule){
+		String sql	=	new UpdateQuery(this.eventsTable)
+							.addSetClause(this.eventsSchedule, aSchedule)
+							.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
+							.validate().toString();
+		
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+		
+		return result;		
+	}
 	
 	
 	

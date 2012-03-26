@@ -141,6 +141,11 @@ public class EMDBBase{
 	 * Setting database name to default if DBNAME variable is not set.
 	 */
 	private void setDefaultDB(){
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("SETTING DEFAULT DB");
+		}
+		
 		if (this.dbName.isEmpty()){
 			this.setName(EMDBSettings.DATABASE_NAME);
 		}	
@@ -183,6 +188,11 @@ public class EMDBBase{
 	 * @return
 	 */
 	protected int runQuery(String sql){
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("RUNNING QUERY (NORMAL)");
+		}
+		
 		try {	
 			PreparedStatement pstm = this.dbCon.prepareStatement(sql);
 			pstm.executeQuery();
@@ -199,6 +209,12 @@ public class EMDBBase{
 	
 	
 	protected ResultSet runQueryResults(String sql){
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("RUNNING QUERY (RESULTS)");
+		}
+		
 		try {	
 
 			PreparedStatement pstm = this.dbCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -225,6 +241,11 @@ public class EMDBBase{
 	 * @return
 	 */
 	protected void queue(String sql){
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("ADDING TO QUEUE");
+		}
+		
 		this.queue.add(sql);
 	}
 	
@@ -236,6 +257,13 @@ public class EMDBBase{
 	 * @return
 	 */
 	protected int commit(){
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("COMMIT ALL QUERIES");
+		}
+		
+		
 		try {
 
 			if(!this.queue.isEmpty()){
@@ -288,6 +316,12 @@ public class EMDBBase{
 	 * @return
 	 */
 	protected boolean setFile(){
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("CREATE/CHECK FILE");
+		}
+		
 		File findFile = new File(this.dbName);
 		return findFile.isFile();
 	}

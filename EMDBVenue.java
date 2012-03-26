@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
+import com.healthmarketscience.sqlbuilder.ComboCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.DeleteQuery;
 import com.healthmarketscience.sqlbuilder.DropQuery;
@@ -14,7 +15,12 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 
-
+/**
+ * 
+ * Database Extended Class - Venue
+ * @author JunZhi
+ *
+ */
 class EMDBVenue extends EMDBBase{
 	
 
@@ -50,7 +56,10 @@ class EMDBVenue extends EMDBBase{
 		this.setTable();
 	}
 
-	
+	public EMDBVenue(String aName){
+		super(aName);
+		this.setTable();
+	}	
 	
 	
 	/**
@@ -131,7 +140,47 @@ class EMDBVenue extends EMDBBase{
 	
 	
 	
-	
+	/**
+	 * VERIFY the database tables
+	 * @return
+	 */
+	public boolean verify(){
+		
+		int tableTotal = 2;
+		
+		String sql = new SelectQuery()
+						.addCustomColumns("rowid")
+						.addCustomFromTable("sqlite_master")
+						.addCondition(
+								ComboCondition.or(
+									BinaryCondition.equalTo("name", EMDBSettings.TABLE_VENUE),
+									BinaryCondition.equalTo("name", EMDBSettings.TABLE_VENUE_BOOKINGS)
+								)
+						)
+						.validate().toString();
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("VERIFICATION - VENUE TABLES");
+			this.dMsg(sql);
+		}
+		
+		try {
+			
+			ResultSet result = this.runQueryResults(sql);
+			int count = 0;
+			
+			if (result.next())
+				count++;
+
+			if (count == tableTotal)
+				return true;
+			
+			return false;
+			
+		} catch (SQLException e) {
+			return false;
+		}
+	}
 	
 	
 	/*

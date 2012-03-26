@@ -5,31 +5,44 @@ import java.util.Vector;
 
 public class EMDBII{
 	
-	static EMDBVenue test = new EMDBVenue();
+	private String	dbName = "";
+	private EMDBEvent	event;
+	private EMDBBudget 	budget; 
+	private EMDBVenue 	venue;	
+	
+	
+	/**
+	 * Constructor
+	 */
+	public EMDBII(){
+		this.start();
+	}
+	public EMDBII(String aName){
+		this.setDbName(aName);
+		this.start();
+	}
+	
+	
+	
+	/**
+	 * Start DB System.
+	 */
+	public void start(){
+		event	=	new EMDBEvent(dbName);
+		budget 	=	new EMDBBudget(dbName);
+		venue	=	new EMDBVenue(dbName);
+	}	
+	
+	
+	
+	/**
+	 * Set DB Name
+	 * @param aName
+	 */
+	public void setDbName(String aName){
+		this.dbName = aName;
+	}
 
-	public static void main(String[] args){
-		
-		System.out.println("start");
-		
-		//test.updateEvent(1, "aName", "aDescription", 10, "aStartDate", "aEndDate", "aStartTime", "aEndTime");
-		//test.addEvent("aName", "aDescription", 10, "aStartDate", "aEndDate", "aStartTime", "aEndTime");
-		test.findVenue("test");
-		//test.getEvent(1);
-		//test.runQueryResults("");
-		
-		System.out.println("end");
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	public void initialize(){
-		
-	}
 	
 	
 	
@@ -42,11 +55,33 @@ public class EMDBII{
 	
 	
 	/**
+	 * Load up / Set up the DB System.
+	 */
+	public void init(){
+		
+	}
+	
+	
+
+	
+	/**
 	 * Check for Database File
 	 */
 	public void system_check(){
 		
 	}
+	
+
+	public static void main(String[] args){
+		String test ="";
+		
+		if(test.isEmpty())
+			System.out.println("Empty");
+		else
+			System.out.println("Not!");
+		
+	}
+
 	
 	
 }
