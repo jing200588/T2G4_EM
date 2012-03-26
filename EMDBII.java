@@ -1,9 +1,11 @@
+import java.util.Vector;
+
 
 
 
 public class EMDBII{
 	
-	static EMDBEvent test = new EMDBEvent();
+	static EMDBBudget test = new EMDBBudget();
 
 	public static void main(String[] args){
 		
@@ -11,13 +13,31 @@ public class EMDBII{
 		
 		//test.updateEvent(1, "aName", "aDescription", 10, "aStartDate", "aEndDate", "aStartTime", "aEndTime");
 		//test.addEvent("aName", "aDescription", 10, "aStartDate", "aEndDate", "aStartTime", "aEndTime");
-		test.getEvent(1);
+
 		//test.getEvent(1);
 		//test.runQueryResults("");
 		
 		System.out.println("end");
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	public void initialize(){
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

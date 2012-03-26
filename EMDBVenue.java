@@ -1,5 +1,13 @@
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
+import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.DropQuery;
+import com.healthmarketscience.sqlbuilder.InsertQuery;
+import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
@@ -112,9 +120,269 @@ class EMDBVenue extends EMDBBase{
 			this.dMsg("Cleanup Venue: "+ sql);
 			this.dMsg("Cleanup Booking: "+ sql2);
 		}
+		
+		this.queue(sql);
+		this.queue(sql2);
+		this.commit();
 	}
 	
 	
+	
+	
+	
+	
+	
+	/*
+	 * ******************************************************
+	 * 
+	 * CRUD Options
+	 * 
+	 * ******************************************************
+	 */
+	
+	
+	
+	/**
+	 * Add a Venue.
+	 * @param aName
+	 * @param aAddress
+	 * @param aDescription
+	 * @param aCapacity
+	 * @param aCost
+	 * @return
+	 */
+	public int addVenue(String aName, String aAddress, String aDescription, int aCapacity, int aCost){
+		String sql	=	new InsertQuery(this.venueTable)
+					  		.addColumn(this.venueName, aName)
+					  		.addColumn(this.venueAddress, aAddress)
+					  		.addColumn(this.venueDescription, aDescription)
+					  		.addColumn(this.venueCapacity, aCapacity)
+					  		.addColumn(this.venueCost, aCost)
+					  		.validate().toString();
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("ADD A VENUE");
+			this.dMsg(sql);
+		}
+		
+
+		try {
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+			int id = 0;
+			
+			if (result.next()){
+				id = result.getInt("venue_id");
+			}
+
+			result.close();
+			this.disconnect();
+			return id;
+			
+			
+			
+		} catch (SQLException e) {
+			return 0;
+		}
+
+		
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Booking of a Venue.
+	 * @param aEventID
+	 * @param aVenueID
+	 * @param aTimeStart
+	 * @param aTimeEnd
+	 * @return
+	 */
+	public int addBooking(int aEventID, int aVenueID, String aTimeStart , String aTimeEnd){
+		String sql	=	new InsertQuery(this.bookingTable)
+					  		.addColumn(this.bookingEventID, aEventID)
+					  		.addColumn(this.bookingVenueID, aVenueID)
+					  		.addColumn(this.bookingTimeStart, aTimeStart)
+					  		.addColumn(this.bookingTimeEnd, aTimeEnd)
+					  		.validate().toString();	
+		
+		
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("BOOK A VENUE");
+			this.dMsg(sql);
+		}
+		
+
+		try {
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+			int id = 0;
+			
+			if (result.next()){
+				id = result.getInt("booking_id");
+			}
+
+			result.close();
+			this.disconnect();
+			return id;
+			
+
+		} catch (SQLException e) {
+			return 0;
+		}
+
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Get Venue Details by VenueID
+	 * @param aVenueID
+	 * @return
+	 */
+	public Venue getVenue(int aVenueID){
+		String sql = new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.venueTable)
+						.addCondition(BinaryCondition.equalTo(this.venueID, aVenueID))
+						.validate().toString();
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("GET VENUE #"+aVenueID);
+			this.dMsg(sql);
+		}
+		
+		try{
+			ResultSet result = this.runQueryResults(sql);
+			
+			Venue place = new Venue();
+			while(result.next()){
+				place.updateID(aVenueID);
+				place.updateName(result.getString("name"));
+				place.updateAddress(result.getString("address"));
+				place.updateDescription(result.getString("description"));
+				place.updateCost(result.getInt("cost"));
+				place.updateMaxCapacity(result.getInt("capacity"));
+			}
+			
+			return place;
+			
+		} catch (SQLException e) {
+			return null;
+		}
+		
+	}
+
+	
+	
+	
+	
+	public TimeSlot getBooking(int aBookingID){
+		String sql = new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.bookingTable)
+						.addCondition(BinaryCondition.equalTo(this.bookingID, aBookingID))
+						.validate().toString();
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("GET BOOKING #"+aBookingID);
+			this.dMsg(sql);
+		}
+		
+		try{
+			ResultSet result = this.runQueryResults(sql);
+			TimeSlot slot = null;
+			
+			while(result.next()){
+				slot = new TimeSlot(
+						result.getInt("booking_id"),
+						new DateHour(result.getString("time_start")),
+						new DateHour(result.getString("time_end"))
+						);
+			}
+	
+			return slot;
+			
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	public void getVenueList(){
+		
+		
+		
+	}
+	
+	public Vector<TimeSlot> getBookingList(){
+		Vector<TimeSlot> list= new Vector<TimeSlot>();
+		
+		
+		return list;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void findVenue(){
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	public void updateVenue(){
+		
+	}
+	
+	public void updateBooking(){
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	public void deleteVenue(){
+		
+	}
+	
+	public void deleteBooking(){
+		
+	}
 	
 	
 	

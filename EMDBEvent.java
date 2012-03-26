@@ -1,5 +1,8 @@
+
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import com.healthmarketscience.sqlbuilder.*;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
@@ -11,6 +14,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
  * 
  * @author JunZhi
  * @version 1.0
+ * @param <Eventitem>
  */
 class EMDBEvent extends EMDBBase{
     
@@ -24,9 +28,7 @@ class EMDBEvent extends EMDBBase{
     private DbColumn 	eventsStartTime;
     private DbColumn 	eventsEndTime;
 	
-    
-    
-    
+
     
     /**
      * Constructor
@@ -95,6 +97,8 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT)
 			this.dMsg("Cleanup Event: "+ sql);
+		
+		this.runQuery(sql);
 	}
 	
 	
@@ -107,17 +111,29 @@ class EMDBEvent extends EMDBBase{
 	/*
 	 * ******************************************************
 	 * 
-	 * CRUD for events (SINGLE)
+	 * CRUD Options
 	 * 
 	 * ******************************************************
 	 */
+	
+	
+	
+	
 	
 
 	
 	/**
 	 * Creates an Event.
+	 * @param aName
+	 * @param aDescription
+	 * @param aBudget
+	 * @param aStartDate
+	 * @param aEndDate
+	 * @param aStartTime
+	 * @param aEndTime
+	 * @return
 	 */
-	public void addEvent(
+	public int addEvent(
 			String aName, 
 			String aDescription, 
 			double aBudget, 
@@ -137,8 +153,40 @@ class EMDBEvent extends EMDBBase{
 			      		.addColumn(this.eventsEndTime, aEndTime)
 			      		.validate().toString();
 		
-		this.runQuery(sql);
+		
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("ADD AN EVENT");
+			this.dMsg(sql);
+		}
+		
+		try {
+
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+			int id = 0;
+			
+			if (result.next()){
+				id = result.getInt("event_id");
+			}
+			
+			result.close();
+			this.disconnect();
+			return id;
+			
+			
+		} catch (SQLException e) {
+			return 0;
+		}
+
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -146,8 +194,12 @@ class EMDBEvent extends EMDBBase{
 	
 	/**
 	 * Get details of an event
+	 * @param aEventID
+	 * @return
 	 */
 	public Eventitem getEvent(int aEventID){
+		
+		
 		String sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.eventsTable)
@@ -156,18 +208,37 @@ class EMDBEvent extends EMDBBase{
 		
 		Eventitem item = null;
 		
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("GET AN EVENT #"+aEventID);
+			this.dMsg(sql);
+		}
+		
+				
+		
 		try {
 			this.connect();
 			ResultSet result = this.runQueryResults(sql);
 	
 			while(result.next()){
-				//item = new Eventitem();
+				item = new Eventitem(
+						result.getString("name"),
+						result.getString("startdate"),
+						result.getString("enddate"),
+						result.getString("starttime"),
+						result.getString("endtime")
+						);
+				item.setDescription(result.getString("description"));
+				item.setBudget(result.getDouble("budget"));
+				item.setID(result.getInt("event_id"));
 			}
 		
-
+			result.close();
 			this.disconnect();
 			
-			return null;
+	
+			
+			return item;
 			
 		} catch (SQLException e) {
 			return null;
@@ -179,8 +250,111 @@ class EMDBEvent extends EMDBBase{
 	
 	
 	
+	
+	
 	/**
-	 * Modifies details of an event
+	 * Wrapper for getting list of events
+	 * @return
+	 */
+	public Vector<Eventitem> getEventList(){
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("GET AN EVENT LIST");
+		}	
+		
+		return this.getEventListAll();
+
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Gets a list of all events in the Database.
+	 * @return
+	 */
+	private Vector<Eventitem> getEventListAll(){
+
+		Vector<Eventitem> list = new Vector<Eventitem>();
+		
+		String sql 	= new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.eventsTable)
+						.validate().toString();	
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("GET ALL EVENTS LIST");
+			this.dMsg(sql);
+		}
+			
+		
+		try {
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+			
+			while(result.next()){
+				Eventitem item = new Eventitem(
+						result.getString("name"),
+						result.getString("startdate"),
+						result.getString("enddate"),
+						result.getString("starttime"),
+						result.getString("endtime")
+						);
+				item.setDescription(result.getString("description"));
+				item.setID(result.getInt("event_id"));
+				item.setBudget(result.getDouble("budget"));
+				
+				list.add(item);
+			}
+			
+			
+			result.close();
+			this.disconnect();
+			return list;
+			
+			
+		} catch (SQLException e) {
+			return  null;
+		}
+			
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Modifies details of an event.
+	 * @param aEventID
+	 * @param aName
+	 * @param aDescription
+	 * @param aBudget
+	 * @param aStartDate
+	 * @param aEndDate
+	 * @param aStartTime
+	 * @param aEndTime
+	 * @return
 	 */
 	public int updateEvent(
 			int aEventID,
@@ -204,44 +378,58 @@ class EMDBEvent extends EMDBBase{
 						.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 						.validate().toString();
 		
-		return this.runQuery(sql);
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+		
+		return result;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	
 	/**
-	 * Deletes an Event
+	 * Deletes an Event.
+	 * @param aEventID
+	 * @return
 	 */
-	public void deleteEvent(int aEventID){
+	public int deleteEvent(int aEventID){
+		String sql 	=	new DeleteQuery(this.eventsTable)
+						.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
+						.validate().toString();
+
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("DELETE EVENT #"+aEventID);
+			this.dMsg(sql);
+		}
 		
+		
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+		
+		return result;
 	}
+	
+	
+	
+	
 	
 	
 
-	/*
-	 * ******************************************************
-	 * 
-	 * CRUD for events (multiple)
-	 * 
-	 * ******************************************************
-	 */
-	
-	
-	/**
-	 * Wrapper for getting list of events
-	 */
-	public void getEventList(){
-		
-	}
-	
-	
-	/**
-	 * Gets a list of all events in the Database.
-	 */
-	private void getEventListAll(){
-		
-	}
 	
 	
 }

@@ -1,6 +1,4 @@
-/*
- * Description: Encapsulates the general settings for the program. Mainly used in EMDB.
- */
+
 
 /**
  * 

@@ -1,8 +1,7 @@
+
 import java.io.File;
 import java.sql.*;
 import java.util.Vector;
-
-import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
 
 
@@ -51,11 +50,11 @@ public class EMDBBase{
 	//Processing
    	//Batch Processing
    	Vector<String> queue = new Vector<String>();
-   	private final String jsonResult = "{\"ResultSet\":{\"Query\":\"ppb\"}}";
 
-	
-	
-	
+   	
+   	
+   	
+   	
 
 	
 	
@@ -87,6 +86,7 @@ public class EMDBBase{
 	
 	
 	
+	
 	/*
 	 * ***********************************
 	 * 
@@ -94,6 +94,7 @@ public class EMDBBase{
 	 * 
 	 * ***********************************
 	 */
+	
 	/**
 	 * Starting a connection
 	 * @return
@@ -119,6 +120,8 @@ public class EMDBBase{
 			
 		} catch (SQLException e) {}
 	}
+	
+	
 	
 	
 	
@@ -224,6 +227,8 @@ public class EMDBBase{
 	protected void queue(String sql){
 		this.queue.add(sql);
 	}
+	
+	
 	
 	
 	/**

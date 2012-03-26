@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 
+
 public class ModelBudget {
 	private int event_id;
 	private Vector<Item> item_list;
