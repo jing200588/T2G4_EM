@@ -5,7 +5,7 @@
  * 
  * @author Nguyen Truong Duy (Team 31 - CS2103)
  */
-public class TimeSlot {
+public class TimeSlot implements Comparable<TimeSlot> {
 	/************************************************************************
 	 * Class member variables
 	 ************************************************************************/
@@ -119,5 +119,38 @@ public class TimeSlot {
 				anotherObj.getEndDateTime().compareTo(m_endDateTime) >= 0)
 			return true;
 		return false;
+	}
+
+	/**
+	 * Compares two TimeSlot objects.
+	 * 
+	 * @param anotherObj - TimeSlot
+	 * @return 1 if this TimeSlot object is 'larger' than anotherObj.
+	 * @return -1 if this TimeSlot object is 'smaller' than anotherObj.
+	 * @return 0 if this TimeSlot object is 'equal' to anotherObj.
+	 * 
+	 * Comparison standard:
+	 * 	+ If this.startDateTime '>' anotherObj.startDateTime, then this '>' anotherObj.
+	 *  + If this.startDateTime '<' anotherObj.startDateTime, then this '<' anotherObj.
+	 *  + If this.startDateTime '=' anotherObj.startDateTime,
+	 *  	- If this.EndDateTime '>' anotherObj.EndDateTime, then this '>' anotherObj.
+	 *  	- If this.EndDateTime '<' anotherObj.EndDateTime, then this '<' anotherObj.
+	 *  	- If this.EndDateTime '=' anotherObj.EndDateTime, then this '=' anotherObj.
+	 */
+	@Override
+	public int compareTo(TimeSlot anotherObj) {
+		// TODO Auto-generated method stub
+		if(m_startDateTime.compareTo(anotherObj.getStartDateTime()) > 0)
+			return 1;
+		if(m_startDateTime.compareTo(anotherObj.getStartDateTime()) < 0)
+			return -1;
+		
+		// At this point this.startDateTime '=' anotherObj.startDateTime
+		// Compare the end date time.
+		if(m_endDateTime.compareTo(anotherObj.getEndDateTime()) > 0)
+			return 1;
+		if(m_endDateTime.compareTo(anotherObj.getEndDateTime()) < 0)
+			return -1;
+		return 0;
 	}
 }

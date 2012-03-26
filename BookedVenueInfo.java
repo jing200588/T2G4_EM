@@ -16,7 +16,7 @@ public class BookedVenueInfo {
 	private String m_description;
 	private int m_maxCapacity;
 	private int m_cost;
-	private int m_venueID;				// Its value will be assigned by database
+	private int m_venueID;					// Its value will be assigned by database
 	private TimeSlot m_bookedTimeSlot;		// A single time slot booked by ONE particular event
 	
 	/************************************************************************
@@ -30,10 +30,11 @@ public class BookedVenueInfo {
 		m_maxCapacity = obj.getMaxCapacity();
 		m_cost = obj.getCost();
 		m_bookedTimeSlot = bookedTimeSlot; 		// Note that TimeSlot object is immutable!
+		m_venueID = obj.getVenueID();
 	}
 
 	
-	public BookedVenueInfo(String name, String address, String description, int capacity, int cost, TimeSlot bookedTimeSlot)
+	public BookedVenueInfo(String name, int venueID, String address, String description, int capacity, int cost, TimeSlot bookedTimeSlot)
 	{
 		m_name = name;
 		m_address = address;

@@ -1,3 +1,5 @@
+import java.util.Calendar;
+
 /**
  * A MyDateTime object keeps track of the date and time regarding year, month, day, hour and minute. 
  * A MyDateTime object is immutable!
@@ -161,7 +163,7 @@ public class MyDateTime implements Comparable<MyDateTime> {
 	 */
 	public int getMinute()
 	{
-		return m_hour;
+		return m_minute;
 	}
 	
 	/**
@@ -314,6 +316,18 @@ public class MyDateTime implements Comparable<MyDateTime> {
 	}
 
 	/**
+	 * Gets the current date and time (which consists of year, month, day, hour and minute) in the system.
+	 * @return currentDateTime - MyDateTime
+	 */
+	public static MyDateTime getCurrentDateTime()
+	{
+		Calendar current = Calendar.getInstance();
+		return new MyDateTime(current.get(Calendar.YEAR),
+				current.get(Calendar.MONTH) + 1, current.get(Calendar.DAY_OF_MONTH),
+				current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE));
+	}
+	
+	/**
 	 * Compares two MyDateTime objects according to the chronological order.
 	 * 
 	 * @param comparedObj - MyDateTime
@@ -352,7 +366,6 @@ public class MyDateTime implements Comparable<MyDateTime> {
 	}
 
 	@Override
-	
 	public String toString() {
 		return "MyDateTime [m_year=" + m_year + ", m_month=" + m_month
 				+ ", m_day=" + m_day + ", m_hour=" + m_hour + ", m_minute=" + m_minute + "]";

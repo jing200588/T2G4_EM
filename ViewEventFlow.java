@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -7,6 +9,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -17,6 +20,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class ViewEventFlow extends Composite {
 	
@@ -30,9 +39,12 @@ public class ViewEventFlow extends Composite {
 	  
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 	
-	private Eventitem eventObj;
+
 	private Table tableEventFlow;
+	private TableViewer tableViewEventFlow;
 	
+	private Eventitem eventObj;
+	private Vector<EventFlowEntry> listEventFlow;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -48,6 +60,8 @@ public class ViewEventFlow extends Composite {
 		
 		// Initialize some variables 
 		eventObj = event;
+		// THIS IS GOING TO BE FIXED!!!!!
+		listEventFlow = new Vector<EventFlowEntry>();
 		
 		// Continue with the GUI
 		toolkit.adapt(this);
@@ -72,13 +86,50 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(mainComposite);
 		toolkit.paintBordersFor(mainComposite);
 		
-		TableViewer tableViewEventFlow = new TableViewer(mainComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewEventFlow = new TableViewer(mainComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableEventFlow = tableViewEventFlow.getTable();
+		tableEventFlow.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				listenToViewAction();
+			}
+		});
+		tableEventFlow.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.keyCode == java.awt.event.KeyEvent.VK_DELETE)
+				{
+					int chosenIndex = tableEventFlow.getSelectionIndex();
+					if(chosenIndex >= 0)
+					{
+						deleteconfirmDialog deleteDialog = new deleteconfirmDialog(new Shell(),
+								deleteconfirmDialog.STATE_TYPE, "this entry");
+						int decision = (Integer) deleteDialog.open();
+						if(decision == 1)
+						{
+							// Delete the entry
+							listEventFlow.remove(chosenIndex);
+							tableViewEventFlow.refresh();
+						}
+					}
+				}
+				else
+				{
+					if(e.keyCode == java.awt.event.KeyEvent.VK_ENTER)
+					{
+						listenToViewAction();
+					}
+				}
+			}
+		});
+	
 		tableEventFlow.setTouchEnabled(true);
 		tableEventFlow.setLinesVisible(true);
 		tableEventFlow.setHeaderVisible(true);
-		tableEventFlow.setBounds(10, 10, 504, 268);
+		tableEventFlow.setBounds(10, 10, 505, 268);
 		tableViewEventFlow.setContentProvider(ArrayContentProvider.getInstance());
+		// Set input
+		tableViewEventFlow.setInput(listEventFlow);
 		toolkit.paintBordersFor(tableEventFlow);
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
@@ -135,7 +186,13 @@ public class ViewEventFlow extends Composite {
 		TableColumn ColNote = tableViewerColumn.getColumn();
 		ColNote.setWidth(100);
 		ColNote.setText(NOTE);
-		
+		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				EventFlowEntry obj = (EventFlowEntry) element;
+				return obj.getUserNote();
+			}
+		});
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////
 		// Create a table for users to input their information
@@ -148,14 +205,67 @@ public class ViewEventFlow extends Composite {
 		btnReturnToEvent.setText("Return to Event page");
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
+		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(), null,
+						eventObj.getBVI_list());
+				EventFlowEntry newEntry = inputDialog.open();
+				
+				// User might press 'Cancel' because they do not want to create a new entry anymore!
+				if(newEntry != null)
+				{
+					EventFlowEntry.insertSortedList(listEventFlow, newEntry);
+					tableViewEventFlow.refresh();
+				}
+			}
+		});
 		btnAdd.setBounds(10, 299, 75, 25);
 		toolkit.adapt(btnAdd, true, true);
 		btnAdd.setText("Add");
+	}
+	
+	/**
+	 * This is part of a listen when a user double-click or enter an entry
+	 */
+	private void listenToViewAction()
+	{
+		int chosenIndex = tableEventFlow.getSelectionIndex();
+		if(chosenIndex >= 0)
+		{
+			EventFlowEntry chosenEntry = listEventFlow.get(chosenIndex);
+			
+			InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(),
+					chosenEntry, eventObj.getBVI_list());
+			EventFlowEntry newEntry = inputDialog.open();
+			
+			// There may be modification in the chosen EventFlowEntry object
+			if(newEntry != null)
+			{
+				chosenEntry = newEntry;
+				tableViewEventFlow.refresh();
+			}
+		}
+	}
+	public static void main(String[] args)
+	{
+		Display display = new Display();
+		display = Display.getDefault();
+		Shell shell = new Shell();
 		
-		Button btnDelete = new Button(mainComposite, SWT.NONE);
-		btnDelete.setBounds(97, 299, 75, 25);
-		toolkit.adapt(btnDelete, true, true);
-		btnDelete.setText("Delete");
-
+		Eventitem event = new Eventitem("Fundraising", 2012, 3, 20, 9, 17, 2012, 4, 19, 5, 25);
+		event.addBVI(new BookedVenueInfo("SoC", 15, "NUS", "Cool", 100, 10, 
+				new TimeSlot(new MyDateTime(2012, 5, 15, 7, 0), new MyDateTime(2012, 5, 15, 9, 0))));
+		event.addBVI(new BookedVenueInfo("Biz", 19, "NUS", "Cool", 100, 10, 
+				new TimeSlot(new MyDateTime(2012, 5, 15, 7, 0), new MyDateTime(2012, 5, 15, 9, 0))));
+		event.addBVI(new BookedVenueInfo("The Deck", 25, "NUS", "Cool", 100, 10, 
+				new TimeSlot(new MyDateTime(2012, 5, 15, 7, 0), new MyDateTime(2012, 5, 15, 9, 0))));
+		
+		ViewEventFlow viewFlow = new ViewEventFlow(shell, SWT.NONE, event);
+		viewFlow.pack();
+		shell.open();
+		while (!shell.isDisposed()) { 
+		if (!display.readAndDispatch()) display.sleep(); 
+		} 
 	}
 }

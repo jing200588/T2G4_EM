@@ -12,15 +12,12 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 
-import java.util.Calendar;
 import java.util.Vector;
 
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -30,18 +27,13 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 
 import java.lang.NumberFormatException;
-import org.eclipse.swt.widgets.Combo;
 
 
 public class ViewBookingSystem extends Composite {
 	private final StackLayout stackLayout = new StackLayout();
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
-	
-	private final Display display = Display.getCurrent();
 	
 	private Text LowerBoundCapacity;
 	private Text UpperBoundCapacity;
@@ -127,7 +119,6 @@ public class ViewBookingSystem extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Form VenueViewForm = toolkit.createForm(this);
-		VenueViewForm.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		VenueViewForm.getBody().setBackgroundMode(SWT.INHERIT_DEFAULT);
 		VenueViewForm.setBounds(0, 0, 700, 400);
 		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
@@ -136,7 +127,6 @@ public class ViewBookingSystem extends Composite {
 		VenueViewForm.getBody().setLayout(new FormLayout());
 
 		Composite mainComposite = new Composite(VenueViewForm.getBody(), SWT.NONE);
-		mainComposite.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		FormData fd_mainComposite = new FormData();
 		fd_mainComposite.bottom = new FormAttachment(100, -24);
 		fd_mainComposite.left = new FormAttachment(0, 28);
@@ -148,7 +138,6 @@ public class ViewBookingSystem extends Composite {
 
 
 		FunctionOptionCompo = new Composite(mainComposite, SWT.NONE);
-		FunctionOptionCompo.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		FunctionOptionCompo.setBounds(10, 10, 680, 37);
 		toolkit.adapt(FunctionOptionCompo);
 		toolkit.paintBordersFor(FunctionOptionCompo);
@@ -198,6 +187,7 @@ public class ViewBookingSystem extends Composite {
 		AddOutsideVenueButton.setText("Add an event outside NUS");
 
 		FunctionContentPage = new Composite(mainComposite, SWT.NONE);
+		FunctionContentPage.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Public\\Pictures\\Sample Pictures\\Chrysanthemum.jpg"));
 		FunctionContentPage.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		FunctionContentPage.setBounds(10, 51, 680, 284);
 		toolkit.adapt(FunctionContentPage);
@@ -722,6 +712,7 @@ public class ViewBookingSystem extends Composite {
 		TimeConfirmButton.setText("Confirm");
 		
 		dt_SearchCriteria = new InputDateTimeComposite(TimeSlotCompo, SWT.NONE);
+		dt_SearchCriteria.setBackgroundMode(SWT.INHERIT_FORCE);
 		dt_SearchCriteria.setBounds(0, 0, 311, 127);
 		toolkit.adapt(dt_SearchCriteria);
 		toolkit.paintBordersFor(dt_SearchCriteria);
@@ -891,10 +882,7 @@ public class ViewBookingSystem extends Composite {
 					if(chosenVenueID < 0)
 						throw new Exception("You have not chosen a venue yet!");
 					
-				    Calendar current = Calendar.getInstance();
-					MyDateTime currentTime = new MyDateTime(current.get(Calendar.YEAR),
-							current.get(Calendar.MONTH) + 1, current.get(Calendar.DAY_OF_MONTH),
-							current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE));
+				    MyDateTime currentTime = MyDateTime.getCurrentDateTime();
 					if(timeSlotChoiceInput.happenBefore(currentTime) == true)
 						throw new Exception("You cannot book a venue with the starting date and time in the past!");
 					

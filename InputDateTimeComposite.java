@@ -36,6 +36,7 @@ public class InputDateTimeComposite extends Composite {
 				toolkit.dispose();
 			}
 		});
+		
 		toolkit.adapt(this);
 		toolkit.paintBordersFor(this);
 		
