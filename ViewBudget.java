@@ -1,8 +1,11 @@
+import gnu.io.CommPortIdentifier;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -262,6 +265,28 @@ public class ViewBudget extends Composite {
 		btnResetInputList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				txtInputList.setText("");
+				
+		        Enumeration ports = CommPortIdentifier.getPortIdentifiers();  
+		        
+		        System.out.println("Hi");
+		        while(ports.hasMoreElements()){  
+		            CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
+		            System.out.println(port.getName());
+		        }
+				
+		        /* to be use IFF required!
+				ComputeSmsData sms = new ComputeSmsData();
+		        SerialToGsm stg = new SerialToGsm("COM10");
+
+		        String retStr = new String("");
+		        String sss = new String();
+		        String alarmNumber = new String("+6590922840");   // a real phone number here
+		        
+		        sss = stg.sendSms(alarmNumber,"Hello");
+		        */
+	
+
+
 			}
 		});
 		formToolkit.adapt(btnResetInputList, true, true);
