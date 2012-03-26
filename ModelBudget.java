@@ -40,6 +40,7 @@ public class ModelBudget {
 		for (int i=0; i < count; i++){
 			Item current = i_list.get(i);
 			db.add_budget(event_id, current.getItem(), current.getPrice(), current.getSatisfaction_value(), current.getType(), true);		
+			//db.add_budget(event_id, current.getItem(), current.getPrice(), current.getSatisfaction_value(), current.getType(), current.getQuantity(), true);		
 		}
 		db.add_batch_commit();
 		db.disconnect();
@@ -61,6 +62,7 @@ public class ModelBudget {
 		for (int i=0; i < count; i++){
 			Item current = i_list.get(i);
 			db.add_budget_optimized(event_id, current.getItem(), current.getPrice(), current.getSatisfaction_value(), current.getType(), true);	
+			//db.add_budget(event_id, current.getItem(), current.getPrice(), current.getSatisfaction_value(), current.getType(), current.getQuantity(), true);
 		}
 		db.add_batch_commit();
 		db.disconnect();	

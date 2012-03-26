@@ -9,6 +9,7 @@ public class Item implements Comparable {
 	private int satisfaction_value;
 	private char compulsory;
 	private String type;
+	private int quantity;
 	
 
 	/**
@@ -22,6 +23,7 @@ public class Item implements Comparable {
 		this.price = (int) (input_price*100);
 		this.satisfaction_value = input_value;
 		this.compulsory = 'N';
+		this.quantity = 1;
 	}
 	
 	/**
@@ -37,6 +39,7 @@ public class Item implements Comparable {
 		this.satisfaction_value = input_value;
 		this.type = type;
 		this.compulsory = 'N';
+		this.quantity = 1;
 	}
 	
 	/**
@@ -48,13 +51,15 @@ public class Item implements Comparable {
 	 * @param type
 	 */
 	public Item(int id, String input_item, int input_price, int input_value, String type) {
-		this.id = id;
-		this.item = input_item;
-		this.price = input_price;
-		this.satisfaction_value = input_value;
-		this.type = type;
-		this.compulsory = 'N';
-	}	
+	this.id = id;
+	this.item = input_item;
+	this.price = input_price;
+	this.satisfaction_value = input_value;
+	this.type = type;
+	this.compulsory = 'N';
+	this.quantity = 1;
+	}
+	
 	
 	/**
 	 * Description: Return item id.
@@ -63,7 +68,7 @@ public class Item implements Comparable {
 	public int getID(){
 		return this.id;
 	}
-	
+
 	/**
 	 * Description: Return item compulsory status.
 	 * @return
@@ -146,6 +151,23 @@ public class Item implements Comparable {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	/**
+	 * Description: Get item quantity
+	 * @return
+	 */
+	public int getQuantity() {
+		return quantity;
+	}
+
+	/**
+	 * Description: Set item quantity
+	 * @param quantity
+	 */
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
 	
 	/**
 	 * Decription: Compare price follow by satisfaction between 2 item.

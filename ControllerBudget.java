@@ -13,6 +13,7 @@ public class ControllerBudget {
 	private Solution soln;
 	private Eventitem event_object;
 	private int typeOfResult; //this will be use to determine how the database list will be manipulated.
+	boolean hasEmptySet = false;
 
 	private Vector<Item> compute_list; //store the item(s) to undergo permutation algorithm
 	private Vector<Item> compulsory_list;
@@ -170,6 +171,7 @@ public class ControllerBudget {
 		typeOfResult = 0;
 		int noOfCombination = 0;
 		Collections.sort(compute_list);
+		hasEmptySet = false;
 
 		if(compulsory_list.size() == item_list.size()){ //All items checked as compulsory and budget is enough to buy all.
 			typeOfResult = 1;
@@ -199,8 +201,11 @@ public class ControllerBudget {
 
 			noOfCombination = soln.getSolnSetSize();
 			for(int i=0 ;i<soln.getSolnSetSize(); i++) {
-				if(soln.getSolnSet().get(i).isEmpty() == true)
+				if(soln.getSolnSet().get(i).isEmpty() == true) {
+					hasEmptySet = true;
 					noOfCombination--;
+				}
+					
 			}
 			if(noOfCombination == 0)
 				typeOfResult = 4; //No solution set.
@@ -291,7 +296,7 @@ public class ControllerBudget {
 			concat_list = compute_list;
 
 		text +=index+"\t";
-		text +=concat_list.get(currentItem).getItem()+" for $";
+		text +=concat_list.get(currentItem).getQuantity() + "x of " + concat_list.get(currentItem).getItem()+" for $";
 		price = ((double) concat_list.get(currentItem).getPrice())/100;
 		if(satisfaction_choice == 1) {
 			text += price + " for ";
@@ -503,6 +508,8 @@ public class ControllerBudget {
 				db_list.add(compulsory_list.get(i));
 			}
 
+			if(hasEmptySet == true)
+				select++;
 
 			BitSet bitmask = soln.getSolnSet().get(select);
 			for(int i=0; i<number; i++) {
