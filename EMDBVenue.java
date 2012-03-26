@@ -5,9 +5,11 @@ import java.util.Vector;
 
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
+import com.healthmarketscience.sqlbuilder.DeleteQuery;
 import com.healthmarketscience.sqlbuilder.DropQuery;
 import com.healthmarketscience.sqlbuilder.InsertQuery;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.UpdateQuery;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
@@ -86,10 +88,10 @@ class EMDBVenue extends EMDBBase{
 	 */
 	public void setup(){
 		String sql 	=	new CreateTableQuery(this.venueTable, true)
-						.validate().toString();
+								.validate().toString();
 		
 		String sql2 =	new CreateTableQuery(this.bookingTable, true)
-						.validate().toString();	
+								.validate().toString();	
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
@@ -112,9 +114,9 @@ class EMDBVenue extends EMDBBase{
 	 */
 	public void cleanup(){
 		String sql 	=	DropQuery.dropTable(this.venueTable)
-						.validate().toString();
+							.validate().toString();
 		String sql2 =	DropQuery.dropTable(this.bookingTable)
-						.validate().toString();
+							.validate().toString();
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("Cleanup Venue: "+ sql);
@@ -151,14 +153,21 @@ class EMDBVenue extends EMDBBase{
 	 * @param aCost
 	 * @return
 	 */
-	public int addVenue(String aName, String aAddress, String aDescription, int aCapacity, int aCost){
+	public int addVenue(
+			String aName, 
+			String aAddress, 
+			String aDescription, 
+			int aCapacity, 
+			int aCost
+			)
+	{
 		String sql	=	new InsertQuery(this.venueTable)
-					  		.addColumn(this.venueName, aName)
-					  		.addColumn(this.venueAddress, aAddress)
-					  		.addColumn(this.venueDescription, aDescription)
-					  		.addColumn(this.venueCapacity, aCapacity)
-					  		.addColumn(this.venueCost, aCost)
-					  		.validate().toString();
+						  		.addColumn(this.venueName, aName)
+						  		.addColumn(this.venueAddress, aAddress)
+						  		.addColumn(this.venueDescription, aDescription)
+						  		.addColumn(this.venueCapacity, aCapacity)
+						  		.addColumn(this.venueCost, aCost)
+						  		.validate().toString();
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
@@ -169,6 +178,7 @@ class EMDBVenue extends EMDBBase{
 
 		try {
 			this.connect();
+			
 			ResultSet result = this.runQueryResults(sql);
 			int id = 0;
 			
@@ -178,8 +188,8 @@ class EMDBVenue extends EMDBBase{
 
 			result.close();
 			this.disconnect();
-			return id;
 			
+			return id;
 			
 			
 		} catch (SQLException e) {
@@ -201,14 +211,20 @@ class EMDBVenue extends EMDBBase{
 	 * @param aTimeEnd
 	 * @return
 	 */
-	public int addBooking(int aEventID, int aVenueID, String aTimeStart , String aTimeEnd){
+	public int addBooking(
+			int aEventID, 
+			int aVenueID, 
+			String aTimeStart , 
+			String aTimeEnd
+			)
+	{
 		String sql	=	new InsertQuery(this.bookingTable)
-					  		.addColumn(this.bookingEventID, aEventID)
-					  		.addColumn(this.bookingVenueID, aVenueID)
-					  		.addColumn(this.bookingTimeStart, aTimeStart)
-					  		.addColumn(this.bookingTimeEnd, aTimeEnd)
-					  		.validate().toString();	
-		
+						  		.addColumn(this.bookingEventID, aEventID)
+						  		.addColumn(this.bookingVenueID, aVenueID)
+						  		.addColumn(this.bookingTimeStart, aTimeStart)
+						  		.addColumn(this.bookingTimeEnd, aTimeEnd)
+						  		.validate().toString();	
+			
 		
 		
 		
@@ -220,6 +236,7 @@ class EMDBVenue extends EMDBBase{
 
 		try {
 			this.connect();
+			
 			ResultSet result = this.runQueryResults(sql);
 			int id = 0;
 			
@@ -229,6 +246,7 @@ class EMDBVenue extends EMDBBase{
 
 			result.close();
 			this.disconnect();
+			
 			return id;
 			
 
@@ -256,10 +274,10 @@ class EMDBVenue extends EMDBBase{
 	 */
 	public Venue getVenue(int aVenueID){
 		String sql = new SelectQuery()
-						.addAllColumns()
-						.addFromTable(this.venueTable)
-						.addCondition(BinaryCondition.equalTo(this.venueID, aVenueID))
-						.validate().toString();
+							.addAllColumns()
+							.addFromTable(this.venueTable)
+							.addCondition(BinaryCondition.equalTo(this.venueID, aVenueID))
+							.validate().toString();
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
@@ -268,6 +286,9 @@ class EMDBVenue extends EMDBBase{
 		}
 		
 		try{
+			
+			this.connect();
+			
 			ResultSet result = this.runQueryResults(sql);
 			
 			Venue place = new Venue();
@@ -280,6 +301,9 @@ class EMDBVenue extends EMDBBase{
 				place.updateMaxCapacity(result.getInt("capacity"));
 			}
 			
+			result.close();
+			this.disconnect();
+			
 			return place;
 			
 		} catch (SQLException e) {
@@ -289,22 +313,112 @@ class EMDBVenue extends EMDBBase{
 	}
 
 	
+
+	
+
 	
 	
 	
+	
+	
+	
+	/**
+	 * Get List of Venues with Limiting Parameters
+	 * @param clause
+	 * @param upper
+	 * @param lower
+	 * @return
+	 */
+	public Vector<Venue> getVenueList(
+			String aSearchType, 
+			int aUpperLimit, 
+			int aLowerLimit
+			)
+	{
+		String sql = new SelectQuery()
+							.addAllColumns()
+							.addFromTable(this.venueTable)
+							.validate().toString();
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("GET VENUE LIST BY " + aSearchType);
+			this.dMsg(sql);
+		}
+			
+		try{
+			Vector<Venue> list = new Vector<Venue>();
+			
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+			
+			while (result.next()) {
+				
+				int cost = result.getInt("cost");
+				int capacity = result.getInt("capacity");
+				
+				if ( (aUpperLimit == 0 && aLowerLimit == 0) 
+						|| (aSearchType.compareTo("cost") == 0 && cost <= aUpperLimit && cost >= aLowerLimit)
+						|| (aSearchType.compareTo("capacity") == 0 && capacity <= aUpperLimit && capacity >= aLowerLimit )
+						)
+				{	
+					
+					Venue place = new Venue();
+					
+					place.updateID(result.getInt("venue_id"));
+					place.updateName(result.getString("name"));
+					place.updateAddress(result.getString("address"));
+					place.updateDescription(result.getString("description"));
+					place.updateCost(result.getInt("cost"));
+					place.updateMaxCapacity(result.getInt("capacity"));
+					
+					list.add(place);
+				}
+			}
+			
+			result.close();
+			this.disconnect();
+			
+			return list;
+			
+			
+			
+		} catch (SQLException e) {
+			return null;
+		}
+	}
+	
+	
+	
+
+
+	
+	
+	
+	
+	/**
+	 * Get a single booking by BookingID
+	 * @param aBookingID
+	 * @return
+	 */
 	public TimeSlot getBooking(int aBookingID){
 		String sql = new SelectQuery()
-						.addAllColumns()
-						.addFromTable(this.bookingTable)
-						.addCondition(BinaryCondition.equalTo(this.bookingID, aBookingID))
-						.validate().toString();
+							.addAllColumns()
+							.addFromTable(this.bookingTable)
+							.addCondition(BinaryCondition.equalTo(this.bookingID, aBookingID))
+							.validate().toString();
+			
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("GET BOOKING #"+aBookingID);
 			this.dMsg(sql);
 		}
 		
+		
+		
 		try{
+			
+			this.connect();
 			ResultSet result = this.runQueryResults(sql);
 			TimeSlot slot = null;
 			
@@ -316,43 +430,15 @@ class EMDBVenue extends EMDBBase{
 						);
 			}
 	
+			result.close();
+			this.disconnect();
+			
 			return slot;
+			
 			
 		} catch (SQLException e) {
 			return null;
 		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	public void getVenueList(){
-		
-		
-		
-	}
-	
-	public Vector<TimeSlot> getBookingList(){
-		Vector<TimeSlot> list= new Vector<TimeSlot>();
-		
-		
-		return list;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public void findVenue(){
 		
 	}
 	
@@ -362,11 +448,131 @@ class EMDBVenue extends EMDBBase{
 	
 	
 	
-	public void updateVenue(){
+	
+	
+	
+	
+	/**
+	 * Get a list of bookings by criteria
+	 * @param aID
+	 * @param aSearchType
+	 * @return
+	 */
+	public Vector<TimeSlot> getBookingList(int aID, String aSearchType){
+		String sql = "";
+		
+		switch (aSearchType){
+			case "event":
+				sql = new SelectQuery()
+							.addAllColumns()
+							.addFromTable(this.bookingTable)
+							.addCondition(BinaryCondition.equalTo(this.bookingEventID, aID))
+							.validate().toString();
+				break;
+					
+			case "venue":
+				sql = new SelectQuery()
+							.addAllColumns()
+							.addFromTable(this.bookingTable)
+							.addCondition(BinaryCondition.equalTo(this.venueID, aID))
+							.validate().toString();
+				break;
+
+			case "all":
+			default:
+				sql = new SelectQuery()
+							.addAllColumns()
+							.addFromTable(this.bookingTable)
+							.validate().toString();
+				break;
+		}
+		
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("GET BOOKING BY " + aSearchType);
+			this.dMsg(sql);
+		}
+		
+		
+		try{
+			
+			Vector<TimeSlot> list= new Vector<TimeSlot>();
+			
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+			
+			while(result.next()){
+				list.add(
+						new TimeSlot(
+							result.getInt("booking_id"),
+							new DateHour(result.getString("time_start")),
+							new DateHour(result.getString("time_end"))
+							)
+						);
+			}
+
+			
+			result.close();
+			this.disconnect();
+			return list;
+		
+		
+		} catch (SQLException e) {
+			return null;
+		}
+			
+		
 		
 	}
 	
-	public void updateBooking(){
+	
+	
+	/**
+	 * Get Bookings attached to an Event
+	 * @param aEventID
+	 * @return
+	 */
+	public Vector<BookedVenueInfo> getEventBookings(int aEventID){
+		
+		String sql = new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.bookingTable)
+						.addCondition(BinaryCondition.equalTo(this.bookingEventID, aEventID))
+						.validate().toString();
+						
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("GET BOOKING OF #"+aEventID);
+			this.dMsg(sql);
+		}
+		
+		
+		try{
+			Vector<BookedVenueInfo> list = new Vector<BookedVenueInfo>();
+			
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+
+			while (result.next()){
+				TimeSlot timing = new TimeSlot(
+										new DateHour(result.getString("time_start")),
+										new DateHour(result.getString("time_end"))
+										);
+				Venue venue = this.getVenue(result.getInt("venue_id"));
+				BookedVenueInfo info = new BookedVenueInfo(venue, timing);
+				
+				list.add(info);
+			}
+	
+			result.close();
+			this.disconnect();
+			
+			return list;
+			
+		} catch (SQLException e) {
+			return null;
+		}
 		
 	}
 	
@@ -376,15 +582,228 @@ class EMDBVenue extends EMDBBase{
 	
 	
 	
-	public void deleteVenue(){
+	/**
+	 * Finding a Venue by Name
+	 * @param aSearchTerm
+	 * @return
+	 */
+	public Vector<Venue> findVenue(String aSearchTerm){
+		
+		//A little sanitizing at work
+		aSearchTerm = aSearchTerm.replaceAll("[^\\w]", " ");
+		
+		String sql = new SelectQuery()
+							.addAllColumns()
+							.addFromTable(this.venueTable)
+							.addCondition(BinaryCondition.like(this.venueName, "%"+aSearchTerm+"%"))
+							.validate().toString();
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("FIND VENUE");
+			this.dMsg(sql);
+		}
+		
+		
+		try{
+			Vector<Venue> list = new Vector<Venue>();
+		
+			this.connect();
+			ResultSet result = this.runQueryResults(sql);
+			
+			while(result.next()){
+				Venue place = new Venue();
+				place.updateID(result.getInt("venue_id"));
+				place.updateName(result.getString("name"));
+				place.updateAddress(result.getString("address"));
+				place.updateDescription(result.getString("description"));
+				place.updateCost(result.getInt("cost"));
+				place.updateMaxCapacity(result.getInt("capacity"));
+				
+				list.add(place);
+			}
+			
+			result.close();
+			this.disconnect();
+			
+			return list;
+			
+		} catch (SQLException e) {
+			return null;
+		}
+		
+		
 		
 	}
 	
-	public void deleteBooking(){
+	
+	
+	
+	
+	
+	/**
+	 * Update Venue Details.
+	 * @param aVenueID
+	 * @param aName
+	 * @param aAddress
+	 * @param aDescription
+	 * @param aCapacity
+	 * @param aCost
+	 * @return
+	 */
+	public int updateVenue(
+			int aVenueID, 
+			String aName, 
+			String aAddress, 
+			String aDescription, 
+			int aCapacity, 
+			int aCost
+			)
+	{
+		String sql	=	new UpdateQuery(this.venueTable)
+								.addSetClause(this.venueName, aName)
+								.addSetClause(this.venueAddress, aDescription)
+								.addSetClause(this.venueDescription, aDescription)
+								.addSetClause(this.venueCapacity, aCapacity)
+								.addSetClause(this.venueCost, aCost)
+								.addCondition(BinaryCondition.equalTo(this.venueID, aVenueID))
+								.validate().toString();
 		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("UPDATE VENUE #"+aVenueID);
+			this.dMsg(sql);
+		}
+		
+		
+		
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+		
+		return result;
 	}
 	
 	
+	
+	
+	/**
+	 * Update Booking Details.
+	 * @param aBookingID
+	 * @param aEventID
+	 * @param aVenueID
+	 * @param aTimeStart
+	 * @param aTimeEnd
+	 * @return
+	 */
+	public int updateBooking(
+			int aBookingID,
+			int aEventID, 
+			int aVenueID, 
+			String aTimeStart , 
+			String aTimeEnd
+			)
+	{
+		String sql	=	new UpdateQuery(this.bookingTable)
+								.addSetClause(this.bookingEventID, aEventID)
+								.addSetClause(this.bookingVenueID, aVenueID)
+								.addSetClause(this.bookingTimeStart, aTimeStart)
+								.addSetClause(this.bookingTimeEnd, aTimeEnd)
+								.addCondition(BinaryCondition.equalTo(this.bookingID, aBookingID))
+								.validate().toString();
+					
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("UPDATE BOOKING #"+aBookingID);
+			this.dMsg(sql);
+		}
+		
+		
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+		
+		return result;	
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * Delete a venue.
+	 * @param aVenueID
+	 * @return
+	 */
+	public int deleteVenue(int aVenueID){
+		String sql 	=	new DeleteQuery(this.venueTable)
+								.addCondition(BinaryCondition.equalTo(this.venueID, aVenueID))
+								.validate().toString();
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("DELETE VENUE #"+aVenueID);
+			this.dMsg(sql);
+		}
+		
+		
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+		
+		return result;	
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Delete a single Booking.
+	 * @param aBookingID
+	 * @return
+	 */
+	public int deleteBooking(int aBookingID){
+		String sql 	=	new DeleteQuery(this.bookingTable)
+								.addCondition(BinaryCondition.equalTo(this.bookingID, aBookingID))
+								.validate().toString();
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("DELETE BOOKING #"+aBookingID);
+			this.dMsg(sql);
+		}
+		
+		
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+		
+		return result;	
+	}
+	
+	
+	
+	/**
+	 * Delete All booking related to an Event
+	 * @param aEventID
+	 * @return
+	 */
+	public int deleteBookingAll(int aEventID){
+		String sql 	=	new DeleteQuery(this.bookingTable)
+								.addCondition(BinaryCondition.equalTo(this.bookingEventID, aEventID))
+								.validate().toString();
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("DELETE BOOKING FOR EVENT #"+aEventID);
+			this.dMsg(sql);
+		}
+		
+		
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+		
+		return result;	
+	}
 	
 	
 	

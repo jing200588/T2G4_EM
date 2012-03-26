@@ -5,7 +5,7 @@ import java.util.Vector;
 
 public class EMDBII{
 	
-	static EMDBBudget test = new EMDBBudget();
+	static EMDBVenue test = new EMDBVenue();
 
 	public static void main(String[] args){
 		
@@ -13,7 +13,7 @@ public class EMDBII{
 		
 		//test.updateEvent(1, "aName", "aDescription", 10, "aStartDate", "aEndDate", "aStartTime", "aEndTime");
 		//test.addEvent("aName", "aDescription", 10, "aStartDate", "aEndDate", "aStartTime", "aEndTime");
-
+		test.findVenue("test");
 		//test.getEvent(1);
 		//test.runQueryResults("");
 		

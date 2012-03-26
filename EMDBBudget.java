@@ -482,12 +482,12 @@ class EMDBBudget extends EMDBBase{
 		switch (aTableType){
 			case "optimized":
 				sql = new UpdateQuery(this.optBudgetTable)
-						.addSetClause(this.optBudgetName, aName)
-						.addSetClause(this.optBudgetPrice, aPrice)
-						.addSetClause(this.optBudgetSatisfaction, aSatisfaction)
-						.addSetClause(this.optBudgetType, aType)
-						.addCondition(BinaryCondition.equalTo(this.optBudgetID, aBudgetID))
-						.validate().toString();
+							.addSetClause(this.optBudgetName, aName)
+							.addSetClause(this.optBudgetPrice, aPrice)
+							.addSetClause(this.optBudgetSatisfaction, aSatisfaction)
+							.addSetClause(this.optBudgetType, aType)
+							.addCondition(BinaryCondition.equalTo(this.optBudgetID, aBudgetID))
+							.validate().toString();
 				break;
 			case "normal":
 			default:
@@ -645,14 +645,14 @@ class EMDBBudget extends EMDBBase{
 		switch (aTableType){
 			case "optimized":
 				sql =	new DeleteQuery(this.optBudgetTable)
-							.addCondition(BinaryCondition.equalTo(this.optBudgetEventsID, aEventID))
-							.validate().toString();
+								.addCondition(BinaryCondition.equalTo(this.optBudgetEventsID, aEventID))
+								.validate().toString();
 				break;
 			case "normal":
 			default:
 				sql =	new DeleteQuery(this.budgetTable)
-							.addCondition(BinaryCondition.equalTo(this.budgetEventsID, aEventID))
-							.validate().toString();
+								.addCondition(BinaryCondition.equalTo(this.budgetEventsID, aEventID))
+								.validate().toString();
 				break;
 		}
 		

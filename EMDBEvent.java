@@ -144,14 +144,14 @@ class EMDBEvent extends EMDBBase{
 			)
 	{
 		String sql	=	new InsertQuery(this.eventsTable)
-			      		.addColumn(this.eventsName, aName)
-			      		.addColumn(this.eventsDescription, aDescription)
-			      		.addColumn(this.eventsBudget, aBudget)
-			      		.addColumn(this.eventsStartDate, aStartDate)
-			      		.addColumn(this.eventsEndDate, aEndDate)
-			      		.addColumn(this.eventsStartTime, aStartTime)
-			      		.addColumn(this.eventsEndTime, aEndTime)
-			      		.validate().toString();
+					      		.addColumn(this.eventsName, aName)
+					      		.addColumn(this.eventsDescription, aDescription)
+					      		.addColumn(this.eventsBudget, aBudget)
+					      		.addColumn(this.eventsStartDate, aStartDate)
+					      		.addColumn(this.eventsEndDate, aEndDate)
+					      		.addColumn(this.eventsStartTime, aStartTime)
+					      		.addColumn(this.eventsEndTime, aEndTime)
+					      		.validate().toString();
 		
 		
 
@@ -201,10 +201,10 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		String sql = new SelectQuery()
-						.addAllColumns()
-						.addFromTable(this.eventsTable)
-						.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
-						.validate().toString();
+							.addAllColumns()
+							.addFromTable(this.eventsTable)
+							.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
+							.validate().toString();
 		
 		Eventitem item = null;
 		
@@ -368,15 +368,15 @@ class EMDBEvent extends EMDBBase{
 			)
 	{
 		String sql	=	new UpdateQuery(this.eventsTable)
-						.addSetClause(this.eventsName, aName)
-						.addSetClause(this.eventsDescription, aDescription)
-						.addSetClause(this.eventsBudget, aBudget)
-						.addSetClause(this.eventsStartDate, aStartDate)
-						.addSetClause(this.eventsEndDate, aEndDate)
-						.addSetClause(this.eventsStartTime, aStartTime)
-						.addSetClause(this.eventsEndTime, aEndTime)	
-						.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
-						.validate().toString();
+								.addSetClause(this.eventsName, aName)
+								.addSetClause(this.eventsDescription, aDescription)
+								.addSetClause(this.eventsBudget, aBudget)
+								.addSetClause(this.eventsStartDate, aStartDate)
+								.addSetClause(this.eventsEndDate, aEndDate)
+								.addSetClause(this.eventsStartTime, aStartTime)
+								.addSetClause(this.eventsEndTime, aEndTime)	
+								.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
+								.validate().toString();
 		
 		this.connect();
 		int result = this.runQuery(sql);
