@@ -16,6 +16,10 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
  */
 class EMDBEvent extends EMDBBase{
     
+	private DbTable 	masterTable = this.schema.addTable(EMDBSettings.TABLE_MASTER);
+	private DbColumn	masterName	= this.masterTable.addColumn("name");
+	
+	
     private DbTable 	eventsTable;
     private DbColumn 	eventsID;
     private DbColumn 	eventsName;
@@ -115,12 +119,12 @@ class EMDBEvent extends EMDBBase{
 	public boolean verify(){
 		
 		int tableTotal = 1;
-		
+				
 		String sql = new SelectQuery()
-						.addCustomColumns("rowid")
-						.addCustomFromTable("sqlite_master")
+						.addAllColumns()
+						.addFromTable(this.masterTable)
 						.addCondition(
-									BinaryCondition.equalTo("name", EMDBSettings.TABLE_EVENTS)
+									BinaryCondition.equalTo(this.masterName, EMDBSettings.TABLE_EVENTS)
 						)
 						.validate().toString();
 
@@ -133,6 +137,10 @@ class EMDBEvent extends EMDBBase{
 		
 		Vector<Object[]> result = this.runQueryResults(sql);
 		int count = result.size();
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("VERIFIED SIZE: "+count);
+		}
 		
 		this.disconnect();
 		
@@ -203,7 +211,7 @@ class EMDBEvent extends EMDBBase{
 		Vector<Object[]> result = this.runQueryResults(sql);
 		int id = 0;
 		
-		if (result.get(0) != null){
+		if (result.size() > 0){
 			id = (int) result.get(0)[0];
 		}
 		
@@ -246,8 +254,7 @@ class EMDBEvent extends EMDBBase{
 			this.dMsg("GET AN EVENT #"+aEventID);
 			this.dMsg(sql);
 		}
-		
-				
+
 		
 		
 		this.connect();

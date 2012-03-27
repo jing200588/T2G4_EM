@@ -23,11 +23,12 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
  */
 class EMDBBudget extends EMDBBase{
 
-
+	private DbTable 	masterTable = this.schema.addTable(EMDBSettings.TABLE_MASTER);
+	private DbColumn	masterName	= this.masterTable.addColumn("name");
     
     private DbTable 	budgetTable;  
     private DbColumn 	budgetID;
-    private DbColumn 	budgetEventsID;
+    private DbColumn 	budgetEventID;
     private DbColumn 	budgetName;
     private DbColumn 	budgetPrice;
     private DbColumn 	budgetSatisfaction;
@@ -37,7 +38,7 @@ class EMDBBudget extends EMDBBase{
     
     private DbTable 	optBudgetTable;
     private DbColumn 	optBudgetID;
-    private DbColumn 	optBudgetEventsID;
+    private DbColumn 	optBudgetEventID;
     private DbColumn 	optBudgetName;
     private DbColumn 	optBudgetPrice;
     private DbColumn 	optBudgetSatisfaction;
@@ -73,7 +74,7 @@ class EMDBBudget extends EMDBBase{
 		 */
 		this.budgetTable 				= 	this.schema.addTable(EMDBSettings.TABLE_BUDGET);
 		this.budgetID 					= 	this.budgetTable.addColumn("budget_id", "INTEGER PRIMARY KEY AUTOINCREMENT", null);
-		this.budgetEventsID				= 	this.budgetTable.addColumn("event_id", "INTEGER NOT NULL DEFAULT (-1)", null);
+		this.budgetEventID				= 	this.budgetTable.addColumn("event_id", "INTEGER NOT NULL DEFAULT (-1)", null);
 		this.budgetName					= 	this.budgetTable.addColumn("name", "TEXT", null);
 		this.budgetPrice				= 	this.budgetTable.addColumn("price", "INTEGER", null);
 		this.budgetSatisfaction			= 	this.budgetTable.addColumn("satisfaction", "INTEGER", null);
@@ -85,7 +86,7 @@ class EMDBBudget extends EMDBBase{
 		 */
 		this.optBudgetTable 			= 	this.schema.addTable(EMDBSettings.TABLE_BUDGET_OPTIMIZED);
 		this.optBudgetID 				= 	this.optBudgetTable.addColumn("budget_id", "INTEGER PRIMARY KEY AUTOINCREMENT", null);
-		this.optBudgetEventsID 			= 	this.optBudgetTable.addColumn("event_id", "INTEGER NOT NULL DEFAULT (-1)", null);
+		this.optBudgetEventID 			= 	this.optBudgetTable.addColumn("event_id", "INTEGER NOT NULL DEFAULT (-1)", null);
 		this.optBudgetName 				= 	this.optBudgetTable.addColumn("name", "TEXT", null);
 		this.optBudgetPrice 			= 	this.optBudgetTable.addColumn("price", "INTEGER", null);
 		this.optBudgetSatisfaction 		= 	this.optBudgetTable.addColumn("satisfaction", "INTEGER", null);
@@ -170,12 +171,12 @@ class EMDBBudget extends EMDBBase{
 		int tableTotal = 2;
 		
 		String sql = new SelectQuery()
-						.addCustomColumns("rowid")
-						.addCustomFromTable("sqlite_master")
+						.addAllColumns()
+						.addFromTable(this.masterTable)
 						.addCondition(
 								ComboCondition.or(
-									BinaryCondition.equalTo("name", EMDBSettings.TABLE_BUDGET),
-									BinaryCondition.equalTo("name", EMDBSettings.TABLE_BUDGET_OPTIMIZED)
+									BinaryCondition.equalTo(this.masterName, EMDBSettings.TABLE_BUDGET),
+									BinaryCondition.equalTo(this.masterName, EMDBSettings.TABLE_BUDGET_OPTIMIZED)
 								)
 						)
 						.validate().toString();
@@ -189,6 +190,11 @@ class EMDBBudget extends EMDBBase{
 		
 		Vector<Object[]> result = this.runQueryResults(sql);
 		int count = result.size();
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("VERIFIED SIZE: "+count);
+		}
+		
 		
 		this.disconnect();
 		
@@ -256,7 +262,7 @@ class EMDBBudget extends EMDBBase{
 		switch (aTableType){
 			case "optimized":
 				sql = new InsertQuery(this.optBudgetTable)
-							.addColumn(this.optBudgetEventsID, aEventID)
+							.addColumn(this.optBudgetEventID, aEventID)
 							.addColumn(this.optBudgetName, aName)
 							.addColumn(this.optBudgetPrice, aPrice)
 							.addColumn(this.optBudgetSatisfaction, aSatisfaction)
@@ -266,7 +272,7 @@ class EMDBBudget extends EMDBBase{
 			case "normal":
 			default:
 				sql = new InsertQuery(this.budgetTable)
-							.addColumn(this.budgetEventsID, aEventID)
+							.addColumn(this.budgetEventID, aEventID)
 							.addColumn(this.budgetName, aName)
 							.addColumn(this.budgetPrice, aPrice)
 							.addColumn(this.budgetSatisfaction, aSatisfaction)
@@ -287,7 +293,7 @@ class EMDBBudget extends EMDBBase{
 		Vector<Object[]> result = this.runQueryResults(sql);
 		int id = 0;
 		
-		if (result.get(0) != null){
+		if (result.size() > 0){
 			id = (int) result.get(0)[0];
 		}
 		
@@ -347,7 +353,7 @@ class EMDBBudget extends EMDBBase{
 			switch (aTableType){
 				case "optimized":
 					sql = new InsertQuery(this.optBudgetTable)
-								.addColumn(this.optBudgetEventsID, aEventID)
+								.addColumn(this.optBudgetEventID, aEventID)
 								.addColumn(this.optBudgetName, current.getItem())
 								.addColumn(this.optBudgetPrice, current.getPrice())
 								.addColumn(this.optBudgetSatisfaction, current.getSatisfaction_value())
@@ -357,7 +363,7 @@ class EMDBBudget extends EMDBBase{
 				case "normal":
 				default:
 					sql = new InsertQuery(this.budgetTable)
-								.addColumn(this.budgetEventsID, aEventID)
+								.addColumn(this.budgetEventID, aEventID)
 								.addColumn(this.budgetName, current.getItem())
 								.addColumn(this.budgetPrice, current.getPrice())
 								.addColumn(this.budgetSatisfaction, current.getSatisfaction_value())
@@ -396,8 +402,8 @@ class EMDBBudget extends EMDBBase{
 	 * Getting the list of budget.
 	 * @return
 	 */
-	public Vector<Item> getBudget(){
-		return this.getBudgetGateway("normal");
+	public Vector<Item> getBudget(int aEventID){
+		return this.getBudgetGateway(aEventID, "normal");
 	}
 	
 	
@@ -406,8 +412,8 @@ class EMDBBudget extends EMDBBase{
 	 * Getting the optimized list of budget.
 	 * @return
 	 */
-	public Vector<Item> getBudgetOptimized(){
-		return this.getBudgetGateway("optimized");
+	public Vector<Item> getBudgetOptimized(int aEventID){
+		return this.getBudgetGateway(aEventID, "optimized");
 	}
 	
 	
@@ -417,7 +423,7 @@ class EMDBBudget extends EMDBBase{
 	 * @param aTableType
 	 * @return
 	 */
-	private Vector<Item> getBudgetGateway(String aTableType){	
+	private Vector<Item> getBudgetGateway(int aEventID, String aTableType){	
 		String sql = "";
 
 		switch (aTableType){
@@ -425,6 +431,7 @@ class EMDBBudget extends EMDBBase{
 				sql = new SelectQuery()
 							.addAllColumns()
 							.addFromTable(this.optBudgetTable)
+							.addCondition(BinaryCondition.equalTo(this.optBudgetEventID, aEventID))
 							.validate().toString();
 				break;
 			case "normal":
@@ -432,6 +439,7 @@ class EMDBBudget extends EMDBBase{
 				sql = new SelectQuery()
 							.addAllColumns()
 							.addFromTable(this.budgetTable)
+							.addCondition(BinaryCondition.equalTo(this.budgetEventID, aEventID))
 							.validate().toString();
 				break;
 		}
@@ -686,13 +694,13 @@ class EMDBBudget extends EMDBBase{
 		switch (aTableType){
 			case "optimized":
 				sql =	new DeleteQuery(this.optBudgetTable)
-								.addCondition(BinaryCondition.equalTo(this.optBudgetEventsID, aEventID))
+								.addCondition(BinaryCondition.equalTo(this.optBudgetEventID, aEventID))
 								.validate().toString();
 				break;
 			case "normal":
 			default:
 				sql =	new DeleteQuery(this.budgetTable)
-								.addCondition(BinaryCondition.equalTo(this.budgetEventsID, aEventID))
+								.addCondition(BinaryCondition.equalTo(this.budgetEventID, aEventID))
 								.validate().toString();
 				break;
 		}

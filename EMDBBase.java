@@ -226,9 +226,9 @@ public class EMDBBase{
 		
 		try {	
 	
-			PreparedStatement query = this.dbCon.prepareStatement(sql+";", Statement.RETURN_GENERATED_KEYS);
-			query.executeUpdate();
-			ResultSet rs = query.getGeneratedKeys();
+			PreparedStatement query = this.dbCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			query.execute();
+			ResultSet rs = query.getResultSet();
 			
 			Vector<Object[]> result = new Vector<Object[]>(); 
 			
@@ -241,10 +241,11 @@ public class EMDBBase{
 				}
 				result.add(row);
 			}
-			
+
 			return result;
 			
 		} catch (SQLException e) {
+			
 			return new Vector<Object[]>();
 		}	
 	}

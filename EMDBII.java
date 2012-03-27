@@ -46,11 +46,32 @@ public class EMDBII{
 	
 	
 	
+
+	/**
+	 * Access event database
+	 * @return
+	 */
+	public EMDBEvent eventDB(){
+		return event;
+	}
+	
+
+	/**
+	 * Access budget database
+	 * @return
+	 */
+	public EMDBBudget budgetDB(){
+		return budget;
+	}
 	
 	
-	
-	
-	
+	/**
+	 * Access venue database
+	 * @return
+	 */
+	public EMDBVenue venueDB(){
+		return venue;
+	}
 	
 	
 	
@@ -72,7 +93,7 @@ public class EMDBII{
 	/**
 	 * Check for Database File
 	 */
-	public void system_check(){
+	public void systemCheck(){
 		if (this.event.verify() 
 				&& this.budget.verify()
 				&& this.venue.verify()){
@@ -122,15 +143,17 @@ public class EMDBII{
 			this.venue.addVenue("MR9 (ICUBE-03-49)", "", "", 12, 0);
 			this.venue.addVenue("Video Conferencing Room (COM1-02-13)", "", "", 30, 0);
 			
-			System.out.println("END");
+		}
+		
+		if (EMDBSettings.DEVELOPMENT){
+			System.out.println("SYSTEM CHECK - END");
 		}
 	}
 	
 
 	public static void main(String[] args){
 		EMDBII test = new EMDBII();
-		test.system_check();
-		
+		test.systemCheck();
 	}
 
 	

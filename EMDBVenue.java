@@ -23,6 +23,8 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
  */
 class EMDBVenue extends EMDBBase{
 	
+	private DbTable 	masterTable = this.schema.addTable(EMDBSettings.TABLE_MASTER);
+	private DbColumn	masterName	= this.masterTable.addColumn("name");
 
 	
     private DbTable 	venueTable;
@@ -149,12 +151,12 @@ class EMDBVenue extends EMDBBase{
 		int tableTotal = 2;
 		
 		String sql = new SelectQuery()
-						.addCustomColumns("rowid")
-						.addCustomFromTable("sqlite_master")
+						.addAllColumns()
+						.addFromTable(this.masterTable)
 						.addCondition(
 								ComboCondition.or(
-									BinaryCondition.equalTo("name", EMDBSettings.TABLE_VENUE),
-									BinaryCondition.equalTo("name", EMDBSettings.TABLE_VENUE_BOOKINGS)
+									BinaryCondition.equalTo(this.masterName, EMDBSettings.TABLE_VENUE),
+									BinaryCondition.equalTo(this.masterName, EMDBSettings.TABLE_VENUE_BOOKINGS)
 								)
 						)
 						.validate().toString();
@@ -168,6 +170,10 @@ class EMDBVenue extends EMDBBase{
 		
 		Vector<Object[]> result = this.runQueryResults(sql);
 		int count = result.size();
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("VERIFIED SIZE: "+count);
+		}
 		
 		this.disconnect();
 		
@@ -227,7 +233,7 @@ class EMDBVenue extends EMDBBase{
 		int id = 0;
 		
 		
-		if (result.get(0) != null){
+		if (result.size() > 0){
 			id = (int) result.get(0)[0];
 			
 			
@@ -281,7 +287,7 @@ class EMDBVenue extends EMDBBase{
 		Vector<Object[]> result = this.runQueryResults(sql);
 		int id = 0;	
 		
-		if (result.get(0) != null){
+		if (result.size() > 0){
 			id = (int) result.get(0)[0];
 		}
 		
@@ -327,8 +333,7 @@ class EMDBVenue extends EMDBBase{
 		
 		Venue place = new Venue();
 		
-		int size = result.size();
-		if (size > 0){
+		if (result.size() > 0){
 			Object[] row = result.get(0);
 			place.updateName( (String) row[1]);
 			place.updateAddress( (String) row[2] );
@@ -449,13 +454,12 @@ class EMDBVenue extends EMDBBase{
 		Vector<Object[]> result = this.runQueryResults(sql);
 		TimeSlot slot = null;
 		
-		int size = result.size();
-		if (size > 0){
+		if (result.size() > 0){
 			Object[] row = result.get(0);
 			slot = new TimeSlot(
 					(int) row[0],
-					new DateHour( (String) row[3] ),
-					new DateHour( (String) row[4] )
+					new MyDateTime( (String) row[3] ),
+					new MyDateTime( (String) row[4] )
 					);
 			
 		}
@@ -531,8 +535,8 @@ class EMDBVenue extends EMDBBase{
 			list.add(
 					new TimeSlot(
 							(int) row[0],
-							new DateHour( (String) row[3] ),
-							new DateHour( (String) row[4] )
+							new MyDateTime( (String) row[3] ),
+							new MyDateTime( (String) row[4] )
 							)
 					);
 		}
@@ -575,8 +579,8 @@ class EMDBVenue extends EMDBBase{
 			Object[] row = result.get(i);
 			
 			TimeSlot timing = new TimeSlot(
-									new DateHour( (String) row[3]),
-									new DateHour( (String) row[4] )
+									new MyDateTime( (String) row[3]),
+									new MyDateTime( (String) row[4] )
 									);
 			Venue venue = this.getVenue( (int) row[2] );
 			BookedVenueInfo info = new BookedVenueInfo(venue, timing);
