@@ -503,7 +503,7 @@ class EMDBVenue extends EMDBBase{
 			sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.bookingTable)
-						.addCondition(BinaryCondition.equalTo(this.venueID, aID))
+						.addCondition(BinaryCondition.equalTo(this.bookingVenueID, aID))
 						.validate().toString();
 		} else {
 			sql = new SelectQuery()
