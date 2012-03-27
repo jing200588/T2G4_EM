@@ -9,7 +9,7 @@
 public class EMDBSettings {
 	
 	public static 		boolean DEVELOPMENT 				= 	true;
-	public static 		String 	DATABASE_NAME 				= 	"test.sqlite";
+	public static 		String 	DATABASE_NAME 				= 	"trial.sqlite";
 	
 	
 	public static final String 	TABLE_VENUE					= 	"EM_VENUE";

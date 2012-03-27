@@ -2,6 +2,7 @@
 import java.io.File;
 import java.sql.*;
 import java.util.Vector;
+
 import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
 
 
@@ -141,14 +142,17 @@ public class EMDBBase{
 	 * Setting database name to default if DBNAME variable is not set.
 	 */
 	private void setDefaultDB(){
-		
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("SETTING DEFAULT DB");
-		}
+
 		
 		if (this.dbName.isEmpty()){
 			this.setName(EMDBSettings.DATABASE_NAME);
 		}	
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("SETTING DEFAULT DB - " + this.dbName);
+		}
+		
 		this.setFile();
 	}
 
@@ -181,6 +185,10 @@ public class EMDBBase{
 	 * ***********************************
 	 */
 	
+	
+	
+	
+	
 	/**
 	 * Generic Query. 
 	 * Accepts a string, connect to DB, execute, and disconnect.
@@ -194,8 +202,9 @@ public class EMDBBase{
 		}
 		
 		try {	
-			PreparedStatement pstm = this.dbCon.prepareStatement(sql);
-			pstm.executeQuery();
+			Statement query = this.dbCon.createStatement();
+			query.executeQuery(sql);
+			
 			return 1;
 			
 		} catch (SQLException e) {
@@ -208,7 +217,7 @@ public class EMDBBase{
 	
 	
 	
-	protected ResultSet runQueryResults(String sql){
+	protected Vector<Object[]> runQueryResults(String sql){
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
@@ -216,13 +225,27 @@ public class EMDBBase{
 		}
 		
 		try {	
-
-			PreparedStatement pstm = this.dbCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ResultSet result = pstm.executeQuery();
+	
+			PreparedStatement query = this.dbCon.prepareStatement(sql+";", Statement.RETURN_GENERATED_KEYS);
+			query.executeUpdate();
+			ResultSet rs = query.getGeneratedKeys();
+			
+			Vector<Object[]> result = new Vector<Object[]>(); 
+			
+			while (rs.next()){
+				int cols = rs.getMetaData().getColumnCount();
+				Object[] row = new Object[cols];
+				
+				for (int i=0; i<cols; i++){
+					row[i] = rs.getObject(i+1);
+				}
+				result.add(row);
+			}
+			
 			return result;
 			
 		} catch (SQLException e) {
-			return null;
+			return new Vector<Object[]>();
 		}	
 	}
 	

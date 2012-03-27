@@ -71,8 +71,8 @@ class EMDBVenue extends EMDBBase{
 		this.venueName			=	this.venueTable.addColumn("name", "TEXT NOT NULL", null);
 		this.venueAddress		=	this.venueTable.addColumn("address", "TEXT", null);
 		this.venueDescription	=	this.venueTable.addColumn("description", "TEXT", null);
-		this.venueCapacity		=	this.venueTable.addColumn("capacity", "INTEGER NOT NULL DEFAULT (0)", 11);
-		this.venueCost			=	this.venueTable.addColumn("cost", "INTEGER NOT NULL DEFAULT (0)", 11);
+		this.venueCapacity		=	this.venueTable.addColumn("capacity", "INTEGER NOT NULL DEFAULT", 11);
+		this.venueCost			=	this.venueTable.addColumn("cost", "INTEGER NOT NULL DEFAULT", 11);
 		
 		
 		this.bookingTable 		= 	this.schema.addTable(EMDBSettings.TABLE_VENUE_BOOKINGS);
@@ -164,22 +164,17 @@ class EMDBVenue extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		try {
-			
-			ResultSet result = this.runQueryResults(sql);
-			int count = 0;
-			
-			if (result.next())
-				count++;
-
-			if (count == tableTotal)
-				return true;
-			
-			return false;
-			
-		} catch (SQLException e) {
-			return false;
-		}
+		this.connect();
+		
+		Vector<Object[]> result = this.runQueryResults(sql);
+		int count = result.size();
+		
+		this.disconnect();
+		
+		if (count == tableTotal)
+			return true;
+		
+		return false;
 	}
 	
 	
@@ -225,27 +220,26 @@ class EMDBVenue extends EMDBBase{
 		}
 		
 
-		try {
-			this.connect();
-			
-			ResultSet result = this.runQueryResults(sql);
-			int id = 0;
-			
-			if (result.next()){
-				id = result.getInt("venue_id");
-			}
-
-			result.close();
-			this.disconnect();
-			
-			return id;
-			
-			
-		} catch (SQLException e) {
-			return 0;
-		}
-
 		
+		this.connect();	
+		
+		Vector<Object[]> result = this.runQueryResults(sql);
+		int id = 0;
+		
+		
+		if (result.get(0) != null){
+			id = (int) result.get(0)[0];
+			
+			
+			if (EMDBSettings.DEVELOPMENT){
+				this.dMsg("NEW VENUE ID #" + id);
+			}
+		}
+		
+		this.disconnect();
+		
+		return id;
+
 	}
 	
 	
@@ -282,26 +276,19 @@ class EMDBVenue extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-
-		try {
-			this.connect();
-			
-			ResultSet result = this.runQueryResults(sql);
-			int id = 0;
-			
-			if (result.next()){
-				id = result.getInt("booking_id");
-			}
-
-			result.close();
-			this.disconnect();
-			
-			return id;
-			
-
-		} catch (SQLException e) {
-			return 0;
+		this.connect();
+	
+		Vector<Object[]> result = this.runQueryResults(sql);
+		int id = 0;	
+		
+		if (result.get(0) != null){
+			id = (int) result.get(0)[0];
 		}
+		
+		this.disconnect();
+			
+		return id;
+	
 
 		
 	}
@@ -334,31 +321,27 @@ class EMDBVenue extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		try{
-			
-			this.connect();
-			
-			ResultSet result = this.runQueryResults(sql);
-			
-			Venue place = new Venue();
-			while(result.next()){
-				place.updateID(aVenueID);
-				place.updateName(result.getString("name"));
-				place.updateAddress(result.getString("address"));
-				place.updateDescription(result.getString("description"));
-				place.updateCost(result.getInt("cost"));
-				place.updateMaxCapacity(result.getInt("capacity"));
-			}
-			
-			result.close();
-			this.disconnect();
-			
-			return place;
-			
-		} catch (SQLException e) {
-			return null;
+		this.connect();
+		
+		Vector<Object[]> result = this.runQueryResults(sql);
+		
+		Venue place = new Venue();
+		
+		int size = result.size();
+		if (size > 0){
+			Object[] row = result.get(0);
+			place.updateName( (String) row[1]);
+			place.updateAddress( (String) row[2] );
+			place.updateDescription( (String) row[3] );
+			place.updateCost( (int) row[4] );
+			place.updateMaxCapacity( (int) row[5] );			
 		}
 		
+
+		this.disconnect();
+		
+		return place;
+	
 	}
 
 	
@@ -395,46 +378,43 @@ class EMDBVenue extends EMDBBase{
 			this.dMsg(sql);
 		}
 			
-		try{
-			Vector<Venue> list = new Vector<Venue>();
+		Vector<Venue> list = new Vector<Venue>();
 			
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
+
+		int size = result.size();
+		for (int i=0; i< size; i++){
+			Object[] row = result.get(i);
 			
-			while (result.next()) {
+			int cost = (int) row[4];
+			int capacity = (int) row[5];
+			
+			
+			if ( (aUpperLimit == 0 && aLowerLimit == 0) 
+					|| (aSearchType.compareTo("cost") == 0 && cost <= aUpperLimit && cost >= aLowerLimit)
+					|| (aSearchType.compareTo("capacity") == 0 && capacity <= aUpperLimit && capacity >= aLowerLimit )
+					)
+			{	
 				
-				int cost = result.getInt("cost");
-				int capacity = result.getInt("capacity");
+				Venue place = new Venue();
 				
-				if ( (aUpperLimit == 0 && aLowerLimit == 0) 
-						|| (aSearchType.compareTo("cost") == 0 && cost <= aUpperLimit && cost >= aLowerLimit)
-						|| (aSearchType.compareTo("capacity") == 0 && capacity <= aUpperLimit && capacity >= aLowerLimit )
-						)
-				{	
-					
-					Venue place = new Venue();
-					
-					place.updateID(result.getInt("venue_id"));
-					place.updateName(result.getString("name"));
-					place.updateAddress(result.getString("address"));
-					place.updateDescription(result.getString("description"));
-					place.updateCost(result.getInt("cost"));
-					place.updateMaxCapacity(result.getInt("capacity"));
-					
-					list.add(place);
-				}
+				place.updateID( (int) row[0] );
+				place.updateName( (String) row[1]);
+				place.updateAddress( (String) row[2] );
+				place.updateDescription( (String) row[3] );
+				place.updateCost( (int) row[4] );
+				place.updateMaxCapacity( (int) row[5] );	
+				
+				list.add(place);
 			}
 			
-			result.close();
-			this.disconnect();
-			
-			return list;
-			
-			
-			
-		} catch (SQLException e) {
-			return null;
 		}
+		
+		this.disconnect();
+		
+		return list;
+		
 	}
 	
 	
@@ -463,32 +443,27 @@ class EMDBVenue extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		
-		
-		try{
-			
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
-			TimeSlot slot = null;
-			
-			while(result.next()){
-				slot = new TimeSlot(
-						result.getInt("booking_id"),
-						new DateHour(result.getString("time_start")),
-						new DateHour(result.getString("time_end"))
-						);
-			}
 	
-			result.close();
-			this.disconnect();
 			
-			return slot;
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
+		TimeSlot slot = null;
+		
+		int size = result.size();
+		if (size > 0){
+			Object[] row = result.get(0);
+			slot = new TimeSlot(
+					(int) row[0],
+					new DateHour( (String) row[3] ),
+					new DateHour( (String) row[4] )
+					);
 			
-			
-		} catch (SQLException e) {
-			return null;
 		}
 		
+		this.disconnect();
+		
+		return slot;
+			
 	}
 	
 	
@@ -543,36 +518,28 @@ class EMDBVenue extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		
-		try{
-			
-			Vector<TimeSlot> list= new Vector<TimeSlot>();
-			
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
-			
-			while(result.next()){
-				list.add(
-						new TimeSlot(
-							result.getInt("booking_id"),
-							new DateHour(result.getString("time_start")),
-							new DateHour(result.getString("time_end"))
-							)
-						);
-			}
 
 			
-			result.close();
-			this.disconnect();
-			return list;
+		Vector<TimeSlot> list= new Vector<TimeSlot>();
 		
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
 		
-		} catch (SQLException e) {
-			return null;
+		int size = result.size();
+		for (int i=0; i < size; i++){
+			Object[] row = result.get(i);
+			list.add(
+					new TimeSlot(
+							(int) row[0],
+							new DateHour( (String) row[3] ),
+							new DateHour( (String) row[4] )
+							)
+					);
 		}
+
+		this.disconnect();
+		return list;
 			
-		
-		
 	}
 	
 	
@@ -596,32 +563,30 @@ class EMDBVenue extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		
-		try{
-			Vector<BookedVenueInfo> list = new Vector<BookedVenueInfo>();
-			
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
-
-			while (result.next()){
-				TimeSlot timing = new TimeSlot(
-										new DateHour(result.getString("time_start")),
-										new DateHour(result.getString("time_end"))
-										);
-				Venue venue = this.getVenue(result.getInt("venue_id"));
-				BookedVenueInfo info = new BookedVenueInfo(venue, timing);
-				
-				list.add(info);
-			}
 	
-			result.close();
-			this.disconnect();
+		Vector<BookedVenueInfo> list = new Vector<BookedVenueInfo>();
+		
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
+		
+		int size = result.size();
+		
+		for(int i=0; i<size; i++){
+			Object[] row = result.get(i);
 			
-			return list;
+			TimeSlot timing = new TimeSlot(
+									new DateHour( (String) row[3]),
+									new DateHour( (String) row[4] )
+									);
+			Venue venue = this.getVenue( (int) row[2] );
+			BookedVenueInfo info = new BookedVenueInfo(venue, timing);
 			
-		} catch (SQLException e) {
-			return null;
+			list.add(info);
 		}
+	
+		this.disconnect();
+		
+		return list;
 		
 	}
 	
@@ -654,33 +619,31 @@ class EMDBVenue extends EMDBBase{
 		}
 		
 		
-		try{
-			Vector<Venue> list = new Vector<Venue>();
+	
+		Vector<Venue> list = new Vector<Venue>();
+	
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
+
+		int size = result.size();
 		
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
-			
-			while(result.next()){
-				Venue place = new Venue();
-				place.updateID(result.getInt("venue_id"));
-				place.updateName(result.getString("name"));
-				place.updateAddress(result.getString("address"));
-				place.updateDescription(result.getString("description"));
-				place.updateCost(result.getInt("cost"));
-				place.updateMaxCapacity(result.getInt("capacity"));
+		for(int i=0; i<size; i++){
+			Object[] row = result.get(i);
+			Venue place = new Venue();
 				
-				list.add(place);
-			}
-			
-			result.close();
-			this.disconnect();
-			
-			return list;
-			
-		} catch (SQLException e) {
-			return null;
+			place.updateID( (int) row[0] );
+			place.updateName( (String) row[1]);
+			place.updateAddress( (String) row[2] );
+			place.updateDescription( (String) row[3] );
+			place.updateCost( (int) row[4] );
+			place.updateMaxCapacity( (int) row[5] );	
+					
+			list.add(place);
 		}
 		
+		this.disconnect();
+		
+		return list;
 		
 		
 	}

@@ -185,22 +185,18 @@ class EMDBBudget extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		try {
-			
-			ResultSet result = this.runQueryResults(sql);
-			int count = 0;
-			
-			if (result.next())
-				count++;
-
-			if (count == tableTotal)
-				return true;
-			
-			return false;
-			
-		} catch (SQLException e) {
-			return false;
-		}
+		this.connect();
+		
+		Vector<Object[]> result = this.runQueryResults(sql);
+		int count = result.size();
+		
+		this.disconnect();
+		
+		if (count == tableTotal)
+			return true;
+		
+		return false;
+		
 	}
 	
 	
@@ -288,21 +284,14 @@ class EMDBBudget extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-	
-		try {
-			
-			ResultSet result = this.runQueryResults(sql);
-			int id = 0;
-			
-			if (result.next()){
-				id = result.getInt("budget_id");
-			}
-			
-			return id;
-			
-		} catch (SQLException e) {
-			return 0;
+		Vector<Object[]> result = this.runQueryResults(sql);
+		int id = 0;
+		
+		if (result.get(0) != null){
+			id = (int) result.get(0)[0];
 		}
+		
+		return id;
 		
 	}
 	
@@ -455,23 +444,27 @@ class EMDBBudget extends EMDBBase{
 		
 		Vector<Item> list = new Vector<Item>();
 
-		try {
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
+		
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
+		
+		int size = result.size();
+		for (int i=0; i< size; i++){
+			Object[] row = result.get(i);
+			Item current = new Item(
+								(int) 		row[0], 
+								(String) 	row[2], 
+								(int)	 	row[3], 
+								(int) 		row[4], 
+								(String) 	row[5]
+							);
+		    list.add(current);
 			
-			while(result.next()){
-				 Item current = new Item(result.getInt("budget_id"), result.getString("name"), result.getInt("price"), result.getInt("satisfaction"), result.getString("type"));
-			     list.add(current);
-			}
-
-			result.close();
-			this.disconnect();
-			
-			
-			return list;
-		} catch (SQLException e) {
-			return null;
 		}
+		this.disconnect();
+	
+		return list;
+		
 	}
 	
 	

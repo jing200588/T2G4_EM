@@ -86,7 +86,8 @@ class EMDBEvent extends EMDBBase{
 			this.dMsg("Setup Event: "+ sql);
 		
 		
-		this.runQuery(sql);
+		this.queue(sql);
+		this.commit();
 	}
 	
 	
@@ -128,22 +129,17 @@ class EMDBEvent extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		try {
-			
-			ResultSet result = this.runQueryResults(sql);
-			int count = 0;
-			
-			if (result.next())
-				count++;
-
-			if (count == tableTotal)
-				return true;
-			
-			return false;
-			
-		} catch (SQLException e) {
-			return false;
-		}
+		this.connect();
+		
+		Vector<Object[]> result = this.runQueryResults(sql);
+		int count = result.size();
+		
+		this.disconnect();
+		
+		if (count == tableTotal)
+			return true;
+		
+		return false;
 	}
 	
 	
@@ -202,24 +198,19 @@ class EMDBEvent extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		try {
-
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
-			int id = 0;
-			
-			if (result.next()){
-				id = result.getInt("event_id");
-			}
-			
-			result.close();
-			this.disconnect();
-			return id;
-			
-			
-		} catch (SQLException e) {
-			return 0;
+		this.connect();
+		
+		Vector<Object[]> result = this.runQueryResults(sql);
+		int id = 0;
+		
+		if (result.get(0) != null){
+			id = (int) result.get(0)[0];
 		}
+		
+		this.disconnect();
+		
+		return id;
+		
 
 	}
 	
@@ -258,33 +249,31 @@ class EMDBEvent extends EMDBBase{
 		
 				
 		
-		try {
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
-	
-			while(result.next()){
-				item = new Eventitem(
-						result.getString("name"),
-						result.getString("startdate"),
-						result.getString("enddate"),
-						result.getString("starttime"),
-						result.getString("endtime")
-						);
-				item.setDescription(result.getString("description"));
-				item.setBudget(result.getDouble("budget"));
-				item.setID(result.getInt("event_id"));
-			}
 		
-			result.close();
-			this.disconnect();
-			
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
 	
+		int size = result.size();
+		for (int i=0; i< size; i++){
+			Object[] row = result.get(i);
 			
-			return item;
+			item = new Eventitem(
+					(String) row[1], //name
+					(String) row[4], //startdate
+					(String) row[5], //enddate
+					(String) row[6], //starttime
+					(String) row[7] //endtime
+					);
+			item.setDescription( (String) row[2]);
+			item.setBudget( (double) row[3] );
+			item.setID( (int) row[0] );
 			
-		} catch (SQLException e) {
-			return null;
 		}
+					
+		this.disconnect();
+		
+		return item;
+		
 
 	}
 	
@@ -331,34 +320,33 @@ class EMDBEvent extends EMDBBase{
 		}
 			
 		
-		try {
-			this.connect();
-			ResultSet result = this.runQueryResults(sql);
+		
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
+		
+		int size = result.size();
+		for (int i=0; i< size; i++){
+			Object[] row = result.get(i);
 			
-			while(result.next()){
-				Eventitem item = new Eventitem(
-						result.getString("name"),
-						result.getString("startdate"),
-						result.getString("enddate"),
-						result.getString("starttime"),
-						result.getString("endtime")
-						);
-				item.setDescription(result.getString("description"));
-				item.setID(result.getInt("event_id"));
-				item.setBudget(result.getDouble("budget"));
-				
-				list.add(item);
-			}
-			
-			
-			result.close();
-			this.disconnect();
-			return list;
-			
-			
-		} catch (SQLException e) {
-			return  null;
+			Eventitem item = new Eventitem(
+						(String) row[1], //name
+						(String) row[4], //startdate
+						(String) row[5], //enddate
+						(String) row[6], //starttime
+						(String) row[7] //endtime
+					);
+			item.setDescription( (String) row[2]); //description
+			item.setBudget( (double) row[3] ); //budget
+			item.setID( (int) row[0] ); //event_id
+		
+		
+			list.add(item);
 		}
+			
+		
+		
+		this.disconnect();
+		return list;
 			
 		
 	}
