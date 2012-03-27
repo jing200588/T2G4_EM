@@ -299,7 +299,7 @@ public class ViewEvent extends Composite {
 		Eprogflowedit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
+				ViewMain.EventFlow();
 			}
 		});
 		GridData gd_Eprogflowedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);

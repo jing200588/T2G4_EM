@@ -204,6 +204,18 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
+	 * Program Flow
+	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewEventFlow and set the page of composite c2 to ViewEventFlow
+	 */
+	public static void EventFlow () {		
+		ViewEventFlow ef = new ViewEventFlow(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		layout.topControl = ef;
+		c2.layout(true);
+	}
+	
+	/************************************************************
 	 * PARTICIPANT LIST
 	 ***********************************************************/
 	/**
@@ -246,7 +258,7 @@ public class ViewMain extends ApplicationWindow {
 	 * SMS ADS
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewFaceBookAds and set the page of composite c2 to ViewFaceBookAds
+	 * Description: Initialize ViewSmsAds and set the page of composite c2 to ViewSmsAds
 	 * @param curevent The event item of the particulars that is to be edited
 	 */
 	public static void SMSAds(Eventitem curevent) {
