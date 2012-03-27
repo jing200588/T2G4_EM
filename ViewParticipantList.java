@@ -49,7 +49,7 @@ public class ViewParticipantList extends Composite {
 	private TableViewer tableViewer;
 	private Text txtexportfile;
 	private Button btnDelete;
-	private int columnNo;
+	private int columnNo = 0;
 	private int index;
 	private List<String[]> myEntries;
 	/**
@@ -61,7 +61,7 @@ public class ViewParticipantList extends Composite {
 		super(parent, style);
 		setLayout(new FormLayout());
 		cevent = curevent;
-
+		
 		//Event Particulars label
 		Label lblEventParticulars = new Label(this, SWT.NONE);
 		lblEventParticulars.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
@@ -243,18 +243,27 @@ public class ViewParticipantList extends Composite {
 		btnAddNew.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TableItem item = new TableItem(table, SWT.NONE);
-				table.setSelection(item);
+				//TableItem item = new TableItem(table, SWT.NONE);
+				String[] newarr = new String[HEADERS.length];
+				myEntries.add(newarr);
+				for (int i=0; i<newarr.length; i++)
+					newarr[i] = "";
+				tableViewer.refresh();
+				table.setSelection(table.getItemCount()-1);
+				//table.setSelection(item);
 				
 			}
 		});
-		btnAddNew.setText("Add New");
+		btnAddNew.setText("New Row");
 		
 		/************************************************************
 		 * 
 		 * DELETE ROW EVENT LISTENER
 		 * 
 		 ***********************************************************/
+		
+		Button btnNewColumn = new Button(compositeside, SWT.NONE);
+		btnNewColumn.setText("New Column");
 		btnDelete = new Button(compositeside, SWT.NONE);
 		GridData gd_btnDelete = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_btnDelete.widthHint = 60;
@@ -277,14 +286,14 @@ public class ViewParticipantList extends Composite {
 		new Label(compositeside, SWT.NONE);
 		new Label(compositeside, SWT.NONE);
 		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
 		
+
 		/************************************************************
 		 * 
 		 * SAVE LIST EVENT LISTENER
 		 * 
 		 ***********************************************************/
+		
 		Button btnSaveList = new Button(compositeside, SWT.NONE);
 		btnSaveList.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnSaveList.addSelectionListener(new SelectionAdapter() {
@@ -295,7 +304,7 @@ public class ViewParticipantList extends Composite {
 			}
 		});
 		btnSaveList.setText("Save List");
-		
+
 		
 		
 		
