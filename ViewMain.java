@@ -58,7 +58,7 @@ public class ViewMain extends ApplicationWindow {
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
     private static ViewEvent view;
     private static ViewHomepage hp;
-    private static EMDB db;
+    private static EMDBII db;
   //  private static boolean vBarOn;
     private static TableColumn tc1, tc2,tc3;
   //  private static int tc2vBarOnWidth, tc2vBarOffWidth;
@@ -204,6 +204,18 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
+	 * Program Flow
+	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewEventFlow and set the page of composite c2 to ViewEventFlow
+	 */
+	public static void EventFlow () {		
+		ViewEventFlow ef = new ViewEventFlow(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		layout.topControl = ef;
+		c2.layout(true);
+	}
+	
+	/************************************************************
 	 * PARTICIPANT LIST
 	 ***********************************************************/
 	/**
@@ -217,7 +229,7 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
-	 * PARTICIPANT LIST
+	 * EMAIL ADS
 	 ***********************************************************/
 	/**
 	 * Description: Initialize ViewEmailAds and set the page of composite c2 to ViewEmailAds
@@ -230,7 +242,7 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
-	 * PARTICIPANT LIST
+	 * FACEBOOK ADS
 	 ***********************************************************/
 	/**
 	 * Description: Initialize ViewFaceBookAds and set the page of composite c2 to ViewFaceBookAds
@@ -239,6 +251,19 @@ public class ViewMain extends ApplicationWindow {
 	public static void FaceBookAds() {
 		ViewFaceBookAds fba = new ViewFaceBookAds(c2);
 		layout.topControl = fba;
+		c2.layout(true);
+	}
+	
+	/************************************************************
+	 * SMS ADS
+	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewSmsAds and set the page of composite c2 to ViewSmsAds
+	 * @param curevent The event item of the particulars that is to be edited
+	 */
+	public static void SMSAds(Eventitem curevent) {
+		ViewSmsAds smsa = new ViewSmsAds(c2, SWT.NONE, curevent);
+		layout.topControl = smsa;
 		c2.layout(true);
 	}
 	
@@ -612,8 +637,8 @@ public class ViewMain extends ApplicationWindow {
 	public static void main(String args[]) {
 		try {
 			
-			db = new EMDB();
-			db.system_check();
+			db = new EMDBII();
+			db.systemCheck();
 			
 			ViewMain window = new ViewMain();
 			window.setBlockOnOpen(true);

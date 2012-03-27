@@ -5,20 +5,20 @@ import java.util.Iterator;
 import java.util.Vector;
 
 
+
 public class ModelBudget {
 	private int event_id;
 	private Vector<Item> item_list;
 	private Vector<Item> confirm_list;
 
-	EMDB db;
+	EMDBII db;
 	
 	/**
 	 * Description: Initialize database.
 	 */
 
 	public ModelBudget() {
-		db = new EMDB();
-		db.set_name(EMSettings.DATABASE_NAME);
+		db = new EMDBII();
 	}
 
 	/**
@@ -29,20 +29,11 @@ public class ModelBudget {
 	public void saveNonOptimizedList(int id, Vector<Item> i_list) { 
 		event_id = id;
 		item_list = i_list;
-
-		db.connect();
-
-		db.delete_budget_list(id);
-
-
-		int count = i_list.size();
-		db.add_prepare("budget");
-		for (int i=0; i < count; i++){
-			Item current = i_list.get(i);
-			db.add_budget(event_id, current.getItem(), current.getPrice(), current.getSatisfaction_value(), current.getType(), true);		
-		}
-		db.add_batch_commit();
-		db.disconnect();
+		
+		db.budgetDB().deleteBudgetList(id);
+		db.budgetDB().addBudgetList(i_list, id);
+		
+		
 	}
 
 	/**
@@ -53,17 +44,10 @@ public class ModelBudget {
 	public void saveOptimizedList(int id, Vector<Item> i_list) { 
 		event_id = id;
 		confirm_list = i_list;
-
-		db.connect();
-
-		int count = i_list.size();
-		db.add_prepare("budgetOptimized");
-		for (int i=0; i < count; i++){
-			Item current = i_list.get(i);
-			db.add_budget_optimized(event_id, current.getItem(), current.getPrice(), current.getSatisfaction_value(), current.getType(), true);	
-		}
-		db.add_batch_commit();
-		db.disconnect();	
+		
+		db.budgetDB().deleteBudgetListOptimized(id);
+		db.budgetDB().addBudgetListOptimized(i_list, id);
+		
 	}
 
 	/**
@@ -86,9 +70,8 @@ public class ModelBudget {
 	 */
 
 	public void deleteNonOptimizeItemList(int id){
-		db.connect();
-		db.delete_budget_list(id);
-		db.disconnect();
+
+		db.budgetDB().deleteBudgetList(id);
 
 	}
 	
@@ -98,11 +81,8 @@ public class ModelBudget {
 	 * @return
 	 */
 	public Vector<Item> getNonOptimizeItemList(int id) {
-
-		db.connect();
-		item_list = db.get_budget_list(id, false);
-		db.disconnect();
-
+		
+		item_list = db.budgetDB().getBudgetList(id);
 		return item_list;
 	}
 	
@@ -111,5 +91,14 @@ public class ModelBudget {
 		//event_object.getID(), ((double)budget)/100);
 	}
 	*/
+	
+	public void deleteBudgetItem(int event_id, int item_id) {
+		db.budgetDB().deleteBudget(item_id);
+	}
+	
+	public Vector<Item> getOptimizeItemList(int id) {
+
+		return db.budgetDB().getBudgetListOptimized(id);
+	}
 
 }

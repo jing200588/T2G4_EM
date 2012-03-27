@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.util.Vector;
 
+
 /**
  * 
  * The bridge and layer between the application models and the database engine/driver.
@@ -33,9 +34,9 @@ public class EMDB_sqlite{
 	 * ***********************************
 	 */
 	protected String DBNAME = "";
-	private Connection DBCON = null;
-	private Statement DBQUERY = null;
-	private PreparedStatement PREPSTATEM = null;
+	protected Connection DBCON = null;
+	protected Statement DBQUERY = null;
+	protected PreparedStatement PREPSTATEM = null;
 	
 	
 	protected boolean EMDB_DEBUGGING = false;
@@ -81,7 +82,7 @@ public class EMDB_sqlite{
 	 */
 	private void set_default_db(){
 		if (this.DBNAME.isEmpty()){
-			this.set_name(EMSettings.DATABASE_NAME);
+			this.set_name(EMDBSettings.DATABASE_NAME);
 		}
 			
 	}
@@ -1173,8 +1174,8 @@ public class EMDB_sqlite{
 				list.add(
 					new TimeSlot(
 						result.getInt("booking_id"),
-						new DateHour(result.getString("time_start")),
-						new DateHour(result.getString("time_end"))
+						new MyDateTime(result.getString("time_start")),
+						new MyDateTime(result.getString("time_end"))
 						)
 					);
 			}
@@ -1223,7 +1224,7 @@ public class EMDB_sqlite{
 			ResultSet result = this.PREPSTATEM.executeQuery();
 
 			while (result.next()) {
-				TimeSlot timing = new TimeSlot(new DateHour(result.getString("time_start")),new DateHour(result.getString("time_end")));
+				TimeSlot timing = new TimeSlot(new MyDateTime(result.getString("time_start")),new MyDateTime(result.getString("time_end")));
 				Venue venue = this.get_venue(result.getInt("venue_id"));
 				BookedVenueInfo info = new BookedVenueInfo(venue, timing);
 				list.add(info);

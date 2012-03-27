@@ -18,8 +18,14 @@ public class Venue {
 	private String m_description;
 	private int m_maxCapacity;
 	private int m_cost;
-	private int m_venueID;				// Its value will be assigned by database
+	private int m_venueID;					// Its value will be assigned by database
 	private Vector<TimeSlot> m_bookedTimeSlots;
+	
+	// With a venue supported by the system, you can request the system to book it for you online
+	// with your valid specified time slot. Its information is automatically updated by the system.
+	// On the other hand, with a venue that is not supported by the system, the system just keeps 
+	// track of it for you. You have to do the booking and updating by yourself.
+	private boolean isSupportedBySystem;	 	
 	
 	/************************************************************************
 	 * Constructor
@@ -243,8 +249,8 @@ public class Venue {
 		{
 			/* For debugging 
 			System.out.println("Time Slot " + i);
-			System.out.println(m_bookedTimeSlots.get(i).getStartDateHour());
-			System.out.println(m_bookedTimeSlots.get(i).getEndDateHour());
+			System.out.println(m_bookedTimeSlots.get(i).getStartDateTime());
+			System.out.println(m_bookedTimeSlots.get(i).getEndDateTime());
 			*/
 			if(m_bookedTimeSlots.get(i).isOverlapping(wantedTimeSlot) == true)
 			{

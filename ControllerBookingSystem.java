@@ -12,15 +12,26 @@ public class ControllerBookingSystem {
 	
 	private static ModelBookingSystem mbs = new ModelBookingSystem();
 	
+	private Vector<Venue> listAllVenue;
+	private Vector<Venue> currentSearchResult;
+	
 	/**
-	 * Books a venue with bookedVenueID from a list of venues for an event with a specified time
-	 * slot. It is assumed that the venue is available at the give time slot. Therefore, The
-	 * availability checking should have been done before calling this method.
-	 * The method update the new booking information in the database of venues and in the 
-	 * 		Eventitem object itself.
+	 * Constructor:
+	 */
+	public ControllerBookingSystem()
+	{
+		listAllVenue = new Vector<Venue>();
+		currentSearchResult = new Vector<Venue>();
+	}
+	
+	/**
+	 * Books a venue with bookedVenueID from the list of venues (currentSearchResult) for an event with 
+	 * a specified time slot. It is assumed that the venue is available at the give time slot. 
+	 * Therefore, the availability checking should have been done before calling this method.
+	 * The method updates the new booking information in the database of venues and in the 
+	 * Eventitem object itself.
 	 * 
 	 * @param event - Eventitem
-	 * @param listVenues - Vector<Venue>
 	 * @param bookedVenueID - int
 	 * @param wantedTimeSlot - TimeSlot
 	 * 
@@ -28,8 +39,7 @@ public class ControllerBookingSystem {
 	 * @return false if there is an error during the booking process.
 	 * 
 	 */
-	public static boolean bookVenue(Eventitem event, Vector<Venue> listVenues,
-			int bookedVenueID, TimeSlot wantedTimeSlot)
+	public boolean bookVenue(Eventitem event, int bookedVenueID, TimeSlot wantedTimeSlot)
 	{	
 		/* For testing purpose
 		System.out.println("Hi Inside BookVenue");
@@ -40,14 +50,20 @@ public class ControllerBookingSystem {
 		
 		mbs.add_booking_to_db(event.getID(), bookedVenueID, wantedTimeSlot);
 		
-		int index = findIndex(listVenues, bookedVenueID);
-		
+		int index = findIndex(currentSearchResult, bookedVenueID);
+	
 		/* For testing purpose 
 		System.out.println("Inside BookVenue" + index); */
 		
 		// index is in valid range!!
-		BookedVenueInfo newObj = new BookedVenueInfo(listVenues.get(index), wantedTimeSlot);
+		BookedVenueInfo newObj = new BookedVenueInfo(currentSearchResult.get(index), wantedTimeSlot);
 		event.addBVI(newObj);
+		
+		// Update in the 2 lists (listAllVenue and currentSearchResult)
+		Venue needUpdate = currentSearchResult.get(index);
+		needUpdate.bookTimeSlot(wantedTimeSlot);
+		// Actually, two elements in 2 two lists with the same ID will reference
+		// to the same objects
 		
 		// For testing purpose: System.out.println("Hi! THis is the end of bookVenue");
 		// If the booking is successful
@@ -76,18 +92,20 @@ public class ControllerBookingSystem {
 	
 	/**
 	 * Looks up in the database and returns the venues whose names contain the input string as a
-	 * substring.
+	 * substring. Case-insensitivity is considered.
 	 *  
 	 * @param venueName - String
 	 * @return list - Vector<Venue>
 	 * list will be empty if there is no venue with such a name.
 	 */
-	public static Vector<Venue> findVenueByName(String venueName)
-	{
-		Vector<Venue> list = new Vector<Venue>();
-		list = mbs.find_venue_by_name(venueName);
+	public Vector<Venue> findVenueByName(String venueName)
+	{	
+		if(listAllVenue.isEmpty() == true)
+			currentSearchResult = mbs.find_venue_by_name(venueName);
+		else
+			currentSearchResult = shortListByName(listAllVenue, venueName);
 		
-		return list;
+		return new Vector<Venue>(currentSearchResult);
 	}
 	
 	/**
@@ -101,7 +119,7 @@ public class ControllerBookingSystem {
 	 * 
 	 * @return satisfiedVenueList - Vector<Venue>
 	 */
-	public static Vector<Venue> findVenueByCriteria(int[] costRange, int[] capacityRange,
+	public Vector<Venue> findVenueByCriteria(int[] costRange, int[] capacityRange,
 			TimeSlot preferredTime, SearchCriteria type)
 	{
 		Vector<Venue> returnList = new Vector<Venue>();
@@ -114,7 +132,11 @@ public class ControllerBookingSystem {
 			case COST_CAPACITY:
 			case ALL_THREE:
 			{
-				Vector<Venue> firstRoundCapacity = mbs.get_venue_by_capacity(capacityRange[1], capacityRange[0]); 
+				Vector<Venue> firstRoundCapacity = new Vector<Venue>();
+				if(listAllVenue.isEmpty() == true)
+					firstRoundCapacity = mbs.get_venue_by_capacity(capacityRange[1], capacityRange[0]); 
+				else
+					firstRoundCapacity = shortListByCapacity(listAllVenue, capacityRange[0], capacityRange[1]);
 				
 				/* For debugging
 				System.out.println(firstRoundCapacity);
@@ -162,8 +184,11 @@ public class ControllerBookingSystem {
 			case COST_TIME:
 			{
 				// For debugging: System.out.println(costRange[1] + " " + costRange[0]);
-				Vector<Venue> firstRoundCost = mbs.get_venue_by_cost(costRange[1], costRange[0]); ;
-				
+				Vector<Venue> firstRoundCost = new Vector<Venue>();
+				if(listAllVenue.isEmpty() == true)
+					firstRoundCost = mbs.get_venue_by_cost(costRange[1], costRange[0]);
+				else
+					firstRoundCost = shortListByCost(listAllVenue, costRange[0], costRange[1]);	
 				
 				// Actual code
 				if(type == SearchCriteria.COST)
@@ -180,8 +205,10 @@ public class ControllerBookingSystem {
 			
 			case TIME:
 			{
-				Vector<Venue> allVenue = mbs.get_all_venue();
-				returnList = shortListByTimeSlot(allVenue, preferredTime);
+				// The worst case: We have to take all the venues from the
+				// database and then short-list them by timeslot.
+				listAllVenue = mbs.get_all_venue();
+				returnList = shortListByTimeSlot(listAllVenue, preferredTime);
 				
 			}
 		}
@@ -189,14 +216,16 @@ public class ControllerBookingSystem {
 		if(returnList == null)
 			returnList = new Vector<Venue>();
 		
-		return returnList;
+		// Update the current search result.
+		currentSearchResult = returnList;
+		
+		return new Vector<Venue>(returnList);
 	}
 
 	/**
-	 * Checks a venue with venueID from a list of venues is available at a specified time
-	 * slot.
+	 * Checks a venue with venueID from a list of venues (currentSearchResult)
+	 * is available at a specified time slot.
 	 * 
-	 * @param listVenue - Vector<Venue>
 	 * @param venueID - int
 	 * @param preferredTime - TimeSlot
 	 * @return true if a venue with venueID in the list of venues is available at the given
@@ -204,9 +233,9 @@ public class ControllerBookingSystem {
 	 * @return false otherwise.
 	 * @throws Exception If there does exist a venue with venueID in the list.
 	 */
-	public static boolean isAvailable(Vector<Venue> listVenue, int venueID, TimeSlot preferredTime) throws Exception
+	public boolean isAvailable(int venueID, TimeSlot preferredTime) throws Exception
 	{
-		int index = findIndex(listVenue, venueID);
+		int index = findIndex(currentSearchResult, venueID);
 		
 		/* For testing purpose:
 		System.out.println("I'm here. Venue ID: " + venueID + " Index: " + index + " Time: " + preferredTime);
@@ -218,22 +247,21 @@ public class ControllerBookingSystem {
 		/* For testing purpose:
 		System.out.println(listVenue.get(index)); */
 		
-		return listVenue.get(index).isAvailable(preferredTime);
+		return currentSearchResult.get(index).isAvailable(preferredTime);
 	}
 	
 	/**
-	 * Returns a string that contains all information about a venue with venueID in the list of venues.
+	 * Returns a string that contains all information about a venue with venueID in the list of venues (currentSearchResult).
 	 * 
-	 * @param listVenue - Vector<Venue>
 	 * @param venueID - int
 	 * @return venueDetail - String
 	 * @throws Exception if there does not exist such a venue with venueID in the list.
 	 */
-	public static String getVenueDetail(Vector<Venue> listVenue, int venueID)
+	public String getVenueDetail(int venueID)throws Exception
 	{
-		int index = findIndex(listVenue, venueID);
+		int index = findIndex(currentSearchResult, venueID);
 	
-		String[] infoPieces = listVenue.get(index).getAllVenueInformation();
+		String[] infoPieces = currentSearchResult.get(index).getAllVenueInformation();
 		
 		String output = "Name: " + infoPieces[0] + "\nAddress: " + infoPieces[1] + 
 				"\nDescription: " + infoPieces[2] + "\nMaximum Capacity: " + infoPieces[3] +
@@ -243,29 +271,28 @@ public class ControllerBookingSystem {
 	}
 	
 	/**
-	 * Checks if a venue with venueID is in the input list of venues.
+	 * Checks if a venue with venueID is in the input list of venues (currentSearchResult).
 	 * 
-	 * @param listVenue - Vector<Venue>
 	 * @param venueID - int
 	 * @return true if there exists a venue with venueID in the list.
 	 * @return false otherwise
 	 */
-	public static boolean isInTheList(Vector<Venue> listVenue, int venueID)
+	public boolean isInTheList(int venueID)
 	{
-		if(findIndex(listVenue, venueID) < 0)
+		if(findIndex(currentSearchResult, venueID) < 0)
 			return false;
 		return true;
 	}
 	
 	/**
-	 * Returns the index of a venue with venueID in the input list of venues.
+	 * Returns the index of a venue with venueID in a given list of venues.
 	 * 
-	 * @param listVenue
-	 * @param venueID
-	 * @return the index of a venue with venueID in the list of venues (listVenue)
+	 * @param listVenue - Vector<Venue>
+	 * @param venueID - int
+	 * @return the index of a venue with venueID in the list
 	 * @return -1 if such an element does not exist.
 	 */
-	private static int findIndex(Vector<Venue> listVenue, int venueID)
+	private int findIndex(Vector<Venue> listVenue, int venueID)
 	{
 		for(int index = 0; index < listVenue.size(); index++)
 			if(listVenue.get(index).getVenueID() == venueID)
@@ -283,8 +310,7 @@ public class ControllerBookingSystem {
 	 * @return satisfiedList - Vector<Venue> (a subset of listVenue such that all the venues in the subset
 	 * 	is available at the given time slot)
 	 */
-	private static Vector<Venue> shortListByTimeSlot(Vector<Venue> listVenue,
-						TimeSlot preferTime)
+	private Vector<Venue> shortListByTimeSlot(Vector<Venue> listVenue, TimeSlot preferTime)
 	{
 		Vector<Venue> returnList = new Vector<Venue>();
 		
@@ -314,6 +340,7 @@ public class ControllerBookingSystem {
 		
 		return returnList;
 	}
+	
 	/**
 	 * Selects venues in the given list of venues such that their cost (in cents) is in
 	 * the specified range.
@@ -324,8 +351,7 @@ public class ControllerBookingSystem {
 	 * @return satisfiedList - Vetor<Venue> (a subset of listVenue such that all the venues in the subset 
 	 * 		has cost in the range [lower upper])
 	 */
-	private static Vector<Venue> shortListByCost(Vector<Venue> listVenue,
-						int lower, int upper)
+	private Vector<Venue> shortListByCost(Vector<Venue> listVenue, int lower, int upper)
 	{
 		Vector<Venue> returnList = new Vector<Venue>();
 		
@@ -337,4 +363,44 @@ public class ControllerBookingSystem {
 		return returnList;
 	}
 	
+	/**
+	 * Selects venues in the given list of venues such that their capacity is in the specified range.
+	 * 
+	 * @param listVenue - Vector<Venue>
+	 * @param lower - int
+	 * @param upper - int
+	 * @return satisfiedList - Vetor<Venue> (a subset of listVenue such that all the venues in the subset 
+	 * 		has capacity in the range [lower upper])
+	 */
+	private Vector<Venue> shortListByCapacity(Vector<Venue> listVenue, int lower, int upper)
+	{
+		Vector<Venue> returnList = new Vector<Venue>();
+		
+		for(int index = 0; index < listVenue.size(); index++)
+			if(listVenue.get(index).getMaxCapacity() >= lower &&
+				listVenue.get(index).getMaxCapacity() <= upper)
+				returnList.add(listVenue.get(index));
+		
+		return returnList;
+	}
+	
+	/**
+	 * Selects venues in the given list of venues such that their name contains
+	 * 		the given input string as a substring. Case-insensitivity is considered.
+	 * 
+	 * @param listVenue - Vector<Venue>
+	 * @param subString - String
+	 * @return satisfiedList - Vetor<Venue> 
+	 */
+	private Vector<Venue> shortListByName(Vector<Venue> listVenue, String subString)
+	{
+		Vector<Venue> returnList = new Vector<Venue>();
+		
+		for(int index = 0; index < listVenue.size(); index++)
+			// Check if subString is a substring of the name of the venue.
+			if(listVenue.get(index).getName().toUpperCase().indexOf(subString.toUpperCase()) >= 0)
+				returnList.add(listVenue.get(index));
+		
+		return returnList;
+	}
 }

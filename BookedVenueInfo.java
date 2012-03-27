@@ -16,7 +16,7 @@ public class BookedVenueInfo {
 	private String m_description;
 	private int m_maxCapacity;
 	private int m_cost;
-	private int m_venueID;				// Its value will be assigned by database
+	private int m_venueID;					// Its value will be assigned by database
 	private TimeSlot m_bookedTimeSlot;		// A single time slot booked by ONE particular event
 	
 	/************************************************************************
@@ -30,10 +30,11 @@ public class BookedVenueInfo {
 		m_maxCapacity = obj.getMaxCapacity();
 		m_cost = obj.getCost();
 		m_bookedTimeSlot = bookedTimeSlot; 		// Note that TimeSlot object is immutable!
+		m_venueID = obj.getVenueID();
 	}
 
 	
-	public BookedVenueInfo(String name, String address, String description, int capacity, int cost, TimeSlot bookedTimeSlot)
+	public BookedVenueInfo(String name, int venueID, String address, String description, int capacity, int cost, TimeSlot bookedTimeSlot)
 	{
 		m_name = name;
 		m_address = address;
@@ -168,7 +169,7 @@ public class BookedVenueInfo {
 	 */
 	public String getStartDateString()
 	{
-		return m_bookedTimeSlot.getStartDateHour().getDateRepresentation();
+		return m_bookedTimeSlot.getStartDateTime().getDateRepresentation();
 	}
 	
 	/**
@@ -179,7 +180,7 @@ public class BookedVenueInfo {
 	 */
 	public String getEndDateString()
 	{
-		return m_bookedTimeSlot.getEndDateHour().getDateRepresentation();
+		return m_bookedTimeSlot.getEndDateTime().getDateRepresentation();
 	}
 	
 	/**
@@ -188,9 +189,9 @@ public class BookedVenueInfo {
 	 * 
 	 * @return startHour - String
 	 */
-	public String getStartHourString()
+	public String getStartTimeString()
 	{
-		return Integer.toString(m_bookedTimeSlot.getStartDateHour().getHour()) + ":00";
+		return m_bookedTimeSlot.getStartDateTime().getTimeRepresentation();
 	}
 	
 	/**
@@ -199,8 +200,8 @@ public class BookedVenueInfo {
 	 * 
 	 * @return endHour - String
 	 */
-	public String getEndHourString()
+	public String getEndTimeString()
 	{
-		return Integer.toString(m_bookedTimeSlot.getEndDateHour().getHour()) + ":00";
+		return m_bookedTimeSlot.getEndDateTime().getTimeRepresentation();
 	}
 }

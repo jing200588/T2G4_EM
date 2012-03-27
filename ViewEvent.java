@@ -10,6 +10,8 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -38,6 +40,7 @@ public class ViewEvent extends Composite {
 	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
 	private static ScrolledComposite sc1;
 	private static Composite maincomp;
+	private static int budgetTableSelectedIndex;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -84,7 +87,7 @@ public class ViewEvent extends Composite {
 		Eparticulars.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
 		Eparticulars.setText("Event Particulars");
 		new Label(EparticularsComp, SWT.NONE);
-		
+
 		/**********************************************************************************************
 		 * 
 		 * EDIT EVENT PARTICULARS BUTTON
@@ -130,12 +133,12 @@ public class ViewEvent extends Composite {
 		Startdate = new Label(EparticularsComp, SWT.NONE);
 		Startdate.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Startdate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Startdate.setText(cevent.getStartDate().getDate());
+		Startdate.setText(cevent.getStartDateTime().getDateRepresentation());
 
 		Starttime = new Label(EparticularsComp, SWT.NONE);
 		Starttime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Starttime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Starttime.setText(cevent.getStartTime().getTime()+"HRS");
+		Starttime.setText(cevent.getStartDateTime().getTimeRepresentation()+"HRS");
 
 		Label Enddntlabel = new Label(EparticularsComp, SWT.NONE);
 		Enddntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
@@ -145,12 +148,12 @@ public class ViewEvent extends Composite {
 		Enddate = new Label(EparticularsComp, SWT.NONE);
 		Enddate.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Enddate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Enddate.setText(cevent.getEndDate().getDate());
+		Enddate.setText(cevent.getEndDateTime().getDateRepresentation());
 
 		Endtime = new Label(EparticularsComp, SWT.NONE);
 		Endtime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		Endtime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Endtime.setText(cevent.getEndTime().getTime()+"HRS");
+		Endtime.setText(cevent.getEndDateTime().getTimeRepresentation()+"HRS");
 
 		Label Edescriptionlabel = new Label(EparticularsComp, SWT.NONE);
 		Edescriptionlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
@@ -166,10 +169,10 @@ public class ViewEvent extends Composite {
 		/**********************************************************************************************
 		 * END OF EVENT PARTICULARS SECTION
 		 *********************************************************************************************/
-		
+
 		//Divider1
 		Label divider1 = createdivider(maincomp, EparticularsComp);
-		
+
 		/**********************************************************************************************
 		 * 
 		 * BOOK VENUE SECTION
@@ -212,10 +215,10 @@ public class ViewEvent extends Composite {
 		/**********************************************************************************************
 		 * END OF BOOK VENUE
 		 *********************************************************************************************/
-	
+
 		//Divider 2
 		Label divider2 = createdivider(maincomp, Bookvenuecomp);
-		
+
 		/**********************************************************************************************
 		 * 
 		 * CALCULATE BUDGET SECTION
@@ -258,11 +261,11 @@ public class ViewEvent extends Composite {
 		/**********************************************************************************************
 		 * END OF CALCULATE BUDGET
 		 *********************************************************************************************/
-		
+
 		//Divider 3
 		Label divider3 = createdivider(maincomp, Budgetcomp);
 
-		
+
 		/**********************************************************************************************
 		 * 
 		 * EVENT PROGRAM FLOW SECTION
@@ -296,7 +299,7 @@ public class ViewEvent extends Composite {
 		Eprogflowedit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
+				ViewMain.EventFlow();
 			}
 		});
 		GridData gd_Eprogflowedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -306,10 +309,10 @@ public class ViewEvent extends Composite {
 		/**********************************************************************************************
 		 * END OF EVENT PROGRAM FLOW
 		 *********************************************************************************************/
-		
+
 		//Divider 4
 		Label divider4 = createdivider(maincomp, Eprogflowcomp);
-	
+
 		/**********************************************************************************************
 		 * 
 		 * PARTICIPANT LIST SECTION
@@ -384,7 +387,7 @@ public class ViewEvent extends Composite {
 		gd_Advertedit.widthHint = 85;
 		Advertemail.setLayoutData(gd_Advertedit);
 		Advertemail.setText("E-Mail");
-		
+
 		new Label(Advertcomp, SWT.NONE);
 		new Label(Advertcomp, SWT.NONE);
 		Button Advertfb = new Button(Advertcomp, SWT.NONE);
@@ -400,11 +403,24 @@ public class ViewEvent extends Composite {
 		Advertfb.setText("Facebook");
 		new Label(Advertcomp, SWT.NONE);
 		new Label(Advertcomp, SWT.NONE);
+		
+		Button AdvertSMS = new Button(Advertcomp, SWT.NONE);
+		AdvertSMS.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				ViewMain.SMSAds(cevent);
+			}
+		});
+		GridData gd_AdvertSMS = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+		gd_AdvertSMS.widthHint = 85;
+		AdvertSMS.setLayoutData(gd_AdvertSMS);
+		AdvertSMS.setText("SMS");
+		new Label(Advertcomp, SWT.NONE);
+		new Label(Advertcomp, SWT.NONE);
 		new Label(Advertcomp, SWT.NONE);
 		/**********************************************************************************************
 		 * END OF ADVERTISING
 		 *********************************************************************************************/
-		
+
 		/**********************************************************************************************
 		 * 
 		 * DELETE EVENT BUTTON
@@ -434,7 +450,7 @@ public class ViewEvent extends Composite {
 		sc1.setContent(maincomp);
 		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
-	
+
 	/**
 	 * Description: Creates a vertical separator in View Event page which attaches itself below  a composite object
 	 * @param container The composite the divider is in
@@ -451,7 +467,7 @@ public class ViewEvent extends Composite {
 
 		return divider;
 	}
-/*	//For use in version 0.2
+	/*	//For use in version 0.2
 	public static void UpdateEvent(Eventitem event) {
 		cevent = event;
 		RefreshParticulars();
@@ -536,80 +552,80 @@ public class ViewEvent extends Composite {
 			item.setText(1, venue_list.get(loopIndex).getMaxCapacityString());
 			item.setText(2, "$" + venue_list.get(loopIndex).getCostInDollarString());
 			item.setText(3, venue_list.get(loopIndex).getStartDateString());
-			item.setText(4, venue_list.get(loopIndex).getStartHourString());
+			item.setText(4, venue_list.get(loopIndex).getStartTimeString());
 			item.setText(5, venue_list.get(loopIndex).getEndDateString());		
-			item.setText(6, venue_list.get(loopIndex).getEndHourString());		
-		
+			item.setText(6, venue_list.get(loopIndex).getEndTimeString());		
+
 		}
 		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
 			VenueResult.getColumn(loopIndex).pack();
 		}					
-		
+
 
 		//Column Resize with table fix
-		 Bookvenuecomp.addControlListener(new ControlAdapter() {
-			    public void controlResized(ControlEvent e) {
-			      Rectangle area = Bookvenuecomp.getClientArea();
-			      Point preferredSize = VenueResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			      int width = area.width - 2*VenueResult.getBorderWidth();
-			      if (preferredSize.y > area.height + VenueResult.getHeaderHeight()) {
-			        // Subtract the scrollbar width from the total column width
-			        // if a vertical scrollbar will be required
-			        Point vBarSize = VenueResult.getVerticalBar().getSize();
-			        width -= vBarSize.x;
-			        
-			      }
-			      Point oldSize = VenueResult.getSize();
-			      if (oldSize.x > area.width) {
-			        // table is getting smaller so make the columns 
-			        // smaller first and then resize the table to
-			        // match the client area width
-			    	  col0.setWidth(width/5-10);
-			    	  col1.setWidth((width - col0.getWidth())/6-10);
-				      col3.setWidth((width - col0.getWidth())/6+4);
-				      col4.setWidth((width - col0.getWidth())/6-4);
-				      col5.setWidth((width - col0.getWidth())/6+4);
-				      col6.setWidth((width - col0.getWidth())/6-4);
-				      col2.setWidth(width - col0.getWidth() - col1.getWidth() - col3.getWidth() - col4.getWidth() -col5.getWidth() -col6.getWidth()-10);
-			    //    System.out.println("width "+ width);
-			        //BudgetResult.setSize(area.width, area.height);
-			      } else {
-			        // table is getting bigger so make the table 
-			        // bigger first and then make the columns wider
-			        // to match the client area width
-			    	//BudgetResult.setSize(area.width, area.height);
-			    	  col0.setWidth(width/5-10);
-			    	  col1.setWidth((width - col0.getWidth())/6-10);
-				      col3.setWidth((width - col0.getWidth())/6+4);
-				      col4.setWidth((width - col0.getWidth())/6-4);
-				      col5.setWidth((width - col0.getWidth())/6+4);
-				      col6.setWidth((width - col0.getWidth())/6-4);
-				      col2.setWidth(width - col0.getWidth() - col1.getWidth() - col3.getWidth() - col4.getWidth() -col5.getWidth() -col6.getWidth()-10);
-			      }
-			    }
-		 });
-		 
-		 //Table Tooltip
-		 VenueResult.addMouseTrackListener(new MouseTrackAdapter() {
-			 @Override
-			 public void mouseHover(MouseEvent e) {
-				 TableItem item = VenueResult.getItem(new Point(e.x, e.y));
-			//	 BudgetResult.setToolTipText(item.getText(0));
-				 
-				 //tooltip for every column
-				 for (int i=0; i<VenueResult.getColumnCount()-1; i++) {
-					 if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
-						 VenueResult.setToolTipText(item.getText(i));
-					 	 break;
-					 }
-					 
-					 else if (i == VenueResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
-						 VenueResult.setToolTipText(item.getText(++i));
-				 }
-				 
+		Bookvenuecomp.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				Rectangle area = Bookvenuecomp.getClientArea();
+				Point preferredSize = VenueResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				int width = area.width - 2*VenueResult.getBorderWidth();
+				if (preferredSize.y > area.height + VenueResult.getHeaderHeight()) {
+					// Subtract the scrollbar width from the total column width
+					// if a vertical scrollbar will be required
+					Point vBarSize = VenueResult.getVerticalBar().getSize();
+					width -= vBarSize.x;
+
+				}
+				Point oldSize = VenueResult.getSize();
+				if (oldSize.x > area.width) {
+					// table is getting smaller so make the columns 
+					// smaller first and then resize the table to
+					// match the client area width
+					col0.setWidth(width/5-10);
+					col1.setWidth((width - col0.getWidth())/6-10);
+					col3.setWidth((width - col0.getWidth())/6+4);
+					col4.setWidth((width - col0.getWidth())/6-4);
+					col5.setWidth((width - col0.getWidth())/6+4);
+					col6.setWidth((width - col0.getWidth())/6-4);
+					col2.setWidth(width - col0.getWidth() - col1.getWidth() - col3.getWidth() - col4.getWidth() -col5.getWidth() -col6.getWidth()-10);
+					//    System.out.println("width "+ width);
+					//BudgetResult.setSize(area.width, area.height);
+				} else {
+					// table is getting bigger so make the table 
+					// bigger first and then make the columns wider
+					// to match the client area width
+					//BudgetResult.setSize(area.width, area.height);
+					col0.setWidth(width/5-10);
+					col1.setWidth((width - col0.getWidth())/6-10);
+					col3.setWidth((width - col0.getWidth())/6+4);
+					col4.setWidth((width - col0.getWidth())/6-4);
+					col5.setWidth((width - col0.getWidth())/6+4);
+					col6.setWidth((width - col0.getWidth())/6-4);
+					col2.setWidth(width - col0.getWidth() - col1.getWidth() - col3.getWidth() - col4.getWidth() -col5.getWidth() -col6.getWidth()-10);
+				}
 			}
 		});
-	
+
+		//Table Tooltip
+		VenueResult.addMouseTrackListener(new MouseTrackAdapter() {
+			@Override
+			public void mouseHover(MouseEvent e) {
+				TableItem item = VenueResult.getItem(new Point(e.x, e.y));
+				//	 BudgetResult.setToolTipText(item.getText(0));
+
+				//tooltip for every column
+				for (int i=0; i<VenueResult.getColumnCount()-1; i++) {
+					if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
+						VenueResult.setToolTipText(item.getText(i));
+						break;
+					}
+
+					else if (i == VenueResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
+						VenueResult.setToolTipText(item.getText(++i));
+				}
+
+			}
+		});
+
 
 		venueflag = true;
 		return VenueResult;
@@ -620,8 +636,8 @@ public class ViewEvent extends Composite {
 	 * @return A table is returned if there are entries in the list, else null is returned
 	 */
 	public static Table OptimizedTable() {
-		Vector<Item> item_list = cevent.getitem_list();
-		
+		final Vector<Item> item_list = cevent.getitem_list();
+
 		//Checks if there is any entry before creating the table
 		if (item_list.isEmpty()) {
 			budgetflag = false;	
@@ -638,121 +654,221 @@ public class ViewEvent extends Composite {
 		final TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
 		final TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
 		final TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
-		col4.setWidth(177);
+		final TableColumn col5 = new TableColumn(BudgetResult, SWT.NULL);
 
 		col0.setText("No.");
 		col1.setText("Item Name");
 		col2.setText("Price");
 		col3.setText("Satisfaction");
 		col4.setText("Type");
+		col5.setText("Quantity");
 
 		col0.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				//sort name
-				TableItem[] items = BudgetResult.getItems();
-				for (int i = 1; i<items.length; i++) {
-					int value1 = Integer.parseInt(items[i].getText(0).substring(5, items[i].getText(0).length()));
-					for(int j=0; j < i; j++) {
-						int value2 = Integer.parseInt(items[j].getText(0).substring(5, items[j].getText(0).length()));
-						if(value1 - value2 < 0) {
-							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
-							items[i].dispose();
-							TableItem item = new TableItem(BudgetResult, SWT.NONE, j);
-							item.setText(values);
-							items = BudgetResult.getItems();
-							break;
-						}
-					}
-				}
+				sortColumn(0, item_list);
 			}
 		});
 
 		//Sorting algorithm of each column
 		col1.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				//sort name
-				TableItem[] items = BudgetResult.getItems();
-				Collator collator = Collator.getInstance(Locale.getDefault());
-				for (int i = 1; i<items.length; i++) {
-					String value1 = items[i].getText(1);
-					for(int j=0; j < i; j++) {
-						String value2 = items[j].getText(1);
-						if(collator.compare(value1, value2) < 0) {
-							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
-							items[i].dispose();
-							TableItem item = new TableItem(BudgetResult, SWT.NONE, j);
-							item.setText(values);
-							items = BudgetResult.getItems();
-							break;
-						}
-					}
-				}
+				sortColumn(1, item_list);
 			}
 		});
 
 		col2.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				//sort price
-				TableItem[] items = BudgetResult.getItems();
-				for (int i = 1; i<items.length; i++) {
-					double value1 = Double.parseDouble(items[i].getText(2).substring(1,items[i].getText(2).length()));
-					for(int j=0; j < i; j++) {
-						double value2 = Double.parseDouble(items[j].getText(2).substring(1,items[j].getText(2).length()));
-						if((value1 - value2) > 0) {
-							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
-							items[i].dispose();
-							TableItem item = new TableItem(BudgetResult, SWT.NONE, j);
-							item.setText(values);
-							items = BudgetResult.getItems();
-							break;
-						}
-					}
-				}
+				sortColumn(2, item_list);
 			}
 		});
 
 		col3.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				//sort satisfaction
-				TableItem[] items = BudgetResult.getItems();
-				for (int i = 1; i<items.length; i++) {
-					int value1 = Integer.parseInt(items[i].getText(3));
-					for(int j=0; j < i; j++) {
-						int value2 = Integer.parseInt(items[j].getText(3));
-						if((value1 - value2) > 0) {
-							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
-							items[i].dispose();
-							TableItem item = new TableItem(BudgetResult, SWT.NONE, j);
-							item.setText(values);
-							items = BudgetResult.getItems();
-							break;
-						}
-					}
-				}
+				sortColumn(3, item_list);
 			}
 		});
 
 		col4.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				//sort name
-				TableItem[] items = BudgetResult.getItems();
-				Collator collator = Collator.getInstance(Locale.getDefault());
-				for (int i = 1; i<items.length; i++) {
-					String value1 = items[i].getText(4);
-					for(int j=0; j < i; j++) {
-						String value2 = items[j].getText(4);
-						if(collator.compare(value1, value2) < 0) {
-							String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4)};
-							items[i].dispose();
-							TableItem item = new TableItem(BudgetResult, SWT.NONE, j);
-							item.setText(values);
-							items = BudgetResult.getItems();
-							break;
-						}
-					}
+				sortColumn(4, item_list);
+			}
+		});
+
+		col5.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				sortColumn(4, item_list);
+			}
+		});
+		refreshBudgetTable(item_list);
+
+
+		//Column Resize with table fix
+		Budgetcomp.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				Rectangle area = Budgetcomp.getClientArea();
+				Point preferredSize = BudgetResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				int width = area.width - 2*BudgetResult.getBorderWidth();
+				if (preferredSize.y > area.height + BudgetResult.getHeaderHeight()) {
+					// Subtract the scrollbar width from the total column width
+					// if a vertical scrollbar will be required
+					Point vBarSize = BudgetResult.getVerticalBar().getSize();
+					width -= vBarSize.x;
+				}
+				Point oldSize = BudgetResult.getSize();
+				if (oldSize.x > area.width) {
+					// table is getting smaller so make the columns 
+					// smaller first and then resize the table to
+					// match the client area width
+					col1.setWidth(width/2-50);
+					col0.setWidth((width - col1.getWidth())/5);
+					col2.setWidth((width - col1.getWidth())/5);
+					col3.setWidth((width - col1.getWidth())/4);
+					col4.setWidth((width - col1.getWidth())/5);
+					col5.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -col4.getWidth() + 30);
+					//BudgetResult.setSize(area.width, area.height);
+				} else {
+					// table is getting bigger so make the table 
+					// bigger first and then make the columns wider
+					// to match the client area width
+					//BudgetResult.setSize(area.width, area.height);
+					col1.setWidth(width/2-50);
+					col0.setWidth((width - col1.getWidth())/5);
+					col2.setWidth((width - col1.getWidth())/5);
+					col3.setWidth((width - col1.getWidth())/4);
+					col4.setWidth((width - col1.getWidth())/5 + 10);
+					col5.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -col4.getWidth() + 30);
+
 				}
 			}
 		});
+
+		//Table Tooltip
+		BudgetResult.addMouseTrackListener(new MouseTrackAdapter() {
+			@Override
+			public void mouseHover(MouseEvent e) {
+				TableItem item = BudgetResult.getItem(new Point(e.x, e.y));
+				//	 BudgetResult.setToolTipText(item.getText(0));
+
+				//tooltip for every column
+				for (int i=0; i<BudgetResult.getColumnCount()-1; i++) {
+					if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
+						BudgetResult.setToolTipText(item.getText(i));
+						break;
+					}
+
+					else if (i == BudgetResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
+						BudgetResult.setToolTipText(item.getText(++i));
+				}
+
+			}
+		});
+
+		Menu menu = new Menu(BudgetResult);
+		BudgetResult.setMenu(menu);
+
+		/************************************************************
+		 * DELETE ITEM
+		 ***********************************************************/
+		MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
+		mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TableItem tb = BudgetResult.getItem(BudgetResult.getSelectionIndex());
+				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(1));
+				if ((Integer) confirm.open() == 1) {
+					deleteBudgetItem(item_list);
+				}
+			}
+		});
+		mntmDeleteEvent.setText("Delete Item");
+
+				budgetflag = true;
+		return BudgetResult;
+	}
+
+	public static void deleteBudgetItem(Vector<Item> item_list) {
+
+		//ControllerBudget cb = null;
+		//cb.deleteBudgetItem(cevent.getID(), item_list.get(budgetTableSelectedIndex).getID());
+		item_list.remove(budgetTableSelectedIndex);
+		cevent.setitem_list(item_list);
+		
+		refreshBudgetTable(item_list);
+		
+	}
+
+	public static void sortColumn(int columnNo, Vector<Item> item_list) {
+
+		TableItem[] items = BudgetResult.getItems();
+		Collator collator = Collator.getInstance(Locale.getDefault());
+		int col0_value1=0, col0_value2=0, col3_value1=0, col3_value2=0,col5_value1=0, col5_value2=0;
+		double col2_value1=0, col2_value2=0;
+		String col1_value1="", col1_value2="", col4_value1="", col4_value2="";
+		boolean compareCorrect = false;
+		for (int i = 1; i<items.length; i++) {
+			if(columnNo == 0) 
+				col0_value1 = Integer.parseInt(items[i].getText(0).substring(5, items[i].getText(0).length()));
+			else if (columnNo == 1) 
+				col1_value1 = items[i].getText(1);
+			else if (columnNo == 2)
+				col2_value1 = Double.parseDouble(items[i].getText(2).substring(1,items[i].getText(2).length()));
+			else if (columnNo == 3)
+				col3_value1 = Integer.parseInt(items[i].getText(3));
+			else if (columnNo == 4)
+				col4_value1 = items[i].getText(4);
+			else if (columnNo == 5)
+				col5_value1 = Integer.parseInt(items[i].getText(5));
+			for(int j=0; j < i; j++) {
+				compareCorrect = false;
+				if(columnNo == 0)  {
+					col0_value2 = Integer.parseInt(items[j].getText(0).substring(5, items[j].getText(0).length()));
+					if(col0_value1 - col0_value2 < 0) 
+						compareCorrect = true;
+				}					
+				else if (columnNo == 1) {
+					col1_value2 = items[j].getText(1);
+					if(collator.compare(col1_value1, col1_value2) < 0) 
+						compareCorrect = true;
+				}	
+				else if (columnNo == 2) {
+					col2_value2 = Double.parseDouble(items[j].getText(2).substring(1,items[j].getText(2).length()));
+					if((col2_value1 - col2_value2) > 0) 
+						compareCorrect = true;
+				}	
+				else if (columnNo == 3) {
+					col3_value2 = Integer.parseInt(items[j].getText(3));
+					if((col3_value1 - col3_value2) > 0) 
+						compareCorrect = true;
+				}	
+				else if (columnNo == 4) {
+					col4_value2 = items[j].getText(4);
+					if(collator.compare(col4_value1, col4_value2) < 0) 
+						compareCorrect = true;
+				}
+				else if (columnNo == 5) {
+					col5_value2 = Integer.parseInt(items[j].getText(5));
+					if((col5_value1 - col5_value2) > 0) 
+						compareCorrect = true;
+				}
+
+				if(compareCorrect == true) {
+					Item temp = item_list.get(i);
+					item_list.remove(i);
+					String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2), items[i].getText(3), items[i].getText(4),items[i].getText(5)};
+					items[i].dispose();
+					TableItem item = new TableItem(BudgetResult, SWT.NONE, j);
+					item_list.add(j, temp);
+					item.setText(values);
+					items = BudgetResult.getItems();
+					break;
+				}
+			}	
+		}
+
+		refreshBudgetTable(item_list);
+	}
+
+	public static void refreshBudgetTable(Vector<Item> item_list) {
 
 		BudgetResult.removeAll();
 		for (int loopIndex = 0; loopIndex < item_list.size(); loopIndex++) {
@@ -768,73 +884,9 @@ public class ViewEvent extends Composite {
 				item.setText(4, "");
 			else
 				item.setText(4, ""+item_list.get(loopIndex).getType());					
+			item.setText(5, ""+item_list.get(loopIndex).getQuantity());
 		}
-		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
-			BudgetResult.getColumn(loopIndex).pack();
-		}							
-
-		//Column Resize with table fix
-		 Budgetcomp.addControlListener(new ControlAdapter() {
-			    public void controlResized(ControlEvent e) {
-			      Rectangle area = Budgetcomp.getClientArea();
-			      Point preferredSize = BudgetResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			      int width = area.width - 2*BudgetResult.getBorderWidth();
-			      if (preferredSize.y > area.height + BudgetResult.getHeaderHeight()) {
-			        // Subtract the scrollbar width from the total column width
-			        // if a vertical scrollbar will be required
-			        Point vBarSize = BudgetResult.getVerticalBar().getSize();
-			        width -= vBarSize.x;
-			      }
-			      Point oldSize = BudgetResult.getSize();
-			      if (oldSize.x > area.width) {
-			        // table is getting smaller so make the columns 
-			        // smaller first and then resize the table to
-			        // match the client area width
-			        col1.setWidth(width/2);
-			        col0.setWidth((width - col1.getWidth())/4);
-			        col2.setWidth((width - col1.getWidth())/4);
-			        col3.setWidth((width - col1.getWidth())/4);
-			        col4.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -10);
-			        //BudgetResult.setSize(area.width, area.height);
-			      } else {
-			        // table is getting bigger so make the table 
-			        // bigger first and then make the columns wider
-			        // to match the client area width
-			    	//BudgetResult.setSize(area.width, area.height);
-			    	  col1.setWidth(width/2);
-				      col0.setWidth((width - col1.getWidth())/4);
-				      col2.setWidth((width - col1.getWidth())/4);
-				      col3.setWidth((width - col1.getWidth())/4);
-				      col4.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -10);			        
-			      }
-			    }
-		 });
-
-		 //Table Tooltip
-		 BudgetResult.addMouseTrackListener(new MouseTrackAdapter() {
-			 @Override
-			 public void mouseHover(MouseEvent e) {
-				 TableItem item = BudgetResult.getItem(new Point(e.x, e.y));
-			//	 BudgetResult.setToolTipText(item.getText(0));
-				 
-				 //tooltip for every column
-				 for (int i=0; i<BudgetResult.getColumnCount()-1; i++) {
-					 if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
-						 BudgetResult.setToolTipText(item.getText(i));
-					 	 break;
-					 }
-					 
-					 else if (i == BudgetResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
-						 BudgetResult.setToolTipText(item.getText(++i));
-				 }
-				 
-			}
-		});
-	
-		budgetflag = true;
-		return BudgetResult;
 	}
-
 
 	@Override
 	protected void checkSubclass() {

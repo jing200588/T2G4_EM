@@ -1,46 +1,24 @@
 import java.util.*;
 
 
+
 public class ModelEvent {
 	private static Vector<Eventitem> list;
-	private static EMDB db;
+	private static EMDBII db;
 
 	public ModelEvent() {
 		list = new Vector<Eventitem>();
 
-
-		db = new EMDB();
-		
-	
-		db.set_name(EMSettings.DATABASE_NAME);
-		
-		
-		
+		db = new EMDBII();
 		
 		/*
-		 * Dummy content.
-		 */
-		db.connect();
-		list = db.get_event_list();
+		list = db.eventDB().getEventList();
 		int size = list.size();
-		
 		for (int i=0; i<size; i++){
-			list.get(i).addBVI(db.get_booking_info(list.get(i).getID()));	
-			list.get(i).setitem_list(db.get_budget_list(list.get(i).getID(), true));
+			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
+			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
 		}
-		
-		
-		db.disconnect();
-		
-		/*
-		//Test Data.
-		list.add(new Eventitem("test event 1", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
-		list.add(new Eventitem("test event 2", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
-		list.add(new Eventitem("test event 3", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
-		list.add(new Eventitem("test event 4", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));
-		list.add(new Eventitem("test event 5", 2012, 11, 13, 2012, 11, 15, 10, 30, 23, 0));	
 		*/
-		
 		
 	};
 	
@@ -54,28 +32,18 @@ public class ModelEvent {
 	public static void CreateEvent(Eventitem eitem) {
 		
 		
-		db.out(eitem.getName());
-		db.out(eitem.getDescription());
-		db.out(eitem.getStartDate().getDate()); 
-		db.out(eitem.getEndDate().getDate());
-		db.out(eitem.getStartTime().getTime());
-		db.out(eitem.getEndTime().getTime());
-		
-		db.connect();
-		int id = db.add_event(eitem.getName(), 
+		int id = db.eventDB().addEvent(
+				eitem.getName(), 
 				eitem.getDescription(), 
 				eitem.getBudget(),
-				eitem.getStartDate().getDate(), 
-				eitem.getEndDate().getDate(),
-				eitem.getStartTime().getTime(),
-				eitem.getEndTime().getTime());
-		//db.out("Create: " + id);
+				eitem.getStartDateTime().getDateRepresentation(), 
+				eitem.getEndDateTime().getDateRepresentation(),
+				eitem.getStartDateTime().getTimeRepresentation(),
+				eitem.getEndDateTime().getTimeRepresentation(), 
+				"");
 		eitem.setID(id);
+		
 		list.add(eitem);
-		
-		db.disconnect();
-		
-		//db.out("Returned: " + eitem.getID());
 	
 	}
 	
@@ -87,18 +55,13 @@ public class ModelEvent {
 	 * @return
 	 */
 	public static Vector<Eventitem> PullList() {
-		db.connect();
-		list = db.get_event_list();
 		
+		list = db.eventDB().getEventList();
 		int size = list.size();
 		for (int i=0; i<size; i++){
-			list.get(i).addBVI(db.get_booking_info(list.get(i).getID()));	
-			list.get(i).setitem_list(db.get_budget_list(list.get(i).getID(), true));
+			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
+			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
 		}
-		
-		
-		
-		db.disconnect();
 		return list;
 	}
 	
@@ -110,12 +73,11 @@ public class ModelEvent {
 	 * @param eitem Event Item
 	 */
 	public static void DeleteEvent(Eventitem eitem) {
-		
-		db.connect();
-		//db.out("Passing: " + eitem.getID() + "-" + eitem.getName());
-		
-		db.delete_event(eitem.getID());
-		db.disconnect();
+
+		db.eventDB().deleteEvent(eitem.getID());
+		db.venueDB().deleteBookingAll(eitem.getID());
+		db.budgetDB().deleteBudgetList(eitem.getID());
+		db.budgetDB().deleteBudgetListOptimized(eitem.getID());
 		list.remove(eitem);
 	}
 	
@@ -129,22 +91,19 @@ public class ModelEvent {
 	 */
 	public static void 	UpdateParticulars(Eventitem eitem) {
 
-		//db.out("testing start");
-		db.connect();
-		db.update_event(
+
+		
+		db.eventDB().updateEvent(
 				eitem.getID(), 
 				eitem.getName(), 
 				eitem.getDescription(), 
 				eitem.getBudget(),
-				eitem.getStartDate().getDate(),
-				eitem.getEndDate().getDate(), 
-				eitem.getStartTime().getTime(), 
-				eitem.getEndTime().getTime());
-		
-		db.disconnect();
-	//	db.out("index:" + index);
-	//	db.out("testing end");
-		
+				eitem.getStartDateTime().getDateRepresentation(),
+				eitem.getEndDateTime().getDateRepresentation(), 
+				eitem.getStartDateTime().getTimeRepresentation(), 
+				eitem.getEndDateTime().getTimeRepresentation(),
+				""
+				);
 		
 	}
 }
