@@ -212,7 +212,7 @@ class EMDBEvent extends EMDBBase{
 		int id = 0;
 		
 		if (result.size() > 0){
-			id = (int) result.get(0)[0];
+			id = Integer.parseInt(result.get(0)[0].toString());
 		}
 		
 		this.disconnect();
@@ -265,15 +265,15 @@ class EMDBEvent extends EMDBBase{
 			Object[] row = result.get(i);
 			
 			item = new Eventitem(
-					(String) row[1], //name
-					(String) row[4], //startdate
-					(String) row[5], //enddate
-					(String) row[6], //starttime
-					(String) row[7] //endtime
+					row[1].toString(), //name
+					row[4].toString(), //startdate
+					row[5].toString(), //enddate
+					row[6].toString(), //starttime
+					row[7].toString() //endtime
 					);
-			item.setDescription( (String) row[2]);
-			item.setBudget( (double) row[3] );
-			item.setID( (int) row[0] );
+			item.setDescription( row[2].toString());
+			item.setBudget( Double.parseDouble(row[3].toString()) );
+			item.setID( Integer.parseInt(row[0].toString()) );
 			
 		}
 					
@@ -336,15 +336,15 @@ class EMDBEvent extends EMDBBase{
 			Object[] row = result.get(i);
 			
 			Eventitem item = new Eventitem(
-						(String) row[1], //name
-						(String) row[4], //startdate
-						(String) row[5], //enddate
-						(String) row[6], //starttime
-						(String) row[7] //endtime
+						row[1].toString(), //name
+						row[4].toString(), //startdate
+						row[5].toString(), //enddate
+						row[6].toString(), //starttime
+						row[7].toString() //endtime
 					);
-			item.setDescription( (String) row[2]); //description
-			item.setBudget( (double) row[3] ); //budget
-			item.setID( (int) row[0] ); //event_id
+			item.setDescription( row[2].toString()); //description
+			item.setBudget( Double.parseDouble(row[3].toString()) ); //budget
+			item.setID( Integer.parseInt(row[0].toString()) ); //event_id
 		
 		
 			list.add(item);

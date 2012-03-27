@@ -256,11 +256,18 @@ class EMDBBudget extends EMDBBase{
 	 * @param aTableType
 	 * @return
 	 */
-	private int addBudgetGateway(int aEventID, String aName, int aPrice, int aSatisfaction, String aType, String aTableType){
+	private int addBudgetGateway(
+			int aEventID, 
+			String aName, 
+			int aPrice, 
+			int aSatisfaction, 
+			String aType, 
+			String aTableType
+			)
+	{
 		String sql = "";
 		
-		switch (aTableType){
-			case "optimized":
+		if (aTableType.compareTo("optimized") == 0){
 				sql = new InsertQuery(this.optBudgetTable)
 							.addColumn(this.optBudgetEventID, aEventID)
 							.addColumn(this.optBudgetName, aName)
@@ -268,9 +275,7 @@ class EMDBBudget extends EMDBBase{
 							.addColumn(this.optBudgetSatisfaction, aSatisfaction)
 							.addColumn(this.optBudgetType, aType)
 							.validate().toString();
-				break;
-			case "normal":
-			default:
+		}else{
 				sql = new InsertQuery(this.budgetTable)
 							.addColumn(this.budgetEventID, aEventID)
 							.addColumn(this.budgetName, aName)
@@ -278,7 +283,6 @@ class EMDBBudget extends EMDBBase{
 							.addColumn(this.budgetSatisfaction, aSatisfaction)
 							.addColumn(this.budgetType, aType)
 							.validate().toString();
-				break;
 		}
 			
 		
@@ -294,7 +298,7 @@ class EMDBBudget extends EMDBBase{
 		int id = 0;
 		
 		if (result.size() > 0){
-			id = (int) result.get(0)[0];
+			id = Integer.parseInt(result.get(0)[0].toString());
 		}
 		
 		return id;
@@ -342,7 +346,10 @@ class EMDBBudget extends EMDBBase{
 	 * @param aTableType
 	 * @return
 	 */
-	private int addBudgetListGatway(Vector<Item> list, int aEventID, String aTableType){
+	private int addBudgetListGatway(
+			Vector<Item> list, 
+			int aEventID, 
+			String aTableType){
 		
 		int size = list.size();
 		for (int i=0; i< size; i++){
@@ -350,8 +357,7 @@ class EMDBBudget extends EMDBBase{
 			Item current = list.get(i);
 			
 			String sql = "";
-			switch (aTableType){
-				case "optimized":
+			if (aTableType.compareTo("optimized") == 0){
 					sql = new InsertQuery(this.optBudgetTable)
 								.addColumn(this.optBudgetEventID, aEventID)
 								.addColumn(this.optBudgetName, current.getItem())
@@ -359,9 +365,7 @@ class EMDBBudget extends EMDBBase{
 								.addColumn(this.optBudgetSatisfaction, current.getSatisfaction_value())
 								.addColumn(this.optBudgetType, current.getType())
 								.validate().toString();
-					break;
-				case "normal":
-				default:
+			}else{
 					sql = new InsertQuery(this.budgetTable)
 								.addColumn(this.budgetEventID, aEventID)
 								.addColumn(this.budgetName, current.getItem())
@@ -369,7 +373,6 @@ class EMDBBudget extends EMDBBase{
 								.addColumn(this.budgetSatisfaction, current.getSatisfaction_value())
 								.addColumn(this.budgetType, current.getType())
 								.validate().toString();
-					break;
 			}
 			
 			
@@ -426,22 +429,18 @@ class EMDBBudget extends EMDBBase{
 	private Vector<Item> getBudgetListGateway(int aEventID, String aTableType){	
 		String sql = "";
 
-		switch (aTableType){
-			case "optimized":
+		if (aTableType.compareTo("optimized") == 0){
 				sql = new SelectQuery()
 							.addAllColumns()
 							.addFromTable(this.optBudgetTable)
 							.addCondition(BinaryCondition.equalTo(this.optBudgetEventID, aEventID))
 							.validate().toString();
-				break;
-			case "normal":
-			default:
+		}else{
 				sql = new SelectQuery()
 							.addAllColumns()
 							.addFromTable(this.budgetTable)
 							.addCondition(BinaryCondition.equalTo(this.budgetEventID, aEventID))
 							.validate().toString();
-				break;
 		}
 		
 
@@ -460,11 +459,11 @@ class EMDBBudget extends EMDBBase{
 		for (int i=0; i< size; i++){
 			Object[] row = result.get(i);
 			Item current = new Item(
-								(int) 		row[0], 
-								(String) 	row[2], 
-								(int)	 	row[3], 
-								(int) 		row[4], 
-								(String) 	row[5]
+								Integer.parseInt(row[0].toString()), 
+								row[2].toString(), 
+								Integer.parseInt(row[3].toString()), 
+								Integer.parseInt(row[4].toString()), 
+								row[5].toString()
 							);
 		    list.add(current);
 			
@@ -493,7 +492,12 @@ class EMDBBudget extends EMDBBase{
 	 * @param aType
 	 * @return
 	 */
-	public int updateBudget(int aBudgetID, String aName, int aPrice, int aSatisfaction, String aType){
+	public int updateBudget(
+			int aBudgetID, 
+			String aName, 
+			int aPrice, 
+			int aSatisfaction, 
+			String aType){
 		return this.updateBudgetGateway(aBudgetID, aName, aPrice, aSatisfaction, aType, "normal");
 	}
 	
@@ -507,7 +511,12 @@ class EMDBBudget extends EMDBBase{
 	 * @param aType
 	 * @return
 	 */
-	public int updateBudgetOptimized(int aBudgetID, String aName, int aPrice, int aSatisfaction, String aType){
+	public int updateBudgetOptimized(
+			int aBudgetID,
+			String aName, 
+			int aPrice, 
+			int aSatisfaction, 
+			String aType){
 		return this.updateBudgetGateway(aBudgetID, aName, aPrice, aSatisfaction, aType, "optimized");
 	}
 	
@@ -524,12 +533,17 @@ class EMDBBudget extends EMDBBase{
 	 * @param aTableType
 	 * @return
 	 */
-	private int updateBudgetGateway(int aBudgetID, String aName, int aPrice, int aSatisfaction, String aType, String aTableType){
+	private int updateBudgetGateway(
+			int aBudgetID, 
+			String aName, 
+			int aPrice, 
+			int aSatisfaction, 
+			String aType, 
+			String aTableType){
 
 		String sql = "";
 
-		switch (aTableType){
-			case "optimized":
+		if (aTableType.compareTo("optimized") == 0){
 				sql = new UpdateQuery(this.optBudgetTable)
 							.addSetClause(this.optBudgetName, aName)
 							.addSetClause(this.optBudgetPrice, aPrice)
@@ -537,9 +551,7 @@ class EMDBBudget extends EMDBBase{
 							.addSetClause(this.optBudgetType, aType)
 							.addCondition(BinaryCondition.equalTo(this.optBudgetID, aBudgetID))
 							.validate().toString();
-				break;
-			case "normal":
-			default:
+		}else{
 				sql = new UpdateQuery(this.budgetTable)
 							.addSetClause(this.budgetName, aName)
 							.addSetClause(this.budgetPrice, aPrice)
@@ -547,7 +559,6 @@ class EMDBBudget extends EMDBBase{
 							.addSetClause(this.budgetType, aType)
 							.addCondition(BinaryCondition.equalTo(this.budgetID, aBudgetID))
 							.validate().toString();
-				break;
 		}
 		
 		
@@ -705,18 +716,14 @@ class EMDBBudget extends EMDBBase{
 	private int deleteBudgetListGateway(int aEventID, String aTableType){
 		String sql = "";
 
-		switch (aTableType){
-			case "optimized":
+		if (aTableType.compareTo("optimized") == 0){
 				sql =	new DeleteQuery(this.optBudgetTable)
 								.addCondition(BinaryCondition.equalTo(this.optBudgetEventID, aEventID))
 								.validate().toString();
-				break;
-			case "normal":
-			default:
+		}else{
 				sql =	new DeleteQuery(this.budgetTable)
 								.addCondition(BinaryCondition.equalTo(this.budgetEventID, aEventID))
 								.validate().toString();
-				break;
 		}
 		
 

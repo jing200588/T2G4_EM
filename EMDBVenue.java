@@ -234,7 +234,7 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (result.size() > 0){
-			id = (int) result.get(0)[0];
+			id = new Integer(result.get(0)[0].toString());
 			
 			
 			if (EMDBSettings.DEVELOPMENT){
@@ -288,7 +288,7 @@ class EMDBVenue extends EMDBBase{
 		int id = 0;	
 		
 		if (result.size() > 0){
-			id = (int) result.get(0)[0];
+			id = new Integer(result.get(0)[0].toString());
 		}
 		
 		this.disconnect();
@@ -335,11 +335,11 @@ class EMDBVenue extends EMDBBase{
 		
 		if (result.size() > 0){
 			Object[] row = result.get(0);
-			place.updateName( (String) row[1]);
-			place.updateAddress( (String) row[2] );
-			place.updateDescription( (String) row[3] );
-			place.updateCost( (int) row[4] );
-			place.updateMaxCapacity( (int) row[5] );			
+			place.updateName		( 	row[1].toString()				);
+			place.updateAddress		( 	row[2].toString()				);
+			place.updateDescription	(	row[3].toString() 				);
+			place.updateCost		( 	new Integer(row[4].toString()) 	);
+			place.updateMaxCapacity	( 	new Integer(row[5].toString()) 	);			
 		}
 		
 
@@ -404,12 +404,12 @@ class EMDBVenue extends EMDBBase{
 				
 				Venue place = new Venue();
 				
-				place.updateID( (int) row[0] );
-				place.updateName( (String) row[1]);
-				place.updateAddress( (String) row[2] );
-				place.updateDescription( (String) row[3] );
-				place.updateCost( (int) row[4] );
-				place.updateMaxCapacity( (int) row[5] );	
+				place.updateID			( 	new Integer(row[0].toString())	);
+				place.updateName		( 	row[1].toString()				);
+				place.updateAddress		( 	row[2].toString()				);
+				place.updateDescription	(	row[3].toString() 				);
+				place.updateCost		( 	new Integer(row[4].toString()) 	);
+				place.updateMaxCapacity	( 	new Integer(row[5].toString()) 	);	
 				
 				list.add(place);
 			}
@@ -457,9 +457,9 @@ class EMDBVenue extends EMDBBase{
 		if (result.size() > 0){
 			Object[] row = result.get(0);
 			slot = new TimeSlot(
-					(int) row[0],
-					new MyDateTime( (String) row[3] ),
-					new MyDateTime( (String) row[4] )
+					new Integer(row[0].toString()),
+					new MyDateTime( row[3].toString() ),
+					new MyDateTime( row[4].toString() )
 					);
 			
 		}
@@ -488,31 +488,28 @@ class EMDBVenue extends EMDBBase{
 	 */
 	public Vector<TimeSlot> getBookingList(int aID, String aSearchType){
 		String sql = "";
-		
-		switch (aSearchType){
-			case "event":
-				sql = new SelectQuery()
-							.addAllColumns()
-							.addFromTable(this.bookingTable)
-							.addCondition(BinaryCondition.equalTo(this.bookingEventID, aID))
-							.validate().toString();
-				break;
-					
-			case "venue":
-				sql = new SelectQuery()
-							.addAllColumns()
-							.addFromTable(this.bookingTable)
-							.addCondition(BinaryCondition.equalTo(this.venueID, aID))
-							.validate().toString();
-				break;
+			
 
-			case "all":
-			default:
-				sql = new SelectQuery()
-							.addAllColumns()
-							.addFromTable(this.bookingTable)
-							.validate().toString();
-				break;
+		
+	
+		if(aSearchType.compareTo("event") == 0){
+			sql = new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.bookingTable)
+						.addCondition(BinaryCondition.equalTo(this.bookingEventID, aID))
+						.validate().toString();
+			
+		}else if(aSearchType.compareTo("venue") == 0){
+			sql = new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.bookingTable)
+						.addCondition(BinaryCondition.equalTo(this.venueID, aID))
+						.validate().toString();
+		} else {
+			sql = new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.bookingTable)
+						.validate().toString();
 		}
 		
 		
@@ -534,9 +531,9 @@ class EMDBVenue extends EMDBBase{
 			Object[] row = result.get(i);
 			list.add(
 					new TimeSlot(
-							(int) row[0],
-							new MyDateTime( (String) row[3] ),
-							new MyDateTime( (String) row[4] )
+							new Integer(row[0].toString()),
+							new MyDateTime( row[3].toString() ),
+							new MyDateTime( row[4].toString() )
 							)
 					);
 		}
@@ -579,10 +576,10 @@ class EMDBVenue extends EMDBBase{
 			Object[] row = result.get(i);
 			
 			TimeSlot timing = new TimeSlot(
-									new MyDateTime( (String) row[3]),
-									new MyDateTime( (String) row[4] )
+									new MyDateTime( row[3].toString() ),
+									new MyDateTime( row[4].toString() )
 									);
-			Venue venue = this.getVenue( (int) row[2] );
+			Venue venue = this.getVenue( new Integer(row[2].toString()) );
 			BookedVenueInfo info = new BookedVenueInfo(venue, timing);
 			
 			list.add(info);
@@ -634,14 +631,14 @@ class EMDBVenue extends EMDBBase{
 		for(int i=0; i<size; i++){
 			Object[] row = result.get(i);
 			Venue place = new Venue();
-				
-			place.updateID( (int) row[0] );
-			place.updateName( (String) row[1]);
-			place.updateAddress( (String) row[2] );
-			place.updateDescription( (String) row[3] );
-			place.updateCost( (int) row[4] );
-			place.updateMaxCapacity( (int) row[5] );	
-					
+
+			place.updateID			( 	new Integer(row[0].toString())	);
+			place.updateName		( 	row[1].toString()				);
+			place.updateAddress		( 	row[2].toString()				);
+			place.updateDescription	(	row[3].toString() 				);
+			place.updateCost		( 	new Integer(row[4].toString()) 	);
+			place.updateMaxCapacity	( 	new Integer(row[5].toString()) 	);	
+			
 			list.add(place);
 		}
 		
