@@ -58,7 +58,7 @@ public class ViewMain extends ApplicationWindow {
     private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
     private static ViewEvent view;
     private static ViewHomepage hp;
-    private static EMDB db;
+    private static EMDBII db;
   //  private static boolean vBarOn;
     private static TableColumn tc1, tc2,tc3;
   //  private static int tc2vBarOnWidth, tc2vBarOffWidth;
@@ -625,8 +625,8 @@ public class ViewMain extends ApplicationWindow {
 	public static void main(String args[]) {
 		try {
 			
-			db = new EMDB();
-			db.system_check();
+			db = new EMDBII();
+			db.systemCheck();
 			
 			ViewMain window = new ViewMain();
 			window.setBlockOnOpen(true);

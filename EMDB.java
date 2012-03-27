@@ -1,4 +1,7 @@
 import java.io.File;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 
 /**
  *  
@@ -14,7 +17,7 @@ public class EMDB extends EMDB_sqlite{
 	 * Description: Checking if database file exists. If it does, check if the database tables exist.
 	 */
 	public void system_check(){
-		this.set_debug(EMSettings.DEVELOPMENT);
+		this.set_debug(EMDBSettings.DEVELOPMENT);
 		
 		this.connect();
 		//test file exists if not create
@@ -94,4 +97,36 @@ public class EMDB extends EMDB_sqlite{
 	}
 
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * ***********************************
+	 * 
+	 * Independent Run Test
+	 * 
+	 * ***********************************
+	 */	
+	
+	/**
+	 * Main - For testing
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+	}
 }

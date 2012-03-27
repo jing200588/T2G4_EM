@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 
+
 public class ModelBudget {
 	private int event_id;
 	private Vector<Item> item_list;
@@ -18,7 +19,7 @@ public class ModelBudget {
 
 	public ModelBudget() {
 		db = new EMDB();
-		db.set_name(EMSettings.DATABASE_NAME);
+		db.set_name(EMDBSettings.DATABASE_NAME);
 	}
 
 	/**
