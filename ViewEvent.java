@@ -41,6 +41,7 @@ public class ViewEvent extends Composite {
 	private static ScrolledComposite sc1;
 	private static Composite maincomp;
 	private static int budgetTableSelectedIndex;
+	private static ControllerBudget bc;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -788,8 +789,8 @@ public class ViewEvent extends Composite {
 
 	public static void deleteBudgetItem(Vector<Item> item_list) {
 
-		//ControllerBudget cb = null;
-		//cb.deleteBudgetItem(cevent.getID(), item_list.get(budgetTableSelectedIndex).getID());
+		bc = new ControllerBudget();
+		bc.deleteBudgetItem(cevent.getID(), item_list.get(budgetTableSelectedIndex).getID());
 		item_list.remove(budgetTableSelectedIndex);
 		cevent.setitem_list(item_list);
 		
