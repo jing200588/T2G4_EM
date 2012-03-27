@@ -42,16 +42,17 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 
 public class ViewParticipantList extends Composite {
-	public static String[] HEADERS = new String[0];
+	public static String[] HEADERS = {"Name", "Matric No.", "Contact", "Email Address", "Home Address", "Remarks"};
 	private Eventitem cevent;
 	private Table table;
 	private Text txtimportfile;
 	private TableViewer tableViewer;
 	private Text txtexportfile;
 	private Button btnDelete;
-	private int columnNo;
-	private int index;
-	private List<String[]> myEntries;
+	private int columnNo = 0;
+	private int index = 0;
+	private static List<Participant> tempEntries;
+	private TableViewerColumn[] tvc= new TableViewerColumn[6];
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -61,7 +62,8 @@ public class ViewParticipantList extends Composite {
 		super(parent, style);
 		setLayout(new FormLayout());
 		cevent = curevent;
-
+		tempEntries = new Vector<Participant>();
+		
 		//Event Particulars label
 		Label lblEventParticulars = new Label(this, SWT.NONE);
 		lblEventParticulars.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
@@ -73,9 +75,10 @@ public class ViewParticipantList extends Composite {
 		
 		//main composite
 		Composite composite = new Composite(this, SWT.NONE);
+		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setLayout(new FormLayout());
 		FormData fd_composite = new FormData();
-		fd_composite.bottom = new FormAttachment(100);
+		fd_composite.bottom = new FormAttachment(90);
 		fd_composite.left = new FormAttachment(0, 0);
 		fd_composite.top = new FormAttachment(15);
 		fd_composite.right = new FormAttachment(100, 0);
@@ -83,6 +86,68 @@ public class ViewParticipantList extends Composite {
 		
 		tableViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
+		
+		//clone the list
+		for (int i=0; i<cevent.getParticipantList().size(); i++)
+			tempEntries.add(cevent.getParticipantList().get(i));
+		
+		//setting the column headers
+		for (int i=0; i<tvc.length; i++) {
+			tvc[i] = new TableViewerColumn (tableViewer, SWT.NONE);
+			tvc[i].getColumn().setText(HEADERS[i]);
+			tvc[i].getColumn().pack();
+		}
+		
+//		if (!cevent.getParticipantList().isEmpty()) {
+			tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+			for (int i=0; i<HEADERS.length; i++) {
+				tvc[i].setLabelProvider(new ColumnLabelProvider() {
+					public String getText(Object element)
+					{
+						if (index == HEADERS.length)
+							index = 0;						
+						Participant parti = (Participant) element;
+						switch (index)	{
+							case 0:
+								index++;
+								return parti.getName();
+							case 1:
+								index++;
+								return parti.getMatric();
+							case 2:
+								index++;
+								return parti.getContact();
+							case 3:
+								index++;
+								return parti.getEmail();
+							case 4:
+								index++;
+								return parti.getAddress();
+							case 5:
+								index++;
+								return parti.getRemark();
+							default:
+								return null;
+						}
+					}
+				});
+			}
+
+			tableViewer.setInput(tempEntries);
+			for (int i=0; i<HEADERS.length; i++)
+				tvc[i].getColumn().pack();
+			
+			CellEditor[] editors = new CellEditor[HEADERS.length];
+			//set headers for the table. set cell editors for each column.
+					for (int i=0; i<HEADERS.length; i++) 	
+						editors[i] = new TextCellEditor(table);
+			
+			tableViewer.setColumnProperties(HEADERS);
+			tableViewer.setCellModifier(new ParticipantListCellModifier(tableViewer));
+			tableViewer.setCellEditors(editors);
+			
+//		}
+		
 		table.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -92,8 +157,8 @@ public class ViewParticipantList extends Composite {
 	//	tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 		
 		FormData fd_table = new FormData();
-		fd_table.bottom = new FormAttachment(0, 282);
-		fd_table.right = new FormAttachment(0, 727);
+		fd_table.bottom = new FormAttachment(75);
+		fd_table.right = new FormAttachment(85);
 		fd_table.top = new FormAttachment(0, 10);
 		fd_table.left = new FormAttachment(0, 10);
 		table.setLayoutData(fd_table);
@@ -102,10 +167,10 @@ public class ViewParticipantList extends Composite {
 		//Bottom composite
 		Composite compositebottom = new Composite(composite, SWT.NONE);
 		FormData fd_compositebottom = new FormData();
-		fd_compositebottom.right = new FormAttachment(100, -131);
+		fd_compositebottom.top = new FormAttachment(table);
+		fd_compositebottom.right = new FormAttachment(85, 5);
 		fd_compositebottom.left = new FormAttachment(0, 10);
-		fd_compositebottom.bottom = new FormAttachment(0, 352);
-		fd_compositebottom.top = new FormAttachment(0, 288);
+	//	fd_compositebottom.bottom = new FormAttachment(0, 352);
 		compositebottom.setLayoutData(fd_compositebottom);
 		compositebottom.setLayout(new GridLayout(4, false));
 		
@@ -152,23 +217,25 @@ public class ViewParticipantList extends Composite {
 		btnImportFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (table.getColumnCount() != 0) {
+				if (table.getItemCount() != 0) {
 					deleteconfirmDialog dialog = new deleteconfirmDialog(new Shell(), "confirm",
 							"Importing a new file will replace the current table. Do you want to continue?");
 					if ((Integer) dialog.open() == 1) {
 						//Clears the tables b4 import.
 						table.setRedraw(false);
 						table.removeAll();
-						while (table.getColumnCount() > 0)
-							table.getColumns()[0].dispose();
 						table.setRedraw(true);
-						
-						//ImportCSV(txtimportfile.getText());
+						tempEntries.clear();
+						ImportCSV(txtimportfile.getText());
 					}
 				}
 				
-				else
+				else {
 					ImportCSV(txtimportfile.getText());
+				}
+				tableViewer.refresh();
+				for (int i=0; i<HEADERS.length; i++)
+					tvc[i].getColumn().pack();
 			}
 		});
 		btnImportFile.setText("Import File");
@@ -229,35 +296,40 @@ public class ViewParticipantList extends Composite {
 		Composite compositeside = new Composite(composite, SWT.NONE);
 		compositeside.setLayout(new GridLayout(1, false));
 		FormData fd_compositeside = new FormData();
-		fd_compositeside.right = new FormAttachment(table, 96, SWT.RIGHT);
-		fd_compositeside.bottom = new FormAttachment(table, 0, SWT.BOTTOM);
-		fd_compositeside.top = new FormAttachment(table, 0, SWT.TOP);
+		fd_compositeside.bottom = new FormAttachment(75);
+		fd_compositeside.right = new FormAttachment(table, 115, SWT.RIGHT);
+//		fd_compositeside.bottom = new FormAttachment(75, 5);
+		fd_compositeside.top = new FormAttachment(1, 0);
 		fd_compositeside.left = new FormAttachment(table, 6);
 		compositeside.setLayoutData(fd_compositeside);
 		
 		//Add New button
 		Button btnAddNew = new Button(compositeside, SWT.NONE);
-		GridData gd_btnAddNew = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
-		gd_btnAddNew.widthHint = 80;
+		GridData gd_btnAddNew = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_btnAddNew.widthHint = 100;
 		btnAddNew.setLayoutData(gd_btnAddNew);
 		btnAddNew.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TableItem item = new TableItem(table, SWT.NONE);
-				table.setSelection(item);
 				
+				AddParticipantDialog Participant = new AddParticipantDialog(new Shell());
+				Participant.open();
+				tableViewer.refresh();
+				//TableItem item = new TableItem(table, SWT.NONE);
+		/*		String[] newarr = new String[HEADERS.length];
+				myEntries.add(newarr);
+				for (int i=0; i<newarr.length; i++)
+					newarr[i] = "";
+				tableViewer.refresh();
+				table.setSelection(table.getItemCount()-1);
+				//table.setSelection(item);
+			*/	
 			}
 		});
-		btnAddNew.setText("Add New");
-		
-		/************************************************************
-		 * 
-		 * DELETE ROW EVENT LISTENER
-		 * 
-		 ***********************************************************/
+		btnAddNew.setText("Add Participant");
 		btnDelete = new Button(compositeside, SWT.NONE);
-		GridData gd_btnDelete = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
-		gd_btnDelete.widthHint = 60;
+		GridData gd_btnDelete = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_btnDelete.widthHint = 100;
 		btnDelete.setLayoutData(gd_btnDelete);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -265,37 +337,49 @@ public class ViewParticipantList extends Composite {
 				//Delete row
 				int currentindex = table.getSelectionIndex();
 				table.remove(currentindex);	
-				myEntries.remove(currentindex);	
+				tempEntries.remove(currentindex);	
 			}
 		});
 		btnDelete.setText("Delete");
 		btnDelete.setEnabled(false);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
-		new Label(compositeside, SWT.NONE);
 		
+		Button btnGoBack = new Button(compositeside, SWT.NONE);
+		btnGoBack.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ViewMain.ReturnView();
+			}
+		});
+		GridData gd_btnGoBack = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
+		gd_btnGoBack.widthHint = 100;
+		btnGoBack.setLayoutData(gd_btnGoBack);
+		btnGoBack.setText("Go Back");
+		
+		Label lbldummy = new Label(compositeside, SWT.NONE);
+		lbldummy.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 6));
+		
+
 		/************************************************************
 		 * 
 		 * SAVE LIST EVENT LISTENER
 		 * 
 		 ***********************************************************/
+		
 		Button btnSaveList = new Button(compositeside, SWT.NONE);
-		btnSaveList.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridData gd_btnSaveList = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_btnSaveList.heightHint = 45;
+		gd_btnSaveList.widthHint = 100;
+		btnSaveList.setLayoutData(gd_btnSaveList);
 		btnSaveList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//save list into DB and event item
-				
+				cevent.setParticipantList(tempEntries);
+				ModelParticipantList.UpdateDB(cevent);
 			}
 		});
 		btnSaveList.setText("Save List");
-		
+
 		
 		
 		
@@ -352,29 +436,61 @@ public void ImportCSV (String filepath) {
 	try {
 		CSVReader reader = new CSVReader(new FileReader(filepath));
 		
-		myEntries = reader.readAll();
-		String[] headers = myEntries.get(0);
-		TableViewerColumn[] tvc= new TableViewerColumn[headers.length];
-		HEADERS = headers;
-		columnNo = headers.length;
-
+		List<String[]> entries = reader.readAll();
+		entries.remove(0);	//remove the header row
+		
+		for (int i=0; i<entries.size(); i++) {
+			tempEntries.add(new Participant(entries.get(i)[0], entries.get(i)[1], entries.get(i)[2], entries.get(i)[3], entries.get(i)[4], entries.get(i)[5]));
+		}
+//		String[] headers = myEntries.get(0);
+//		TableViewerColumn[] tvc= new TableViewerColumn[headers.length];
+//		HEADERS = headers;
+//		columnNo = headers.length;
+/*
 		index =0;
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-		for (int i=0; i<headers.length; i++) {
-			tvc[i] = new TableViewerColumn (tableViewer, SWT.NONE);
-			tvc[i].getColumn().setText(headers[i]);
+		for (int i=0; i<HEADERS.length; i++) {
 			tvc[i].setLabelProvider(new ColumnLabelProvider() {
 				public String getText(Object element)
 				{
-					if (index == columnNo)
+					if (index == HEADERS.length)
 						index = 0;
-					System.out.println(index);
+				/*	System.out.println(index);
 					String[] arr = (String[]) element;
 					return arr[index++];
+					*/
+	/*				
+					Participant parti = (Participant) element;
+					switch (index)	{
+						case 0:
+							index++;
+							return parti.getName();
+						case 1:
+							index++;
+							return parti.getMatric();
+						case 2:
+							index++;
+							return parti.getContact();
+						case 3:
+							index++;
+							return parti.getEmail();
+						case 4:
+							index++;
+							return parti.getAddress();
+						case 5:
+							index++;
+							return parti.getRemark();
+						default:
+							return null;
+					}
 				}
 			});
-			tvc[i].getColumn().pack();
+			//tvc[i].getColumn().pack();
 		}
+		
+		for (int i=0; i<HEADERS.length; i++)
+			tvc[i].getColumn().pack();
+		*/
 	/*	
 		TableViewerColumn tvc2 = new TableViewerColumn (tableViewer, SWT.NONE);
 		tvc2.getColumn().setText(myEntries.get(0)[1]);
@@ -387,19 +503,19 @@ public void ImportCSV (String filepath) {
 		});
 		tvc2.getColumn().pack();
 		*/
-		myEntries.remove(0);
-		tableViewer.setInput(myEntries);
+/*		tempEntries.remove(0);
+		tableViewer.setInput(tempEntries);
 		
-		CellEditor[] editors = new CellEditor[headers.length];
+		CellEditor[] editors = new CellEditor[HEADERS.length];
 		//set headers for the table. set cell editors for each column.
-				for (int i=0; i<headers.length; i++) 	
+				for (int i=0; i<HEADERS.length; i++) 	
 					editors[i] = new TextCellEditor(table);
 		
-		tableViewer.setColumnProperties(headers);
+		tableViewer.setColumnProperties(HEADERS);
 		tableViewer.setCellModifier(new ParticipantListCellModifier(tableViewer));
 		tableViewer.setCellEditors(editors);
 		
-		Vector<TableColumn> tc = new Vector<TableColumn>();
+		Vector<TableColumn> tc = new Vector<TableColumn>();*/
 		/*
 		String[] headers = myEntries.get(0);
 		
@@ -446,7 +562,9 @@ public void ImportCSV (String filepath) {
 	}
 
 }
-	
+	public static void addParticipant(Participant newparticipant) {
+		tempEntries.add(newparticipant);
+	}
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components

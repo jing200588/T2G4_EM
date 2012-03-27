@@ -10,6 +10,7 @@ public class Eventitem {
 	private Vector<BookedVenueInfo> _BVI_list;
 	private MyDateTime _startDateTime;
 	private MyDateTime _endDateTime;
+	private List<Participant> _participant_list =  new Vector<Participant>();
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters 
@@ -31,6 +32,9 @@ public class Eventitem {
 		_endDateTime = new MyDateTime(ey, em, ed, ehour, emin);
 		_description = "";
 		_BVI_list = new Vector<BookedVenueInfo>();
+	//	_participant_list = new Vector<Participant>();
+		_participant_list.add(new Participant("Jonathan", "A1234567", "65554493", "chuichui@gmail.com", "Block 123 Tamp street 81", "-"));
+		System.out.println("hello " + _participant_list.size());
 	}
 	
 	/**
@@ -174,5 +178,13 @@ public class Eventitem {
 	public void addBVI(Vector<BookedVenueInfo> BVI){
 		_BVI_list = BVI;
 
+	}
+
+	public void setParticipantList(List<Participant> newlist) {
+		_participant_list = newlist;
+	}
+	
+	public List<Participant> getParticipantList() {
+		return _participant_list;
 	}
 }
