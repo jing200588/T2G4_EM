@@ -386,8 +386,8 @@ public class EMDBTools {
 			
 			db.out("\n******Display Event #"+eid+" Details******");
 			db.out(" +Name : "+item.getName());
-			db.out(" +Time : "+item.getStartTime() + "-" + item.getEndTime());
-			db.out(" +Date : "+item.getStartDate() + "-" + item.getEndDate());
+			//db.out(" +Time : "+item.getStartTime() + "-" + item.getEndTime());
+			//db.out(" +Date : "+item.getStartDate() + "-" + item.getEndDate());
 			
 			
 			db.out(" +Booked Venue List :");
