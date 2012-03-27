@@ -392,8 +392,8 @@ class EMDBVenue extends EMDBBase{
 		for (int i=0; i< size; i++){
 			Object[] row = result.get(i);
 			
-			int cost = (int) row[4];
-			int capacity = (int) row[5];
+			int cost = Integer.parseInt(row[4].toString());
+			int capacity = Integer.parseInt(row[5].toString());
 			
 			
 			if ( (aUpperLimit == 0 && aLowerLimit == 0) 
