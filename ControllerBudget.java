@@ -33,6 +33,10 @@ public class ControllerBudget {
 	 * @param ei
 	 * @throws Exception
 	 */
+	
+	public ControllerBudget() {
+		
+	}
 	public ControllerBudget(String input, int budget, int type_c, int satisfaction_c, Eventitem ei) throws Exception {
 
 		item_list = new Vector<Item>();
