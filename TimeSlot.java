@@ -137,7 +137,7 @@ public class TimeSlot implements Comparable<TimeSlot> {
 	 *  	- If this.EndDateTime '<' anotherObj.EndDateTime, then this '<' anotherObj.
 	 *  	- If this.EndDateTime '=' anotherObj.EndDateTime, then this '=' anotherObj.
 	 */
-	@Override
+	//@Override
 	public int compareTo(TimeSlot anotherObj) {
 		// TODO Auto-generated method stub
 		if(m_startDateTime.compareTo(anotherObj.getStartDateTime()) > 0)

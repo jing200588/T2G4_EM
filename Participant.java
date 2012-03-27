@@ -2,7 +2,7 @@
 public class Participant {
 	private String name, contact, email, address, matric, remark;
 	
-	public Participant(String n, String c, String e, String a, String m, String r) {
+	public Participant(String n, String m, String c, String e, String a, String r) {
 		name = n;
 		contact = c;
 		email = e;
