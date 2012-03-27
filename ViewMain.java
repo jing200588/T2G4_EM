@@ -224,10 +224,8 @@ public class ViewMain extends ApplicationWindow {
 	 * @param curevent The event item of the particulars that is to be edited
 	 */
 	public static void EmailAds(Eventitem curevent) {
-		//ViewEmailAds ea = new ViewEmailAds(c2, SWT.NONE, curevent);
-		ViewSmsAds sa = new ViewSmsAds(c2, SWT.NONE, curevent);
-		//layout.topControl = ea;
-		layout.topControl = sa;
+		ViewEmailAds ea = new ViewEmailAds(c2, SWT.NONE, curevent);
+		layout.topControl = ea;
 		c2.layout(true);
 	}
 	
