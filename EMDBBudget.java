@@ -651,10 +651,24 @@ class EMDBBudget extends EMDBBase{
 	
 	
 	
+	/**
+	 * Delete Budget item
+	 * @param aBudgetID
+	 * @return
+	 */
+	public int deleteBudget(int aBudgetID){
+		return this.deleteBudgetGateway(aBudgetID, "normal");
+	}
 	
 	
-	
-	
+	/**
+	 * Delete optimized budget item
+	 * @param aBudgetID
+	 * @return
+	 */
+	public int deleteBudgetOptimized(int aBudgetID){
+		return this.deleteBudgetGateway(aBudgetID, "optimized");
+	}
 	
 	
 	/**
@@ -662,11 +676,19 @@ class EMDBBudget extends EMDBBase{
 	 * @param aBudgetID
 	 * @return
 	 */
-	public int deleteBudget(int aBudgetID){
-		String sql =	new DeleteQuery(this.budgetTable)
-								.addCondition(BinaryCondition.equalTo(this.budgetID, aBudgetID))
-								.validate().toString();
+	private int deleteBudgetGateway(int aBudgetID, String aTableType){
+		String sql = "";
 		
+		if (aTableType.compareTo("optimized") == 0){
+			sql = new DeleteQuery(this.optBudgetTable)
+						.addCondition(BinaryCondition.equalTo(this.optBudgetID, aBudgetID))
+						.validate().toString();
+		}else{
+			sql = new DeleteQuery(this.budgetTable)
+						.addCondition(BinaryCondition.equalTo(this.budgetID, aBudgetID))
+						.validate().toString();
+			
+		}
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("DELETE BUDGET ID #" + aBudgetID);
 			this.dMsg(sql);
