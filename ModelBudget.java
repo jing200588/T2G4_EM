@@ -134,8 +134,8 @@ public class ModelBudget {
 	}
 	
 	public Vector<Item> getOptimizeItemList(int id) {
-		//RETURN me optimize item list with item id included.
-		return null;
+
+		return db.budgetDB().getBudgetListOptimized(id);
 	}
 
 }
