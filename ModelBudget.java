@@ -93,7 +93,7 @@ public class ModelBudget {
 	*/
 	
 	public void deleteBudgetItem(int event_id, int item_id) {
-		//DELETE item
+		db.budgetDB().deleteBudget(item_id);
 	}
 	
 	public Vector<Item> getOptimizeItemList(int id) {
