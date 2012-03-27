@@ -16,7 +16,7 @@ public class ModelEvent {
 		int size = list.size();
 		for (int i=0; i<size; i++){
 			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
-			list.get(i).setitem_list(db.budgetDB().getBudgetOptimized(list.get(i).getID()));
+			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
 		}
 		*/
 		
@@ -60,7 +60,7 @@ public class ModelEvent {
 		int size = list.size();
 		for (int i=0; i<size; i++){
 			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
-			list.get(i).setitem_list(db.budgetDB().getBudgetOptimized(list.get(i).getID()));
+			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
 		}
 		return list;
 	}
@@ -76,8 +76,8 @@ public class ModelEvent {
 
 		db.eventDB().deleteEvent(eitem.getID());
 		db.venueDB().deleteBookingAll(eitem.getID());
-		db.budgetDB().deleteBudgetList(eitem.getID(), "optimized");
-		db.budgetDB().deleteBudgetList(eitem.getID(), "normal");
+		db.budgetDB().deleteBudgetList(eitem.getID());
+		db.budgetDB().deleteBudgetListOptimized(eitem.getID());
 		list.remove(eitem);
 	}
 	
