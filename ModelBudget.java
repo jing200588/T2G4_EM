@@ -93,6 +93,8 @@ public class ModelBudget {
 	*/
 	
 	public void deleteBudgetItem(int event_id, int item_id) {
+		db.eventDB().dMsg("TO DEL" + item_id);
+		
 		db.budgetDB().deleteBudget(item_id);
 	}
 	

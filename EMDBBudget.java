@@ -728,8 +728,7 @@ class EMDBBudget extends EMDBBase{
 		
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("DELETE BUDGET LIST");
-			this.dMsg(" - "+ aTableType);
+			this.dMsg("DELETE BUDGET LIST " + aTableType);
 			this.dMsg(sql);
 		}
 		
