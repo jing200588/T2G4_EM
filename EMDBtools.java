@@ -1,5 +1,9 @@
+
+
 import java.util.Scanner;
 import java.util.Vector;
+
+
 
 
 /**
@@ -8,7 +12,7 @@ import java.util.Vector;
  * @author JunZhi
  *
  */
-public class EMDBtools {
+public class EMDBTools {
 
 	public static EMDB db = new EMDB();
 	public static Scanner sc = new Scanner(System.in);
@@ -174,10 +178,11 @@ public class EMDBtools {
 		
 		//See if use default DB Name
 		if (option.compareTo("y") == 0 || option.compareTo("Y") == 0)
-			db.set_name(EMSettings.DATABASE_NAME);
+			db.set_name(EMDBSettings.DATABASE_NAME);
 		else
 			db.set_name(option);	
 		
+		db.out(db.DBNAME);
 	}
 
 	

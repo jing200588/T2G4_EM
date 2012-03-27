@@ -1,12 +1,13 @@
 import java.util.Vector;
 
+
 public class ModelBookingSystem {
 	EMDB db;
 
 	//Construct
 	public ModelBookingSystem() {
 		db = new EMDB();
-		db.set_name(EMSettings.DATABASE_NAME);
+		db.set_name(EMDBSettings.DATABASE_NAME);
 	}
 	
 	

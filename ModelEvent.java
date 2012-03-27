@@ -1,6 +1,7 @@
 import java.util.*;
 
 
+
 public class ModelEvent {
 	private static Vector<Eventitem> list;
 	private static EMDB db;
@@ -12,7 +13,7 @@ public class ModelEvent {
 		db = new EMDB();
 		
 	
-		db.set_name(EMSettings.DATABASE_NAME);
+		db.set_name(EMDBSettings.DATABASE_NAME);
 		
 		
 		
