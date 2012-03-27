@@ -257,7 +257,7 @@ public class ViewBudget extends Composite {
 		lblInputList.setText("Input format: [itemname] [price] [satisfaction] [type]");
 
 		btnResetInputList = new Button(Step1, SWT.NONE);
-		btnResetInputList.setBounds(427, 229, 128, 25);
+		btnResetInputList.setBounds(355, 229, 128, 25);
 		btnResetInputList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				txtInputList.setText("");
@@ -267,7 +267,7 @@ public class ViewBudget extends Composite {
 		btnResetInputList.setText("Reset Input List");
 
 		btnConfirm = new Button(Step1, SWT.NONE);
-		btnConfirm.setBounds(595,  229, 75, 25);
+		btnConfirm.setBounds(512,  229, 75, 25);
 		btnConfirm.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				selected_compulsory.removeAllElements();
@@ -342,6 +342,16 @@ public class ViewBudget extends Composite {
 		txtDirectory.setEditable(false);
 		txtDirectory.setBounds(303, 190, 286, 21);
 		formToolkit.adapt(txtDirectory, true, true);
+		
+		Button btnBack = new Button(Step1, SWT.NONE);
+		btnBack.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				ViewMain.ReturnView();
+			}
+		});
+		btnBack.setBounds(595, 229, 75, 25);
+		formToolkit.adapt(btnBack, true, true);
+		btnBack.setText("Back");
 		/**********************************************************************************
 		 * Composite that will that display the input by the user for he/she to select compulsory items.
 		 **********************************************************************************/
