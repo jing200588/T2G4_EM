@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +39,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Listener;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.ibm.icu.text.Collator;
 
@@ -347,12 +349,12 @@ public class ViewBudget extends Composite {
 		Step2.setBounds(0, 0, 675, 260);
 		formToolkit.adapt(Step2);
 		formToolkit.paintBordersFor(Step2);
-		
-		
+
+
 
 		table = new Table(Step2, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);			
 		table.setHeaderVisible(true);
-		
+
 		final TableEditor editor = new TableEditor(table);
 		//The editor must have the same size as the cell and must
 		//not be any smaller than 50 pixels.
@@ -367,11 +369,11 @@ public class ViewBudget extends Composite {
 				// Clean up any previous editor control
 				Control oldEditor = editor.getEditor();
 				if (oldEditor != null) oldEditor.dispose();
-		
+
 				// Identify the selected row
 				final TableItem item = (TableItem)e.item;
 				if (item == null) return;
-		
+
 				// The control that will be the editor must be a child of the Table
 				Text newEditor = new Text(table, SWT.NONE);
 				newEditor.setText(item.getText(EDITABLECOLUMN));
@@ -395,7 +397,7 @@ public class ViewBudget extends Composite {
 								item_list.get(index-1).setQuantity(quantityNo);
 								editor.getItem().setText(2, ""+"$"+((double) newPrice)/100);
 							}
-													
+
 						}
 						catch (Exception qe) {
 							text.setText("1");
@@ -403,7 +405,7 @@ public class ViewBudget extends Composite {
 							errordiag.open();
 						}
 						editor.getItem().setText(EDITABLECOLUMN, text.getText());
-						
+
 					}
 				});
 				newEditor.selectAll();
@@ -411,7 +413,7 @@ public class ViewBudget extends Composite {
 				editor.setEditor(newEditor, item, EDITABLECOLUMN);
 			}
 		});
-		
+
 		TableColumn col0 = new TableColumn(table, SWT.NULL);
 		col0.setText("No.");
 		col0.addListener(SWT.Selection, new Listener() {
@@ -533,7 +535,7 @@ public class ViewBudget extends Composite {
 		btnNext.setBounds(595, 213, 75, 25);
 		formToolkit.adapt(btnNext, true, true);
 		btnNext.setText("Next");
-		
+
 		Label lblNoteAllChanges = new Label(Step2, SWT.NONE);
 		lblNoteAllChanges.setBounds(25, 213, 404, 15);
 		formToolkit.adapt(lblNoteAllChanges, true, true);
@@ -553,7 +555,7 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(txtResult, true, true);
 
 		comboSelection = new Combo(Step3, SWT.NONE);
-		comboSelection.setBounds(448, 236, 126, 23);
+		comboSelection.setBounds(377, 236, 126, 23);
 		formToolkit.adapt(comboSelection);
 		formToolkit.paintBordersFor(comboSelection);
 
@@ -562,15 +564,25 @@ public class ViewBudget extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				int option = comboSelection.getSelectionIndex();
 				budgetPersonalAssistant.saveOptimizeOption(option);	
+
+				FileDialog fsd = new FileDialog(new Shell());
+				String[] extension = {"*.csv"};
+				fsd.setFilterExtensions(extension);
+
+				String input = fsd.open();
+				if (input != null) {
+					if (!input.toLowerCase().endsWith(".csv"))
+						input+= ".csv";
+					ExportCSV(input);}
 				ViewMain.ReturnView();
 			}
 		});
-		btnFinish.setBounds(595, 234, 75, 25);
+		btnFinish.setBounds(530, 234, 140, 25);
 		formToolkit.adapt(btnFinish, true, true);
-		btnFinish.setText("Finish");
+		btnFinish.setText("Finish and Export");
 
 		Label lblSelectAnCombination = new Label(Step3, SWT.NONE);
-		lblSelectAnCombination.setBounds(321, 239, 121, 15);
+		lblSelectAnCombination.setBounds(250, 239, 121, 15);
 		formToolkit.adapt(lblSelectAnCombination, true, true);
 		lblSelectAnCombination.setText("Select an combination:");
 
@@ -696,5 +708,44 @@ public class ViewBudget extends Composite {
 			errordiag.open();
 		}
 
+	}
+
+	public void ExportCSV (String filepath) {
+		try {
+			CSVWriter writer = new CSVWriter(new FileWriter(filepath));
+			Vector<Item> optimizeList = budgetPersonalAssistant.getOptimizeItemList(current_event.getID());
+			for(int i=0; i<optimizeList.size(); i++) {
+				String[] entries = new String[4];
+				entries[0] = item_list.get(i).getItem();
+				entries[1] = ""+item_list.get(i).getPrice();
+				entries[2] = ""+item_list.get(i).getSatisfaction_value();
+				entries[3] = item_list.get(i).getType();
+
+				writer.writeNext(entries);
+
+			}
+			/*String[] headers = new String[table.getColumnCount()];
+			for (int i=0; i<table.getColumnCount(); i++) {
+				headers[i] = table.getColumns()[i].getText();
+			}
+
+			writer.writeNext(headers);
+
+			for (int i=0; i<table.getItemCount(); i++) {
+				String[] entries = new String[table.getColumnCount()];
+				for (int j=0; j<table.getColumnCount(); j++) 
+					entries[j] = table.getItem(i).getText(j);
+				writer.writeNext(entries);
+			}*/
+
+			//for(int i=0; i<)
+			writer.close();
+			new errormessageDialog(new Shell(), "The file was exported successfully!").open();		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error exporting");
+			new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
+			e.printStackTrace();
+		}
 	}
 }

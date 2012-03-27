@@ -113,5 +113,14 @@ public class ModelBudget {
 		//event_object.getID(), ((double)budget)/100);
 	}
 	*/
+	
+	public void deleteBudgetItem(int event_id, int item_id) {
+		//DELETE item
+	}
+	
+	public Vector<Item> getOptimizeItemList(int id) {
+		//RETURN me optimize item list with item id included.
+		return null;
+	}
 
 }

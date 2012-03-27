@@ -82,7 +82,7 @@ public class ControllerBudget {
 	 */
 
 	public Vector<Item> getItemList() {
-		return item_list;		
+		return bm.getNonOptimizeItemList(event_object.getID());		
 	}
 
 	/**
@@ -521,5 +521,13 @@ public class ControllerBudget {
 
 		bm.saveOptimizedList(event_object.getID(), db_list);
 		event_object.setitem_list(db_list);
+	}
+	
+	public void deleteBudgetItem(int event_id, int item_id) {
+		bm.deleteBudgetItem(event_id, item_id);
+	}
+	
+	public Vector<Item> getOptimizeItemList(int event_id) {
+		return bm.getOptimizeItemList(event_id);
 	}
 }
