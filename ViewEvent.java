@@ -10,6 +10,8 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -38,6 +40,7 @@ public class ViewEvent extends Composite {
 	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
 	private static ScrolledComposite sc1;
 	private static Composite maincomp;
+	private static int budgetTableSelectedIndex;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -400,6 +403,19 @@ public class ViewEvent extends Composite {
 		Advertfb.setText("Facebook");
 		new Label(Advertcomp, SWT.NONE);
 		new Label(Advertcomp, SWT.NONE);
+		
+		Button AdvertSMS = new Button(Advertcomp, SWT.NONE);
+		AdvertSMS.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				ViewMain.SMSAds(cevent);
+			}
+		});
+		GridData gd_AdvertSMS = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+		gd_AdvertSMS.widthHint = 85;
+		AdvertSMS.setLayoutData(gd_AdvertSMS);
+		AdvertSMS.setText("SMS");
+		new Label(Advertcomp, SWT.NONE);
+		new Label(Advertcomp, SWT.NONE);
 		new Label(Advertcomp, SWT.NONE);
 		/**********************************************************************************************
 		 * END OF ADVERTISING
@@ -677,7 +693,7 @@ public class ViewEvent extends Composite {
 				sortColumn(4, item_list);
 			}
 		});
-		
+
 		col5.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				sortColumn(4, item_list);
@@ -703,25 +719,25 @@ public class ViewEvent extends Composite {
 					// table is getting smaller so make the columns 
 					// smaller first and then resize the table to
 					// match the client area width
-					col1.setWidth(width/2);
+					col1.setWidth(width/2-50);
 					col0.setWidth((width - col1.getWidth())/5);
 					col2.setWidth((width - col1.getWidth())/5);
 					col3.setWidth((width - col1.getWidth())/4);
 					col4.setWidth((width - col1.getWidth())/5);
-					col5.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -col4.getWidth());
+					col5.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -col4.getWidth() + 30);
 					//BudgetResult.setSize(area.width, area.height);
 				} else {
 					// table is getting bigger so make the table 
 					// bigger first and then make the columns wider
 					// to match the client area width
 					//BudgetResult.setSize(area.width, area.height);
-					col1.setWidth(width/2);
+					col1.setWidth(width/2-50);
 					col0.setWidth((width - col1.getWidth())/5);
 					col2.setWidth((width - col1.getWidth())/5);
 					col3.setWidth((width - col1.getWidth())/4);
-					col4.setWidth((width - col1.getWidth())/5);
-					col5.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -col4.getWidth());
-	        
+					col4.setWidth((width - col1.getWidth())/5 + 10);
+					col5.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -col4.getWidth() + 30);
+
 				}
 			}
 		});
@@ -747,10 +763,40 @@ public class ViewEvent extends Composite {
 			}
 		});
 
-		budgetflag = true;
+		Menu menu = new Menu(BudgetResult);
+		BudgetResult.setMenu(menu);
+
+		/************************************************************
+		 * DELETE ITEM
+		 ***********************************************************/
+		MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
+		mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TableItem tb = BudgetResult.getItem(BudgetResult.getSelectionIndex());
+				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(1));
+				if ((Integer) confirm.open() == 1) {
+					deleteBudgetItem(item_list);
+				}
+			}
+		});
+		mntmDeleteEvent.setText("Delete Item");
+
+				budgetflag = true;
 		return BudgetResult;
 	}
-	
+
+	public static void deleteBudgetItem(Vector<Item> item_list) {
+
+		//ControllerBudget cb = null;
+		//cb.deleteBudgetItem(cevent.getID(), item_list.get(budgetTableSelectedIndex).getID());
+		item_list.remove(budgetTableSelectedIndex);
+		cevent.setitem_list(item_list);
+		
+		refreshBudgetTable(item_list);
+		
+	}
+
 	public static void sortColumn(int columnNo, Vector<Item> item_list) {
 
 		TableItem[] items = BudgetResult.getItems();
@@ -839,9 +885,6 @@ public class ViewEvent extends Composite {
 			else
 				item.setText(4, ""+item_list.get(loopIndex).getType());					
 			item.setText(5, ""+item_list.get(loopIndex).getQuantity());
-		}
-		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
-			//BudgetResult.getColumn(loopIndex).pack();
 		}
 	}
 

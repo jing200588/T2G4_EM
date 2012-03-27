@@ -217,7 +217,7 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
-	 * PARTICIPANT LIST
+	 * EMAIL ADS
 	 ***********************************************************/
 	/**
 	 * Description: Initialize ViewEmailAds and set the page of composite c2 to ViewEmailAds
@@ -230,7 +230,7 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
-	 * PARTICIPANT LIST
+	 * FACEBOOK ADS
 	 ***********************************************************/
 	/**
 	 * Description: Initialize ViewFaceBookAds and set the page of composite c2 to ViewFaceBookAds
@@ -239,6 +239,19 @@ public class ViewMain extends ApplicationWindow {
 	public static void FaceBookAds() {
 		ViewFaceBookAds fba = new ViewFaceBookAds(c2);
 		layout.topControl = fba;
+		c2.layout(true);
+	}
+	
+	/************************************************************
+	 * SMS ADS
+	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewFaceBookAds and set the page of composite c2 to ViewFaceBookAds
+	 * @param curevent The event item of the particulars that is to be edited
+	 */
+	public static void SMSAds(Eventitem curevent) {
+		ViewSmsAds smsa = new ViewSmsAds(c2, SWT.NONE, curevent);
+		layout.topControl = smsa;
 		c2.layout(true);
 	}
 	
