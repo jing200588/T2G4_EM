@@ -11,15 +11,14 @@ public class ModelBudget {
 	private Vector<Item> item_list;
 	private Vector<Item> confirm_list;
 
-	EMDB db;
+	EMDBII db;
 	
 	/**
 	 * Description: Initialize database.
 	 */
 
 	public ModelBudget() {
-		db = new EMDB();
-		db.set_name(EMDBSettings.DATABASE_NAME);
+		db = new EMDBII();
 	}
 
 	/**
@@ -30,7 +29,7 @@ public class ModelBudget {
 	public void saveNonOptimizedList(int id, Vector<Item> i_list) { 
 		event_id = id;
 		item_list = i_list;
-
+/*
 		db.connect();
 
 		db.delete_budget_list(id);
@@ -45,6 +44,12 @@ public class ModelBudget {
 		}
 		db.add_batch_commit();
 		db.disconnect();
+		*/
+		
+		db.budgetDB().deleteBudgetList(id);
+		db.budgetDB().addBudgetList(i_list, id);
+		
+		
 	}
 
 	/**
@@ -55,7 +60,8 @@ public class ModelBudget {
 	public void saveOptimizedList(int id, Vector<Item> i_list) { 
 		event_id = id;
 		confirm_list = i_list;
-
+		
+		/*
 		db.connect();
 
 		int count = i_list.size();
@@ -67,6 +73,10 @@ public class ModelBudget {
 		}
 		db.add_batch_commit();
 		db.disconnect();	
+		*/
+		db.budgetDB().deleteBudgetListOptimized(id);
+		db.budgetDB().addBudgetListOptimized(i_list, id);
+		
 	}
 
 	/**
@@ -89,9 +99,11 @@ public class ModelBudget {
 	 */
 
 	public void deleteNonOptimizeItemList(int id){
+		/*
 		db.connect();
 		db.delete_budget_list(id);
-		db.disconnect();
+		db.disconnect();*/
+		db.budgetDB().deleteBudgetList(id);
 
 	}
 	
@@ -101,11 +113,13 @@ public class ModelBudget {
 	 * @return
 	 */
 	public Vector<Item> getNonOptimizeItemList(int id) {
-
+/*
 		db.connect();
 		item_list = db.get_budget_list(id, false);
 		db.disconnect();
-
+*/
+		
+		item_list = db.budgetDB().getBudgetList(id);
 		return item_list;
 	}
 	
@@ -120,8 +134,8 @@ public class ModelBudget {
 	}
 	
 	public Vector<Item> getOptimizeItemList(int id) {
-		//RETURN me optimize item list with item id included.
-		return null;
+
+		return db.budgetDB().getBudgetListOptimized(id);
 	}
 
 }

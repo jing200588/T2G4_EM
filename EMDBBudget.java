@@ -402,8 +402,8 @@ class EMDBBudget extends EMDBBase{
 	 * Getting the list of budget.
 	 * @return
 	 */
-	public Vector<Item> getBudget(int aEventID){
-		return this.getBudgetGateway(aEventID, "normal");
+	public Vector<Item> getBudgetList(int aEventID){
+		return this.getBudgetListGateway(aEventID, "normal");
 	}
 	
 	
@@ -412,8 +412,8 @@ class EMDBBudget extends EMDBBase{
 	 * Getting the optimized list of budget.
 	 * @return
 	 */
-	public Vector<Item> getBudgetOptimized(int aEventID){
-		return this.getBudgetGateway(aEventID, "optimized");
+	public Vector<Item> getBudgetListOptimized(int aEventID){
+		return this.getBudgetListGateway(aEventID, "optimized");
 	}
 	
 	
@@ -423,7 +423,7 @@ class EMDBBudget extends EMDBBase{
 	 * @param aTableType
 	 * @return
 	 */
-	private Vector<Item> getBudgetGateway(int aEventID, String aTableType){	
+	private Vector<Item> getBudgetListGateway(int aEventID, String aTableType){	
 		String sql = "";
 
 		switch (aTableType){
@@ -620,7 +620,7 @@ class EMDBBudget extends EMDBBase{
 		}
 		
 		//Clear the entire list
-		this.deleteBudgetList(aEventID, aTableType);
+		this.deleteBudgetListGateway(aEventID, aTableType);
 		
 		//add it back
 		return this.addBudgetListGatway(list, aEventID, aTableType);
@@ -673,12 +673,26 @@ class EMDBBudget extends EMDBBase{
 	
 	
 	
+	/**
+	 * Delete Budget List Entries
+	 * @param aEventID
+	 * @return
+	 */
+	public int deleteBudgetList(int aEventID){
+		return this.deleteBudgetListGateway(aEventID, "normal");
+	}
 	
 	
 	
-	
-	
-	
+	/**
+	 * Delete Optimized Budget Entries
+	 * @param aEventID
+	 * @return
+	 */
+	public int deleteBudgetListOptimized(int aEventID){
+		return this.deleteBudgetListGateway(aEventID, "optimized");
+	}
+		
 	
 	
 	
@@ -688,7 +702,7 @@ class EMDBBudget extends EMDBBase{
 	 * @param aTableType
 	 * @return
 	 */
-	public int deleteBudgetList(int aEventID, String aTableType){
+	private int deleteBudgetListGateway(int aEventID, String aTableType){
 		String sql = "";
 
 		switch (aTableType){
