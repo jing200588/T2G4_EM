@@ -144,9 +144,25 @@ public class ViewSmsAds extends Composite {
 				ImportCSV(fsd.open());
 			}
 		});
-		btnImportNumber.setBounds(368, 84, 122, 25);
+		btnImportNumber.setBounds(248, 84, 122, 25);
 		formToolkit.adapt(btnImportNumber, true, true);
 		btnImportNumber.setText("Import Number");
+		
+		Button btnNotifyParticipants = new Button(mainComposite, SWT.NONE);
+		btnNotifyParticipants.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				String participantsContact = "";
+				for(int i=0 ; i< current_event.getParticipantList().size(); i++) {
+					participantsContact += current_event.getParticipantList().get(i).getContact() + " ";
+				}
+				
+				System.out.println("Here " + participantsContact);
+				txtToInputBox.setText(participantsContact);
+			}
+		});
+		btnNotifyParticipants.setBounds(376, 84, 114, 25);
+		formToolkit.adapt(btnNotifyParticipants, true, true);
+		btnNotifyParticipants.setText("Notify Participants");
 
 
 	}

@@ -775,9 +775,10 @@ public class ViewEvent extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem tb = BudgetResult.getItem(BudgetResult.getSelectionIndex());
+				int itemToDelete = Integer.parseInt(tb.getText(0).substring(5, tb.getText(0).length()));
 				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(1));
 				if ((Integer) confirm.open() == 1) {
-					deleteBudgetItem(item_list);
+					deleteBudgetItem(item_list, itemToDelete);
 				}
 			}
 		});
@@ -787,10 +788,10 @@ public class ViewEvent extends Composite {
 		return BudgetResult;
 	}
 
-	public static void deleteBudgetItem(Vector<Item> item_list) {
-
+	public static void deleteBudgetItem(Vector<Item> item_list, int itemToDelete) {
+		
 		bc = new ControllerBudget();
-		bc.deleteBudgetItem(cevent.getID(), item_list.get(budgetTableSelectedIndex).getID());
+		bc.deleteBudgetItem(cevent.getID(), item_list.get(itemToDelete-1).getID());
 		item_list.remove(budgetTableSelectedIndex);
 		cevent.setitem_list(item_list);
 		
