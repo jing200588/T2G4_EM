@@ -48,12 +48,29 @@ class ParticipantListCellModifier implements ICellModifier {
 	      return p.getShirtColor();
 	    else
 */
-		  String[] obj = (String[]) element;
+/*		  String[] obj = (String[]) element;
 		  
 		  for(int i = 0; i < ViewParticipantList.HEADERS.length; i++)
 			  if(ViewParticipantList.HEADERS[i].equals(property))
 				  return obj[i];
-		  return null;
+		  return null;*/
+		  
+		  Participant obj = (Participant) element;
+		  
+		    if (property.equals("Name"))
+		      	return obj.getName();
+		    else if (property.equals("Matric No."))
+		    	return obj.getMatric();
+		    else if (property.equals("Contact"))
+		    	return obj.getContact();
+		    else if (property.equals("Email Address"))
+		    	return obj.getEmail();
+		    else if (property.equals("Home Address"))
+		    	return obj.getAddress();
+		    else if (property.equals("Remarks"))
+		    	return obj.getRemark();
+		    else
+		    	return null;
 	  }
 
 	  /**
@@ -80,7 +97,7 @@ class ParticipantListCellModifier implements ICellModifier {
 	    else if (PersonEditor.SHIRT_COLOR.equals(property))
 	      p.setShirtColor((RGB) value);
 */
-		  if (element instanceof Item)
+	/*	  if (element instanceof Item)
 		      element = ((Item) element).getData();
 		  
 		  String[] obj = (String[]) element;
@@ -88,6 +105,27 @@ class ParticipantListCellModifier implements ICellModifier {
 		  for(int i = 0; i < ViewParticipantList.HEADERS.length; i++)
 			  if(ViewParticipantList.HEADERS[i].equals(property))
 				 obj[i] = (String) value;
+		  // Force the viewer to refresh
+		  viewer.refresh();
+		  */
+		  if (element instanceof Item)
+		      element = ((Item) element).getData();
+		  
+		  Participant obj = (Participant) element;
+		  
+		  if (property.equals("Name"))
+		      	obj.setName((String) value);
+		    else if (property.equals("Matric No."))
+		    	obj.setMatric((String) value);
+		    else if (property.equals("Contact"))
+		    	obj.setContact((String) value);
+		    else if (property.equals("Email Address"))
+		    	obj.setEmail((String) value);
+		    else if (property.equals("Home Address"))
+		    	obj.setAddress((String) value);
+		    else if (property.equals("Remarks"))
+		    	obj.setRemark((String) value);
+
 		  // Force the viewer to refresh
 		  viewer.refresh();
 	  }

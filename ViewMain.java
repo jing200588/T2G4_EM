@@ -636,6 +636,7 @@ public class ViewMain extends ApplicationWindow {
 		newShell.setText("E-Man");
 		newShell.setSize(getInitialSize());
 		//newShell.setMaximized(true);
+
 	}
 
 	/**
