@@ -1,3 +1,4 @@
+
 /**
  * A TimeSlot object represents a time slot which consists of the starting date and hour and
  * the ending date and hour.
@@ -154,3 +155,4 @@ public class TimeSlot implements Comparable<TimeSlot> {
 		return 0;
 	}
 }
+

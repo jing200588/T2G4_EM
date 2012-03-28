@@ -895,3 +895,4 @@ public class ViewEvent extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 }
+
