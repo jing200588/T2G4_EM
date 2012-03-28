@@ -774,8 +774,8 @@ public class ViewMain extends ApplicationWindow {
 //		int period = 1000;  // repeat every sec.
 //		Timer timer = new Timer();
 		
-		checkthread chkthread = new checkthread();
-		chkthread.start();
+		//checkthread chkthread = new checkthread();
+		//chkthread.start();
 		
 //		timer.scheduleAtFixedRate(new TimerTask() {
 //		        public void run() {
