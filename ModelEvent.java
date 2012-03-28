@@ -4,11 +4,13 @@ import java.util.*;
 
 public class ModelEvent {
 	private static Vector<Eventitem> list;
+	private static Vector<Eventitem> expired;
 	private static EMDBII db;
 
 	public ModelEvent() {
 		list = new Vector<Eventitem>();
-
+		expired = new Vector<Eventitem>();
+		
 		db = new EMDBII();
 		
 		/*
@@ -64,6 +66,24 @@ public class ModelEvent {
 		}
 		return list;
 	}
+
+	/************************************************************
+	 * PULL EXPIRED LIST //Returns local expired list.
+	 ***********************************************************/
+	/**
+	 * Description: Returns the local expired list of event items
+	 * @return
+	 */
+	public static Vector<Eventitem> PullExpiredList() {
+		
+	/*	list = db.eventDB().getEventList();
+		int size = list.size();
+		for (int i=0; i<size; i++){
+			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
+			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
+		}*/
+		return expired;
+	}
 	
 	/************************************************************
 	 * DELETE EVENT	//Deletes event from DB and local list.
@@ -105,5 +125,9 @@ public class ModelEvent {
 				""
 				);
 		
+	}
+	
+	public static void UpdateExpiredList(List<Eventitem> newlyexpired) {
+		//update DB!
 	}
 }
