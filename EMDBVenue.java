@@ -147,7 +147,13 @@ class EMDBVenue extends EMDBBase{
 	 * @return
 	 */
 	public boolean verify(){
-			
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_VENUE);
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_VENUE_BOOKINGS);
+		}
+		
+		
 		String sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.masterTable)

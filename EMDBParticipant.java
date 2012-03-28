@@ -114,6 +114,12 @@ class EMDBParticipant extends EMDBBase{
 	 */
 	public boolean verify(){
 		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_PARTICIPANTS);
+		}
+		
+		
 		String sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.masterTable)

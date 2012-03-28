@@ -29,6 +29,10 @@ public class EMDBII{
 	 * Start DB System.
 	 */
 	public void start(){
+		if (EMDBSettings.DEVELOPMENT){
+			System.out.println("EMDB - STARTING UP");
+		}
+		
 		this.event			=	new EMDBEvent(dbName);
 		this.budget			=	new EMDBBudget(dbName);
 		this.venue			=	new EMDBVenue(dbName);
@@ -165,8 +169,8 @@ public class EMDBII{
 	
 
 	public static void main(String[] args){
-		EMDBII test = new EMDBII();
-		test.systemCheck();
+		/*EMDBII test = new EMDBII();
+		test.systemCheck();*/
 	}
 
 	

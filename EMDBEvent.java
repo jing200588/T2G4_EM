@@ -117,7 +117,12 @@ class EMDBEvent extends EMDBBase{
 	 * @return
 	 */
 	public boolean verify(){
-				
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_EVENTS);
+		}
+		
+		
 		String sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.masterTable)

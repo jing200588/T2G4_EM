@@ -169,6 +169,11 @@ class EMDBBudget extends EMDBBase{
 	 */
 	public boolean verify(){
 		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_BUDGET);
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_BUDGET_OPTIMIZED);
+		}
+		
 		String sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.masterTable)
