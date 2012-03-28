@@ -64,8 +64,7 @@ public class ViewEventFlow extends Composite {
 		
 		// Initialize some variables 
 		eventObj = event;
-		// THIS IS GOING TO BE FIXED!!!!!
-		listEventFlow = new Vector<EventFlowEntry>();
+		listEventFlow = eventObj.getEventFlow();
 		
 		// Continue with the GUI
 		toolkit.adapt(this);
@@ -80,6 +79,21 @@ public class ViewEventFlow extends Composite {
 		VenueViewForm.setText("Event Flow");
 		VenueViewForm.getBody().setLayout(new FormLayout());
 
+		/////////////////////////////////////////////////////////////////////////////////////
+		/// 
+		////////////////////////////////////////////////////////////////////////////////////
+		this.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// User presses Ctrl + S
+				if((e.stateMask & SWT.CTRL) != 0 && e.keyCode == java.awt.event.KeyEvent.VK_S)
+				{
+					// Update in the database
+					ModelEventFlow.saveEventFlow(listEventFlow);
+				}
+			}
+		});
+		
 		Composite mainComposite = new Composite(VenueViewForm.getBody(), SWT.NONE);
 		FormData fd_mainComposite = new FormData();
 		fd_mainComposite.bottom = new FormAttachment(100, -24);
@@ -242,33 +256,7 @@ public class ViewEventFlow extends Composite {
 		textFilePath = new Text(mainComposite, SWT.BORDER);
 		textFilePath.setBounds(76, 301, 189, 21);
 		toolkit.adapt(textFilePath, true, true);
-		
-		Button btnNewButton = new Button(mainComposite, SWT.NONE);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				System.out.println("Click");
-			}
-		});
-	
-		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				System.out.println(e.keyCode);
-				System.out.println(SWT.CTRL);
-				System.out.println(e.stateMask);
-				System.out.println(SWT.CONTROL);
-				if((e.stateMask & SWT.CTRL) != 0)
-					System.out.println("Press Ctrl in combination");
-				if(e.character == 's')
-					System.out.println("Press S");
-				if(e.keyCode == java.awt.event.KeyEvent.VK_S && (e.stateMask & SWT.ALT) != 0)
-					System.out.println("Recognize Ctrl + S");
-			}
-		});
-		toolkit.adapt(btnNewButton, true, true);
-		btnNewButton.setText("New Button");
-		
+
 		Button btnNewButton_1 = new Button(mainComposite, SWT.NONE);
 		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
 			@Override
