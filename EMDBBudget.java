@@ -505,8 +505,10 @@ class EMDBBudget extends EMDBBase{
 			String aName, 
 			int aPrice, 
 			int aSatisfaction, 
-			String aType){
-		return this.updateBudgetGateway(aBudgetID, aName, aPrice, aSatisfaction, aType, "normal");
+			String aType,
+			int aQuantity)
+	{
+		return this.updateBudgetGateway(aBudgetID, aName, aPrice, aSatisfaction, aType, "normal", aQuantity);
 	}
 	
 	
@@ -524,8 +526,11 @@ class EMDBBudget extends EMDBBase{
 			String aName, 
 			int aPrice, 
 			int aSatisfaction, 
-			String aType){
-		return this.updateBudgetGateway(aBudgetID, aName, aPrice, aSatisfaction, aType, "optimized");
+			String aType,
+			int aQuantity
+			)
+	{
+		return this.updateBudgetGateway(aBudgetID, aName, aPrice, aSatisfaction, aType, "optimized", aQuantity);
 	}
 	
 	
