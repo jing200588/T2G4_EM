@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Vector;
 import java.util.Locale;
 
@@ -33,10 +34,10 @@ import com.ibm.icu.text.Collator;
 
 
 public class ViewEvent extends Composite {
-	private static Table BudgetResult, VenueResult, FlowResult;
-	private static boolean budgetflag, venueflag, flowflag;
+	private static Table BudgetResult, VenueResult, FlowResult, ParticipantResult;
+	private static boolean budgetflag, venueflag, flowflag, participantflag;
 	private static Eventitem cevent;
-	private static Composite Budgetcomp, Bookvenuecomp, Eprogflowcomp;
+	private static Composite Budgetcomp, Bookvenuecomp, Eprogflowcomp, Plistcomp;
 	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
 	private static ScrolledComposite sc1;
 	private static Composite maincomp;
@@ -320,7 +321,7 @@ public class ViewEvent extends Composite {
 		 * PARTICIPANT LIST SECTION
 		 * 
 		 *********************************************************************************************/
-		Composite Plistcomp = new Composite(maincomp, SWT.NONE);
+		Plistcomp = new Composite(maincomp, SWT.NONE);
 		Plistcomp.setLayout(new GridLayout(3, false));
 		FormData fd_Plistcomp = new FormData();
 		fd_Plistcomp.left = new FormAttachment(20, 0);
@@ -452,6 +453,7 @@ public class ViewEvent extends Composite {
 		RefreshBudget();
 		RefreshVenue();
 		RefreshFlow();
+		RefreshParticipant();
 		sc1.setContent(maincomp);
 		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
@@ -520,6 +522,129 @@ public class ViewEvent extends Composite {
 			FlowResult.dispose();
 		FlowResult = FlowTable();
 
+	}
+	
+	public static void RefreshParticipant() {
+		if (participantflag)
+			ParticipantResult.dispose();
+		ParticipantResult = ParticipantTable();
+
+	}
+	
+	public static Table ParticipantTable() {
+		List<Participant> participant_list = cevent.getParticipantList();
+	
+
+		//Checks if there is any entry before creating the table
+		if (participant_list.isEmpty()) {
+			participantflag = false;	
+			return null;
+		}
+
+
+		ParticipantResult = new Table(Plistcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
+		ParticipantResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		ParticipantResult.setHeaderVisible(true);
+		ParticipantResult.getVerticalBar().setEnabled(false);
+
+		final TableColumn col0 = new TableColumn(ParticipantResult, SWT.LEFT);
+		final TableColumn col1 = new TableColumn(ParticipantResult, SWT.CENTER);
+		final TableColumn col2 = new TableColumn(ParticipantResult, SWT.CENTER);
+		final TableColumn col3 = new TableColumn(ParticipantResult, SWT.CENTER);
+		final TableColumn col4 = new TableColumn(ParticipantResult, SWT.CENTER);
+		final TableColumn col5 = new TableColumn(ParticipantResult, SWT.CENTER);
+
+		col0.setText("Name");
+		col1.setText("Matric No.");
+		col2.setText("Contact");
+		col3.setText("Email Address");
+		col4.setText("Home Address");
+		col5.setText("Remark");
+
+		ParticipantResult.removeAll();
+		for (int loopIndex = 0; loopIndex < participant_list.size(); loopIndex++) {
+			TableItem item = new TableItem(ParticipantResult, SWT.NULL);
+			item.setText(0, participant_list.get(loopIndex).getName());
+			item.setText(1, participant_list.get(loopIndex).getMatric());
+			item.setText(2, participant_list.get(loopIndex).getContact());
+			item.setText(3, participant_list.get(loopIndex).getEmail());
+			item.setText(4, participant_list.get(loopIndex).getAddress());
+			item.setText(5, participant_list.get(loopIndex).getRemark());
+		
+
+		}
+		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
+			ParticipantResult.getColumn(loopIndex).pack();
+		}					
+
+
+		//Column Resize with table fix
+		Plistcomp.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				Rectangle area = Plistcomp.getClientArea();
+				Point preferredSize = ParticipantResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				int width = area.width - 2*ParticipantResult.getBorderWidth();
+				if (preferredSize.y > area.height + ParticipantResult.getHeaderHeight()) {
+					// Subtract the scrollbar width from the total column width
+					// if a vertical scrollbar will be required
+					Point vBarSize = ParticipantResult.getVerticalBar().getSize();
+					width -= vBarSize.x;
+
+				}
+				Point oldSize = ParticipantResult.getSize();
+				if (oldSize.x > area.width) {
+					// table is getting smaller so make the columns 
+					// smaller first and then resize the table to
+					// match the client area width
+					col0.setWidth(width/6+10);
+					col1.setWidth(width/6+10);
+					col2.setWidth(width/6+20);
+					col3.setWidth(width/6+20);
+					col4.setWidth(width/6-20);
+					col5.setWidth(width/6-20);
+				
+					//    System.out.println("width "+ width);
+					//BudgetResult.setSize(area.width, area.height);
+				} else {
+					// table is getting bigger so make the table 
+					// bigger first and then make the columns wider
+					// to match the client area width
+					//BudgetResult.setSize(area.width, area.height);
+					col0.setWidth(width/5-10);
+					col1.setWidth(width/5-10);
+					col2.setWidth(width/5+20);
+					col3.setWidth(width/5+20);
+					col4.setWidth(width/5-20);
+					col5.setWidth(width/6-20);
+					
+				}
+			}
+		});
+
+		//Table Tooltip
+		ParticipantResult.addMouseTrackListener(new MouseTrackAdapter() {
+			@Override
+			public void mouseHover(MouseEvent e) {
+				TableItem item = ParticipantResult.getItem(new Point(e.x, e.y)); 
+				//	 BudgetResult.setToolTipText(item.getText(0));
+
+				//tooltip for every column
+				for (int i=0; i<ParticipantResult.getColumnCount()-1; i++) {
+					if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
+						ParticipantResult.setToolTipText(item.getText(i));
+						break;
+					}
+
+					else if (i == ParticipantResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
+						ParticipantResult.setToolTipText(item.getText(++i));
+				}
+
+			}
+		});
+
+
+		participantflag = true;
+		return ParticipantResult;
 	}
 
 	/**
