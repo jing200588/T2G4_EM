@@ -50,8 +50,11 @@ public class ModelEvent {
 		list = db.eventDB().getEventList();
 		int size = list.size();
 		for (int i=0; i<size; i++){
-			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
-			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
+			
+			int pid = list.get(i).getID();
+			list.get(i).addBVI(db.venueDB().getEventBookings(pid));	
+			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(pid));
+			list.get(i).setParticipantList(db.participantDB().getParticipantList(pid));
 		}
 		return list;
 	}

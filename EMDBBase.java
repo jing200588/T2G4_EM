@@ -375,7 +375,7 @@ public class EMDBBase{
 	 * Generic verfication process
 	 * @return
 	 */
-	public boolean verification(String sql, int tableTotal){
+	protected boolean verification(String sql, int tableTotal){
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - VERIFICATION");
