@@ -76,6 +76,8 @@ public class ModelEvent {
 			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
 			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
 		}*/
+		expired = db.eventDB().getArchiveEventList();
+		
 		return expired;
 	}
 	
@@ -122,6 +124,6 @@ public class ModelEvent {
 	}
 	
 	public static void UpdateExpiredList(List<Eventitem> newlyexpired) {
-		//update DB!
+		db.eventDB().addAchiveEventList(newlyexpired);
 	}
 }

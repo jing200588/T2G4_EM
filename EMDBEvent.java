@@ -2,6 +2,7 @@
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Vector;
 
 import com.healthmarketscience.sqlbuilder.*;
@@ -570,7 +571,7 @@ class EMDBEvent extends EMDBBase{
 	 * @param aEventID
 	 * @return
 	 */
-	public int archiveEvent(int aEventID){
+	public int addArchiveEvent(int aEventID){
 		Eventitem item = this.getEvent(aEventID);
 		this.deleteEvent(aEventID);
 		String sql = this.generateArchiveQuery(item);
@@ -593,7 +594,7 @@ class EMDBEvent extends EMDBBase{
 	 * @param list
 	 * @return
 	 */
-	public int archiveEventList(Vector<Eventitem> list){
+	public int addAchiveEventList(List<Eventitem> list){
 		int size = list.size();
 		
 		
@@ -619,9 +620,65 @@ class EMDBEvent extends EMDBBase{
 	}
 	
 	
+	/**
+	 * Wrapper for getting list of events
+	 * @return
+	 */
+	public Vector<Eventitem> getArchiveEventList(){
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - GET AN ARCHIVE EVENT LIST");
+		}	
+		
+		return this.getArchiveEventListAll();
+
+	}
 	
-	
-	
+	private Vector<Eventitem> getArchiveEventListAll(){
+
+		Vector<Eventitem> list = new Vector<Eventitem>();
+		
+		String sql 	= new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.archiveTable)
+						.validate().toString();	
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - GET ALL ARCHIVE EVENTS LIST");
+			this.dMsg(sql);
+		}
+			
+		
+		
+		this.connect();
+		Vector<Object[]> result = this.runQueryResults(sql);
+		
+		int size = result.size();
+		for (int i=0; i< size; i++){
+			Object[] row = result.get(i);
+			
+			Eventitem item = new Eventitem(
+						row[2].toString(), //name
+						row[5].toString(), //startdate
+						row[6].toString(), //enddate
+						row[7].toString(), //starttime
+						row[8].toString() //endtime
+					);
+			item.setDescription( row[3].toString()); //description
+			item.setBudget( Double.parseDouble(row[4].toString()) ); //budget
+			item.setID( Integer.parseInt(row[1].toString()) ); //event_id
+		
+		
+			list.add(item);
+		}
+			
+		
+		
+		this.disconnect();
+		return list;
+			
+		
+	}
 
 	
 	
