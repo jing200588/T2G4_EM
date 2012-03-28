@@ -40,6 +40,7 @@ public class ViewEmailAds extends Composite {
 		});
 		current_event = input_ei;
 
+
 		formToolkit.adapt(this);
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -94,7 +95,6 @@ public class ViewEmailAds extends Composite {
 		btnSend.setBounds(415, 305, 75, 25);
 		formToolkit.adapt(btnSend, true, true);
 		btnSend.setText("Send");
-
 
 
 	}
