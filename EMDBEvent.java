@@ -298,6 +298,7 @@ class EMDBEvent extends EMDBBase{
 			item.setDescription( row[2].toString());
 			item.setBudget( Double.parseDouble(row[3].toString()) );
 			item.setID( Integer.parseInt(row[0].toString()) );
+			item.setEventFlow(EventFlowEntry.constructEventFlowEntryList(row[8].toString()));
 			
 		}
 					
@@ -555,7 +556,7 @@ class EMDBEvent extends EMDBBase{
 					      		.addColumn(this.archiveEndDate, item.getEndDateTime().getDateRepresentation())
 					      		.addColumn(this.archiveStartTime, item.getStartDateTime().getTimeRepresentation())
 					      		.addColumn(this.archiveEndTime, item.getEndDateTime().getTimeRepresentation())
-					      		.addColumn(this.archiveSchedule, "")
+					      		.addColumn(this.archiveSchedule, EventFlowEntry.getStringRepresentation( item.getEventFlow() ))
 					      		.validate().toString();
 		
 		return sql;
@@ -595,22 +596,26 @@ class EMDBEvent extends EMDBBase{
 	public int archiveEventList(Vector<Eventitem> list){
 		int size = list.size();
 		
-		for (int i=0; i<size; i++){
-			Eventitem current = list.get(i);
-			this.deleteEvent(current.getID());
-			
-			String sql = this.generateArchiveQuery(current);
-			this.queue(sql);
-			
-		}
 		
-		int result = 0;
-		if (size > 0){
+		if (!list.isEmpty()){
+			for (int i=0; i<size; i++){
+				Eventitem current = list.get(i);
+				this.deleteEvent(current.getID());
+				
+				String sql = this.generateArchiveQuery(current);
+				this.queue(sql);
+				
+			}
+
 			this.connect();
-			result = this.commit();
+			int result = this.commit();
 			this.disconnect();
+			
+			return result;
+		}else{
+			return 0;
 		}
-		 return result;
+		 
 	}
 	
 	
