@@ -5,10 +5,11 @@ import java.util.Vector;
 
 public class EMDBII{
 	
-	private String	dbName = "";
-	private EMDBEvent	event;
-	private EMDBBudget 	budget; 
-	private EMDBVenue 	venue;	
+	private String				dbName = "";
+	private EMDBEvent			event;
+	private EMDBBudget 			budget; 
+	private EMDBVenue 			venue;	
+	private EMDBParticipant 	participant;
 	
 	
 	/**
@@ -28,9 +29,14 @@ public class EMDBII{
 	 * Start DB System.
 	 */
 	public void start(){
-		event	=	new EMDBEvent(dbName);
-		budget 	=	new EMDBBudget(dbName);
-		venue	=	new EMDBVenue(dbName);
+		if (EMDBSettings.DEVELOPMENT){
+			System.out.println("EMDB - STARTING UP");
+		}
+		
+		this.event			=	new EMDBEvent(dbName);
+		this.budget			=	new EMDBBudget(dbName);
+		this.venue			=	new EMDBVenue(dbName);
+		this.participant	=	new EMDBParticipant(dbName);
 	}	
 	
 	
@@ -52,7 +58,7 @@ public class EMDBII{
 	 * @return
 	 */
 	public EMDBEvent eventDB(){
-		return event;
+		return this.event;
 	}
 	
 
@@ -61,7 +67,7 @@ public class EMDBII{
 	 * @return
 	 */
 	public EMDBBudget budgetDB(){
-		return budget;
+		return this.budget;
 	}
 	
 	
@@ -70,8 +76,15 @@ public class EMDBII{
 	 * @return
 	 */
 	public EMDBVenue venueDB(){
-		return venue;
+		return this.venue;
 	}
+	
+	
+	
+	public EMDBParticipant participantDB(){
+		return this.participant;
+	}
+	
 	
 	
 	
@@ -85,6 +98,7 @@ public class EMDBII{
 		this.event.setup();
 		this.budget.setup();
 		this.venue.setup();
+		this.participant.setup();
 	}
 	
 	
@@ -94,9 +108,12 @@ public class EMDBII{
 	 * Check for Database File
 	 */
 	public void systemCheck(){
-		if (this.event.verify() 
-				&& this.budget.verify()
-				&& this.venue.verify()){
+		if (		this.event.verify() 
+				&& 	this.budget.verify()
+				&& 	this.venue.verify()
+				&&	this.participant.verify()
+			)
+	{
 			
 			
 			if (EMDBSettings.DEVELOPMENT){
@@ -152,8 +169,8 @@ public class EMDBII{
 	
 
 	public static void main(String[] args){
-		EMDBII test = new EMDBII();
-		test.systemCheck();
+		/*EMDBII test = new EMDBII();
+		test.systemCheck();*/
 	}
 
 	

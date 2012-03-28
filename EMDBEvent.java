@@ -31,6 +31,17 @@ class EMDBEvent extends EMDBBase{
     private DbColumn 	eventsEndTime;
     private DbColumn	eventsSchedule;
 	
+    private DbTable 	archiveTable;
+    private DbColumn 	archiveID;
+    private DbColumn	archiveEventID;
+    private DbColumn 	archiveName;
+    private DbColumn 	archiveDescription;
+    private DbColumn 	archiveBudget;
+    private DbColumn 	archiveStartDate;
+    private DbColumn 	archiveEndDate;
+    private DbColumn 	archiveStartTime;
+    private DbColumn 	archiveEndTime;
+    private DbColumn	archiveSchedule;
 
     
     /**
@@ -63,6 +74,18 @@ class EMDBEvent extends EMDBBase{
 		this.eventsEndTime		= 	this.eventsTable.addColumn("endtime", "TEXT", null);
 		this.eventsSchedule		=	this.eventsTable.addColumn("schdeule", "TEXT", null);
 		
+		
+		this.archiveTable 		= 	this.schema.addTable(EMDBSettings.TABLE_EVENTS_ARCHIVE);
+		this.archiveID 			= 	this.archiveTable.addColumn("archive_id", "INTEGER PRIMARY KEY AUTOINCREMENT", null);
+		this.archiveEventID 	= 	this.archiveTable.addColumn("event_id", "INTEGER", null);
+		this.archiveName 		= 	this.archiveTable.addColumn("name", "TEXT NOT NULL", null);
+		this.archiveDescription	= 	this.archiveTable.addColumn("description", "TEXT", null);
+		this.archiveBudget		= 	this.archiveTable.addColumn("budget", "DOUBLE", null);
+		this.archiveStartDate	= 	this.archiveTable.addColumn("startdate", "TEXT", null);
+		this.archiveEndDate		= 	this.archiveTable.addColumn("enddate", "TEXT", null);
+		this.archiveStartTime	= 	this.archiveTable.addColumn("starttime", "TEXT", null);
+		this.archiveEndTime		= 	this.archiveTable.addColumn("endtime", "TEXT", null);
+		this.archiveSchedule	=	this.archiveTable.addColumn("schdeule", "TEXT", null);
 	}
 	
 	
@@ -84,13 +107,19 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public void setup(){
 		String sql 	=	new CreateTableQuery(this.eventsTable, true)
-						.validate().toString();
+								.validate().toString();
+		String sql2 =	new CreateTableQuery(this.archiveTable, true)
+								.validate().toString();
 		
-		if (EMDBSettings.DEVELOPMENT)
-			this.dMsg("Setup Event: "+ sql);
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - Setup Event: "+ sql);
+			this.dMsg("EMDB - Setup Event Archive: "+ sql2);
+		}
 		
 		
 		this.queue(sql);
+		this.queue(sql2);
 		this.commit();
 	}
 	
@@ -101,12 +130,19 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public void cleanup(){
 		String sql 	=	DropQuery.dropTable(this.eventsTable)
-						.validate().toString();
+							.validate().toString();
+		String sql2 =	DropQuery.dropTable(this.archiveTable)
+							.validate().toString();
 		
-		if (EMDBSettings.DEVELOPMENT)
-			this.dMsg("Cleanup Event: "+ sql);
 		
-		this.runQuery(sql);
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - Cleanup Event: "+ sql);
+			this.dMsg("EMDB - Cleanup Event Archive: "+ sql2);
+		}
+		
+		this.queue(sql);
+		this.queue(sql2);
+		this.commit();
 	}
 	
 	
@@ -118,36 +154,24 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public boolean verify(){
 		
-		int tableTotal = 1;
-				
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_EVENTS);
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_EVENTS_ARCHIVE);
+		}
+		
+		
 		String sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.masterTable)
 						.addCondition(
-									BinaryCondition.equalTo(this.masterName, EMDBSettings.TABLE_EVENTS)
+								ComboCondition.or(
+									BinaryCondition.equalTo(this.masterName, EMDBSettings.TABLE_EVENTS),
+									BinaryCondition.equalTo(this.masterName, EMDBSettings.TABLE_EVENTS_ARCHIVE)
+								)
 						)
 						.validate().toString();
 
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("VERIFICATION - EVEMT TABLES");
-			this.dMsg(sql);
-		}
-		
-		this.connect();
-		
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int count = result.size();
-		
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("VERIFIED SIZE: "+count);
-		}
-		
-		this.disconnect();
-		
-		if (count == tableTotal)
-			return true;
-		
-		return false;
+		return this.verification(sql, 2);
 	}
 	
 	
@@ -202,7 +226,7 @@ class EMDBEvent extends EMDBBase{
 		
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("ADD AN EVENT");
+			this.dMsg("EMDB - ADD AN EVENT");
 			this.dMsg(sql);
 		}
 		
@@ -251,7 +275,7 @@ class EMDBEvent extends EMDBBase{
 		
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET AN EVENT #"+aEventID);
+			this.dMsg("EMDB - GET AN EVENT #"+aEventID);
 			this.dMsg(sql);
 		}
 
@@ -296,7 +320,7 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public Vector<Eventitem> getEventList(){
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET AN EVENT LIST");
+			this.dMsg("EMDB - GET AN EVENT LIST");
 		}	
 		
 		return this.getEventListAll();
@@ -322,7 +346,7 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET ALL EVENTS LIST");
+			this.dMsg("EMDB - GET ALL EVENTS LIST");
 			this.dMsg(sql);
 		}
 			
@@ -417,6 +441,12 @@ class EMDBEvent extends EMDBBase{
 								.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 								.validate().toString();
 		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - UPDATE EVENT #"+aEventID);
+			this.dMsg(sql);
+		}
+		
+		
 		this.connect();
 		int result = this.runQuery(sql);
 		this.disconnect();
@@ -443,6 +473,12 @@ class EMDBEvent extends EMDBBase{
 							.addSetClause(this.eventsSchedule, aSchedule)
 							.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 							.validate().toString();
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - UDPATE SCHEDULE FOR #"+aEventID);
+			this.dMsg(sql);
+		}
 		
 		this.connect();
 		int result = this.runQuery(sql);
@@ -472,7 +508,7 @@ class EMDBEvent extends EMDBBase{
 
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("DELETE EVENT #"+aEventID);
+			this.dMsg("EMDB - DELETE EVENT #"+aEventID);
 			this.dMsg(sql);
 		}
 		
@@ -484,6 +520,98 @@ class EMDBEvent extends EMDBBase{
 		return result;
 	}
 	
+	
+	
+	
+
+
+	
+	
+	
+	
+	
+	/*
+	 * ******************************************************
+	 * 
+	 * CRUD Options (ARCHIVE)
+	 * 
+	 * ******************************************************
+	 */
+	
+	
+	
+	/**
+	 * Generate the event query
+	 * @param item
+	 * @return
+	 */
+	private String generateArchiveQuery(Eventitem item){
+		String sql	=	new InsertQuery(this.archiveTable)
+								.addColumn(this.archiveEventID, item.getID())
+					      		.addColumn(this.archiveName, item.getName())
+					      		.addColumn(this.archiveDescription, item.getDescription())
+					      		.addColumn(this.archiveBudget, item.getBudget())
+					      		.addColumn(this.archiveStartDate, item.getStartDateTime().getDateRepresentation())
+					      		.addColumn(this.archiveEndDate, item.getEndDateTime().getDateRepresentation())
+					      		.addColumn(this.archiveStartTime, item.getStartDateTime().getTimeRepresentation())
+					      		.addColumn(this.archiveEndTime, item.getEndDateTime().getTimeRepresentation())
+					      		.addColumn(this.archiveSchedule, "")
+					      		.validate().toString();
+		
+		return sql;
+
+	}
+	
+	
+	
+	/**
+	 * Transfer an event to an archive.
+	 * @param aEventID
+	 * @return
+	 */
+	public int archiveEvent(int aEventID){
+		Eventitem item = this.getEvent(aEventID);
+		this.deleteEvent(aEventID);
+		String sql = this.generateArchiveQuery(item);
+		
+		this.connect();
+		int result = this.runQuery(sql);
+		this.disconnect();
+	
+		return result;
+	}
+	
+	
+
+	
+	
+	
+	
+	/**
+	 * Transfer a list of events to archive.
+	 * @param list
+	 * @return
+	 */
+	public int archiveEventList(Vector<Eventitem> list){
+		int size = list.size();
+		
+		for (int i=0; i<size; i++){
+			Eventitem current = list.get(i);
+			this.deleteEvent(current.getID());
+			
+			String sql = this.generateArchiveQuery(current);
+			this.queue(sql);
+			
+		}
+		
+		int result = 0;
+		if (size > 0){
+			this.connect();
+			result = this.commit();
+			this.disconnect();
+		}
+		 return result;
+	}
 	
 	
 	

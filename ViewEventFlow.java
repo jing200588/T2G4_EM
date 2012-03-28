@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -26,6 +27,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 public class ViewEventFlow extends Composite {
 	
@@ -45,6 +48,7 @@ public class ViewEventFlow extends Composite {
 	
 	private Eventitem eventObj;
 	private Vector<EventFlowEntry> listEventFlow;
+	private Text textFilePath;
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -60,8 +64,7 @@ public class ViewEventFlow extends Composite {
 		
 		// Initialize some variables 
 		eventObj = event;
-		// THIS IS GOING TO BE FIXED!!!!!
-		listEventFlow = new Vector<EventFlowEntry>();
+		listEventFlow = eventObj.getEventFlow();
 		
 		// Continue with the GUI
 		toolkit.adapt(this);
@@ -76,6 +79,21 @@ public class ViewEventFlow extends Composite {
 		VenueViewForm.setText("Event Flow");
 		VenueViewForm.getBody().setLayout(new FormLayout());
 
+		/////////////////////////////////////////////////////////////////////////////////////
+		/// 
+		////////////////////////////////////////////////////////////////////////////////////
+		this.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// User presses Ctrl + S
+				if((e.stateMask & SWT.CTRL) != 0 && e.keyCode == java.awt.event.KeyEvent.VK_S)
+				{
+					// Update in the database
+					ModelEventFlow.saveEventFlow(listEventFlow);
+				}
+			}
+		});
+		
 		Composite mainComposite = new Composite(VenueViewForm.getBody(), SWT.NONE);
 		FormData fd_mainComposite = new FormData();
 		fd_mainComposite.bottom = new FormAttachment(100, -24);
@@ -121,7 +139,7 @@ public class ViewEventFlow extends Composite {
 					}
 				}
 			}
-		});
+		}); 
 	
 		tableEventFlow.setTouchEnabled(true);
 		tableEventFlow.setLinesVisible(true);
@@ -194,12 +212,18 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		
-		/////////////////////////////////////////////////////////////////////////////////////////////////
-		// Create a table for users to input their information
-		/////////////////////////////////////////////////////////////////////////////////////////////////
-	//	createTableViewEventFlow();
-		
 		Button btnReturnToEvent = new Button(mainComposite, SWT.NONE);
+		btnReturnToEvent.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// Update the event flow in the database as well as in the event itself
+				ModelEventFlow.saveEventFlow(listEventFlow);
+				eventObj.setEventFlow(listEventFlow);
+				
+				// Return to the main GUI
+				ViewMain.ReturnView();
+			}
+		});
 		btnReturnToEvent.setBounds(545, 299, 129, 25);
 		toolkit.adapt(btnReturnToEvent, true, true);
 		btnReturnToEvent.setText("Return to Event page");
@@ -220,9 +244,44 @@ public class ViewEventFlow extends Composite {
 				}
 			}
 		});
-		btnAdd.setBounds(10, 299, 75, 25);
+		btnAdd.setBounds(571, 10, 75, 25);
 		toolkit.adapt(btnAdd, true, true);
 		btnAdd.setText("Add");
+		
+		Label lblNewLabel = new Label(mainComposite, SWT.NONE);
+		lblNewLabel.setBounds(10, 304, 66, 15);
+		toolkit.adapt(lblNewLabel, true, true);
+		lblNewLabel.setText("Output file:");
+		
+		textFilePath = new Text(mainComposite, SWT.BORDER);
+		textFilePath.setBounds(76, 301, 189, 21);
+		toolkit.adapt(textFilePath, true, true);
+
+		Button btnNewButton_1 = new Button(mainComposite, SWT.NONE);
+		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fileDialog = new FileDialog(new Shell());
+				String[] extension = {"*.csv"};
+				fileDialog.setFilterExtensions(extension);
+				
+				String filePath = fileDialog.open();
+				if (filePath != null) 
+				{
+					if (filePath.toLowerCase().endsWith(".csv") == false);
+						filePath += ".csv";
+					textFilePath.setText(filePath);
+				}
+			}
+		});
+		btnNewButton_1.setBounds(279, 299, 75, 25);
+		toolkit.adapt(btnNewButton_1, true, true);
+		btnNewButton_1.setText("Browse");
+		
+		Button btnExport = new Button(mainComposite, SWT.NONE);
+		btnExport.setBounds(360, 299, 75, 25);
+		toolkit.adapt(btnExport, true, true);
+		btnExport.setText("Export");
 	}
 	
 	/**

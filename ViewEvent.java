@@ -42,6 +42,7 @@ public class ViewEvent extends Composite {
 	private static Composite maincomp;
 	private static int budgetTableSelectedIndex;
 	private static ControllerBudget bc;
+	protected LoginEmailDialog loginDiag; 
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -381,7 +382,9 @@ public class ViewEvent extends Composite {
 		Advertemail.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ViewMain.EmailAds(cevent);
+				loginDiag = new LoginEmailDialog(new Shell(), SWT.NONE, cevent);
+				loginDiag.open();
+
 			}
 		});
 		GridData gd_Advertedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);

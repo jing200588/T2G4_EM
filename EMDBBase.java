@@ -3,6 +3,11 @@ import java.io.File;
 import java.sql.*;
 import java.util.Vector;
 
+import com.healthmarketscience.sqlbuilder.BinaryCondition;
+import com.healthmarketscience.sqlbuilder.ComboCondition;
+import com.healthmarketscience.sqlbuilder.CreateTableQuery;
+import com.healthmarketscience.sqlbuilder.DropQuery;
+import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
 
 
@@ -150,7 +155,7 @@ public class EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("SETTING DEFAULT DB - " + this.dbName);
+			this.dMsg("EMDB - SETTING DEFAULT DB - " + this.dbName);
 		}
 		
 		this.setFile();
@@ -198,7 +203,7 @@ public class EMDBBase{
 	protected int runQuery(String sql){
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("RUNNING QUERY (NORMAL)");
+			this.dMsg("EMDB - RUNNING QUERY (NORMAL)");
 		}
 		
 		try {	
@@ -221,7 +226,7 @@ public class EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("RUNNING QUERY (RESULTS)");
+			this.dMsg("EMDB - RUNNING QUERY (RESULTS)");
 		}
 		
 		try {	
@@ -267,7 +272,7 @@ public class EMDBBase{
 	protected void queue(String sql){
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("ADDING TO QUEUE");
+			this.dMsg("EMDB - ADDING TO QUEUE");
 		}
 		
 		this.queue.add(sql);
@@ -284,7 +289,7 @@ public class EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("COMMIT ALL QUERIES");
+			this.dMsg("EMDB - COMMIT ALL QUERIES");
 		}
 		
 		
@@ -343,7 +348,7 @@ public class EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("CREATE/CHECK FILE");
+			this.dMsg("EMDB - CREATE/CHECK FILE");
 		}
 		
 		File findFile = new File(this.dbName);
@@ -362,4 +367,42 @@ public class EMDBBase{
 	
 	
 		
+	
+
+	
+	
+	/**
+	 * Generic verfication process
+	 * @return
+	 */
+	protected boolean verification(String sql, int tableTotal){
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - VERIFICATION");
+			this.dMsg(sql);
+		}
+		
+		this.connect();
+		
+		Vector<Object[]> result = this.runQueryResults(sql);
+		int count = result.size();
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - VERIFIED SIZE: "+count);
+		}
+		
+		this.disconnect();
+		
+		if (count == tableTotal)
+			return true;
+		
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
 }

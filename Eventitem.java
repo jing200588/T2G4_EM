@@ -11,6 +11,7 @@ public class Eventitem {
 	private MyDateTime _startDateTime;
 	private MyDateTime _endDateTime;
 	private List<Participant> _participant_list =  new Vector<Participant>();
+	private Vector<EventFlowEntry> _eventFlow = new Vector<EventFlowEntry>();
 	private boolean _expired;
 	
 	/**
@@ -152,6 +153,10 @@ public class Eventitem {
 		return _item_list;
 	}
 
+	public Vector<EventFlowEntry> getEventFlow()
+	{
+		return _eventFlow;
+	}
 
 	public void setitem_list(Vector<Item> item_list) {
 		_item_list = item_list;
@@ -193,6 +198,9 @@ public class Eventitem {
 	public void setIsExpired(boolean flag) {
 		_expired = flag;
 	}
+	public void setEventFlow(Vector<EventFlowEntry> newEventFlow)
+	{
+		_eventFlow = newEventFlow;
 	
 	public boolean isExpired() {
 		return _expired;

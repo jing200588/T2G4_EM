@@ -106,8 +106,8 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("Setup Venue: "+ sql);
-			this.dMsg("Setup Booking: "+ sql2);
+			this.dMsg("EMDB - Setup Venue: "+ sql);
+			this.dMsg("EMDB - Setup Booking: "+ sql2);
 		}
 		
 		
@@ -130,8 +130,8 @@ class EMDBVenue extends EMDBBase{
 							.validate().toString();
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("Cleanup Venue: "+ sql);
-			this.dMsg("Cleanup Booking: "+ sql2);
+			this.dMsg("EMDB - Cleanup Venue: "+ sql);
+			this.dMsg("EMDB - Cleanup Booking: "+ sql2);
 		}
 		
 		this.queue(sql);
@@ -147,8 +147,12 @@ class EMDBVenue extends EMDBBase{
 	 * @return
 	 */
 	public boolean verify(){
+
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_VENUE);
+			this.dMsg("EMDB - " + EMDBSettings.TABLE_VENUE_BOOKINGS);
+		}
 		
-		int tableTotal = 2;
 		
 		String sql = new SelectQuery()
 						.addAllColumns()
@@ -161,28 +165,8 @@ class EMDBVenue extends EMDBBase{
 						)
 						.validate().toString();
 
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("VERIFICATION - VENUE TABLES");
-			this.dMsg(sql);
-		}
-		
-		this.connect();
-		
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int count = result.size();
-		
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("VERIFIED SIZE: "+count);
-		}
-		
-		this.disconnect();
-		
-		if (count == tableTotal)
-			return true;
-		
-		return false;
+		return this.verification(sql, 2);
 	}
-	
 	
 	/*
 	 * ******************************************************
@@ -221,7 +205,7 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("ADD A VENUE");
+			this.dMsg("EMDB - ADD A VENUE");
 			this.dMsg(sql);
 		}
 		
@@ -238,7 +222,7 @@ class EMDBVenue extends EMDBBase{
 			
 			
 			if (EMDBSettings.DEVELOPMENT){
-				this.dMsg("NEW VENUE ID #" + id);
+				this.dMsg("EMDB - NEW VENUE ID #" + id);
 			}
 		}
 		
@@ -278,7 +262,7 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("BOOK A VENUE");
+			this.dMsg("EMDB - BOOK A VENUE");
 			this.dMsg(sql);
 		}
 		
@@ -323,7 +307,7 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET VENUE #"+aVenueID);
+			this.dMsg("EMDB - GET VENUE #"+aVenueID);
 			this.dMsg(sql);
 		}
 		
@@ -379,7 +363,7 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET VENUE LIST BY " + aSearchType);
+			this.dMsg("EMDB - GET VENUE LIST BY " + aSearchType);
 			this.dMsg(sql);
 		}
 			
@@ -444,7 +428,7 @@ class EMDBVenue extends EMDBBase{
 			
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET BOOKING #"+aBookingID);
+			this.dMsg("EMDB - GET BOOKING #"+aBookingID);
 			this.dMsg(sql);
 		}
 		
@@ -515,7 +499,7 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET BOOKING BY " + aSearchType);
+			this.dMsg("EMDB - GET BOOKING BY " + aSearchType);
 			this.dMsg(sql);
 		}
 		
@@ -560,7 +544,7 @@ class EMDBVenue extends EMDBBase{
 						
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET BOOKING OF #"+aEventID);
+			this.dMsg("EMDB - GET BOOKING OF #"+aEventID);
 			this.dMsg(sql);
 		}
 		
@@ -615,7 +599,7 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("FIND VENUE");
+			this.dMsg("EMDB - FIND VENUE");
 			this.dMsg(sql);
 		}
 		
@@ -684,7 +668,7 @@ class EMDBVenue extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("UPDATE VENUE #"+aVenueID);
+			this.dMsg("EMDB - UPDATE VENUE #"+aVenueID);
 			this.dMsg(sql);
 		}
 		
@@ -726,7 +710,7 @@ class EMDBVenue extends EMDBBase{
 								.validate().toString();
 					
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("UPDATE BOOKING #"+aBookingID);
+			this.dMsg("EMDB - UPDATE BOOKING #"+aBookingID);
 			this.dMsg(sql);
 		}
 		
@@ -754,7 +738,7 @@ class EMDBVenue extends EMDBBase{
 								.validate().toString();
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("DELETE VENUE #"+aVenueID);
+			this.dMsg("EMDB - DELETE VENUE #"+aVenueID);
 			this.dMsg(sql);
 		}
 		
@@ -781,7 +765,7 @@ class EMDBVenue extends EMDBBase{
 								.validate().toString();
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("DELETE BOOKING #"+aBookingID);
+			this.dMsg("EMDB - DELETE BOOKING #"+aBookingID);
 			this.dMsg(sql);
 		}
 		
@@ -806,7 +790,7 @@ class EMDBVenue extends EMDBBase{
 								.validate().toString();
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("DELETE BOOKING FOR EVENT #"+aEventID);
+			this.dMsg("EMDB - DELETE BOOKING FOR EVENT #"+aEventID);
 			this.dMsg(sql);
 		}
 		
