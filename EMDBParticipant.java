@@ -241,16 +241,15 @@ class EMDBParticipant extends EMDBBase{
 			
 			Participant person = new Participant(
 									row[2].toString(),
+									row[6].toString(),
 									row[3].toString(),
 									row[4].toString(),
 									row[5].toString(),
-									row[6].toString(),
 									row[7].toString()
 								);
 			person.setID(Integer.parseInt(row[1].toString()));
 			list.add(person);
 		}
-			
 
 		this.disconnect();
 		return list;
