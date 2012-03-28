@@ -613,6 +613,7 @@ public class ViewMain extends ApplicationWindow {
 			table.setHeaderVisible(true);
 			table.setLinesVisible(false);
 			UpdateTable();
+	//		CheckExpiry();
 			Menu menu = new Menu(table);
 			table.setMenu(menu);
 			
@@ -712,7 +713,7 @@ public class ViewMain extends ApplicationWindow {
 			formToolkit.paintBordersFor(table_1);
 			table_1.setHeaderVisible(true);
 			table_1.setLinesVisible(false);
-	//		UpdateTable();
+			UpdateExpiredTable();
 			Menu menu2 = new Menu(table_1);
 			table_1.setMenu(menu2);
 			

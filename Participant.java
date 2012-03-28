@@ -1,16 +1,16 @@
 
 
 public class Participant {
-	private String name, contact, email, address, matric, remark;
+	private String _name, _contact, _email, _address, _matric, _remark;
 	private int id;
 	
-	public Participant(String n, String m, String c, String e, String a, String r) {
-		name = n;
-		contact = c;
-		email = e;
-		address = a;
-		matric = m;
-		remark = r;
+	public Participant(String name, String matric, String contact, String emailadd, String homeadd, String remarks) {
+		_name = name;
+		_contact = contact;
+		_email = emailadd;
+		_address = homeadd;
+		_matric = matric;
+		_remark = remarks;
 	}
 
 	public int getID(){
@@ -23,51 +23,51 @@ public class Participant {
 	}
 	
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this._name = name;
 	}
 
 	public String getContact() {
-		return contact;
+		return _contact;
 	}
 	
 	public void setContact(String contact) {
-		this.contact = contact;
+		this._contact = contact;
 	}
 
 	public String getEmail() {
-		return email;
+		return _email;
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this._email = email;
 	}
 
 	public String getAddress() {
-		return address;
+		return _address;
 	}
 
 	public void setAddress(String address) {
-		this.address = address;
+		this._address = address;
 	}
 
 	public String getMatric() {
-		return matric;
+		return _matric;
 	}
 
 	public void setMatric(String matric) {
-		this.matric = matric;
+		this._matric = matric;
 	}
 
 	public String getRemark() {
-		return remark;
+		return _remark;
 	}
 
 	public void setRemark(String remark) {
-		this.remark = remark;
+		this._remark = remark;
 	}
 	
 }
