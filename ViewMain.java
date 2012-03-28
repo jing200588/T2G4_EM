@@ -1,5 +1,10 @@
 import com.ibm.icu.text.Collator;
+
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
@@ -64,7 +69,8 @@ public class ViewMain extends ApplicationWindow {
   //  private static boolean vBarOn;
     private static TableColumn tc1, tc2, tc3;
     private static TableColumn etc1, etc2, etc3;
-    private Table table_1;
+    private static Table table_1;
+    private static Vector<Eventitem> expiredlist;
   //  private static int tc2vBarOnWidth, tc2vBarOffWidth;
   //  private static int firstruncheck = 0;
     
@@ -158,6 +164,63 @@ public class ViewMain extends ApplicationWindow {
         
 	}
 	
+	/************************************************************
+	 * Method to update the expired table in c1
+	 ***********************************************************/
+	/**
+	 * Description: Pulls the expired list from ModelEvent and updates the expired event table in composite c1
+	 */
+	public static void UpdateExpiredTable() {
+		expiredlist = ModelEvent.PullExpiredList();
+
+		TableItem item;
+		int i;
+		if (table_1.getItemCount() == 0)	//adds whole vector if table empty 
+			i=0;
+
+		else
+			i = table_1.getItemCount() + 1;		//add the last item into table
+		
+		for (; i<expiredlist.size(); i++) {			
+			item = new TableItem(table_1,SWT.NONE);
+			item.setText(expiredlist.get(i).getName());
+/*			item.setText(1, "5");
+			item.setBackground(1, red);
+	    	item.setText(2, "X");
+	    	item.setBackground(2,blue);
+	    	*/
+		}
+	}
+	
+	/************************************************************
+	 * Method to shift expired events between tables in c1
+	 ***********************************************************/
+	/**
+	 * Description:
+	 */
+	public static void ShiftExpired() {
+		expiredlist = ModelEvent.PullExpiredList();
+		int prevExpIndex = expiredlist.size();
+		
+		//shifts expired events into expired list & remove from event list table
+		for (int i=0; i<eventlist.size(); i++) {
+			if (eventlist.get(i).isExpired()) {
+				table.remove(i);
+				expiredlist.add(eventlist.get(i));
+			}
+		}
+		
+		//Remove the expired events from event list
+		for (int i=0; i<eventlist.size(); i++) {
+			if (eventlist.get(i).isExpired()) {
+				eventlist.remove(i);
+				i--;
+			}
+		}
+		
+		UpdateExpiredTable();
+		ModelEvent.UpdateExpiredList(expiredlist.subList(prevExpIndex, expiredlist.size()));
+	}
 	/************************************************************
 	 * HOMEPAGE
 	 ***********************************************************/
@@ -282,6 +345,30 @@ public class ViewMain extends ApplicationWindow {
 		layout.topControl = newview;
 		c2.layout(true);
 		
+	}
+	
+	public static void CheckExpiry() {
+        // Task here ...
+/*	        	GregorianCalendar date = new GregorianCalendar();
+    	date.setTimeInMillis(System.currentTimeMillis());
+    	date.set(GregorianCalendar.MILLISECOND, 0);
+    	SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
+    	String curtime = sdf.format(date.getTime());	//gets the current time in string
+    	     	
+    	sdf = new SimpleDateFormat("YYYYMMdd");
+    	*/
+    	MyDateTime currentDT = MyDateTime.getCurrentDateTime();
+    	boolean flag = false;
+    	for (int i=0; i<eventlist.size(); i++) {
+    		if (eventlist.get(i).getEndDateTime().compareTo(currentDT) <= 0) {
+    			eventlist.get(i).setIsExpired(true);
+    			flag = true;
+    			System.out.println("FLAGGED");
+    		}
+    	}
+    	if (flag)
+    		ShiftExpired();
+    	System.out.println("Checking !!");
 	}
 	
 	/**
@@ -681,6 +768,50 @@ public class ViewMain extends ApplicationWindow {
 			}
 	
 		}
+		
+	
+//		int delay = 5000;   // delay for 5 sec.
+//		int period = 1000;  // repeat every sec.
+//		Timer timer = new Timer();
+		
+		checkthread chkthread = new checkthread();
+		chkthread.start();
+		
+//		timer.scheduleAtFixedRate(new TimerTask() {
+//		        public void run() {
+/*		        	MyDateTime currentDT = MyDateTime.getCurrentDateTime();
+		        	boolean flag = false;
+		        	for (int i=0; i<eventlist.size(); i++) {
+		        		if (eventlist.get(i).getEndDateTime().compareTo(currentDT) <= 0) {
+		        			eventlist.get(i).setIsExpired(true);
+		        			flag = true;
+		        		}
+		        	}
+		        	if (flag)
+		        		ShiftExpired();
+		        	System.out.println("Checking !!");
+		        }
+		    }, delay, period);
+	*/	
+		/****************************************************************
+		 * 
+		 * THREAD
+		 * 
+		 ****************************************************************/
+	/*	new Thread(new Runnable() {
+		      public void run() {
+		         while (true) {
+		            try { Thread.sleep(1000); } catch (Exception e) {Thread.yield();}
+		            Display.getDefault().asyncExec(new Runnable() {
+		               public void run() {
+		                  CheckExpiry();
+		                  
+		               }
+		            });
+		         }
+		      }
+		   }).start();
+	*/
 		container.setContent(maincomposite);
 		container.setMinSize(maincomposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		return container;
@@ -755,6 +886,7 @@ public class ViewMain extends ApplicationWindow {
 			window.setBlockOnOpen(true);
 			window.open();
 			Display.getCurrent().dispose();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

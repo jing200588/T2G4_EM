@@ -80,6 +80,7 @@ public class AddParticipantDialog extends Dialog {
 		lblName.setText("Name:");
 		
 		txtName = new Text(composite, SWT.BORDER);
+		txtName.setMessage("eg. John Goh");
 		txtName.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		GridData gd_txtName = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
 		gd_txtName.widthHint = 188;
@@ -94,6 +95,7 @@ public class AddParticipantDialog extends Dialog {
 		lblMatricNo.setText("Matric No.:");
 		
 		txtMatricNo = new Text(composite, SWT.BORDER);
+		txtMatricNo.setMessage("eg. A0012334X");
 		txtMatricNo.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		GridData gd_txtMatricNo = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtMatricNo.widthHint = 188;
@@ -108,6 +110,7 @@ public class AddParticipantDialog extends Dialog {
 		lblContact.setText("Contact:");
 		
 		txtContact = new Text(composite, SWT.BORDER);
+		txtContact.setMessage("House or Handphone number");
 		txtContact.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		GridData gd_txtContact = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
 		gd_txtContact.widthHint = 188;
@@ -122,6 +125,7 @@ public class AddParticipantDialog extends Dialog {
 		lblEmailAddress.setText("Email Address:");
 		
 		txtEmailAddress = new Text(composite, SWT.BORDER);
+		txtEmailAddress.setMessage("eg. johnjohn89@gmail.com");
 		txtEmailAddress.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		GridData gd_txtEmailAddress = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtEmailAddress.widthHint = 188;
