@@ -661,7 +661,7 @@ public class ViewMain extends ApplicationWindow {
 				}
 			
 				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
-				view = new ViewEvent(c2, SWT.NONE, eventlist.get(table_1.getSelectionIndex()));
+				view = new ViewEvent(c2, SWT.NONE, expiredlist.get(table_1.getSelectionIndex()));
 		        layout.topControl = view;
 				c2.layout(true);
 		     }
@@ -774,8 +774,8 @@ public class ViewMain extends ApplicationWindow {
 //		int period = 1000;  // repeat every sec.
 //		Timer timer = new Timer();
 		
-		checkthread chkthread = new checkthread();
-		chkthread.start();
+//		checkthread chkthread = new checkthread();
+//		chkthread.start();
 		
 //		timer.scheduleAtFixedRate(new TimerTask() {
 //		        public void run() {

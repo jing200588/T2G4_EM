@@ -147,7 +147,6 @@ public class ViewEventFlow extends Composite {
 		tableEventFlow.setBounds(10, 10, 505, 268);
 		tableViewEventFlow.setContentProvider(ArrayContentProvider.getInstance());
 		// Set input
-		tableViewEventFlow.setInput(listEventFlow);
 		toolkit.paintBordersFor(tableEventFlow);
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
@@ -282,6 +281,9 @@ public class ViewEventFlow extends Composite {
 		btnExport.setBounds(360, 299, 75, 25);
 		toolkit.adapt(btnExport, true, true);
 		btnExport.setText("Export");
+		
+		tableViewEventFlow.setInput(listEventFlow);
+		tableViewEventFlow.refresh();
 	}
 	
 	/**
