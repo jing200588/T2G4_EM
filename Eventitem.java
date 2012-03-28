@@ -201,6 +201,7 @@ public class Eventitem {
 	public void setEventFlow(Vector<EventFlowEntry> newEventFlow)
 	{
 		_eventFlow = newEventFlow;
+	}
 	
 	public boolean isExpired() {
 		return _expired;
