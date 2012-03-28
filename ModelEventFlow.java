@@ -8,6 +8,8 @@ import java.util.Vector;
 
 public class ModelEventFlow {
 	
+	private static EMDBII db = new EMDBII();
+	
 	/**
 	 * Stores the given list of EventFlowEntry objects into the database
 	 * 
@@ -23,6 +25,9 @@ public class ModelEventFlow {
 			
 			// DATABASE: add the string storedText into the database
 			// Add code here
+			
+			db.eventDB().updateSchedule(1, storedText);
+			
 			
 			return true;
 		}
