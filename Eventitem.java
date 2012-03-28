@@ -11,6 +11,7 @@ public class Eventitem {
 	private MyDateTime _startDateTime;
 	private MyDateTime _endDateTime;
 	private List<Participant> _participant_list =  new Vector<Participant>();
+	private Vector<EventFlowEntry> _eventFlow = new Vector<EventFlowEntry>();
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters 
@@ -150,6 +151,10 @@ public class Eventitem {
 		return _item_list;
 	}
 
+	public Vector<EventFlowEntry> getEventFlow()
+	{
+		return _eventFlow;
+	}
 
 	public void setitem_list(Vector<Item> item_list) {
 		_item_list = item_list;
@@ -186,5 +191,10 @@ public class Eventitem {
 	
 	public List<Participant> getParticipantList() {
 		return _participant_list;
+	}
+	
+	public void setEventFlow(Vector<EventFlowEntry> newEventFlow)
+	{
+		_eventFlow = newEventFlow;
 	}
 }
