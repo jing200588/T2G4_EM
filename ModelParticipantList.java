@@ -1,10 +1,10 @@
 
 public class ModelParticipantList {
 	
-	private static EMDBII db;
+	private static EMDBII db = new EMDBII();;
 	
 	public ModelParticipantList() {
-		db = new EMDBII();
+	
 	}
 	
 	
