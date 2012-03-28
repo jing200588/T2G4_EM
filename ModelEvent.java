@@ -94,6 +94,7 @@ public class ModelEvent {
 		db.venueDB().deleteBookingAll(eitem.getID());
 		db.budgetDB().deleteBudgetList(eitem.getID());
 		db.budgetDB().deleteBudgetListOptimized(eitem.getID());
+		db.participantDB().deleteParticipantList(eitem.getID());
 		list.remove(eitem);
 	}
 	
