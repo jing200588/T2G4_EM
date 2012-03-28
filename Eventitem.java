@@ -202,7 +202,6 @@ public class Eventitem {
 	{
 		_eventFlow = newEventFlow;
 	}
-	
 	public boolean isExpired() {
 		return _expired;
 	}
