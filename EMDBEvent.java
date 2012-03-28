@@ -572,9 +572,17 @@ class EMDBEvent extends EMDBBase{
 	 * @return
 	 */
 	public int addArchiveEvent(int aEventID){
+		
+		
+		
 		Eventitem item = this.getEvent(aEventID);
 		this.deleteEvent(aEventID);
 		String sql = this.generateArchiveQuery(item);
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - ADD TO ARCHIVE LIST");
+			this.dMsg(sql);
+		}	
 		
 		this.connect();
 		int result = this.runQuery(sql);
@@ -605,9 +613,15 @@ class EMDBEvent extends EMDBBase{
 				
 				String sql = this.generateArchiveQuery(current);
 				this.queue(sql);
-				
+				if (EMDBSettings.DEVELOPMENT){
+					this.dMsg("EMDB - ADD TO ARCHIVE LIST QUEUE");
+				}	
 			}
-
+			
+			if (EMDBSettings.DEVELOPMENT){
+				this.dMsg("EMDB - ADD TO ARCHIVE LIST");
+			}	
+			
 			this.connect();
 			int result = this.commit();
 			this.disconnect();
