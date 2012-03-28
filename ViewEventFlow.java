@@ -89,7 +89,7 @@ public class ViewEventFlow extends Composite {
 				if((e.stateMask & SWT.CTRL) != 0 && e.keyCode == java.awt.event.KeyEvent.VK_S)
 				{
 					// Update in the database
-					ModelEventFlow.saveEventFlow(listEventFlow);
+					ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
 				}
 			}
 		});
@@ -146,8 +146,6 @@ public class ViewEventFlow extends Composite {
 		tableEventFlow.setHeaderVisible(true);
 		tableEventFlow.setBounds(10, 10, 505, 268);
 		tableViewEventFlow.setContentProvider(ArrayContentProvider.getInstance());
-		// Set input
-		toolkit.paintBordersFor(tableEventFlow);
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColStartDateTime = tableViewerColumn_4.getColumn();
@@ -216,7 +214,7 @@ public class ViewEventFlow extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// Update the event flow in the database as well as in the event itself
-				ModelEventFlow.saveEventFlow(listEventFlow);
+				ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
 				eventObj.setEventFlow(listEventFlow);
 				
 				// Return to the main GUI
@@ -278,12 +276,46 @@ public class ViewEventFlow extends Composite {
 		btnNewButton_1.setText("Browse");
 		
 		Button btnExport = new Button(mainComposite, SWT.NONE);
+/*		btnExport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					CSVWriter writer = new CSVWriter(new FileWriter(filepath));
+					String[] headers = new String[table.getColumnCount()];
+					for (int i=0; i<table.getColumnCount(); i++) {
+						headers[i] = table.getColumns()[i].getText();
+					}
+					
+					writer.writeNext(headers);
+					
+					for (int i=0; i<table.getItemCount(); i++) {
+						String[] entries = new String[table.getColumnCount()];
+						for (int j=0; j<table.getColumnCount(); j++) 
+							entries[j] = table.getItem(i).getText(j);
+						writer.writeNext(entries);
+					}
+					writer.close();
+					new errormessageDialog(new Shell(), "The file was exported successfully!").open();
+					/*
+				     String[] entries = "first#second#third".split("#");
+				     writer.writeNext(entries);
+					writer.close();
+				      */         		
+	/*			} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.out.println("Error exporting");
+					new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
+					e.printStackTrace();
+				}
+			}
+		}); */
 		btnExport.setBounds(360, 299, 75, 25);
 		toolkit.adapt(btnExport, true, true);
 		btnExport.setText("Export");
 		
+		// Set input for table viewer at the beginning
 		tableViewEventFlow.setInput(listEventFlow);
-		tableViewEventFlow.refresh();
+		toolkit.paintBordersFor(tableEventFlow);
 	}
 	
 	/**

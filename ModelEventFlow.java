@@ -11,13 +11,14 @@ public class ModelEventFlow {
 	private static EMDBII db = new EMDBII();
 	
 	/**
-	 * Stores the given list of EventFlowEntry objects into the database
+	 * Stores the given list of EventFlowEntry objects of an event with eventID into the database
 	 * 
 	 * @param storedData - Vector<EventFlowEnrty>
+	 * @param
 	 * @return true if data are stored into the database successfully.
 	 * @return false if there is a storing problem.
 	 */
-	public static boolean saveEventFlow(Vector<EventFlowEntry> storedData)
+	public static boolean saveEventFlow(int eventID, Vector<EventFlowEntry> storedData)
 	{
 		try
 		{
@@ -42,7 +43,7 @@ public class ModelEventFlow {
 	 * 
 	 * @return eventFlowData - Vector<EventFlowEntry>
 	 */
-	public static Vector<EventFlowEntry> retrieveEventFlow()
+	public static Vector<EventFlowEntry> retrieveEventFlow(int eventID)
 	{
 		// DATABASE: you should return a string
 		// Replace the instruction below

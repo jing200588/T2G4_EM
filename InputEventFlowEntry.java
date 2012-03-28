@@ -189,6 +189,8 @@ public class InputEventFlowEntry extends Composite {
 		// Set date time
 		setDateTime(dateFrom, timeFrom, obj.getDuration().getStartDateTime());
 		setDateTime(dateTo, timeTo, obj.getDuration().getEndDateTime());
+		
+		isVenueChosen = true;
 	}
 	/**
 	 * Returns a MyDateTime object based on the inputs given in two DateTime objects which are
