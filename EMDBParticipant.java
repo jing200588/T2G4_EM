@@ -156,33 +156,49 @@ class EMDBParticipant extends EMDBBase{
 		
 		String sql = "";
 		
-		int size = list.size();
-		for (int i=0; i< size; i++){
-			
-			Participant row = list.get(i);
-			
-			sql = new InsertQuery(this.participantTable)
-						.addColumn(this.participantEventID, aEventID)
-						.addColumn(this.participantName, row.getName())
-						.addColumn(this.participantContact, row.getContact())
-						.addColumn(this.participantEmail, row.getEmail())
-						.addColumn(this.participantAddress, row.getAddress())
-						.addColumn(this.participantMatric, row.getMatric())
-						.addColumn(this.participantRemarks, row.getRemark())
-						.validate().toString();
-			this.queue(sql);
-			
-		}
 		
-		int result = 0;
-		
-		if (size > 0){
+		if (!list.isEmpty()){
+			int size = list.size();
+			
+			for (int i=0; i< size; i++){
+				
+				Participant row = list.get(i);
+				
+				sql = new InsertQuery(this.participantTable)
+							.addColumn(this.participantEventID, aEventID)
+							.addColumn(this.participantName, row.getName())
+							.addColumn(this.participantContact, row.getContact())
+							.addColumn(this.participantEmail, row.getEmail())
+							.addColumn(this.participantAddress, row.getAddress())
+							.addColumn(this.participantMatric, row.getMatric())
+							.addColumn(this.participantRemarks, row.getRemark())
+							.validate().toString();
+				
+				
+				
+				if (EMDBSettings.DEVELOPMENT){
+					this.dMsg("EMDB - ADD PARICIPANT TO QUEUE");
+					this.dMsg(sql);
+				}
+				
+				this.queue(sql);
+				
+			}
+			
+			if (EMDBSettings.DEVELOPMENT){
+				this.dMsg("EMDB - COMMIT PARICIPANT IN QUEUE");
+				this.dMsg(sql);
+			}
+			
 			this.connect();
-			result = this.commit();
+			int result = this.commit();
 			this.disconnect();
-		}
 		
-		return result;
+		
+			return result;
+		}else{
+			return 0;
+		}
 	}
 	
 	
@@ -224,14 +240,14 @@ class EMDBParticipant extends EMDBBase{
 			Object[] row = result.get(i);
 			
 			Participant person = new Participant(
-									row[1].toString(),
 									row[2].toString(),
 									row[3].toString(),
 									row[4].toString(),
 									row[5].toString(),
-									row[6].toString()
+									row[6].toString(),
+									row[7].toString()
 								);
-			person.setID(Integer.parseInt(row[0].toString()));
+			person.setID(Integer.parseInt(row[1].toString()));
 			list.add(person);
 		}
 			
