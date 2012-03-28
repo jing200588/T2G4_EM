@@ -122,8 +122,8 @@ class EMDBBudget extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("Setup Budget: "+ sql);
-			this.dMsg("Setup Budget Optimized: "+ sql2);
+			this.dMsg("EMDB - Setup Budget: "+ sql);
+			this.dMsg("EMDB - Setup Budget Optimized: "+ sql2);
 		}
 		
 		
@@ -149,8 +149,8 @@ class EMDBBudget extends EMDBBase{
 						.validate().toString();
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("Cleanup Budget: "+ sql);
-			this.dMsg("Cleanup Budget Optimized: "+ sql2);
+			this.dMsg("EMDB - Cleanup Budget: "+ sql);
+			this.dMsg("EMDB - Cleanup Budget Optimized: "+ sql2);
 		}
 		
 		
@@ -169,8 +169,6 @@ class EMDBBudget extends EMDBBase{
 	 */
 	public boolean verify(){
 		
-		int tableTotal = 2;
-		
 		String sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.masterTable)
@@ -182,27 +180,7 @@ class EMDBBudget extends EMDBBase{
 						)
 						.validate().toString();
 
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("VERIFICATION - BUDGET TABLES");
-			this.dMsg(sql);
-		}
-		
-		this.connect();
-		
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int count = result.size();
-		
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("VERIFIED SIZE: "+count);
-		}
-		
-		
-		this.disconnect();
-		
-		if (count == tableTotal)
-			return true;
-		
-		return false;
+		return this.verification(sql, 2);
 		
 	}
 	
@@ -295,7 +273,7 @@ class EMDBBudget extends EMDBBase{
 		
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("ADD BUDGET");
+			this.dMsg("EMDB - ADD BUDGET");
 			this.dMsg(sql);
 		}
 		
@@ -452,7 +430,7 @@ class EMDBBudget extends EMDBBase{
 		
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET BUDGET LIST " + aTableType);
+			this.dMsg("EMDB - GET BUDGET LIST " + aTableType);
 			this.dMsg(sql);
 		}
 		
@@ -581,7 +559,7 @@ class EMDBBudget extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("Update Budget #"+aBudgetID);
+			this.dMsg("EMDB - Update Budget #"+aBudgetID);
 			this.dMsg(sql);
 		}
 		
@@ -643,9 +621,9 @@ class EMDBBudget extends EMDBBase{
 	 */
 	private int updateBudgetListGateway(Vector<Item> list, int aEventID, String aTableType){
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("Update Budget");
-			this.dMsg( " - " + aEventID);
-			this.dMsg( " - " + aTableType);
+			this.dMsg("EMDB - Update Budget");
+			this.dMsg( " - Event ID #" + aEventID);
+			this.dMsg( " - Type " + aTableType);
 		}
 		
 		//Clear the entire list
@@ -708,7 +686,7 @@ class EMDBBudget extends EMDBBase{
 			
 		}
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("DELETE BUDGET ID #" + aBudgetID);
+			this.dMsg("EMDB - DELETE BUDGET ID #" + aBudgetID);
 			this.dMsg(sql);
 		}
 		
@@ -768,7 +746,7 @@ class EMDBBudget extends EMDBBase{
 		
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("DELETE BUDGET LIST " + aTableType);
+			this.dMsg("EMDB - DELETE BUDGET LIST " + aTableType);
 			this.dMsg(sql);
 		}
 		

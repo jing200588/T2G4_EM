@@ -17,6 +17,7 @@ public class EMDBSettings {
 	public static final String 	TABLE_EVENTS				= 	"EM_EVENTS";
 	public static final String 	TABLE_BUDGET				= 	"EM_BUDGET";
 	public static final String 	TABLE_BUDGET_OPTIMIZED		= 	"EM_BUDGET_OPTIMIZED";	
+	public static final String	TABLE_PARTICIPANTS			=	"EM_PARTICIPANTS";
 	
 	
 }

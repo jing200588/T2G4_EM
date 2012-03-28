@@ -87,7 +87,7 @@ class EMDBEvent extends EMDBBase{
 						.validate().toString();
 		
 		if (EMDBSettings.DEVELOPMENT)
-			this.dMsg("Setup Event: "+ sql);
+			this.dMsg("EMDB - Setup Event: "+ sql);
 		
 		
 		this.queue(sql);
@@ -104,7 +104,7 @@ class EMDBEvent extends EMDBBase{
 						.validate().toString();
 		
 		if (EMDBSettings.DEVELOPMENT)
-			this.dMsg("Cleanup Event: "+ sql);
+			this.dMsg("EMDB - Cleanup Event: "+ sql);
 		
 		this.runQuery(sql);
 	}
@@ -117,8 +117,6 @@ class EMDBEvent extends EMDBBase{
 	 * @return
 	 */
 	public boolean verify(){
-		
-		int tableTotal = 1;
 				
 		String sql = new SelectQuery()
 						.addAllColumns()
@@ -128,26 +126,7 @@ class EMDBEvent extends EMDBBase{
 						)
 						.validate().toString();
 
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("VERIFICATION - EVEMT TABLES");
-			this.dMsg(sql);
-		}
-		
-		this.connect();
-		
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int count = result.size();
-		
-		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("VERIFIED SIZE: "+count);
-		}
-		
-		this.disconnect();
-		
-		if (count == tableTotal)
-			return true;
-		
-		return false;
+		return this.verification(sql, 1);
 	}
 	
 	
@@ -202,7 +181,7 @@ class EMDBEvent extends EMDBBase{
 		
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("ADD AN EVENT");
+			this.dMsg("EMDB - ADD AN EVENT");
 			this.dMsg(sql);
 		}
 		
@@ -251,7 +230,7 @@ class EMDBEvent extends EMDBBase{
 		
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET AN EVENT #"+aEventID);
+			this.dMsg("EMDB - GET AN EVENT #"+aEventID);
 			this.dMsg(sql);
 		}
 
@@ -296,7 +275,7 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public Vector<Eventitem> getEventList(){
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET AN EVENT LIST");
+			this.dMsg("EMDB - GET AN EVENT LIST");
 		}	
 		
 		return this.getEventListAll();
@@ -322,7 +301,7 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("GET ALL EVENTS LIST");
+			this.dMsg("EMDB - GET ALL EVENTS LIST");
 			this.dMsg(sql);
 		}
 			
@@ -417,6 +396,12 @@ class EMDBEvent extends EMDBBase{
 								.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 								.validate().toString();
 		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - UPDATE EVENT #"+aEventID);
+			this.dMsg(sql);
+		}
+		
+		
 		this.connect();
 		int result = this.runQuery(sql);
 		this.disconnect();
@@ -443,6 +428,12 @@ class EMDBEvent extends EMDBBase{
 							.addSetClause(this.eventsSchedule, aSchedule)
 							.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 							.validate().toString();
+		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - UDPATE SCHEDULE FOR #"+aEventID);
+			this.dMsg(sql);
+		}
 		
 		this.connect();
 		int result = this.runQuery(sql);
@@ -472,7 +463,7 @@ class EMDBEvent extends EMDBBase{
 
 
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("DELETE EVENT #"+aEventID);
+			this.dMsg("EMDB - DELETE EVENT #"+aEventID);
 			this.dMsg(sql);
 		}
 		

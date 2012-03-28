@@ -2,6 +2,7 @@
 
 public class Participant {
 	private String name, contact, email, address, matric, remark;
+	private int id;
 	
 	public Participant(String n, String m, String c, String e, String a, String r) {
 		name = n;
@@ -12,6 +13,15 @@ public class Participant {
 		remark = r;
 	}
 
+	public int getID(){
+		return id;
+	}
+
+
+	public void setID(int id){
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -23,7 +33,7 @@ public class Participant {
 	public String getContact() {
 		return contact;
 	}
-
+	
 	public void setContact(String contact) {
 		this.contact = contact;
 	}

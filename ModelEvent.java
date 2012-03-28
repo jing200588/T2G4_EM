@@ -11,15 +11,6 @@ public class ModelEvent {
 
 		db = new EMDBII();
 		
-		/*
-		list = db.eventDB().getEventList();
-		int size = list.size();
-		for (int i=0; i<size; i++){
-			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
-			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
-		}
-		*/
-		
 	};
 	
 	/************************************************************
