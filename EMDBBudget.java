@@ -33,7 +33,7 @@ class EMDBBudget extends EMDBBase{
     private DbColumn 	budgetPrice;
     private DbColumn 	budgetSatisfaction;
     private DbColumn 	budgetType;
-
+    private DbColumn    budgetQuantity;
     
     
     private DbTable 	optBudgetTable;
@@ -43,7 +43,7 @@ class EMDBBudget extends EMDBBase{
     private DbColumn 	optBudgetPrice;
     private DbColumn 	optBudgetSatisfaction;
     private DbColumn 	optBudgetType;  
-	
+    private DbColumn    optBudgetQuantity;
     
     
     
@@ -79,6 +79,7 @@ class EMDBBudget extends EMDBBase{
 		this.budgetPrice				= 	this.budgetTable.addColumn("price", "INTEGER", null);
 		this.budgetSatisfaction			= 	this.budgetTable.addColumn("satisfaction", "INTEGER", null);
 		this.budgetType					= 	this.budgetTable.addColumn("type", "TEXT", null);
+		this.budgetQuantity				= 	this.budgetTable.addColumn("quantity", "INTEGER DEFAULT (1)", null);
 
 		
 		/*
@@ -91,7 +92,7 @@ class EMDBBudget extends EMDBBase{
 		this.optBudgetPrice 			= 	this.optBudgetTable.addColumn("price", "INTEGER", null);
 		this.optBudgetSatisfaction 		= 	this.optBudgetTable.addColumn("satisfaction", "INTEGER", null);
 		this.optBudgetType 				= 	this.optBudgetTable.addColumn("type", "TEXT", null);
-		
+		this.optBudgetQuantity 			= 	this.optBudgetTable.addColumn("quantity", "INTEGER DEFAULT (1)", null);
 	}
 	
 	
@@ -225,8 +226,8 @@ class EMDBBudget extends EMDBBase{
 	 * @param aType
 	 * @return
 	 */
-	public int addBudget(int aEventID, String aName, int aPrice, int aSatisfaction, String aType){
-		return this.addBudgetGateway(aEventID, aName, aPrice, aSatisfaction, aType, "normal");
+	public int addBudget(int aEventID, String aName, int aPrice, int aSatisfaction, String aType, int aQuantity){
+		return this.addBudgetGateway(aEventID, aName, aPrice, aSatisfaction, aType, "normal", aQuantity);
 	}
 	
 	
@@ -240,8 +241,8 @@ class EMDBBudget extends EMDBBase{
 	 * @param aType
 	 * @return
 	 */
-	public int addBudgetOptimized(int aEventID, String aName, int aPrice, int aSatisfaction, String aType){
-		return this.addBudgetGateway(aEventID, aName, aPrice, aSatisfaction, aType, "optimized");
+	public int addBudgetOptimized(int aEventID, String aName, int aPrice, int aSatisfaction, String aType, int aQuantity){
+		return this.addBudgetGateway(aEventID, aName, aPrice, aSatisfaction, aType, "optimized", aQuantity);
 	}	
 	
 
@@ -254,6 +255,7 @@ class EMDBBudget extends EMDBBase{
 	 * @param aSatisfaction
 	 * @param aType
 	 * @param aTableType
+     * @param aQuantity
 	 * @return
 	 */
 	private int addBudgetGateway(
@@ -262,7 +264,8 @@ class EMDBBudget extends EMDBBase{
 			int aPrice, 
 			int aSatisfaction, 
 			String aType, 
-			String aTableType
+			String aTableType,
+            int aQuantity
 			)
 	{
 		String sql = "";
@@ -274,6 +277,7 @@ class EMDBBudget extends EMDBBase{
 							.addColumn(this.optBudgetPrice, aPrice)
 							.addColumn(this.optBudgetSatisfaction, aSatisfaction)
 							.addColumn(this.optBudgetType, aType)
+							.addColumn(this.optBudgetQuantity, aQuantity)
 							.validate().toString();
 		}else{
 				sql = new InsertQuery(this.budgetTable)
@@ -282,6 +286,7 @@ class EMDBBudget extends EMDBBase{
 							.addColumn(this.budgetPrice, aPrice)
 							.addColumn(this.budgetSatisfaction, aSatisfaction)
 							.addColumn(this.budgetType, aType)
+							.addColumn(this.budgetQuantity, aQuantity)
 							.validate().toString();
 		}
 			
@@ -364,6 +369,7 @@ class EMDBBudget extends EMDBBase{
 								.addColumn(this.optBudgetPrice, current.getPrice())
 								.addColumn(this.optBudgetSatisfaction, current.getSatisfaction_value())
 								.addColumn(this.optBudgetType, current.getType())
+								.addColumn(this.optBudgetQuantity, current.getQuantity())
 								.validate().toString();
 			}else{
 					sql = new InsertQuery(this.budgetTable)
@@ -372,6 +378,7 @@ class EMDBBudget extends EMDBBase{
 								.addColumn(this.budgetPrice, current.getPrice())
 								.addColumn(this.budgetSatisfaction, current.getSatisfaction_value())
 								.addColumn(this.budgetType, current.getType())
+								.addColumn(this.budgetQuantity, current.getQuantity())
 								.validate().toString();
 			}
 			
@@ -465,6 +472,7 @@ class EMDBBudget extends EMDBBase{
 								Integer.parseInt(row[4].toString()), 
 								row[5].toString()
 							);
+            current.setQuantity(Integer.parseInt(row[6].toString()));
 		    list.add(current);
 			
 		}
@@ -539,7 +547,10 @@ class EMDBBudget extends EMDBBase{
 			int aPrice, 
 			int aSatisfaction, 
 			String aType, 
-			String aTableType){
+			String aTableType,
+            int aQuantity
+            )
+    {
 
 		String sql = "";
 
@@ -549,6 +560,7 @@ class EMDBBudget extends EMDBBase{
 							.addSetClause(this.optBudgetPrice, aPrice)
 							.addSetClause(this.optBudgetSatisfaction, aSatisfaction)
 							.addSetClause(this.optBudgetType, aType)
+							.addSetClause(this.optBudgetQuantity, aQuantity)
 							.addCondition(BinaryCondition.equalTo(this.optBudgetID, aBudgetID))
 							.validate().toString();
 		}else{
@@ -557,6 +569,7 @@ class EMDBBudget extends EMDBBase{
 							.addSetClause(this.budgetPrice, aPrice)
 							.addSetClause(this.budgetSatisfaction, aSatisfaction)
 							.addSetClause(this.budgetType, aType)
+							.addSetClause(this.budgetQuantity, aQuantity)
 							.addCondition(BinaryCondition.equalTo(this.budgetID, aBudgetID))
 							.validate().toString();
 		}
