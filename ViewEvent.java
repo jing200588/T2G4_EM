@@ -33,10 +33,10 @@ import com.ibm.icu.text.Collator;
 
 
 public class ViewEvent extends Composite {
-	private static Table BudgetResult, VenueResult;
-	private static boolean budgetflag, venueflag;
+	private static Table BudgetResult, VenueResult, FlowResult;
+	private static boolean budgetflag, venueflag, flowflag;
 	private static Eventitem cevent;
-	private static Composite Budgetcomp, Bookvenuecomp;
+	private static Composite Budgetcomp, Bookvenuecomp, Eprogflowcomp;
 	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
 	private static ScrolledComposite sc1;
 	private static Composite maincomp;
@@ -273,7 +273,7 @@ public class ViewEvent extends Composite {
 		 * EVENT PROGRAM FLOW SECTION
 		 * 
 		 *********************************************************************************************/
-		Composite Eprogflowcomp = new Composite(maincomp, SWT.NONE);
+		Eprogflowcomp = new Composite(maincomp, SWT.NONE);
 		Eprogflowcomp.setLayout(new GridLayout(3, false));
 		FormData fd_Eprogflowcomp = new FormData();
 		fd_Eprogflowcomp.right = new FormAttachment(80, 0);
@@ -451,6 +451,7 @@ public class ViewEvent extends Composite {
 		//Checks and refreshes the individual sections and scroll space
 		RefreshBudget();
 		RefreshVenue();
+		RefreshFlow();
 		sc1.setContent(maincomp);
 		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
@@ -511,6 +512,13 @@ public class ViewEvent extends Composite {
 		if (venueflag)
 			VenueResult.dispose();
 		VenueResult = VenueTable();
+
+	}
+	
+	public static void RefreshFlow() {
+		if (flowflag)
+			FlowResult.dispose();
+		FlowResult = FlowTable();
 
 	}
 
@@ -635,6 +643,124 @@ public class ViewEvent extends Composite {
 		return VenueResult;
 	}
 
+	public static Table FlowTable() {
+		Vector<EventFlowEntry> flow_list = cevent.getEventFlow();
+		
+		System.out.println("Size: " + flow_list.size());
+		for(int i=0; i<flow_list.size(); i++) {
+			System.out.println(flow_list.get(i).getActivityName());
+		}
+		
+
+		//Checks if there is any entry before creating the table
+		if (flow_list.isEmpty()) {
+			flowflag = false;	
+			return null;
+		}
+
+
+		FlowResult = new Table(Eprogflowcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
+		FlowResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		FlowResult.setHeaderVisible(true);
+		FlowResult.getVerticalBar().setEnabled(false);
+
+		final TableColumn col0 = new TableColumn(FlowResult, SWT.LEFT);
+		final TableColumn col1 = new TableColumn(FlowResult, SWT.CENTER);
+		final TableColumn col2 = new TableColumn(FlowResult, SWT.CENTER);
+		final TableColumn col3 = new TableColumn(FlowResult, SWT.CENTER);
+		final TableColumn col4 = new TableColumn(FlowResult, SWT.CENTER);
+
+		col0.setText("Start Date Time");
+		col1.setText("End Date Time");
+		col2.setText("Activity");
+		col3.setText("Venue");
+		col4.setText("Remark");
+
+		FlowResult.removeAll();
+		for (int loopIndex = 0; loopIndex < flow_list.size(); loopIndex++) {
+			TableItem item = new TableItem(FlowResult, SWT.NULL);
+			item.setText(0, flow_list.get(loopIndex).getDuration().getStartDateTime().getDateRepresentation() + " " +
+					flow_list.get(loopIndex).getDuration().getStartDateTime().getTimeRepresentation());
+			item.setText(1, flow_list.get(loopIndex).getDuration().getEndDateTime().getDateRepresentation() + " " +
+					flow_list.get(loopIndex).getDuration().getEndDateTime().getTimeRepresentation());
+			item.setText(2, flow_list.get(loopIndex).getActivityName());
+			item.setText(3, flow_list.get(loopIndex).getVenueName());
+			item.setText(4, flow_list.get(loopIndex).getUserNote());
+		
+
+		}
+		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
+			FlowResult.getColumn(loopIndex).pack();
+		}					
+
+
+		//Column Resize with table fix
+		Eprogflowcomp.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				Rectangle area = Eprogflowcomp.getClientArea();
+				Point preferredSize = FlowResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				int width = area.width - 2*FlowResult.getBorderWidth();
+				if (preferredSize.y > area.height + FlowResult.getHeaderHeight()) {
+					// Subtract the scrollbar width from the total column width
+					// if a vertical scrollbar will be required
+					Point vBarSize = FlowResult.getVerticalBar().getSize();
+					width -= vBarSize.x;
+
+				}
+				Point oldSize = FlowResult.getSize();
+				if (oldSize.x > area.width) {
+					// table is getting smaller so make the columns 
+					// smaller first and then resize the table to
+					// match the client area width
+					col0.setWidth(width/5+10);
+					col1.setWidth(width/5+10);
+					col2.setWidth(width/5+20);
+					col3.setWidth(width/5+20);
+					col4.setWidth(width/5-20);
+				
+					//    System.out.println("width "+ width);
+					//BudgetResult.setSize(area.width, area.height);
+				} else {
+					// table is getting bigger so make the table 
+					// bigger first and then make the columns wider
+					// to match the client area width
+					//BudgetResult.setSize(area.width, area.height);
+					col0.setWidth(width/5-10);
+					col1.setWidth(width/5-10);
+					col2.setWidth(width/5+20);
+					col3.setWidth(width/5+20);
+					col4.setWidth(width/5-20);
+					
+				}
+			}
+		});
+
+		//Table Tooltip
+		FlowResult.addMouseTrackListener(new MouseTrackAdapter() {
+			@Override
+			public void mouseHover(MouseEvent e) {
+				TableItem item = FlowResult.getItem(new Point(e.x, e.y));
+				//	 BudgetResult.setToolTipText(item.getText(0));
+
+				//tooltip for every column
+				for (int i=0; i<FlowResult.getColumnCount()-1; i++) {
+					if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
+						FlowResult.setToolTipText(item.getText(i));
+						break;
+					}
+
+					else if (i == FlowResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
+						FlowResult.setToolTipText(item.getText(++i));
+				}
+
+			}
+		});
+
+
+		flowflag = true;
+		return FlowResult;
+	}
+	
 	/**
 	 * Description: Creates a sortable table that is populated with items of the event's optimized item list
 	 * @return A table is returned if there are entries in the list, else null is returned

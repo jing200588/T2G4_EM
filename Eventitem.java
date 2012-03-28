@@ -12,6 +12,7 @@ public class Eventitem {
 	private MyDateTime _endDateTime;
 	private List<Participant> _participant_list =  new Vector<Participant>();
 	private Vector<EventFlowEntry> _eventFlow = new Vector<EventFlowEntry>();
+	private boolean _expired;
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters 
@@ -33,6 +34,7 @@ public class Eventitem {
 		_endDateTime = new MyDateTime(ey, em, ed, ehour, emin);
 		_description = descript;
 		_BVI_list = new Vector<BookedVenueInfo>();
+		_expired = false;
 	//	_participant_list = new Vector<Participant>();
 		_participant_list.add(new Participant("Jonathan", "A1234567", "65554493", "chuichui@gmail.com", "Block 123 Tamp street 81", "-"));
 		System.out.println("hello " + _participant_list.size());
@@ -193,8 +195,14 @@ public class Eventitem {
 		return _participant_list;
 	}
 	
+	public void setIsExpired(boolean flag) {
+		_expired = flag;
+	}
 	public void setEventFlow(Vector<EventFlowEntry> newEventFlow)
 	{
 		_eventFlow = newEventFlow;
+	}
+	public boolean isExpired() {
+		return _expired;
 	}
 }
