@@ -451,7 +451,7 @@ public class ViewMain extends ApplicationWindow {
 			tbtmUpcomingEvents.setText("       Upcoming Events       ");
 			
 			//Event List Table
-			table = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+			table = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
 			tbtmUpcomingEvents.setControl(table);
 			table.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override
@@ -483,7 +483,7 @@ public class ViewMain extends ApplicationWindow {
 			tc2 = new TableColumn(table,SWT.CENTER);
 			tc3 = new TableColumn(table,SWT.CENTER);
 			
-		    tc1.setText("Event List");
+		    tc1.setText("Event Title");
 		    tc2.setText("DL");
 		    tc3.setText("Undone");
 		    // 	    tc1.setWidth(206);
@@ -583,7 +583,7 @@ public class ViewMain extends ApplicationWindow {
 			etc2 = new TableColumn(table_1,SWT.CENTER);
 			etc3 = new TableColumn(table_1,SWT.CENTER);
 			
-		    etc1.setText("Event List");
+		    etc1.setText("Event Title");
 		    etc2.setText("DL");
 		    etc3.setText("Undone");
 		    // 	    tc1.setWidth(206);
@@ -633,11 +633,11 @@ public class ViewMain extends ApplicationWindow {
 			 * DELETE PAST EVENT
 			 ***********************************************************/
 			
-			MenuItem mntmDeletePastEvent = new MenuItem(menu, SWT.PUSH);
+			MenuItem mntmDeletePastEvent = new MenuItem(menu2, SWT.PUSH);
 			mntmDeletePastEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					TableItem tb = table.getItem(table.getSelectionIndex());
+					TableItem tb = table_1.getItem(table_1.getSelectionIndex());
 					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 					if ((Integer) confirm.open() == 1) {
 				//		ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
@@ -645,7 +645,7 @@ public class ViewMain extends ApplicationWindow {
 					}
 				}
 			});
-			mntmDeleteEvent.setText("Delete Event");
+			mntmDeletePastEvent.setText("Delete Event");
 			
 			DateTime Calender = new DateTime(c1, SWT.CALENDAR | SWT.LONG);
 			Calender.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));

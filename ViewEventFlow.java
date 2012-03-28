@@ -253,7 +253,7 @@ public class ViewEventFlow extends Composite {
 		display = Display.getDefault();
 		Shell shell = new Shell();
 		
-		Eventitem event = new Eventitem("Fundraising", 2012, 3, 20, 9, 17, 2012, 4, 19, 5, 25);
+		Eventitem event = new Eventitem("Fundraising", 2012, 3, 20, 9, 17, 2012, 4, 19, 5, 25, "Fundraising Event");
 		event.addBVI(new BookedVenueInfo("SoC", 15, "NUS", "Cool", 100, 10, 
 				new TimeSlot(new MyDateTime(2012, 5, 15, 7, 0), new MyDateTime(2012, 5, 15, 9, 0))));
 		event.addBVI(new BookedVenueInfo("Biz", 19, "NUS", "Cool", 100, 10, 

@@ -26,11 +26,11 @@ public class Eventitem {
 	 * @param ehour End Hour
 	 * @param emin End Minute
 	 */
-	public Eventitem (String name, int sy, int sm, int sd, int ey, int em, int ed, int shour, int smin, int ehour, int emin) {
+	public Eventitem (String name, int sy, int sm, int sd, int ey, int em, int ed, int shour, int smin, int ehour, int emin, String descript) {
 		_name = name;
 		_startDateTime = new MyDateTime (sy, sm, sd, shour, smin);
 		_endDateTime = new MyDateTime(ey, em, ed, ehour, emin);
-		_description = "";
+		_description = descript;
 		_BVI_list = new Vector<BookedVenueInfo>();
 	//	_participant_list = new Vector<Participant>();
 		_participant_list.add(new Participant("Jonathan", "A1234567", "65554493", "chuichui@gmail.com", "Block 123 Tamp street 81", "-"));

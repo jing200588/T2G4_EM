@@ -36,7 +36,7 @@ public class ViewCreateEvent extends ViewEventParticulars {
 				eventname = eventname.replaceAll("  ", "");	//removes excess whitespaces between the names
 				
 				Eventitem newevent = new Eventitem(eventname, StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(),
-						EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes());
+						EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes(), txtDescription.getText());
 				ModelEvent.CreateEvent(newevent);
 				ViewMain.UpdateTable();
 				}
