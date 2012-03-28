@@ -33,7 +33,8 @@ public class ModelEvent {
 				eitem.getEndDateTime().getDateRepresentation(),
 				eitem.getStartDateTime().getTimeRepresentation(),
 				eitem.getEndDateTime().getTimeRepresentation(), 
-				"");
+				EventFlowEntry.getStringRepresentation(eitem.getEventFlow())
+				);
 		eitem.setID(id);
 		
 		list.add(eitem);

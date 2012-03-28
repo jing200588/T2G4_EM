@@ -27,7 +27,7 @@ public class ModelEventFlow {
 			// DATABASE: add the string storedText into the database
 			// Add code here
 			
-			db.eventDB().updateSchedule(1, storedText);
+			db.eventDB().updateSchedule(eventID, storedText);
 			
 			
 			return true;
@@ -47,8 +47,9 @@ public class ModelEventFlow {
 	{
 		// DATABASE: you should return a string
 		// Replace the instruction below
-		String stringData = new String();
+		return db.eventDB().getEvent(eventID).getEventFlow();
 		
-		return EventFlowEntry.constructEventFlowEntryList(stringData);
+		
+		//return EventFlowEntry.constructEventFlowEntryList(stringData);
 	}
 }
