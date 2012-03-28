@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.util.Vector;
 
 import org.eclipse.swt.SWT;
@@ -29,6 +30,8 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 public class ViewEventFlow extends Composite {
 	
@@ -276,39 +279,42 @@ public class ViewEventFlow extends Composite {
 		btnNewButton_1.setText("Browse");
 		
 		Button btnExport = new Button(mainComposite, SWT.NONE);
-/*		btnExport.addSelectionListener(new SelectionAdapter() {
+		btnExport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					CSVWriter writer = new CSVWriter(new FileWriter(filepath));
-					String[] headers = new String[table.getColumnCount()];
-					for (int i=0; i<table.getColumnCount(); i++) {
-						headers[i] = table.getColumns()[i].getText();
+				try 
+				{
+					CSVWriter writer = new CSVWriter(new FileWriter(textFilePath.getText()));
+					
+					writer.writeNext(COLUMN_PROPS);
+					
+					String[] line = new String[COLUMN_PROPS.length];
+					
+					for (int index = 0; index < listEventFlow.size(); index++) 
+					{
+						line[0] = listEventFlow.get(index).getDuration().getStartDateTime().getDateRepresentation()
+								+ " " + listEventFlow.get(index).getDuration().getStartDateTime().getTimeRepresentation();
+						line[1] = listEventFlow.get(index).getDuration().getEndDateTime().getDateRepresentation()
+								+ " " + listEventFlow.get(index).getDuration().getEndDateTime().getTimeRepresentation();
+						line[2] = listEventFlow.get(index).getActivityName();
+						line[3] = listEventFlow.get(index).getVenueName();
+						line[4] = listEventFlow.get(index).getUserNote();
+						
+						writer.writeNext(line);
 					}
 					
-					writer.writeNext(headers);
-					
-					for (int i=0; i<table.getItemCount(); i++) {
-						String[] entries = new String[table.getColumnCount()];
-						for (int j=0; j<table.getColumnCount(); j++) 
-							entries[j] = table.getItem(i).getText(j);
-						writer.writeNext(entries);
-					}
 					writer.close();
-					new errormessageDialog(new Shell(), "The file was exported successfully!").open();
-					/*
-				     String[] entries = "first#second#third".split("#");
-				     writer.writeNext(entries);
-					writer.close();
-				      */         		
-	/*			} catch (IOException e) {
+					new errormessageDialog(new Shell(), "The file was exported successfully!").open();  		
+				} 
+				catch (Exception excetion) 
+				{
 					// TODO Auto-generated catch block
-					System.out.println("Error exporting");
-					new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
-					e.printStackTrace();
+					errormessageDialog errorBoard = new errormessageDialog(new Shell(), 
+							"There was an error exporting the file.");
+					errorBoard.open();
 				}
 			}
-		}); */
+		}); 
 		btnExport.setBounds(360, 299, 75, 25);
 		toolkit.adapt(btnExport, true, true);
 		btnExport.setText("Export");
