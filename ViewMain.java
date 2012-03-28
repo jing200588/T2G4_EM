@@ -40,6 +40,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 
 
 
@@ -60,7 +62,9 @@ public class ViewMain extends ApplicationWindow {
     private static ViewHomepage hp;
     private static EMDBII db;
   //  private static boolean vBarOn;
-    private static TableColumn tc1, tc2,tc3;
+    private static TableColumn tc1, tc2, tc3;
+    private static TableColumn etc1, etc2, etc3;
+    private Table table_1;
   //  private static int tc2vBarOnWidth, tc2vBarOffWidth;
   //  private static int firstruncheck = 0;
     
@@ -346,80 +350,9 @@ public class ViewMain extends ApplicationWindow {
 			gd_btnCreateEvent.widthHint = 294;
 			btnCreateEvent.setLayoutData(gd_btnCreateEvent);
 			
-			//Event List Table
-			table = new Table(c1, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
-			table.addMouseTrackListener(new MouseTrackAdapter() {
-				@Override
-				public void mouseHover(MouseEvent e) {
-					 TableItem item = table.getItem(new Point(e.x, e.y));
-					 table.setToolTipText(item.getText(0));
-				}
-			});
-			table.setToolTipText("");
-			table.setTouchEnabled(true);
-			
 			/************************************************************
 			 * TABLE ITEM SELECTION EVENT LISTENER
 			 ***********************************************************/
-			table.addListener(SWT.Selection, new Listener() {
-		     public void handleEvent(Event event) {
-
-		      //dispose of all children that currently is in c2
-				if (c2 != null && !c2.isDisposed()) {
-				Object[] children = c2.getChildren();
-				for (int i=0; i<children.length; i++)
-					((Composite)children[i]).dispose();
-				}
-			
-				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
-				view = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
-		        layout.topControl = view;
-				c2.layout(true);
-		     }
-			});
-				
-			
-			GridData gd_table = new GridData(SWT.CENTER, SWT.FILL, false, true, 1, 1);
-			gd_table.widthHint = 270;
-			tc1 = new TableColumn(table, SWT.LEFT);
-			tc2 = new TableColumn(table,SWT.CENTER);
-			tc3 = new TableColumn(table,SWT.CENTER);
-			
-		    tc1.setText("Event List");
-	 	    tc2.setText("DL");
-	 	    tc3.setText("Undone");
-	// 	    tc1.setWidth(206);
-	// 	    tc2.setWidth(40);
-	// 	    tc3.setWidth(40);
-	 //	    tc1.pack();
-	 //	    tc2.pack();
-	 //	    tc3.pack();
-	 	    
-	 	    tc1.setResizable(false);
-	 	    tc2.setResizable(false);
-	 	    tc3.setResizable(false);
-	 	    
-			tc1.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event e) {
-					//sort name
-					TableItem[] items = table.getItems();
-					Collator collator = Collator.getInstance(Locale.getDefault());
-					for (int i = 1; i<items.length; i++) {
-						String value1 = items[i].getText(0);
-						for(int j=0; j < i; j++) {
-							String value2 = items[j].getText(0);
-							if(collator.compare(value1, value2) < 0) {
-								String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2)};
-								items[i].dispose();
-								TableItem item = new TableItem(table, SWT.NONE, j);	//j could be the final index
-								item.setText(values);
-								items = table.getItems();
-								break;
-							}
-						}
-					}
-				}
-			});
 			
 			//Column Resize with table fix
 			 c1.addControlListener(new ControlAdapter() {
@@ -505,10 +438,89 @@ public class ViewMain extends ApplicationWindow {
 				    }
 				    
 			 });
+			
+			
+			TabFolder tabFolder = new TabFolder(c1, SWT.NONE);
+			GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+			gd_tabFolder.widthHint = 284;
+			tabFolder.setLayoutData(gd_tabFolder);
+			formToolkit.adapt(tabFolder);
+			formToolkit.paintBordersFor(tabFolder);
+			
+			TabItem tbtmUpcomingEvents = new TabItem(tabFolder, SWT.NONE);
+			tbtmUpcomingEvents.setText("       Upcoming Events       ");
+			
+			//Event List Table
+			table = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+			tbtmUpcomingEvents.setControl(table);
+			table.addMouseTrackListener(new MouseTrackAdapter() {
+				@Override
+				public void mouseHover(MouseEvent e) {
+					 TableItem item = table.getItem(new Point(e.x, e.y));
+					 if (item != null)
+						 table.setToolTipText(item.getText(0));
+				}
+			});
+			table.setToolTipText("");
+			table.setTouchEnabled(true);
+			table.addListener(SWT.Selection, new Listener() {
+		     public void handleEvent(Event event) {
 
+		      //dispose of all children that currently is in c2
+				if (c2 != null && !c2.isDisposed()) {
+				Object[] children = c2.getChildren();
+				for (int i=0; i<children.length; i++)
+					((Composite)children[i]).dispose();
+				}
+			
+				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
+				view = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		        layout.topControl = view;
+				c2.layout(true);
+		     }
+			});
+			tc1 = new TableColumn(table, SWT.LEFT);
+			tc2 = new TableColumn(table,SWT.CENTER);
+			tc3 = new TableColumn(table,SWT.CENTER);
+			
+		    tc1.setText("Event List");
+		    tc2.setText("DL");
+		    tc3.setText("Undone");
+		    // 	    tc1.setWidth(206);
+		    // 	    tc2.setWidth(40);
+		    // 	    tc3.setWidth(40);
+		     //	    tc1.pack();
+		     //	    tc2.pack();
+		     //	    tc3.pack();
+		     	    
+		     	    tc1.setResizable(false);
+		     	    tc2.setResizable(false);
+		     	    tc3.setResizable(false);
+		     	    
+			tc1.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event e) {
+					//sort name
+					TableItem[] items = table.getItems();
+					Collator collator = Collator.getInstance(Locale.getDefault());
+					for (int i = 1; i<items.length; i++) {
+						String value1 = items[i].getText(0);
+						for(int j=0; j < i; j++) {
+							String value2 = items[j].getText(0);
+							if(collator.compare(value1, value2) < 0) {
+								String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2)};
+								items[i].dispose();
+								TableItem item = new TableItem(table, SWT.NONE, j);	//j could be the final index
+								item.setText(values);
+								items = table.getItems();
+								break;
+							}
+						}
+					}
+				}
+			});
+			
 			table.getHorizontalBar().setVisible(true);
 			table.getHorizontalBar().setEnabled(false);
-			table.setLayoutData(gd_table);
 			formToolkit.adapt(table);
 			formToolkit.paintBordersFor(table);
 			table.setHeaderVisible(true);
@@ -517,11 +529,10 @@ public class ViewMain extends ApplicationWindow {
 			Menu menu = new Menu(table);
 			table.setMenu(menu);
 			
-			
-			
 			/************************************************************
 			 * DELETE EVENT
 			 ***********************************************************/
+			
 			MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
 			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -531,6 +542,106 @@ public class ViewMain extends ApplicationWindow {
 					if ((Integer) confirm.open() == 1) {
 						ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
 						DeleteItem();
+					}
+				}
+			});
+			mntmDeleteEvent.setText("Delete Event");
+			
+			TabItem tbtmPastEvents = new TabItem(tabFolder, SWT.NONE);
+			tbtmPastEvents.setText("          Past Events          ");
+			
+			//Past Event List Table
+			table_1 = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			tbtmPastEvents.setControl(table_1);			
+			table_1.addMouseTrackListener(new MouseTrackAdapter() {
+				@Override
+				public void mouseHover(MouseEvent e) {
+					 TableItem item = table_1.getItem(new Point(e.x, e.y));
+					 if (item != null)
+						 table_1.setToolTipText(item.getText(0));
+				}
+			});
+			table_1.setToolTipText("");
+			table_1.setTouchEnabled(true);
+			table_1.addListener(SWT.Selection, new Listener() {
+		     public void handleEvent(Event event) {
+
+		      //dispose of all children that currently is in c2
+				if (c2 != null && !c2.isDisposed()) {
+				Object[] children = c2.getChildren();
+				for (int i=0; i<children.length; i++)
+					((Composite)children[i]).dispose();
+				}
+			
+				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
+				view = new ViewEvent(c2, SWT.NONE, eventlist.get(table_1.getSelectionIndex()));
+		        layout.topControl = view;
+				c2.layout(true);
+		     }
+			});
+			etc1 = new TableColumn(table_1, SWT.LEFT);
+			etc2 = new TableColumn(table_1,SWT.CENTER);
+			etc3 = new TableColumn(table_1,SWT.CENTER);
+			
+		    etc1.setText("Event List");
+		    etc2.setText("DL");
+		    etc3.setText("Undone");
+		    // 	    tc1.setWidth(206);
+		    // 	    tc2.setWidth(40);
+		    // 	    tc3.setWidth(40);
+		    	    etc1.pack();
+		     	    etc2.pack();
+		     	    etc3.pack();
+		     	    
+		     	    etc1.setResizable(false);
+		     	    etc2.setResizable(false);
+		     	    etc3.setResizable(false);
+		     	    
+			etc1.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event e) {
+					//sort name
+					TableItem[] items = table_1.getItems();
+					Collator collator = Collator.getInstance(Locale.getDefault());
+					for (int i = 1; i<items.length; i++) {
+						String value1 = items[i].getText(0);
+						for(int j=0; j < i; j++) {
+							String value2 = items[j].getText(0);
+							if(collator.compare(value1, value2) < 0) {
+								String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2)};
+								items[i].dispose();
+								TableItem item = new TableItem(table_1, SWT.NONE, j);	//j could be the final index
+								item.setText(values);
+								items = table_1.getItems();
+								break;
+							}
+						}
+					}
+				}
+			});
+			
+			table_1.getHorizontalBar().setVisible(true);
+			table_1.getHorizontalBar().setEnabled(false);
+			formToolkit.adapt(table_1);
+			formToolkit.paintBordersFor(table_1);
+			table_1.setHeaderVisible(true);
+			table_1.setLinesVisible(false);
+	//		UpdateTable();
+			Menu menu2 = new Menu(table_1);
+			table_1.setMenu(menu2);
+			
+			/************************************************************
+			 * DELETE PAST EVENT
+			 ***********************************************************/
+			
+			MenuItem mntmDeletePastEvent = new MenuItem(menu, SWT.PUSH);
+			mntmDeletePastEvent.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					TableItem tb = table.getItem(table.getSelectionIndex());
+					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
+					if ((Integer) confirm.open() == 1) {
+				//		ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
+					//	DeleteItem();
 					}
 				}
 			});
