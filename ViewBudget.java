@@ -727,7 +727,7 @@ public class ViewBudget extends Composite {
 			for(int i=0; i<optimizeList.size(); i++) {
 				String[] entries = new String[4];
 				entries[0] = item_list.get(i).getItem();
-				entries[1] = ""+item_list.get(i).getPrice();
+				entries[1] = ""+(((double) item_list.get(i).getPrice())/100);
 				entries[2] = ""+item_list.get(i).getSatisfaction_value();
 				entries[3] = item_list.get(i).getType();
 
