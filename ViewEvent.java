@@ -384,6 +384,7 @@ public class ViewEvent extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				loginDiag = new EmailLoginDialog(new Shell(), cevent);
 				loginDiag.open();
+
 			}
 		});
 		GridData gd_Advertedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
