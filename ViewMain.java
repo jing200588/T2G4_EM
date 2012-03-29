@@ -143,10 +143,12 @@ public class ViewMain extends ApplicationWindow {
 		for (; i<eventlist.size(); i++) {			
 			item = new TableItem(table,SWT.NONE);
 			item.setText(eventlist.get(i).getName());
-			item.setText(1, "5");
+			item.setText(1,eventlist.get(i).getStartDateTime().getDateRepresentation());
+/*			item.setText(1, "5");
 			item.setBackground(1, red);
 	    	item.setText(2, "X");
 	    	item.setBackground(2,blue);
+	    	*/
 		}
 		/*
         if (vBarOn && tc2.getWidth() != tc2vBarOnWidth) {
@@ -184,6 +186,7 @@ public class ViewMain extends ApplicationWindow {
 		for (; i<expiredlist.size(); i++) {			
 			item = new TableItem(table_1,SWT.NONE);
 			item.setText(expiredlist.get(i).getName());
+			item.setText(1,eventlist.get(i).getEndDateTime().getDateRepresentation());
 /*			item.setText(1, "5");
 			item.setBackground(1, red);
 	    	item.setText(2, "X");
@@ -459,23 +462,10 @@ public class ViewMain extends ApplicationWindow {
 				        width -= vBarSize.x;
 				      }
 				      Point oldSize = c1.getSize();
-				      if (oldSize.x > area.width) {
-				        // table is getting smaller so make the columns 
-				        // smaller first and then resize the table to
-				        // match the client area width
-				    	  tc1.setWidth(width/3*2);
-					      tc2.setWidth((width - tc1.getWidth())/2 -12);
-					      tc3.setWidth((width - tc1.getWidth())/2 -12);
-				   //       table.setSize(area.width, area.height);
-				      } else {
-				        // table is getting bigger so make the table 
-				        // bigger first and then make the columns wider
-				        // to match the client area width
-				    //	  table.setSize(area.width, area.height);
-				    	  tc1.setWidth(width/3*2);
-					      tc2.setWidth((width - tc1.getWidth())/2 -12);
-					      tc3.setWidth((width - tc1.getWidth())/2 -12);			        
-				      }
+				      tc1.setWidth(width/3*2);
+				      tc2.setWidth((width - tc1.getWidth()) -24);        
+				      etc1.setWidth(width/3*2);
+				      etc2.setWidth((width - etc1.getWidth()) -24);  
 			/*
 				        table.addPaintListener(new PaintListener() {
 				            public void paintControl(PaintEvent e) {
@@ -572,11 +562,11 @@ public class ViewMain extends ApplicationWindow {
 			});
 			tc1 = new TableColumn(table, SWT.LEFT);
 			tc2 = new TableColumn(table,SWT.CENTER);
-			tc3 = new TableColumn(table,SWT.CENTER);
+	//		tc3 = new TableColumn(table,SWT.CENTER);
 			
 		    tc1.setText("Event Title");
-		    tc2.setText("DL");
-		    tc3.setText("Undone");
+		    tc2.setText("Start Date");
+	//	    tc3.setText("Undone");
 		    // 	    tc1.setWidth(206);
 		    // 	    tc2.setWidth(40);
 		    // 	    tc3.setWidth(40);
@@ -586,7 +576,7 @@ public class ViewMain extends ApplicationWindow {
 		     	    
 		     	    tc1.setResizable(false);
 		     	    tc2.setResizable(false);
-		     	    tc3.setResizable(false);
+	//	     	    tc3.setResizable(false);
 		     	    
 			tc1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
@@ -628,16 +618,22 @@ public class ViewMain extends ApplicationWindow {
 			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					TableItem tb = table.getItem(table.getSelectionIndex());
-					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
-					if ((Integer) confirm.open() == 1) {
-						ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
-						DeleteItem();
+					try {
+						TableItem tb = table.getItem(table.getSelectionIndex());
+						deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
+						if ((Integer) confirm.open() == 1) {
+							ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
+							DeleteItem();
+						}
+					} catch (Exception ex) {
+						errormessageDialog errormsg = new errormessageDialog(new Shell(), "There was nothing selected!");
+						errormsg.open();
 					}
 				}
+				
 			});
 			mntmDeleteEvent.setText("Delete Event");
-			
+
 			TabItem tbtmPastEvents = new TabItem(tabFolder, SWT.NONE);
 			tbtmPastEvents.setText("          Past Events          ");
 			
@@ -672,21 +668,21 @@ public class ViewMain extends ApplicationWindow {
 			});
 			etc1 = new TableColumn(table_1, SWT.LEFT);
 			etc2 = new TableColumn(table_1,SWT.CENTER);
-			etc3 = new TableColumn(table_1,SWT.CENTER);
+	//		etc3 = new TableColumn(table_1,SWT.CENTER);
 			
 		    etc1.setText("Event Title");
-		    etc2.setText("DL");
-		    etc3.setText("Undone");
+		    etc2.setText("End Date");
+	//	    etc3.setText("Undone");
 		    // 	    tc1.setWidth(206);
 		    // 	    tc2.setWidth(40);
 		    // 	    tc3.setWidth(40);
 		    	    etc1.pack();
 		     	    etc2.pack();
-		     	    etc3.pack();
+	//	     	    etc3.pack();
 		     	    
 		     	    etc1.setResizable(false);
 		     	    etc2.setResizable(false);
-		     	    etc3.setResizable(false);
+	//	     	    etc3.setResizable(false);
 		     	    
 			etc1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
@@ -717,7 +713,7 @@ public class ViewMain extends ApplicationWindow {
 			table_1.setHeaderVisible(true);
 			table_1.setLinesVisible(false);
 			UpdateExpiredTable();
-			CheckExpiry();
+	//		CheckExpiry();
 			Menu menu2 = new Menu(table_1);
 			table_1.setMenu(menu2);
 			
@@ -729,11 +725,16 @@ public class ViewMain extends ApplicationWindow {
 			mntmDeletePastEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
+					try {
 					TableItem tb = table_1.getItem(table_1.getSelectionIndex());
 					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 					if ((Integer) confirm.open() == 1) {
 				//		ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
 					//	DeleteItem();
+					}
+					} catch (Exception ex) {
+						errormessageDialog errormsg = new errormessageDialog(new Shell(), "There was nothing selected!");
+						errormsg.open();
 					}
 				}
 			});

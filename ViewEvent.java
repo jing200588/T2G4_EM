@@ -79,9 +79,9 @@ public class ViewEvent extends Composite {
 		 *********************************************************************************************/
 		Composite EparticularsComp = new Composite(maincomp, SWT.NONE);
 		FormData fd_EparticularsComp = new FormData();
-		fd_EparticularsComp.right = new FormAttachment(80, 0);
+		fd_EparticularsComp.right = new FormAttachment(90);
 		fd_EparticularsComp.top = new FormAttachment(Title, 30);
-		fd_EparticularsComp.left = new FormAttachment(20, 0);
+		fd_EparticularsComp.left = new FormAttachment(10);
 		EparticularsComp.setLayoutData(fd_EparticularsComp);
 		EparticularsComp.setLayout(new GridLayout(3, false));
 
@@ -184,8 +184,8 @@ public class ViewEvent extends Composite {
 		Bookvenuecomp = new Composite(maincomp, SWT.NONE);
 		Bookvenuecomp.setLayout(new GridLayout(3, false));
 		FormData fd_Bookvenuecomp = new FormData();
-		fd_Bookvenuecomp.right = new FormAttachment(80, 0);
-		fd_Bookvenuecomp.left = new FormAttachment(20, 0);
+		fd_Bookvenuecomp.right = new FormAttachment(90);
+		fd_Bookvenuecomp.left = new FormAttachment(10);
 		fd_Bookvenuecomp.top = new FormAttachment(divider1, 30);
 		Bookvenuecomp.setLayoutData(fd_Bookvenuecomp);
 
@@ -230,8 +230,8 @@ public class ViewEvent extends Composite {
 		Budgetcomp = new Composite(maincomp, SWT.NONE);
 		Budgetcomp.setLayout(new GridLayout(3, false));
 		FormData fd_Budgetcomp = new FormData();
-		fd_Budgetcomp.right = new FormAttachment(80, 0);
-		fd_Budgetcomp.left = new FormAttachment(20, 0);
+		fd_Budgetcomp.right = new FormAttachment(90);
+		fd_Budgetcomp.left = new FormAttachment(10);
 		fd_Budgetcomp.top = new FormAttachment(divider2, 30);
 		Budgetcomp.setLayoutData(fd_Budgetcomp);
 
@@ -277,8 +277,8 @@ public class ViewEvent extends Composite {
 		Eprogflowcomp = new Composite(maincomp, SWT.NONE);
 		Eprogflowcomp.setLayout(new GridLayout(3, false));
 		FormData fd_Eprogflowcomp = new FormData();
-		fd_Eprogflowcomp.right = new FormAttachment(80, 0);
-		fd_Eprogflowcomp.left = new FormAttachment(20, 0);
+		fd_Eprogflowcomp.right = new FormAttachment(90);
+		fd_Eprogflowcomp.left = new FormAttachment(10);
 		fd_Eprogflowcomp.top = new FormAttachment(divider3, 30);
 		Eprogflowcomp.setLayoutData(fd_Eprogflowcomp);
 
@@ -324,8 +324,8 @@ public class ViewEvent extends Composite {
 		Plistcomp = new Composite(maincomp, SWT.NONE);
 		Plistcomp.setLayout(new GridLayout(3, false));
 		FormData fd_Plistcomp = new FormData();
-		fd_Plistcomp.left = new FormAttachment(20, 0);
-		fd_Plistcomp.right = new FormAttachment(80, 0);
+		fd_Plistcomp.left = new FormAttachment(10);
+		fd_Plistcomp.right = new FormAttachment(90);
 		fd_Plistcomp.top = new FormAttachment(divider4, 30);
 		Plistcomp.setLayoutData(fd_Plistcomp);
 
@@ -362,8 +362,8 @@ public class ViewEvent extends Composite {
 		Advertcomp.setLayout(new GridLayout(3, false));
 		FormData fd_Advertcomp = new FormData();
 		fd_Advertcomp.top = new FormAttachment(divider5, 30);
-		fd_Advertcomp.left = new FormAttachment(20, 0);
-		fd_Advertcomp.right = new FormAttachment(80, 0);
+		fd_Advertcomp.left = new FormAttachment(10);
+		fd_Advertcomp.right = new FormAttachment(90);
 		Advertcomp.setLayoutData(fd_Advertcomp);
 
 		Label Advertising = new Label(Advertcomp, SWT.NONE);
@@ -468,8 +468,8 @@ public class ViewEvent extends Composite {
 		Label divider = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
 		FormData fd_divider = new FormData();
 		fd_divider.top = new FormAttachment(object, 30);
-		fd_divider.left = new FormAttachment(10, 0);
-		fd_divider.right = new FormAttachment(90, 0);
+		fd_divider.left = new FormAttachment(5);
+		fd_divider.right = new FormAttachment(95);
 		divider.setLayoutData(fd_divider);
 
 		return divider;
@@ -628,17 +628,18 @@ public class ViewEvent extends Composite {
 				TableItem item = ParticipantResult.getItem(new Point(e.x, e.y)); 
 				//	 BudgetResult.setToolTipText(item.getText(0));
 
-				//tooltip for every column
-				for (int i=0; i<ParticipantResult.getColumnCount()-1; i++) {
-					if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
-						ParticipantResult.setToolTipText(item.getText(i));
-						break;
+				 if (item != null) {
+					//tooltip for every column
+					for (int i=0; i<ParticipantResult.getColumnCount()-1; i++) {
+						if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
+							ParticipantResult.setToolTipText(item.getText(i));
+							break;
+						}
+	
+						else if (i == ParticipantResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
+							ParticipantResult.setToolTipText(item.getText(++i));
 					}
-
-					else if (i == ParticipantResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
-						ParticipantResult.setToolTipText(item.getText(++i));
-				}
-
+				 }
 			}
 		});
 
@@ -749,17 +750,18 @@ public class ViewEvent extends Composite {
 				TableItem item = VenueResult.getItem(new Point(e.x, e.y));
 				//	 BudgetResult.setToolTipText(item.getText(0));
 
-				//tooltip for every column
-				for (int i=0; i<VenueResult.getColumnCount()-1; i++) {
-					if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
-						VenueResult.setToolTipText(item.getText(i));
-						break;
+				if (item != null) {
+					//tooltip for every column
+					for (int i=0; i<VenueResult.getColumnCount()-1; i++) {
+						if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
+							VenueResult.setToolTipText(item.getText(i));
+							break;
+						}
+	
+						else if (i == VenueResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
+							VenueResult.setToolTipText(item.getText(++i));
 					}
-
-					else if (i == VenueResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
-						VenueResult.setToolTipText(item.getText(++i));
 				}
-
 			}
 		});
 
@@ -867,17 +869,18 @@ public class ViewEvent extends Composite {
 				TableItem item = FlowResult.getItem(new Point(e.x, e.y));
 				//	 BudgetResult.setToolTipText(item.getText(0));
 
-				//tooltip for every column
-				for (int i=0; i<FlowResult.getColumnCount()-1; i++) {
-					if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
-						FlowResult.setToolTipText(item.getText(i));
-						break;
+				if (item != null) {
+					//tooltip for every column
+					for (int i=0; i<FlowResult.getColumnCount()-1; i++) {
+						if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
+							FlowResult.setToolTipText(item.getText(i));
+							break;
+						}
+	
+						else if (i == FlowResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
+							FlowResult.setToolTipText(item.getText(++i));
 					}
-
-					else if (i == FlowResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
-						FlowResult.setToolTipText(item.getText(++i));
 				}
-
 			}
 		});
 
