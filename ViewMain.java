@@ -217,7 +217,8 @@ public class ViewMain extends ApplicationWindow {
 				System.out.println("Expired - " + expiredlist.size());
 			}
 		}
-		ModelEvent.UpdateExpiredList(expiredlist);//.subList(prevExpIndex, expiredlist.size()));
+		
+		ModelEvent.UpdateExpiredList(expiredlist.subList(prevExpIndex, expiredlist.size()));
 		//Remove the expired events from event list
 		
 		for (int i=0; i<eventlist.size(); i++) {

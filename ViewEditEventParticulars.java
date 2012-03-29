@@ -24,7 +24,6 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 		btnConfirm.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				//Exception handling for event name
-				String eventname = txtEventTitle.getText().trim();
 				/*
 				//Exception handling for date/time difference from booked venue.
 				Vector<Date> venueStartdate = new Vector<Date>();
@@ -43,14 +42,26 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 				//	if (venueStartdate.get(i).get_year())
 					
 				}*/
-				if (eventname.equals("")) {
-					errormessageDialog errordiag = new errormessageDialog(new Shell(), "Event name should not consist of only whitespaces. Please try again.");
-					errordiag.open();
-				}
+				
+				try
+				{
+					String eventname = txtEventTitle.getText().trim();
+					if (eventname.equals("")) {
+						throw new Exception("Event name should not consist of only whitespaces. Please try again.");
+					}
 				
 				
-				else {
 					eventname = eventname.replaceAll("  ", "");	//removes excess whitespaces between the names
+					
+					MyDateTime startDT = new MyDateTime(StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(), StartTime.getHours(), StartTime.getMinutes());
+					MyDateTime endDT = new MyDateTime(EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), EndTime.getHours(), EndTime.getMinutes());
+					int compareResult = startDT.compareTo(endDT);
+					if(compareResult == 0)
+						throw new Exception("Start and end date time are the same!");
+					if(compareResult > 0)
+						throw new Exception("Start and end date time are not in chronological order");
+					if(startDT.compareTo(MyDateTime.getCurrentDateTime()) < 0)
+						throw new Exception("Start date time of an event must not be in the past");
 					curevent.setName(eventname);
 					curevent.setDescription(txtDescription.getText());
 					curevent.setStartTime(StartTime.getHours(), StartTime.getMinutes());
@@ -61,6 +72,11 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 					ModelEvent.UpdateParticulars(curevent);
 					ViewMain.UpdateTable();
 					ViewMain.ReturnView();
+				}
+				catch(Exception exception)
+				{
+					errordiag = new errormessageDialog(new Shell(), exception.getMessage());
+					errordiag.open();
 				}
 			}
 		});

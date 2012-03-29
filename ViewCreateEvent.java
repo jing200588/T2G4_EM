@@ -26,19 +26,35 @@ public class ViewCreateEvent extends ViewEventParticulars {
 		btnConfirm.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				//Exception handling for event name
-				String eventname = txtEventTitle.getText().trim();
-				if (eventname.equals("")) {
-					errordiag = new errormessageDialog(new Shell(), "Event name should not consist of only whitespaces. Please try again.");
-					errordiag.open();
+				try
+				{
+					String eventname = txtEventTitle.getText().trim();
+					if (eventname.equals("")) {
+						throw new Exception("Event name should not consist of only whitespaces. Please try again.");
+					}
+				
+				
+					eventname = eventname.replaceAll("  ", "");	//removes excess whitespaces between the names
+					
+					MyDateTime startDT = new MyDateTime(StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(), StartTime.getHours(), StartTime.getMinutes());
+					MyDateTime endDT = new MyDateTime(EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), EndTime.getHours(), EndTime.getMinutes());
+					int compareResult = startDT.compareTo(endDT);
+					if(compareResult == 0)
+						throw new Exception("Start and end date time are the same!");
+					if(compareResult > 0)
+						throw new Exception("Start and end date time are not in chronological order");
+					if(startDT.compareTo(MyDateTime.getCurrentDateTime()) < 0)
+						throw new Exception("Start date time of an event must not be in the past");
+					
+					Eventitem newevent = new Eventitem(eventname, StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(),
+							EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes(), txtDescription.getText());
+					ModelEvent.CreateEvent(newevent);
+					ViewMain.UpdateTable();
 				}
-				
-				else {
-				eventname = eventname.replaceAll("  ", "");	//removes excess whitespaces between the names
-				
-				Eventitem newevent = new Eventitem(eventname, StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(),
-						EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes(), txtDescription.getText());
-				ModelEvent.CreateEvent(newevent);
-				ViewMain.UpdateTable();
+				catch(Exception exception)
+				{
+					errordiag = new errormessageDialog(new Shell(), exception.getMessage());
+					errordiag.open();
 				}
 			}
 		});

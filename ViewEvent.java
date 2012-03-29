@@ -454,6 +454,16 @@ public class ViewEvent extends Composite {
 		RefreshVenue();
 		RefreshFlow();
 		RefreshParticipant();
+		if (cevent.isExpired()) {
+			Epartedit.setEnabled(false);
+			Bookvenueedit.setEnabled(false);
+			btnEdit.setEnabled(false);
+			Eprogflowedit.setEnabled(false);
+			Advertemail.setEnabled(false);
+			Advertfb.setEnabled(false);
+			AdvertSMS.setEnabled(false);
+			
+		}
 		sc1.setContent(maincomp);
 		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
