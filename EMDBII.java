@@ -18,6 +18,8 @@ public class EMDBII{
 	public EMDBII(){
 		this.start();
 	}
+	
+	
 	public EMDBII(String aName){
 		this.setDbName(aName);
 		this.start();

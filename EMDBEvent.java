@@ -57,7 +57,11 @@ class EMDBEvent extends EMDBBase{
 		super(aName);
 		this.setTable();
 	}	
-	
+
+	public EMDBEvent(String aName, boolean aDebugState){
+		super(aName, aDebugState);
+		this.setTable();
+	}	
 	
 	/**
 	 * Set up the table structure.
@@ -113,7 +117,7 @@ class EMDBEvent extends EMDBBase{
 								.validate().toString();
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - Setup Event: "+ sql);
 			this.dMsg("EMDB - Setup Event Archive: "+ sql2);
 		}
@@ -136,7 +140,7 @@ class EMDBEvent extends EMDBBase{
 							.validate().toString();
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - Cleanup Event: "+ sql);
 			this.dMsg("EMDB - Cleanup Event Archive: "+ sql2);
 		}
@@ -155,7 +159,7 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public boolean verify(){
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - " + EMDBSettings.TABLE_EVENTS);
 			this.dMsg("EMDB - " + EMDBSettings.TABLE_EVENTS_ARCHIVE);
 		}
@@ -226,7 +230,7 @@ class EMDBEvent extends EMDBBase{
 		
 		
 
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - ADD AN EVENT");
 			this.dMsg("EMDB - " + sql);
 		}
@@ -275,7 +279,7 @@ class EMDBEvent extends EMDBBase{
 		Eventitem item = null;
 		
 
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - GET AN EVENT #"+aEventID);
 			this.dMsg("EMDB - " + sql);
 		}
@@ -321,7 +325,7 @@ class EMDBEvent extends EMDBBase{
 	 * @return
 	 */
 	public Vector<Eventitem> getEventList(){
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - GET AN EVENT LIST");
 		}	
 		
@@ -347,7 +351,7 @@ class EMDBEvent extends EMDBBase{
 						.validate().toString();	
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - GET ALL EVENTS LIST");
 			this.dMsg("EMDB - " + sql);
 		}
@@ -443,7 +447,7 @@ class EMDBEvent extends EMDBBase{
 								.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 								.validate().toString();
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - UPDATE EVENT #"+aEventID);
 			this.dMsg("EMDB - " + sql);
 		}
@@ -477,7 +481,7 @@ class EMDBEvent extends EMDBBase{
 							.validate().toString();
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - UDPATE SCHEDULE FOR #"+aEventID);
 			this.dMsg("EMDB - " + sql);
 		}
@@ -509,7 +513,7 @@ class EMDBEvent extends EMDBBase{
 						.validate().toString();
 
 
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - DELETE EVENT #"+aEventID);
 			this.dMsg("EMDB - " + sql);
 		}
@@ -574,7 +578,7 @@ class EMDBEvent extends EMDBBase{
 	public int addArchiveEvent(int aEventID){
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE EVENT #"+aEventID);
 		}
 		
@@ -583,7 +587,7 @@ class EMDBEvent extends EMDBBase{
 		this.deleteEvent(aEventID);
 		String sql = this.generateArchiveQuery(item);
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - ADDING TO ARCHIVE LIST");
 			this.dMsg("EMDB - " + sql);
 		}	
@@ -610,7 +614,7 @@ class EMDBEvent extends EMDBBase{
 		
 		int size = list.size();
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE LIST OF SIZE " + size);
 		}	
 		
@@ -622,12 +626,12 @@ class EMDBEvent extends EMDBBase{
 				
 				String sql = this.generateArchiveQuery(current);
 				this.queue(sql);
-				if (EMDBSettings.DEVELOPMENT){
+				if (this.dbDebug){
 					this.dMsg("EMDB - ADD TO ARCHIVE LIST QUEUE");
 				}	
 			}
 			
-			if (EMDBSettings.DEVELOPMENT){
+			if (this.dbDebug){
 				this.dMsg("EMDB - ADD TO ARCHIVE LIST");
 			}	
 			
@@ -649,7 +653,7 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public Vector<Eventitem> getArchiveEventList(){
 			
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - GET AN ARCHIVE EVENT LIST");
 		}	
 		
@@ -667,7 +671,7 @@ class EMDBEvent extends EMDBBase{
 						.validate().toString();	
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - GET ALL ARCHIVE EVENTS LIST");
 			this.dMsg("EMDB - " + sql);
 		}

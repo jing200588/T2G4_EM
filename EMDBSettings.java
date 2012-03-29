@@ -9,6 +9,7 @@
 public class EMDBSettings {
 	
 	public static 		boolean DEVELOPMENT 				= 	true;
+	public static 		double	EMDB_VERSION				=	0.2;
 	public static 		String 	DATABASE_NAME 				= 	"trial.sqlite";
 	
 	public static final String 	TABLE_MASTER				=	"sqlite_master";
