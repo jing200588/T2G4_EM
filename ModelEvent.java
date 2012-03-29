@@ -118,7 +118,7 @@ public class ModelEvent {
 		
 	}
 	
-	public static void UpdateExpiredList(List<Eventitem> newlyexpired) {
+	public static void UpdateExpiredList(Vector<Eventitem> newlyexpired) {
 		System.out.println("RAN!!");
 		System.out.println("size of new" + newlyexpired.size());
 		db.eventDB().addAchiveEventList(newlyexpired);

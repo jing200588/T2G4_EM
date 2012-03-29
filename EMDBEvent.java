@@ -606,7 +606,7 @@ class EMDBEvent extends EMDBBase{
 	 * @param list
 	 * @return
 	 */
-	public int addAchiveEventList(List<Eventitem> list){
+	public int addAchiveEventList(Vector<Eventitem> list){
 		
 		int size = list.size();
 		
