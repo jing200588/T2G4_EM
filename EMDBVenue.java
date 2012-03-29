@@ -322,8 +322,8 @@ class EMDBVenue extends EMDBBase{
 			place.updateName		( 	row[1].toString()				);
 			place.updateAddress		( 	row[2].toString()				);
 			place.updateDescription	(	row[3].toString() 				);
-			place.updateCost		( 	new Integer(row[4].toString()) 	);
-			place.updateMaxCapacity	( 	new Integer(row[5].toString()) 	);			
+			place.updateMaxCapacity	( 	new Integer(row[4].toString()) 	);	
+			place.updateCost		( 	new Integer(row[5].toString()) 	);
 		}
 		
 
@@ -392,8 +392,8 @@ class EMDBVenue extends EMDBBase{
 				place.updateName		( 	row[1].toString()				);
 				place.updateAddress		( 	row[2].toString()				);
 				place.updateDescription	(	row[3].toString() 				);
-				place.updateCost		( 	new Integer(row[4].toString()) 	);
-				place.updateMaxCapacity	( 	new Integer(row[5].toString()) 	);	
+				place.updateMaxCapacity	( 	new Integer(row[4].toString()) 	);	
+				place.updateCost		( 	new Integer(row[5].toString()) 	);
 				
 				list.add(place);
 			}
@@ -620,8 +620,9 @@ class EMDBVenue extends EMDBBase{
 			place.updateName		( 	row[1].toString()				);
 			place.updateAddress		( 	row[2].toString()				);
 			place.updateDescription	(	row[3].toString() 				);
-			place.updateCost		( 	new Integer(row[4].toString()) 	);
-			place.updateMaxCapacity	( 	new Integer(row[5].toString()) 	);	
+			place.updateMaxCapacity	( 	new Integer(row[4].toString()) 	);	
+			place.updateCost		( 	new Integer(row[5].toString()) 	);
+
 			
 			list.add(place);
 		}
