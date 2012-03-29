@@ -62,42 +62,58 @@ public class ViewSmsAds extends Composite {
 		ViewSmsAdsForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		formToolkit.paintBordersFor(ViewSmsAdsForm);
 		ViewSmsAdsForm.setText("SMS Advertising");
-		ViewSmsAdsForm.getBody().setLayout(new FormLayout());
 
 		/**********************************************************************************
 		 *Main screen composite 
 		 **********************************************************************************/
+		ViewSmsAdsForm.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
 		mainComposite = new Composite(ViewSmsAdsForm.getBody(), SWT.NONE);
-		FormData fd_mainComposite = new FormData();
-		fd_mainComposite.top = new FormAttachment(50, -160);
-		fd_mainComposite.bottom = new FormAttachment (50, 180);
-		fd_mainComposite.left = new FormAttachment(50, -350);
-		fd_mainComposite.right = new FormAttachment(50, 350);
-		mainComposite.setLayoutData(fd_mainComposite);
+		mainComposite.setLayout(new FormLayout());
 		formToolkit.adapt(mainComposite);
 		formToolkit.paintBordersFor(mainComposite);
 
 		lblTo = new Label(mainComposite, SWT.NONE);
-		lblTo.setBounds(10, 56, 55, 15);
+		FormData fd_lblTo = new FormData();
+		fd_lblTo.right = new FormAttachment(0, 65);
+		fd_lblTo.top = new FormAttachment(5, 2);
+		fd_lblTo.left = new FormAttachment(0, 10);
+		lblTo.setLayoutData(fd_lblTo);
 		formToolkit.adapt(lblTo, true, true);
 		lblTo.setText("To:");
 
 		txtToInputBox = new Text(mainComposite, SWT.BORDER);
-		txtToInputBox.setBounds(71, 53, 419, 21);
+		FormData fd_txtToInputBox = new FormData();
+		fd_txtToInputBox.right = new FormAttachment(95);
+		fd_txtToInputBox.top = new FormAttachment(5);
+		fd_txtToInputBox.left = new FormAttachment(0, 71);
+		txtToInputBox.setLayoutData(fd_txtToInputBox);
 		formToolkit.adapt(txtToInputBox, true, true);
 
 		lblMessage = new Label(mainComposite, SWT.NONE);
-		lblMessage.setBounds(10, 118, 55, 15);
+		FormData fd_lblMessage = new FormData();
+
+		fd_lblMessage.right = new FormAttachment(txtMessageInputBox, 65);
+		fd_lblMessage.left = new FormAttachment(0, 10);
+		lblMessage.setLayoutData(fd_lblMessage);
 		formToolkit.adapt(lblMessage, true, true);
 		lblMessage.setText("Message:");
 
 		txtMessageInputBox = new Text(mainComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		txtMessageInputBox.setBounds(71, 115, 419, 144);
+		FormData fd_txtMessageInputBox = new FormData();
+		fd_txtMessageInputBox.bottom = new FormAttachment(90);
+		fd_txtMessageInputBox.right = new FormAttachment(95);
+		fd_txtMessageInputBox.left = new FormAttachment(0, 71);
+		txtMessageInputBox.setLayoutData(fd_txtMessageInputBox);
 		formToolkit.adapt(txtMessageInputBox, true, true);
 		String start = current_event.getStartDateTime().getDateRepresentation() + " - " + current_event.getStartDateTime().getTimeRepresentation();
 		String end = current_event.getEndDateTime().getDateRepresentation() + " - " + current_event.getEndDateTime().getTimeRepresentation();
 		txtMessageInputBox.setText("Upcoming event: " + current_event.getName()+".\nStart date: " + start + ".\nEnd date: " + end +".");
 		btnSend = new Button(mainComposite, SWT.NONE);
+		FormData fd_btnSend = new FormData();
+		fd_btnSend.right = new FormAttachment(0, 490);
+		fd_btnSend.top = new FormAttachment(0, 282);
+		fd_btnSend.left = new FormAttachment(0, 415);
+		btnSend.setLayoutData(fd_btnSend);
 		btnSend.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 
@@ -130,11 +146,17 @@ public class ViewSmsAds extends Composite {
 
 			}
 		});
-		btnSend.setBounds(415, 282, 75, 25);
 		formToolkit.adapt(btnSend, true, true);
 		btnSend.setText("Send");
 		
 		Button btnImportNumber = new Button(mainComposite, SWT.NONE);
+		fd_lblMessage.top = new FormAttachment(btnImportNumber, 10);
+		fd_txtMessageInputBox.top = new FormAttachment(btnImportNumber, 10);
+		FormData fd_btnImportNumber = new FormData();
+		fd_btnImportNumber.width = 110;
+		fd_btnImportNumber.top = new FormAttachment(txtToInputBox, 10);
+//		fd_btnImportNumber.left = new FormAttachment(0, 248);
+		btnImportNumber.setLayoutData(fd_btnImportNumber);
 		btnImportNumber.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fsd = new FileDialog(new Shell());
@@ -144,11 +166,17 @@ public class ViewSmsAds extends Composite {
 				ImportCSV(fsd.open());
 			}
 		});
-		btnImportNumber.setBounds(248, 84, 122, 25);
 		formToolkit.adapt(btnImportNumber, true, true);
 		btnImportNumber.setText("Import Number");
 		
 		Button btnNotifyParticipants = new Button(mainComposite, SWT.NONE);
+		fd_btnImportNumber.right = new FormAttachment(btnNotifyParticipants, -10);
+		FormData fd_btnNotifyParticipants = new FormData();
+		fd_btnNotifyParticipants.width = 110;
+	//	fd_btnNotifyParticipants.left = new FormAttachment(btnImportNumber, 5);
+		fd_btnNotifyParticipants.top = new FormAttachment(txtToInputBox, 10);
+		fd_btnNotifyParticipants.right = new FormAttachment(95);
+		btnNotifyParticipants.setLayoutData(fd_btnNotifyParticipants);
 		btnNotifyParticipants.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				String participantsContact = "";
@@ -160,7 +188,6 @@ public class ViewSmsAds extends Composite {
 				txtToInputBox.setText(participantsContact);
 			}
 		});
-		btnNotifyParticipants.setBounds(376, 84, 114, 25);
 		formToolkit.adapt(btnNotifyParticipants, true, true);
 		btnNotifyParticipants.setText("Notify Participants");
 
