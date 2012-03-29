@@ -20,6 +20,6 @@ public class ViewFaceBookAds extends Composite {
     layoutData.verticalSpan = 1;
     layoutData.horizontalSpan = 1;
     browser.setLayoutData(layoutData);
-    browser.setUrl("http://www.facebook.com");
+    browser.setUrl("https://www.facebook.com/dialog/feed?app_id=387929524559765&link=http://www.facebook.com/&picture=http://fbrell.com/f8.jpg&name=My%20Facebook%20Homepage&caption=%20&description=Upcoming%20Event%20Notice&redirect_uri=http://www.facebook.com/");
   }
 }
