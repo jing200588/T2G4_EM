@@ -11,6 +11,7 @@ public class EMDBII{
 	private EMDBVenue 			venue;	
 	private EMDBParticipant 	participant;
 	
+	private boolean				debugState = EMDBSettings.DEVELOPMENT;
 	
 	/**
 	 * Constructor
@@ -18,12 +19,31 @@ public class EMDBII{
 	public EMDBII(){
 		this.start();
 	}
-	
-	
+
 	public EMDBII(String aName){
 		this.setDbName(aName);
 		this.start();
 	}
+
+	public EMDBII(String aName, boolean aDebugState){
+		this.setDbName(aName);
+		this.setDebugState(aDebugState);
+		this.start();
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * Set the debug status.
+	 * @param aDebugState
+	 */
+	public void setDebugState(boolean aDebugState){
+		this.debugState = aDebugState;
+	}
+	
 	
 	
 	
@@ -35,11 +55,13 @@ public class EMDBII{
 			System.out.println("EMDB - STARTING UP");
 		}
 		
-		this.event			=	new EMDBEvent(dbName);
-		this.budget			=	new EMDBBudget(dbName);
-		this.venue			=	new EMDBVenue(dbName);
-		this.participant	=	new EMDBParticipant(dbName);
+		this.event			=	new EMDBEvent(dbName, this.debugState);
+		this.budget			=	new EMDBBudget(dbName, this.debugState);
+		this.venue			=	new EMDBVenue(dbName, this.debugState);
+		this.participant	=	new EMDBParticipant(dbName, this.debugState);
 	}	
+	
+
 	
 	
 	
@@ -86,6 +108,11 @@ public class EMDBII{
 	public EMDBParticipant participantDB(){
 		return this.participant;
 	}
+	
+	
+	
+	
+	
 	
 	
 	
