@@ -692,7 +692,7 @@ class EMDBEvent extends EMDBBase{
 				item.setDescription( row[3].toString()); //description
 				item.setBudget( Double.parseDouble(row[4].toString()) ); //budget
 				item.setID( Integer.parseInt(row[1].toString()) ); //event_id
-			
+				item.setEventFlow(EventFlowEntry.constructEventFlowEntryList(row[9].toString()));
 			
 				list.add(item);
 			}

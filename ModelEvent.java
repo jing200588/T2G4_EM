@@ -71,6 +71,13 @@ public class ModelEvent {
 	public static Vector<Eventitem> PullExpiredList() {
 
 		expired = db.eventDB().getArchiveEventList();
+		int size = expired.size();
+		for (int i=0; i<size; i++){
+			int pid = expired.get(i).getID();
+			expired.get(i).addBVI(db.venueDB().getEventBookings(pid));	
+			expired.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(pid));
+			expired.get(i).setParticipantList(db.participantDB().getParticipantList(pid));
+		}
 		
 		return expired;
 	}
