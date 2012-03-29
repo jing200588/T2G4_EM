@@ -228,7 +228,7 @@ class EMDBEvent extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - ADD AN EVENT");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		this.connect();
@@ -277,7 +277,7 @@ class EMDBEvent extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET AN EVENT #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 
 		
@@ -349,7 +349,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET ALL EVENTS LIST");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 			
 		
@@ -445,7 +445,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - UPDATE EVENT #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		
@@ -479,7 +479,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - UDPATE SCHEDULE FOR #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		this.connect();
@@ -511,7 +511,7 @@ class EMDBEvent extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - DELETE EVENT #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		
@@ -585,7 +585,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - ADDING TO ARCHIVE LIST");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}	
 		
 		this.connect();
@@ -669,7 +669,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET ALL ARCHIVE EVENTS LIST");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 			
 		

@@ -279,7 +279,7 @@ class EMDBBudget extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - ADD BUDGET");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		Vector<Object[]> result = this.runQueryResults(sql);
@@ -436,7 +436,7 @@ class EMDBBudget extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET BUDGET LIST " + aTableType);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		Vector<Item> list = new Vector<Item>();
@@ -565,7 +565,7 @@ class EMDBBudget extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - Update Budget #"+aBudgetID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		
@@ -692,7 +692,7 @@ class EMDBBudget extends EMDBBase{
 		}
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - DELETE BUDGET ID #" + aBudgetID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		
@@ -752,7 +752,7 @@ class EMDBBudget extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - DELETE BUDGET LIST " + aTableType);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		this.connect();

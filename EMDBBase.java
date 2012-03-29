@@ -379,7 +379,7 @@ public class EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - VERIFICATION");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		this.connect();
