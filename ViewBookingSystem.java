@@ -187,7 +187,6 @@ public class ViewBookingSystem extends Composite {
 		AddOutsideVenueButton.setText("Add an event outside NUS");
 
 		FunctionContentPage = new Composite(mainComposite, SWT.NONE);
-		FunctionContentPage.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Public\\Pictures\\Sample Pictures\\Chrysanthemum.jpg"));
 		FunctionContentPage.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		FunctionContentPage.setBounds(10, 51, 680, 284);
 		toolkit.adapt(FunctionContentPage);
@@ -1203,7 +1202,7 @@ public class ViewBookingSystem extends Composite {
 			hasTimeSlotChecked = true;
 		}
 	}
-	
+	/*
 	public static void main(String[] args){
 	
 		Display display = new Display();
@@ -1229,5 +1228,5 @@ public class ViewBookingSystem extends Composite {
 			if(!display.readAndDispatch()) display.sleep();
 		} 
 
-	} 
+	}*/ 
 }

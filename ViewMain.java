@@ -186,7 +186,7 @@ public class ViewMain extends ApplicationWindow {
 		for (; i<expiredlist.size(); i++) {			
 			item = new TableItem(table_1,SWT.NONE);
 			item.setText(expiredlist.get(i).getName());
-			item.setText(1,eventlist.get(i).getEndDateTime().getDateRepresentation());
+			item.setText(1,expiredlist.get(i).getEndDateTime().getDateRepresentation());
 /*			item.setText(1, "5");
 			item.setBackground(1, red);
 	    	item.setText(2, "X");
@@ -717,7 +717,7 @@ public class ViewMain extends ApplicationWindow {
 			table_1.setHeaderVisible(true);
 			table_1.setLinesVisible(false);
 			UpdateExpiredTable();
-	//		CheckExpiry();
+			CheckExpiry();
 			Menu menu2 = new Menu(table_1);
 			table_1.setMenu(menu2);
 			
