@@ -46,6 +46,8 @@ public class EMDBBase{
 	protected Connection dbCon = null;
 	protected Statement dbQuery = null;
 	
+	
+	protected boolean dbDebug = false;
 
 	//Specifications and extended tables
    	protected DbSpec spec = new DbSpec();
@@ -68,22 +70,45 @@ public class EMDBBase{
 	 * Constructor.
 	 */
 	public EMDBBase(){	
+		this.setDebug(EMDBSettings.DEVELOPMENT);
+		
 		this.setDefaultDB();
 		this.loadLibrary();
 	}
 
-	public EMDBBase(String name){	
-		this.dbName = name;
+	public EMDBBase(String aName){	
+		this.setDebug(EMDBSettings.DEVELOPMENT);
+		
+		this.dbName = aName;
 		this.setDefaultDB();
 		this.loadLibrary();
 	}
 
+	
+	public EMDBBase(String aName, boolean aDebugState){
+		this.setDebug(aDebugState);
+		
+		this.dbName = aName;
+		this.setDefaultDB();
+		this.loadLibrary();
+	}
+	
+	
+	/**
+	 * Debug state override
+	 * @param state
+	 */
+	public void setDebug(boolean aDebugState){
+		this.dbDebug = aDebugState;
+	}
+	
+	
 	
 	
 	/**
 	 * JDBC SQLite loader
 	 */
-	private void loadLibrary(){
+	private void loadLibrary(){	
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {}
@@ -154,7 +179,7 @@ public class EMDBBase{
 		}	
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (EMDBSettings.DEVELOPMENT || this.dbDebug){
 			this.dMsg("EMDB - SETTING DEFAULT DB - " + this.dbName);
 		}
 		
@@ -170,8 +195,8 @@ public class EMDBBase{
 	 * Setting of the database name.
 	 * @param name
 	 */
-	public void setName(String name){
-		dbName = name;
+	public void setName(String aName){
+		dbName = aName;
 	}
 	
 
@@ -200,15 +225,15 @@ public class EMDBBase{
 	 * @param sql
 	 * @return
 	 */
-	protected int runQuery(String sql){
+	protected int runQuery(String aSql){
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - RUNNING QUERY (NORMAL)");
 		}
 		
 		try {	
 			Statement query = this.dbCon.createStatement();
-			query.executeQuery(sql);
+			query.executeQuery(aSql);
 			
 			return 1;
 			
@@ -222,16 +247,16 @@ public class EMDBBase{
 	
 	
 	
-	protected Vector<Object[]> runQueryResults(String sql){
+	protected Vector<Object[]> runQueryResults(String aSql){
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - RUNNING QUERY (RESULTS)");
 		}
 		
 		try {	
 	
-			PreparedStatement query = this.dbCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement query = this.dbCon.prepareStatement(aSql, Statement.RETURN_GENERATED_KEYS);
 			query.execute();
 			ResultSet rs = query.getResultSet();
 			
@@ -269,13 +294,13 @@ public class EMDBBase{
 	 * @param sql
 	 * @return
 	 */
-	protected void queue(String sql){
+	protected void queue(String aSql){
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - ADDING TO QUEUE");
 		}
 		
-		this.queue.add(sql);
+		this.queue.add(aSql);
 	}
 	
 	
@@ -288,7 +313,7 @@ public class EMDBBase{
 	protected int commit(){
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - COMMIT ALL QUERIES");
 		}
 		
@@ -347,7 +372,7 @@ public class EMDBBase{
 	protected boolean setFile(){
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - CREATE/CHECK FILE");
 		}
 		
@@ -361,8 +386,8 @@ public class EMDBBase{
 	 * Shortcut to print out strings.
 	 * @param msg
 	 */
-	protected void dMsg(String msg){
-		System.out.println(msg);
+	protected void dMsg(String aMsg){
+		System.out.println(aMsg);
 	}
 	
 	
@@ -375,25 +400,25 @@ public class EMDBBase{
 	 * Generic verfication process
 	 * @return
 	 */
-	protected boolean verification(String sql, int tableTotal){
+	protected boolean verification(String aSql, int aTableTotal){
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - VERIFICATION");
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("EMDB - " + aSql);
 		}
 		
 		this.connect();
 		
-		Vector<Object[]> result = this.runQueryResults(sql);
+		Vector<Object[]> result = this.runQueryResults(aSql);
 		int count = result.size();
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - VERIFIED SIZE: "+count);
 		}
 		
 		this.disconnect();
 		
-		if (count == tableTotal)
+		if (count == aTableTotal)
 			return true;
 		
 		return false;

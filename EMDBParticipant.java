@@ -42,6 +42,11 @@ class EMDBParticipant extends EMDBBase{
 		this.setTable();
 	}	
 
+	public EMDBParticipant(String aName, boolean aDebugState){
+		super(aName, aDebugState);
+		this.setTable();
+	}	
+	
 
 	/**
 	 * Set up the table structure.
@@ -76,7 +81,7 @@ class EMDBParticipant extends EMDBBase{
 								.validate().toString();
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - Setup Participants: "+ sql);
 		}
 		
@@ -97,7 +102,7 @@ class EMDBParticipant extends EMDBBase{
 							.validate().toString();
 
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - Cleanup Participants: "+ sql);
 		}
 		
@@ -115,7 +120,7 @@ class EMDBParticipant extends EMDBBase{
 	public boolean verify(){
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - " + EMDBSettings.TABLE_PARTICIPANTS);
 		}
 		
@@ -176,7 +181,7 @@ class EMDBParticipant extends EMDBBase{
 				
 				
 				
-				if (EMDBSettings.DEVELOPMENT){
+				if (this.dbDebug){
 					this.dMsg("EMDB - ADD PARICIPANT TO QUEUE");
 					this.dMsg("EMDB - " + sql);
 				}
@@ -185,7 +190,7 @@ class EMDBParticipant extends EMDBBase{
 				
 			}
 			
-			if (EMDBSettings.DEVELOPMENT){
+			if (this.dbDebug){
 				this.dMsg("EMDB - COMMIT PARICIPANT IN QUEUE");
 				this.dMsg("EMDB - " + sql);
 			}
@@ -225,7 +230,7 @@ class EMDBParticipant extends EMDBBase{
 		List<Participant> list = new Vector<Participant>();
 		
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - GET ALL EVENTS PARTICIPANTS");
 			this.dMsg("EMDB - " + sql);
 		}
@@ -280,7 +285,7 @@ class EMDBParticipant extends EMDBBase{
 							.addCondition(BinaryCondition.equalTo(this.participantEventID, aEventID))
 							.validate().toString();
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.dbDebug){
 			this.dMsg("EMDB - DELETE/CLEAR PARTICIPANT LIST #"+aEventID);
 			this.dMsg("EMDB - " + sql);
 		}
