@@ -47,21 +47,6 @@ public class EMDBII{
 	
 	
 	
-	/**
-	 * Start DB System.
-	 */
-	public void start(){
-		if (EMDBSettings.DEVELOPMENT){
-			System.out.println("EMDB - STARTING UP");
-		}
-		
-		this.event			=	new EMDBEvent(dbName, this.debugState);
-		this.budget			=	new EMDBBudget(dbName, this.debugState);
-		this.venue			=	new EMDBVenue(dbName, this.debugState);
-		this.participant	=	new EMDBParticipant(dbName, this.debugState);
-	}	
-	
-
 	
 	
 	
@@ -73,6 +58,110 @@ public class EMDBII{
 		this.dbName = aName;
 	}
 
+	
+	
+	
+	
+	
+	
+	/**
+	 * Start DB System.
+	 */
+	private void start(){
+		if (this.debugState){
+			System.out.println("EMDB - STARTING UP");
+		}
+		
+		this.event			=	new EMDBEvent(dbName, this.debugState);
+		this.budget			=	new EMDBBudget(dbName, false);
+		this.venue			=	new EMDBVenue(dbName, false);
+		this.participant	=	new EMDBParticipant(dbName, false);
+		
+		
+		this.budget.setDebug(this.debugState);
+		this.venue.setDebug(this.debugState);
+		this.participant.setDebug(this.debugState);
+	}	
+	
+
+
+	
+	/**
+	 * Clear up all database tables.
+	 */
+	public void truncate(){
+		if (this.debugState){
+			System.out.println("EMDB - Clearing Tables");
+		}
+		
+		this.event.truncate();
+		this.budget.truncate();
+		this.venue.truncate();
+		this.participant.truncate();
+		
+		
+	}
+	
+	
+	
+	/**
+	 * Clears and ensures all connections are closed.
+	 */
+	public void clearConnections(){
+		this.event.disconnect();
+		this.budget.disconnect();
+		this.venue.disconnect();
+		this.participant.disconnect();
+	}
+	
+	
+	
+	/**
+	 * Destroys the database system
+	 */
+	public void destroy(){
+		if (this.debugState){
+			System.out.println("EMDB - Destructing Tables");
+		}
+		
+		
+		/*
+		 * Remove event tables
+		 */
+		this.event.cleanup();
+		if(this.event.verify() && this.debugState){
+			System.out.println("EMDB - EVENT TABLE CLEARED");
+		}
+		
+		
+		/*
+		 * Remove budget tables
+		 */
+		this.budget.cleanup();
+		if(this.budget.verify() && this.debugState){
+			System.out.println("EMDB - BUDGET TABLE CLEARED");
+		}
+		
+		/*
+		 * Remove venue tables
+		 */
+		this.venue.cleanup();
+		if(this.venue.verify() && this.debugState){
+			System.out.println("EMDB - VENUE TABLE CLEARED");
+		}
+		
+		/*
+		 * Remove participant tables
+		 */
+		this.participant.cleanup();
+		if(this.participant.verify() && this.debugState){
+			System.out.println("EMDB - PARTICIPANT TABLE CLEARED");
+		}
+		
+		
+		
+	}
+	
 	
 	
 	
@@ -105,6 +194,10 @@ public class EMDBII{
 	
 	
 	
+	/**
+	 * Access participant database
+	 * @return
+	 */
 	public EMDBParticipant participantDB(){
 		return this.participant;
 	}
@@ -121,13 +214,16 @@ public class EMDBII{
 	 * Load up / Set up the DB System.
 	 */
 	public void init(){
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.debugState){
 			System.out.println("EMDB - INITIALIZING DATABASE");
 		}
 		this.event.setup();
 		this.budget.setup();
 		this.venue.setup();
 		this.participant.setup();
+		
+		this.clearConnections();
+		
 	}
 	
 	
@@ -137,6 +233,9 @@ public class EMDBII{
 	 * Check for Database File
 	 */
 	public void systemCheck(){
+		
+		
+		//check if all tables are present and initialized.
 		if (		this.event.verify() 
 				&& 	this.budget.verify()
 				&& 	this.venue.verify()
@@ -145,7 +244,7 @@ public class EMDBII{
 	{
 			
 			
-			if (EMDBSettings.DEVELOPMENT){
+			if (this.debugState){
 				System.out.println("EMDB - SYSTEM CHECK - OK");
 			}
 			
@@ -153,46 +252,25 @@ public class EMDBII{
 		}else{
 			
 			
-			if (EMDBSettings.DEVELOPMENT){
+			if (this.debugState){
 				System.out.println("EMDB - SYSTEM CHECK - FAILED");
 			}
 			
 			
+			//Initialize the system
 			this.init();
 			
 			
-			if (EMDBSettings.DEVELOPMENT){
+			if (this.debugState){
 				System.out.println("EMDB - POPULATING HARD CODED VENUE DETAILS");
 			}
 			
-			//temp hard code values
-			
-			this.venue.addVenue("DR1 (COM1-B-14B)", "", "", 6, 1000);
-			this.venue.addVenue("DR2 (COM1-B-14A)", "", "", 6, 1200);
-			this.venue.addVenue("DR3 (COM1-B-07)", "", "", 5, 1000);
-			this.venue.addVenue("DR4 (COM1-B-06)", "", "", 5, 1951);
-			this.venue.addVenue("DR5 (ICUBE-03-18)", "", "", 8, 1639);
-			this.venue.addVenue("DR6 (COM2-02-12)", "", "", 8, 4754);
-			this.venue.addVenue("DR7 (COM2-03-14)", "", "", 8, 35);
-			this.venue.addVenue("DR8 (COM2-03-15)", "", "", 8, 325);
-			this.venue.addVenue("DR9 (COM2-04-06)", "", "", 8, 72);
-			this.venue.addVenue("DR10 (COM2-02-24)", "", "", 8, 963);
-			this.venue.addVenue("DR11 (COM2-02-23)", "", "", 8, 43);
-			this.venue.addVenue("Executive Classroom (COM2-04-02)", "", "", 25, 10000);
-			this.venue.addVenue("MR1 (COM1-03-19)", "", "", 7, 48);
-			this.venue.addVenue("MR2 (COM1-03-28)", "", "", 7, 753);
-			this.venue.addVenue("MR3 (COM2-02-26)", "", "", 7, 2625);
-			this.venue.addVenue("MR4 (COM1-01-22)", "", "", 7, 2452);
-			this.venue.addVenue("MR5 (COM1-01-18)", "", "", 7, 25);
-			this.venue.addVenue("MR6 (AS6-05-10)", "", "", 8, 436);
-			this.venue.addVenue("MR7 (ICUBE-03-01)", "", "", 12, 425);
-			this.venue.addVenue("MR8 (ICUBE-03-48)", "", "", 12, 234);
-			this.venue.addVenue("MR9 (ICUBE-03-49)", "", "", 12, 242);
-			this.venue.addVenue("Video Conferencing Room (COM1-02-13)", "", "", 30, 15000);
+			//Use the tool 
+			EMDBIITools.populateVenues(this);
 			
 		}
 		
-		if (EMDBSettings.DEVELOPMENT){
+		if (this.debugState){
 			System.out.println("EMDB - SYSTEM CHECK - END");
 		}
 	}

@@ -179,8 +179,8 @@ public class EMDBBase{
 		}	
 		
 		
-		if (EMDBSettings.DEVELOPMENT || this.dbDebug){
-			this.dMsg("EMDB - SETTING DEFAULT DB - " + this.dbName);
+		if (this.dbDebug){
+			this.dMsg("SETTING DEFAULT DB - " + this.dbName);
 		}
 		
 		this.setFile();
@@ -228,7 +228,7 @@ public class EMDBBase{
 	protected int runQuery(String aSql){
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - RUNNING QUERY (NORMAL)");
+			this.dMsg("RUNNING QUERY (NORMAL)");
 		}
 		
 		try {	
@@ -251,7 +251,7 @@ public class EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - RUNNING QUERY (RESULTS)");
+			this.dMsg("RUNNING QUERY (RESULTS)");
 		}
 		
 		try {	
@@ -297,7 +297,7 @@ public class EMDBBase{
 	protected void queue(String aSql){
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - ADDING TO QUEUE");
+			this.dMsg("ADDING TO QUEUE");
 		}
 		
 		this.queue.add(aSql);
@@ -314,7 +314,7 @@ public class EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - COMMIT ALL QUERIES");
+			this.dMsg("COMMIT ALL QUERIES");
 		}
 		
 		
@@ -331,13 +331,14 @@ public class EMDBBase{
 				}
 				
 				if (this.dbDebug){
-					this.dMsg("EMDB - RUNNING BATCH");
+					this.dMsg("RUNNING BATCH");
 				}
 				
 				
 				//run the batch queries
 				this.dbCon.setAutoCommit(false);
 				this.dbQuery.executeBatch();
+				this.dbCon.commit();
 				this.dbCon.setAutoCommit(true);
 
 				//DC and clear the temp vector queue.
@@ -378,7 +379,7 @@ public class EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - CREATE/CHECK FILE");
+			this.dMsg("CREATE/CHECK FILE");
 		}
 		
 		File findFile = new File(this.dbName);
@@ -392,7 +393,7 @@ public class EMDBBase{
 	 * @param msg
 	 */
 	protected void dMsg(String aMsg){
-		System.out.println(aMsg);
+		System.out.println("EMDB - " + aMsg);
 	}
 	
 	
@@ -408,8 +409,8 @@ public class EMDBBase{
 	protected boolean verification(String aSql, int aTableTotal){
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - VERIFICATION");
-			this.dMsg("EMDB - " + aSql);
+			this.dMsg("VERIFICATION");
+			this.dMsg("" + aSql);
 		}
 		
 		this.connect();
@@ -418,7 +419,7 @@ public class EMDBBase{
 		int count = result.size();
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - VERIFIED SIZE: "+count);
+			this.dMsg("VERIFIED SIZE: "+count);
 		}
 		
 		this.disconnect();

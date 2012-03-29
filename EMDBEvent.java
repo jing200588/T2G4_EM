@@ -118,8 +118,8 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - Setup Event: "+ sql);
-			this.dMsg("EMDB - Setup Event Archive: "+ sql2);
+			this.dMsg(""+ sql);
+			this.dMsg(""+ sql2);
 		}
 		
 		
@@ -141,8 +141,8 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - Cleanup Event: "+ sql);
-			this.dMsg("EMDB - Cleanup Event Archive: "+ sql2);
+			this.dMsg(""+ sql);
+			this.dMsg(""+ sql2);
 		}
 		
 		this.queue(sql);
@@ -152,6 +152,26 @@ class EMDBEvent extends EMDBBase{
 	
 	
 	
+	/**
+	 * "TRUNCATE" the database tables
+	 */
+	public void truncate(){
+		String sql 	=	new DeleteQuery(this.eventsTable)
+							.validate().toString();
+		String sql2 =	new DeleteQuery(this.archiveTable)
+						.validate().toString();
+		
+		
+		if (this.dbDebug){
+			this.dMsg(""+ sql);
+			this.dMsg(""+ sql2);
+		}
+		
+		this.queue(sql);
+		this.queue(sql2);
+		this.commit();
+	}
+	
 	
 	/**
 	 * VERIFY the database tables
@@ -160,8 +180,8 @@ class EMDBEvent extends EMDBBase{
 	public boolean verify(){
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - " + EMDBSettings.TABLE_EVENTS);
-			this.dMsg("EMDB - " + EMDBSettings.TABLE_EVENTS_ARCHIVE);
+			this.dMsg(EMDBSettings.TABLE_EVENTS);
+			this.dMsg(EMDBSettings.TABLE_EVENTS_ARCHIVE);
 		}
 		
 		
@@ -231,8 +251,8 @@ class EMDBEvent extends EMDBBase{
 		
 
 		if (this.dbDebug){
-			this.dMsg("EMDB - ADD AN EVENT");
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("ADD AN EVENT");
+			this.dMsg(sql);
 		}
 		
 		this.connect();
@@ -280,8 +300,8 @@ class EMDBEvent extends EMDBBase{
 		
 
 		if (this.dbDebug){
-			this.dMsg("EMDB - GET AN EVENT #"+aEventID);
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("GET AN EVENT #"+aEventID);
+			this.dMsg(sql);
 		}
 
 		
@@ -326,7 +346,7 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public Vector<Eventitem> getEventList(){
 		if (this.dbDebug){
-			this.dMsg("EMDB - GET AN EVENT LIST");
+			this.dMsg("GET AN EVENT LIST");
 		}	
 		
 		return this.getEventListAll();
@@ -352,8 +372,8 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - GET ALL EVENTS LIST");
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("GET ALL EVENTS LIST");
+			this.dMsg(sql);
 		}
 			
 		
@@ -448,8 +468,8 @@ class EMDBEvent extends EMDBBase{
 								.validate().toString();
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - UPDATE EVENT #"+aEventID);
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("UPDATE EVENT #"+aEventID);
+			this.dMsg(sql);
 		}
 		
 		
@@ -482,8 +502,8 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - UDPATE SCHEDULE FOR #"+aEventID);
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("UDPATE SCHEDULE FOR #"+aEventID);
+			this.dMsg(sql);
 		}
 		
 		this.connect();
@@ -514,8 +534,8 @@ class EMDBEvent extends EMDBBase{
 
 
 		if (this.dbDebug){
-			this.dMsg("EMDB - DELETE EVENT #"+aEventID);
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("DELETE EVENT #"+aEventID);
+			this.dMsg(sql);
 		}
 		
 		
@@ -579,7 +599,7 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE EVENT #"+aEventID);
+			this.dMsg("STARTING PROCESS TO ARCHIVE EVENT #"+aEventID);
 		}
 		
 		Eventitem item = this.getEvent(aEventID);
@@ -588,8 +608,8 @@ class EMDBEvent extends EMDBBase{
 		String sql = this.generateArchiveQuery(item);
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - ADDING TO ARCHIVE LIST");
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("ADDING TO ARCHIVE LIST");
+			this.dMsg(sql);
 		}	
 		
 		this.connect();
@@ -615,7 +635,7 @@ class EMDBEvent extends EMDBBase{
 		int size = newlyexpired.size();
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE LIST OF SIZE " + size);
+			this.dMsg("STARTING PROCESS TO ARCHIVE LIST OF SIZE " + size);
 		}	
 		
 		
@@ -627,12 +647,12 @@ class EMDBEvent extends EMDBBase{
 				String sql = this.generateArchiveQuery(current);
 				this.queue(sql);
 				if (this.dbDebug){
-					this.dMsg("EMDB - ADD TO ARCHIVE LIST QUEUE");
+					this.dMsg("ADD TO ARCHIVE LIST QUEUE");
 				}	
 			}
 			
 			if (this.dbDebug){
-				this.dMsg("EMDB - ADD TO ARCHIVE LIST");
+				this.dMsg("ADD TO ARCHIVE LIST");
 			}	
 			
 			this.connect();
@@ -654,7 +674,7 @@ class EMDBEvent extends EMDBBase{
 	public Vector<Eventitem> getArchiveEventList(){
 			
 		if (this.dbDebug){
-			this.dMsg("EMDB - GET AN ARCHIVE EVENT LIST");
+			this.dMsg("GET AN ARCHIVE EVENT LIST");
 		}	
 		
 		return this.getArchiveEventListAll();
@@ -672,8 +692,8 @@ class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - GET ALL ARCHIVE EVENTS LIST");
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("GET ALL ARCHIVE EVENTS LIST");
+			this.dMsg(sql);
 		}
 			
 		

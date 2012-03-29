@@ -82,7 +82,7 @@ class EMDBParticipant extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - Setup Participants: "+ sql);
+			this.dMsg(""+ sql);
 		}
 		
 		
@@ -103,7 +103,27 @@ class EMDBParticipant extends EMDBBase{
 
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - Cleanup Participants: "+ sql);
+			this.dMsg(""+ sql);
+		}
+		
+		this.queue(sql);
+		this.commit();
+	}
+	
+	
+	
+	
+	
+	/**
+	 * "TRUNCATE" the database tables
+	 */
+	public void truncate(){
+		String sql 	=	new DeleteQuery(this.participantTable)
+							.validate().toString();
+		
+		
+		if (this.dbDebug){
+			this.dMsg(""+ sql);
 		}
 		
 		this.queue(sql);
@@ -121,7 +141,7 @@ class EMDBParticipant extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - " + EMDBSettings.TABLE_PARTICIPANTS);
+			this.dMsg(EMDBSettings.TABLE_PARTICIPANTS);
 		}
 		
 		
@@ -182,8 +202,8 @@ class EMDBParticipant extends EMDBBase{
 				
 				
 				if (this.dbDebug){
-					this.dMsg("EMDB - ADD PARICIPANT TO QUEUE");
-					this.dMsg("EMDB - " + sql);
+					this.dMsg("ADD PARICIPANT TO QUEUE");
+					this.dMsg(sql);
 				}
 				
 				this.queue(sql);
@@ -191,7 +211,7 @@ class EMDBParticipant extends EMDBBase{
 			}
 			
 			if (this.dbDebug){
-				this.dMsg("EMDB - COMMIT PARICIPANT IN QUEUE");
+				this.dMsg("COMMIT PARICIPANT IN QUEUE");
 			}
 			
 			
@@ -230,8 +250,8 @@ class EMDBParticipant extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - GET ALL EVENTS PARTICIPANTS");
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("GET ALL EVENTS PARTICIPANTS");
+			this.dMsg(sql);
 		}
 			
 		
@@ -285,8 +305,8 @@ class EMDBParticipant extends EMDBBase{
 							.validate().toString();
 		
 		if (this.dbDebug){
-			this.dMsg("EMDB - DELETE/CLEAR PARTICIPANT LIST #"+aEventID);
-			this.dMsg("EMDB - " + sql);
+			this.dMsg("DELETE/CLEAR PARTICIPANT LIST #"+aEventID);
+			this.dMsg(sql);
 		}
 		
 		
