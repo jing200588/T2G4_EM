@@ -573,13 +573,18 @@ class EMDBEvent extends EMDBBase{
 	 */
 	public int addArchiveEvent(int aEventID){
 		
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE EVENT #"+aEventID);
+		}
+		
 		Eventitem item = this.getEvent(aEventID);
 
 		this.deleteEvent(aEventID);
 		String sql = this.generateArchiveQuery(item);
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("EMDB - ADD TO ARCHIVE LIST");
+			this.dMsg("EMDB - ADDING TO ARCHIVE LIST");
 			this.dMsg(sql);
 		}	
 		
@@ -602,10 +607,13 @@ class EMDBEvent extends EMDBBase{
 	 * @return
 	 */
 	public int addAchiveEventList(List<Eventitem> list){
-		System.out.println("adding");
 		
 		int size = list.size();
-		System.out.println("size" + size);
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE LIST OF SIZE " + size);
+		}	
+		
 		
 		if (!list.isEmpty()){
 			for (int i=0; i<size; i++){
@@ -640,8 +648,7 @@ class EMDBEvent extends EMDBBase{
 	 * @return
 	 */
 	public Vector<Eventitem> getArchiveEventList(){
-		System.out.println("get Archive EVent List all");
-		
+			
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET AN ARCHIVE EVENT LIST");
 		}	
@@ -651,8 +658,6 @@ class EMDBEvent extends EMDBBase{
 	}
 	
 	private Vector<Eventitem> getArchiveEventListAll(){
-		
-		System.out.println("get Archive EVent List all");
 		
 		Vector<Eventitem> list = new Vector<Eventitem>();
 		
