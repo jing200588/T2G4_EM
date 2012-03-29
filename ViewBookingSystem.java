@@ -185,7 +185,8 @@ public class ViewBookingSystem extends Composite {
 		AddOutsideVenueButton.setBounds(501, 9, 169, 16);
 		toolkit.adapt(AddOutsideVenueButton, true, true);
 		AddOutsideVenueButton.setText("Add an event outside NUS");
-
+		AddOutsideVenueButton.setVisible(false);
+		
 		FunctionContentPage = new Composite(mainComposite, SWT.NONE);
 		FunctionContentPage.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		FunctionContentPage.setBounds(10, 51, 680, 284);
@@ -886,19 +887,20 @@ public class ViewBookingSystem extends Composite {
 						throw new Exception("You cannot book a venue with the starting date and time in the past!");
 					
 					// Check if the book time slot is within the event time slot.
-					if(BookVenueButton.getText().equals("Book Venue") &&
-							timeSlotChoiceInput.isContained(new TimeSlot(event.getStartDateTime(),
+					if(timeSlotChoiceInput.isContained(new TimeSlot(event.getStartDateTime(),
 									event.getEndDateTime())) == false)
 					{
-						errormessageDialog warningBoard = new errormessageDialog(new Shell(), 
-								"Warning: Your preferred time slot is not within the event's time slot. Do you still want to book it?"
-								+ " If no, please edit your time slot. If yes, please press the button \"Continute to book\".",
-								"Message");
-						warningBoard.open();
-						BookVenueButton.setText("Continue to Book");
-						ButtonConfirmBookTime.setText("Confirm");
-						dt_SearchResult.setEnabled(true);
-						return;
+						TwoChoiceDialog warningBoard = new TwoChoiceDialog(new Shell(), "Warning", 
+								"Warning: Your preferred time slot is not within the event's time slot. Do you still want to book it?",
+								"Yes", "No");
+						String choice = (String) warningBoard.open();
+						if(choice.equals("Yes") == false)
+						{
+							BookVenueButton.setEnabled(false);
+							ButtonConfirmBookTime.setText("Confirm");
+							dt_SearchResult.setEnabled(true);
+							return;
+						}
 					}
 										
 					if(hasTimeSlotChecked == false)

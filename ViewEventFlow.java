@@ -71,6 +71,23 @@ public class ViewEventFlow extends Composite {
 		eventObj = event;
 		listEventFlow = eventObj.getEventFlow();
 		
+		/////////////////////////////////////////////////////////////////////////////////////
+		/// 
+		////////////////////////////////////////////////////////////////////////////////////
+		this.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// User presses Ctrl + S
+				System.out.println(e.keyCode);
+				if((e.stateMask & SWT.CTRL) != 0 && e.keyCode == (int) 's')
+				{
+					// Update in the database
+					System.out.println("Press Crl + S");
+					ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
+				}
+			}
+		});
+		
 		// Continue with the GUI
 		toolkit.adapt(this);
 		toolkit.paintBordersFor(this);
@@ -84,20 +101,6 @@ public class ViewEventFlow extends Composite {
 		toolkit.paintBordersFor(VenueViewForm);
 		VenueViewForm.setText("Event Flow");
 
-		/////////////////////////////////////////////////////////////////////////////////////
-		/// 
-		////////////////////////////////////////////////////////////////////////////////////
-		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// User presses Ctrl + S
-				if((e.stateMask & SWT.CTRL) != 0 && e.keyCode == java.awt.event.KeyEvent.VK_S)
-				{
-					// Update in the database
-					ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
-				}
-			}
-		});
 		VenueViewForm.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite mainComposite = new Composite(VenueViewForm.getBody(), SWT.NONE);
@@ -235,7 +238,7 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		toolkit.adapt(btnReturnToEvent, true, true);
-		btnReturnToEvent.setText("Return to Event page");
+		btnReturnToEvent.setText("Save & Return");
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
 		FormData fd_btnAdd = new FormData();
@@ -359,7 +362,25 @@ public class ViewEventFlow extends Composite {
 		btnNewButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnExport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		
+		Button btnNewButton = new Button(mainComposite, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// Update in the database
+				ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
+			}
+		});
+		btnNewButton.setSelection(true);
+		FormData fd_btnNewButton = new FormData();
+		fd_btnNewButton.left = new FormAttachment(tableEventFlow, 10);
+		fd_btnNewButton.top = new FormAttachment(btnReturnToEvent, 11);
+		fd_btnNewButton.right = new FormAttachment(95);
+		btnNewButton.setLayoutData(fd_btnNewButton);
+		toolkit.adapt(btnNewButton, true, true);
+		btnNewButton.setText("Save");
 
+	
 	}
 	
 	/**
@@ -385,7 +406,7 @@ public class ViewEventFlow extends Composite {
 			}
 		}
 	}
-	/*
+	
 	public static void main(String[] args)
 	{
 		Display display = new Display();
@@ -407,5 +428,4 @@ public class ViewEventFlow extends Composite {
 		if (!display.readAndDispatch()) display.sleep(); 
 		} 
 	}
-	*/
 }
