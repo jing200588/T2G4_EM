@@ -264,12 +264,12 @@ class EMDBParticipant extends EMDBBase{
 			Object[] row = result.get(i);
 			
 			Participant person = new Participant(
-									row[2].toString(),
-									row[6].toString(),
-									row[3].toString(),
-									row[4].toString(),
-									row[5].toString(),
-									row[7].toString()
+									(row[2] == null) ? "" : row[2].toString(),
+									(row[6] == null) ? "" : row[6].toString(),
+									(row[3] == null) ? "" : row[3].toString(),
+									(row[4] == null) ? "" : row[4].toString(),
+									(row[5] == null) ? "" : row[5].toString(),
+									(row[7] == null) ? "" : row[7].toString()
 								);
 			person.setID(Integer.parseInt(row[1].toString()));
 			list.add(person);

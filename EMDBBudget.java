@@ -337,7 +337,7 @@ class EMDBBudget extends EMDBBase{
 	 * @return
 	 */
 	public int addBudgetList(Vector<Item> list, int aEventID){
-		return this.addBudgetListGatway(list, aEventID, "normal");
+		return this.addBudgetListGateway(list, aEventID, "normal");
 	}
 	
 	
@@ -348,7 +348,7 @@ class EMDBBudget extends EMDBBase{
 	 * @return
 	 */
 	public int addBudgetListOptimized(Vector<Item> list, int aEventID){
-		return this.addBudgetListGatway(list, aEventID, "optimized");
+		return this.addBudgetListGateway(list, aEventID, "optimized");
 	}
 	
 	
@@ -360,7 +360,7 @@ class EMDBBudget extends EMDBBase{
 	 * @param aTableType
 	 * @return
 	 */
-	private int addBudgetListGatway(
+	private int addBudgetListGateway(
 			Vector<Item> list, 
 			int aEventID, 
 			String aTableType){
@@ -392,7 +392,9 @@ class EMDBBudget extends EMDBBase{
 			}
 			
 			
-			
+			if (this.dbDebug){
+				this.dMsg(sql);
+			}
 			this.queue(sql);
 		}
 		
@@ -476,10 +478,10 @@ class EMDBBudget extends EMDBBase{
 			Object[] row = result.get(i);
 			Item current = new Item(
 								Integer.parseInt(row[0].toString()), 
-								row[2].toString(), 
+								(row[2] == null) ? "" : row[2].toString(), 
 								Integer.parseInt(row[3].toString()), 
 								Integer.parseInt(row[4].toString()), 
-								row[5].toString()
+								(row[5] == null) ? "" : row[5].toString()
 							);
             current.setQuantity(Integer.parseInt(row[6].toString()));
 		    list.add(current);
@@ -661,7 +663,7 @@ class EMDBBudget extends EMDBBase{
 		this.deleteBudgetListGateway(aEventID, aTableType);
 		
 		//add it back
-		return this.addBudgetListGatway(list, aEventID, aTableType);
+		return this.addBudgetListGateway(list, aEventID, aTableType);
 	}
 	
 	

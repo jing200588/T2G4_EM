@@ -350,13 +350,13 @@ class EMDBVenue extends EMDBBase{
 		
 		if (result.size() > 0){
 			Object[] row = result.get(0);
-			place.updateName		( 	row[1].toString()				);
-			place.updateAddress		( 	row[2].toString()				);
-			place.updateDescription	(	row[3].toString() 				);
-			place.updateMaxCapacity	( 	new Integer(row[4].toString()) 	);	
-			place.updateCost		( 	new Integer(row[5].toString()) 	);
+			place.updateName		( 	(row[1] == null) ? "" : row[1].toString()		);
+			place.updateAddress		( 	(row[2] == null) ? "" : row[2].toString()		);
+			place.updateDescription	(	(row[3] == null) ? "" : row[3].toString() 		);
+			place.updateMaxCapacity	( 	new Integer(row[4].toString()) 					);	
+			place.updateCost		( 	new Integer(row[5].toString()) 					);
 		}
-		
+
 
 		this.disconnect();
 		
@@ -407,8 +407,8 @@ class EMDBVenue extends EMDBBase{
 		for (int i=0; i< size; i++){
 			Object[] row = result.get(i);
 			
-			int cost = Integer.parseInt(row[4].toString());
-			int capacity = Integer.parseInt(row[5].toString());
+			int cost = Integer.parseInt(row[5].toString());
+			int capacity = Integer.parseInt(row[4].toString());
 			
 			
 			if ( (aUpperLimit == 0 && aLowerLimit == 0) 
@@ -420,11 +420,11 @@ class EMDBVenue extends EMDBBase{
 				Venue place = new Venue();
 				
 				place.updateID			( 	new Integer(row[0].toString())	);
-				place.updateName		( 	row[1].toString()				);
-				place.updateAddress		( 	row[2].toString()				);
-				place.updateDescription	(	row[3].toString() 				);
-				place.updateMaxCapacity	( 	new Integer(row[4].toString()) 	);	
-				place.updateCost		( 	new Integer(row[5].toString()) 	);
+				place.updateName		( 	(row[1] == null) ? "" : row[1].toString()		);
+				place.updateAddress		( 	(row[2] == null) ? "" : row[2].toString()		);
+				place.updateDescription	(	(row[3] == null) ? "" : row[3].toString() 		);
+				place.updateMaxCapacity	( 	new Integer(row[4].toString()) 					);	
+				place.updateCost		( 	new Integer(row[5].toString()) 					);
 				
 				list.add(place);
 			}
@@ -473,10 +473,9 @@ class EMDBVenue extends EMDBBase{
 			Object[] row = result.get(0);
 			slot = new TimeSlot(
 					new Integer(row[0].toString()),
-					new MyDateTime( row[3].toString() ),
-					new MyDateTime( row[4].toString() )
+					new MyDateTime( (row[3] == null) ? "" : row[3].toString() ),
+					new MyDateTime( (row[4] == null) ? "" : row[4].toString() )
 					);
-			
 		}
 		
 		this.disconnect();
@@ -520,7 +519,13 @@ class EMDBVenue extends EMDBBase{
 						.addFromTable(this.bookingTable)
 						.addCondition(BinaryCondition.equalTo(this.bookingVenueID, aID))
 						.validate().toString();
-		} else {
+		}else if(aSearchType.compareTo("capacity") == 0){
+			sql = new SelectQuery()
+						.addAllColumns()
+						.addFromTable(this.bookingTable)
+						.addCondition(BinaryCondition.equalTo(this.bookingVenueID, aID))
+						.validate().toString();
+		}else {
 			sql = new SelectQuery()
 						.addAllColumns()
 						.addFromTable(this.bookingTable)
@@ -547,8 +552,8 @@ class EMDBVenue extends EMDBBase{
 			list.add(
 					new TimeSlot(
 							new Integer(row[0].toString()),
-							new MyDateTime( row[3].toString() ),
-							new MyDateTime( row[4].toString() )
+							new MyDateTime( (row[3] == null) ? "" : row[3].toString() ),
+							new MyDateTime( (row[4] == null) ? "" : row[4].toString() )
 							)
 					);
 		}
@@ -591,8 +596,8 @@ class EMDBVenue extends EMDBBase{
 			Object[] row = result.get(i);
 			
 			TimeSlot timing = new TimeSlot(
-									new MyDateTime( row[3].toString() ),
-									new MyDateTime( row[4].toString() )
+									new MyDateTime( (row[3] == null) ? "" : row[3].toString() ),
+									new MyDateTime( (row[4] == null) ? "" : row[4].toString() )
 									);
 			Venue venue = this.getVenue( new Integer(row[2].toString()) );
 			BookedVenueInfo info = new BookedVenueInfo(venue, timing);
@@ -648,11 +653,11 @@ class EMDBVenue extends EMDBBase{
 			Venue place = new Venue();
 
 			place.updateID			( 	new Integer(row[0].toString())	);
-			place.updateName		( 	row[1].toString()				);
-			place.updateAddress		( 	row[2].toString()				);
-			place.updateDescription	(	row[3].toString() 				);
-			place.updateMaxCapacity	( 	new Integer(row[4].toString()) 	);	
-			place.updateCost		( 	new Integer(row[5].toString()) 	);
+			place.updateName		( 	(row[1] == null) ? "" : row[1].toString()		);
+			place.updateAddress		( 	(row[2] == null) ? "" : row[2].toString()		);
+			place.updateDescription	(	(row[3] == null) ? "" : row[3].toString() 		);
+			place.updateMaxCapacity	( 	new Integer(row[4].toString()) 					);	
+			place.updateCost		( 	new Integer(row[5].toString()) 					);
 
 			
 			list.add(place);
