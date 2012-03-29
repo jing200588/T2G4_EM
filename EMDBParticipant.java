@@ -192,12 +192,11 @@ class EMDBParticipant extends EMDBBase{
 			
 			if (this.dbDebug){
 				this.dMsg("EMDB - COMMIT PARICIPANT IN QUEUE");
-				this.dMsg("EMDB - " + sql);
 			}
 			
-			this.connect();
+			
 			int result = this.commit();
-			this.disconnect();
+			
 		
 		
 			return result;

@@ -330,6 +330,11 @@ public class EMDBBase{
 					this.dbQuery.addBatch(this.queue.get(i));
 				}
 				
+				if (this.dbDebug){
+					this.dMsg("EMDB - RUNNING BATCH");
+				}
+				
+				
 				//run the batch queries
 				this.dbCon.setAutoCommit(false);
 				this.dbQuery.executeBatch();
