@@ -228,7 +228,7 @@ class EMDBEvent extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - ADD AN EVENT");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		this.connect();
@@ -277,7 +277,7 @@ class EMDBEvent extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET AN EVENT #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 
 		
@@ -349,7 +349,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET ALL EVENTS LIST");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 			
 		
@@ -445,7 +445,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - UPDATE EVENT #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		
@@ -479,7 +479,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - UDPATE SCHEDULE FOR #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		this.connect();
@@ -511,7 +511,7 @@ class EMDBEvent extends EMDBBase{
 
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - DELETE EVENT #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		
@@ -574,14 +574,18 @@ class EMDBEvent extends EMDBBase{
 	public int addArchiveEvent(int aEventID){
 		
 		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE EVENT #"+aEventID);
+		}
 		
 		Eventitem item = this.getEvent(aEventID);
+
 		this.deleteEvent(aEventID);
 		String sql = this.generateArchiveQuery(item);
 		
 		if (EMDBSettings.DEVELOPMENT){
-			this.dMsg("EMDB - ADD TO ARCHIVE LIST");
-			this.dMsg(sql);
+			this.dMsg("EMDB - ADDING TO ARCHIVE LIST");
+			this.dMsg("EMDB - " + sql);
 		}	
 		
 		this.connect();
@@ -602,8 +606,13 @@ class EMDBEvent extends EMDBBase{
 	 * @param list
 	 * @return
 	 */
-	public int addAchiveEventList(List<Eventitem> list){
+	public int addAchiveEventList(Vector<Eventitem> list){
+		
 		int size = list.size();
+		
+		if (EMDBSettings.DEVELOPMENT){
+			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE LIST OF SIZE " + size);
+		}	
 		
 		
 		if (!list.isEmpty()){
@@ -639,6 +648,7 @@ class EMDBEvent extends EMDBBase{
 	 * @return
 	 */
 	public Vector<Eventitem> getArchiveEventList(){
+			
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET AN ARCHIVE EVENT LIST");
 		}	
@@ -648,7 +658,7 @@ class EMDBEvent extends EMDBBase{
 	}
 	
 	private Vector<Eventitem> getArchiveEventListAll(){
-
+		
 		Vector<Eventitem> list = new Vector<Eventitem>();
 		
 		String sql 	= new SelectQuery()
@@ -659,7 +669,7 @@ class EMDBEvent extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET ALL ARCHIVE EVENTS LIST");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 			
 		
@@ -667,26 +677,26 @@ class EMDBEvent extends EMDBBase{
 		this.connect();
 		Vector<Object[]> result = this.runQueryResults(sql);
 		
-		int size = result.size();
-		for (int i=0; i< size; i++){
-			Object[] row = result.get(i);
+		if (!result.isEmpty()){
+			int size = result.size();
+			for (int i=0; i< size; i++){
+				Object[] row = result.get(i);
+				
+				Eventitem item = new Eventitem(
+							row[2].toString(), //name
+							row[5].toString(), //startdate
+							row[6].toString(), //enddate
+							row[7].toString(), //starttime
+							row[8].toString() //endtime
+						);
+				item.setDescription( row[3].toString()); //description
+				item.setBudget( Double.parseDouble(row[4].toString()) ); //budget
+				item.setID( Integer.parseInt(row[1].toString()) ); //event_id
+				item.setEventFlow(EventFlowEntry.constructEventFlowEntryList(row[9].toString()));
 			
-			Eventitem item = new Eventitem(
-						row[2].toString(), //name
-						row[5].toString(), //startdate
-						row[6].toString(), //enddate
-						row[7].toString(), //starttime
-						row[8].toString() //endtime
-					);
-			item.setDescription( row[3].toString()); //description
-			item.setBudget( Double.parseDouble(row[4].toString()) ); //budget
-			item.setID( Integer.parseInt(row[1].toString()) ); //event_id
-		
-		
-			list.add(item);
+				list.add(item);
+			}
 		}
-			
-		
 		
 		this.disconnect();
 		return list;

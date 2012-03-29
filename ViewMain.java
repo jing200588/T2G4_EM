@@ -213,20 +213,24 @@ public class ViewMain extends ApplicationWindow {
 //				System.out.println("table count: " + tb);
 				table.remove(i);
 				expiredlist.add(eventlist.get(i));
+				System.out.println(eventlist.get(i).getName());
+				System.out.println("Expired - " + expiredlist.size());
 			}
 		}
-		
+		ModelEvent.UpdateExpiredList(expiredlist);//.subList(prevExpIndex, expiredlist.size()));
 		//Remove the expired events from event list
+		
 		for (int i=0; i<eventlist.size(); i++) {
 			if (eventlist.get(i).isExpired()) {
 				eventlist.remove(i);
 				i--;
 			}
 		}
-		
+		System.out.println("Expired - " + expiredlist.size());
+		System.out.println("OK List - " + eventlist.size());
 		UpdateExpiredTable();
 		System.out.println("RAN");
-		ModelEvent.UpdateExpiredList(expiredlist.subList(prevExpIndex, expiredlist.size()));
+		
 	}
 	/************************************************************
 	 * HOMEPAGE

@@ -379,7 +379,8 @@ public class ViewEventFlow extends Composite {
 			// There may be modification in the chosen EventFlowEntry object
 			if(newEntry != null)
 			{
-				chosenEntry = newEntry;
+				listEventFlow.remove(chosenIndex);
+				EventFlowEntry.insertSortedList(listEventFlow, newEntry);
 				tableViewEventFlow.refresh();
 			}
 		}

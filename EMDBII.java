@@ -93,7 +93,7 @@ public class EMDBII{
 	 */
 	public void init(){
 		if (EMDBSettings.DEVELOPMENT){
-			System.out.println("INITIALIZING DATABASE");
+			System.out.println("EMDB - INITIALIZING DATABASE");
 		}
 		this.event.setup();
 		this.budget.setup();
@@ -117,7 +117,7 @@ public class EMDBII{
 			
 			
 			if (EMDBSettings.DEVELOPMENT){
-				System.out.println("SYSTEM CHECK - OK");
+				System.out.println("EMDB - SYSTEM CHECK - OK");
 			}
 			
 			
@@ -125,7 +125,7 @@ public class EMDBII{
 			
 			
 			if (EMDBSettings.DEVELOPMENT){
-				System.out.println("SYSTEM CHECK - FAILED");
+				System.out.println("EMDB - SYSTEM CHECK - FAILED");
 			}
 			
 			
@@ -133,7 +133,7 @@ public class EMDBII{
 			
 			
 			if (EMDBSettings.DEVELOPMENT){
-				System.out.println("POPULATING HARD CODED VENUE DETAILS");
+				System.out.println("EMDB - POPULATING HARD CODED VENUE DETAILS");
 			}
 			
 			//temp hard code values
@@ -163,7 +163,7 @@ public class EMDBII{
 		}
 		
 		if (EMDBSettings.DEVELOPMENT){
-			System.out.println("SYSTEM CHECK - END");
+			System.out.println("EMDB - SYSTEM CHECK - END");
 		}
 	}
 	

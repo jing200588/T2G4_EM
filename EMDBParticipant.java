@@ -178,7 +178,7 @@ class EMDBParticipant extends EMDBBase{
 				
 				if (EMDBSettings.DEVELOPMENT){
 					this.dMsg("EMDB - ADD PARICIPANT TO QUEUE");
-					this.dMsg(sql);
+					this.dMsg("EMDB - " + sql);
 				}
 				
 				this.queue(sql);
@@ -187,7 +187,7 @@ class EMDBParticipant extends EMDBBase{
 			
 			if (EMDBSettings.DEVELOPMENT){
 				this.dMsg("EMDB - COMMIT PARICIPANT IN QUEUE");
-				this.dMsg(sql);
+				this.dMsg("EMDB - " + sql);
 			}
 			
 			this.connect();
@@ -227,7 +227,7 @@ class EMDBParticipant extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - GET ALL EVENTS PARTICIPANTS");
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 			
 		
@@ -282,7 +282,7 @@ class EMDBParticipant extends EMDBBase{
 		
 		if (EMDBSettings.DEVELOPMENT){
 			this.dMsg("EMDB - DELETE/CLEAR PARTICIPANT LIST #"+aEventID);
-			this.dMsg(sql);
+			this.dMsg("EMDB - " + sql);
 		}
 		
 		

@@ -954,7 +954,7 @@ public class ViewEvent extends Composite {
 
 		col5.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				sortColumn(4, item_list);
+				sortColumn(5, item_list);
 			}
 		});
 		refreshBudgetTable(item_list);
