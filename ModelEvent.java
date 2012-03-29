@@ -33,8 +33,7 @@ public class ModelEvent {
 				eitem.getEndDateTime().getDateRepresentation(),
 				eitem.getStartDateTime().getTimeRepresentation(),
 				eitem.getEndDateTime().getTimeRepresentation(), 
-				EventFlowEntry.getStringRepresentation(eitem.getEventFlow())
-				);
+				"");
 		eitem.setID(id);
 		
 		list.add(eitem);
@@ -70,22 +69,9 @@ public class ModelEvent {
 	 * @return
 	 */
 	public static Vector<Eventitem> PullExpiredList() {
-		
-	/*	list = db.eventDB().getEventList();
-		int size = list.size();
-		for (int i=0; i<size; i++){
-			list.get(i).addBVI(db.venueDB().getEventBookings(list.get(i).getID()));	
-			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(list.get(i).getID()));
-		}*/
+
 		expired = db.eventDB().getArchiveEventList();
-		int size = expired.size();
-		for (int i=0; i<size; i++){
-			
-			int pid = expired.get(i).getID();
-			expired.get(i).addBVI(db.venueDB().getEventBookings(pid));	
-			expired.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(pid));
-			expired.get(i).setParticipantList(db.participantDB().getParticipantList(pid));
-		}
+		
 		return expired;
 	}
 	
@@ -133,6 +119,8 @@ public class ModelEvent {
 	}
 	
 	public static void UpdateExpiredList(List<Eventitem> newlyexpired) {
+		System.out.println("RAN!!");
 		db.eventDB().addAchiveEventList(newlyexpired);
+		System.out.println("RAN!!");
 	}
 }

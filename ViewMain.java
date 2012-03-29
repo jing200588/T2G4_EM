@@ -205,6 +205,9 @@ public class ViewMain extends ApplicationWindow {
 		//shifts expired events into expired list & remove from event list table
 		for (int i=0; i<eventlist.size(); i++) {
 			if (eventlist.get(i).isExpired()) {
+//				System.out.println("expired " + i);
+//				TableItem tb = new TableItem(table, 0);
+//				System.out.println("table count: " + tb);
 				table.remove(i);
 				expiredlist.add(eventlist.get(i));
 			}
@@ -219,6 +222,7 @@ public class ViewMain extends ApplicationWindow {
 		}
 		
 		UpdateExpiredTable();
+		System.out.println("RAN");
 		ModelEvent.UpdateExpiredList(expiredlist.subList(prevExpIndex, expiredlist.size()));
 	}
 	/************************************************************
@@ -613,7 +617,6 @@ public class ViewMain extends ApplicationWindow {
 			table.setHeaderVisible(true);
 			table.setLinesVisible(false);
 			UpdateTable();
-	//		CheckExpiry();
 			Menu menu = new Menu(table);
 			table.setMenu(menu);
 			
@@ -714,6 +717,7 @@ public class ViewMain extends ApplicationWindow {
 			table_1.setHeaderVisible(true);
 			table_1.setLinesVisible(false);
 			UpdateExpiredTable();
+			CheckExpiry();
 			Menu menu2 = new Menu(table_1);
 			table_1.setMenu(menu2);
 			
@@ -764,7 +768,6 @@ public class ViewMain extends ApplicationWindow {
 				formToolkit.paintBordersFor(c2);
 				hp = new ViewHomepage(c2, SWT.NONE);
 				layout.topControl = hp;
-				
 			
 			}
 	

@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 
 public class ViewEventFlow extends Composite {
 	
@@ -75,12 +77,12 @@ public class ViewEventFlow extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 				
 		Form VenueViewForm = toolkit.createForm(this);
-		VenueViewForm.getBody().setBackgroundMode(SWT.INHERIT_DEFAULT);
+		VenueViewForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		VenueViewForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		VenueViewForm.setBounds(0, 0, 700, 400);
 		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		toolkit.paintBordersFor(VenueViewForm);
 		VenueViewForm.setText("Event Flow");
-		VenueViewForm.getBody().setLayout(new FormLayout());
 
 		/////////////////////////////////////////////////////////////////////////////////////
 		/// 
@@ -96,19 +98,22 @@ public class ViewEventFlow extends Composite {
 				}
 			}
 		});
+		VenueViewForm.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite mainComposite = new Composite(VenueViewForm.getBody(), SWT.NONE);
-		FormData fd_mainComposite = new FormData();
-		fd_mainComposite.bottom = new FormAttachment(100, -24);
-		fd_mainComposite.left = new FormAttachment(0, 28);
-		fd_mainComposite.top = new FormAttachment(50, -159);
-		fd_mainComposite.right = new FormAttachment(50, 349);
-		mainComposite.setLayoutData(fd_mainComposite);
+		
 		toolkit.adapt(mainComposite);
 		toolkit.paintBordersFor(mainComposite);
+		mainComposite.setLayout(new FormLayout());
 		
 		tableViewEventFlow = new TableViewer(mainComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableEventFlow = tableViewEventFlow.getTable();
+		FormData fd_tableEventFlow = new FormData();
+		fd_tableEventFlow.bottom = new FormAttachment(80);
+		fd_tableEventFlow.right = new FormAttachment(80);
+		fd_tableEventFlow.top = new FormAttachment(0, 10);
+		fd_tableEventFlow.left = new FormAttachment(5);
+		tableEventFlow.setLayoutData(fd_tableEventFlow);
 		tableEventFlow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -147,7 +152,6 @@ public class ViewEventFlow extends Composite {
 		tableEventFlow.setTouchEnabled(true);
 		tableEventFlow.setLinesVisible(true);
 		tableEventFlow.setHeaderVisible(true);
-		tableEventFlow.setBounds(10, 10, 505, 268);
 		tableViewEventFlow.setContentProvider(ArrayContentProvider.getInstance());
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
@@ -213,6 +217,12 @@ public class ViewEventFlow extends Composite {
 		});
 		
 		Button btnReturnToEvent = new Button(mainComposite, SWT.NONE);
+		FormData fd_btnReturnToEvent = new FormData();
+		fd_btnReturnToEvent.left = new FormAttachment(tableEventFlow, 10);
+
+		fd_btnReturnToEvent.right = new FormAttachment(95);
+	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
+		btnReturnToEvent.setLayoutData(fd_btnReturnToEvent);
 		btnReturnToEvent.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -224,11 +234,18 @@ public class ViewEventFlow extends Composite {
 				ViewMain.ReturnView();
 			}
 		});
-		btnReturnToEvent.setBounds(545, 299, 129, 25);
 		toolkit.adapt(btnReturnToEvent, true, true);
 		btnReturnToEvent.setText("Return to Event page");
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
+		FormData fd_btnAdd = new FormData();
+		fd_btnAdd.left = new FormAttachment(tableEventFlow, 10);
+		fd_btnAdd.width = 100;
+		fd_btnAdd.right = new FormAttachment(95);
+		fd_btnAdd.top = new FormAttachment(0, 10);
+		fd_btnReturnToEvent.top = new FormAttachment(btnAdd, 10);
+//		fd_btnAdd.left = new FormAttachment(0, 571);
+		btnAdd.setLayoutData(fd_btnAdd);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -244,20 +261,31 @@ public class ViewEventFlow extends Composite {
 				}
 			}
 		});
-		btnAdd.setBounds(571, 10, 75, 25);
 		toolkit.adapt(btnAdd, true, true);
 		btnAdd.setText("Add");
 		
-		Label lblNewLabel = new Label(mainComposite, SWT.NONE);
-		lblNewLabel.setBounds(10, 304, 66, 15);
+		Composite composite = new Composite(mainComposite, SWT.NONE);
+		FormData fd_composite = new FormData();
+		fd_composite.right = new FormAttachment(80, 5);
+		fd_composite.top = new FormAttachment(tableEventFlow, 10);
+		fd_composite.left = new FormAttachment(5, -5);
+		composite.setLayoutData(fd_composite);
+		toolkit.adapt(composite);
+		toolkit.paintBordersFor(composite);
+		composite.setLayout(new GridLayout(4, false));
+		
+		Label lblNewLabel = new Label(composite, SWT.NONE);
 		toolkit.adapt(lblNewLabel, true, true);
 		lblNewLabel.setText("Output file:");
 		
-		textFilePath = new Text(mainComposite, SWT.BORDER);
-		textFilePath.setBounds(76, 301, 189, 21);
+		textFilePath = new Text(composite, SWT.BORDER);
+		textFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(textFilePath, true, true);
 
-		Button btnNewButton_1 = new Button(mainComposite, SWT.NONE);
+		Button btnNewButton_1 = new Button(composite, SWT.NONE);
+		GridData gd_btnNewButton_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnNewButton_1.widthHint = 60;
+		btnNewButton_1.setLayoutData(gd_btnNewButton_1);
 		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -274,11 +302,13 @@ public class ViewEventFlow extends Composite {
 				}
 			}
 		});
-		btnNewButton_1.setBounds(279, 299, 75, 25);
 		toolkit.adapt(btnNewButton_1, true, true);
 		btnNewButton_1.setText("Browse");
 		
-		Button btnExport = new Button(mainComposite, SWT.NONE);
+		Button btnExport = new Button(composite, SWT.NONE);
+		GridData gd_btnExport = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnExport.widthHint = 60;
+		btnExport.setLayoutData(gd_btnExport);
 		btnExport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -314,14 +344,22 @@ public class ViewEventFlow extends Composite {
 					errorBoard.open();
 				}
 			}
-		}); 
-		btnExport.setBounds(360, 299, 75, 25);
+		});
 		toolkit.adapt(btnExport, true, true);
 		btnExport.setText("Export");
 		
 		// Set input for table viewer at the beginning
 		tableViewEventFlow.setInput(listEventFlow);
 		toolkit.paintBordersFor(tableEventFlow);
+		
+		mainComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnReturnToEvent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnAdd.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnNewButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnExport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+
 	}
 	
 	/**
@@ -346,6 +384,7 @@ public class ViewEventFlow extends Composite {
 			}
 		}
 	}
+	/*
 	public static void main(String[] args)
 	{
 		Display display = new Display();
@@ -367,4 +406,5 @@ public class ViewEventFlow extends Composite {
 		if (!display.readAndDispatch()) display.sleep(); 
 		} 
 	}
+	*/
 }
