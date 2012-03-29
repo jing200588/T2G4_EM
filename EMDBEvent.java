@@ -607,21 +607,21 @@ class EMDBEvent extends EMDBBase{
 	
 	/**
 	 * Transfer a list of events to archive.
-	 * @param list
+	 * @param newlyexpired
 	 * @return
 	 */
-	public int addAchiveEventList(Vector<Eventitem> list){
+	public int addAchiveEventList(List<Eventitem> newlyexpired){
 		
-		int size = list.size();
+		int size = newlyexpired.size();
 		
 		if (this.dbDebug){
 			this.dMsg("EMDB - STARTING PROCESS TO ARCHIVE LIST OF SIZE " + size);
 		}	
 		
 		
-		if (!list.isEmpty()){
+		if (!newlyexpired.isEmpty()){
 			for (int i=0; i<size; i++){
-				Eventitem current = list.get(i);
+				Eventitem current = newlyexpired.get(i);
 				this.deleteEvent(current.getID());
 				
 				String sql = this.generateArchiveQuery(current);
