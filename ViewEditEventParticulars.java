@@ -45,6 +45,7 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 				
 				try
 				{
+					
 					String eventname = txtEventTitle.getText().trim();
 					if (eventname.equals("")) {
 						throw new Exception("Event name should not consist of only whitespaces. Please try again.");
