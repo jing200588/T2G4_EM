@@ -99,7 +99,7 @@ public class ViewSmsAds extends Composite {
 
 		txtMessageInputBox = new Text(compSmsMain, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		FormData fd_txtMessageInputBox = new FormData();
-		fd_txtMessageInputBox.bottom = new FormAttachment(90);
+		fd_txtMessageInputBox.bottom = new FormAttachment(90, -54);
 		fd_txtMessageInputBox.right = new FormAttachment(95);
 		fd_txtMessageInputBox.left = new FormAttachment(0, 71);
 		txtMessageInputBox.setLayoutData(fd_txtMessageInputBox);
@@ -109,9 +109,9 @@ public class ViewSmsAds extends Composite {
 		txtMessageInputBox.setText("Upcoming event: " + currentEvent.getName()+".\nStart date: " + start + ".\nEnd date: " + end +".");
 		btnSend = new Button(compSmsMain, SWT.NONE);
 		FormData fd_btnSend = new FormData();
-		fd_btnSend.right = new FormAttachment(0, 490);
-		fd_btnSend.top = new FormAttachment(0, 282);
-		fd_btnSend.left = new FormAttachment(0, 415);
+		fd_btnSend.top = new FormAttachment(txtMessageInputBox, 19);
+		fd_btnSend.right = new FormAttachment(txtToInputBox, 0, SWT.RIGHT);
+		fd_btnSend.left = new FormAttachment(0, 590);
 		btnSend.setLayoutData(fd_btnSend);
 		btnSend.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
