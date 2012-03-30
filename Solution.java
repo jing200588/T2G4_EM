@@ -5,12 +5,12 @@ import java.util.Vector;
 class Solution {
 	Vector<BitSet> bitmask;
 	Vector<Double> cost;
-	int svalue;
+	int satisfactionValue;
 	
 	public Solution () {
 		bitmask = new Vector<BitSet>();
 		cost = new Vector<Double>();
-		svalue = 0;
+		satisfactionValue = 0;
 	}
 	public void addSet (BitSet items, double totalcost) {
 		bitmask.add(items);
@@ -18,11 +18,11 @@ class Solution {
 	}
 	
 	public int getSvalue () {
-		return svalue;
+		return satisfactionValue;
 	}
 	
 	public void setSvalue (int value) {
-		svalue = value;
+		satisfactionValue = value;
 	}
 	
 	public BitSet getOptimalSet () {

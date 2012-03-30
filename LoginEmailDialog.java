@@ -19,17 +19,17 @@ import org.eclipse.swt.events.SelectionAdapter;
 
 public class LoginEmailDialog extends Dialog {
 
-	protected Object result;
-	protected Shell shell;
+	protected Object objResult;
+	protected Shell shellMain;
 	private Text txtUsername;
 	private Text txtPassword;
 	private Button btnLogin;
 	private Button btnCancel;
 	private Label lblPassword;
-	private String username;
+	private String userName;
 	private String password;
 	private boolean loginSuccessful;
-	private Eventitem cevent;
+	private Eventitem currentEvent;
 	protected errormessageDialog errordiag;
 
 	/**
@@ -40,7 +40,7 @@ public class LoginEmailDialog extends Dialog {
 	public LoginEmailDialog(Shell parent, int style, Eventitem item) {
 		super(parent, style);
 		setText("SWT Dialog");
-		cevent = item;
+		currentEvent = item;
 	}
 
 	/**
@@ -49,27 +49,27 @@ public class LoginEmailDialog extends Dialog {
 	 */
 	public Object open() {
 		createContents();
-		shell.open();
-		shell.layout();
+		shellMain.open();
+		shellMain.layout();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed()) {
+		while (!shellMain.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
 		}
-		return result;
+		return objResult;
 	}
 
 	/**
 	 * Create contents of the dialog.
 	 */
 	private void createContents() {
-		shell = new Shell(getParent(), getStyle());
-		shell.setSize(450, 300);
-		shell.setText(getText());		
-		shell.setLayout(new FormLayout());
+		shellMain = new Shell(getParent(), getStyle());
+		shellMain.setSize(450, 300);
+		shellMain.setText(getText());		
+		shellMain.setLayout(new FormLayout());
 		
-		Composite composite = new Composite(shell, SWT.NONE);
+		Composite composite = new Composite(shellMain, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(0, 41);
@@ -107,7 +107,7 @@ public class LoginEmailDialog extends Dialog {
 		gd_txtPassword.widthHint = 188;
 		txtPassword.setLayoutData(gd_txtPassword);
 		
-		btnLogin = new Button(shell, SWT.NONE);
+		btnLogin = new Button(shellMain, SWT.NONE);
 		btnLogin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				loginSuccessful = false; //alway reset to false
@@ -115,7 +115,7 @@ public class LoginEmailDialog extends Dialog {
 				try {
 					txtUsername.getText().trim();
 					if(txtUsername.getText().length() == 0) throw new Exception("Username must not be empty.");
-					username = txtUsername.getText();
+					userName = txtUsername.getText();
 					txtPassword.getText().trim();
 					if(txtPassword.getText().length() == 0) throw new Exception("Password must not be empty.");
 					password = txtPassword.getText();
@@ -124,8 +124,8 @@ public class LoginEmailDialog extends Dialog {
 				loginSuccessful = false; //Change this to your method of login.
 				
 				if(loginSuccessful == true) {
-					shell.close();
-					ViewMain.EmailAds(cevent);//need to store the sesson somewhere anot? If yes I am not sure how you do it actually. 
+					shellMain.close();
+					ViewMain.EmailAds(currentEvent);//need to store the sesson somewhere anot? If yes I am not sure how you do it actually. 
 				}
 				else {
 					throw new Exception("Incorrect Username/Password.");
@@ -146,10 +146,10 @@ public class LoginEmailDialog extends Dialog {
 		btnLogin.setLayoutData(fd_btnLogin);
 		btnLogin.setText("Login");
 		
-		btnCancel = new Button(shell, SWT.NONE);
+		btnCancel = new Button(shellMain, SWT.NONE);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				shell.close();
+				shellMain.close();
 			}
 		});
 		btnCancel.setSize(new Point(100, 250));
