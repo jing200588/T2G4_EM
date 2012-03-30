@@ -7,40 +7,39 @@ import java.util.Vector;
 
 
 public class ControllerBudget {
-	private DecimalFormat myFormatter = new DecimalFormat("##.##");
-	private int number; //store the number of item to undergo permutation algorithm
-	private double budget, recursive_fnc_budget; 
-	private Solution soln;
-	private Eventitem event_object;
-	private int typeOfResult; //this will be use to determine how the database list will be manipulated.
-	boolean hasEmptySet = false;
 
-	private Vector<Item> compute_list; //store the item(s) to undergo permutation algorithm
-	private Vector<Item> compulsory_list;
-	private Vector<Item> item_list; //store the initial item list input by the user
-	private int temp_budget, non_compulsory_cost, compulsory_cost, compulsory_satisfaction, non_compulsory_satisfaction;
+	private int number; //store the number of item to undergo permutation algorithm
+	private double budget, recursiveFunctionBudget; 
+	private Solution soln;
+	private Eventitem currentEvent;
+	private int typeOfResult; //this will be use to determine how the database list will be manipulated.
+	private boolean hasEmptySet = false;
+	private Vector<Item> computeList; //store the item(s) to undergo permutation algorithm
+	private Vector<Item> compulsoryList;
+	private Vector<Item> itemList; //store the initial item list input by the user
+	private int tempBudget, nonCompulsoryCost, compulsoryCost, compulsorySatisfaction, nonCompulsorySatisfaction;
 	private int totalCombination; 
-	private Vector<Item> db_list;//store the list to be send to database
+
 
 	private ModelBudget bm = new ModelBudget();
 
+	public ControllerBudget() {
+
+	}
+	
 	/**
 	 * Description: Create a constructor that take in the input and process them into item list.
 	 * @param input
 	 * @param budget
-	 * @param type_c
-	 * @param satisfaction_c
-	 * @param ei
+	 * @param typeChoice
+	 * @param satisfactionChoice
+	 * @param inputEventitem
 	 * @throws Exception
 	 */
-	
-	public ControllerBudget() {
-		
-	}
-	public ControllerBudget(String input, int budget, int type_c, int satisfaction_c, Eventitem ei) throws Exception {
+	public ControllerBudget(String input, int budget, int typeChoice, int satisfactionChoice, Eventitem inputEventitem) throws Exception {
 
-		item_list = new Vector<Item>();
-		event_object = ei;
+		itemList = new Vector<Item>();
+		currentEvent = inputEventitem;
 		Scanner sc = new Scanner(input);
 		String line;
 		String[] component;
@@ -57,8 +56,8 @@ public class ControllerBudget {
 				name = component[0];
 				cost = Double.parseDouble(component[1]);
 				if(cost < 0) throw new IOException("Cost should not be negative");
-				if (type_c == 1) { //has type
-					if(satisfaction_c == 1) { //has satisfaction
+				if (typeChoice == 1) { //has type
+					if(satisfactionChoice == 1) { //has satisfaction
 						satisfaction = Integer.parseInt(component[2]);
 						type = component[3];
 					}
@@ -66,18 +65,18 @@ public class ControllerBudget {
 						satisfaction = -1;
 						type = component[2];
 					}
-					item_list.add(new Item(name, cost, satisfaction, type));
+					itemList.add(new Item(name, cost, satisfaction, type));
 				}
 				else { //no type
-					if(satisfaction_c == 1) //has satisfaction
+					if(satisfactionChoice == 1) //has satisfaction
 						satisfaction = Integer.parseInt(component[2]);
 					else  //no satisfaction
 						satisfaction = -1;
-					item_list.add(new Item(name, cost, satisfaction));
+					itemList.add(new Item(name, cost, satisfaction));
 				}
 			}
 		}
-		bm.saveNonOptimizedList(event_object.getID(), item_list); //save to database non optimized item list
+		bm.saveNonOptimizedList(currentEvent.getID(), itemList); //save to database non optimized item list
 	}
 
 	/**
@@ -86,58 +85,58 @@ public class ControllerBudget {
 	 */
 
 	public Vector<Item> getItemList() {
-		return item_list;		
+		return itemList;		
 	}
 
 	/**
 	 * Description: Differentiate the item list into compulsory list and compute list.
 	 * @param com
-	 * @param satisfaction_choice
+	 * @param satisfactionChoice
 	 */
-	public void differentiateCompulsory(Vector<Integer> com, int satisfaction_choice) {
-		temp_budget = (int) (budget*100);
-		compute_list = (Vector<Item>) item_list.clone();
-		compulsory_list = new Vector<Item>();
+	public void differentiateCompulsory(Vector<Integer> com, int satisfactionChoice) {
+		tempBudget = (int) (budget*100);
+		computeList = (Vector<Item>) itemList.clone();
+		compulsoryList = new Vector<Item>();
 		if(com.size() > 0) {
-			for(int i=0; i<item_list.size(); i++) {
-				item_list.get(i).setCompulsory('N');
+			for(int i=0; i<itemList.size(); i++) {
+				itemList.get(i).setCompulsory('N');
 			}
 			for(int i=com.size()-1; i>=0; i--) {
-				compute_list.remove(com.get(i)-1);
-				item_list.get(com.get(i)-1).setCompulsory('Y');
-				compulsory_list.add(item_list.get(com.get(i)-1));
-				temp_budget = temp_budget - item_list.get(com.get(i)-1).getPrice();
+				computeList.remove(com.get(i)-1);
+				itemList.get(com.get(i)-1).setCompulsory('Y');
+				compulsoryList.add(itemList.get(com.get(i)-1));
+				tempBudget = tempBudget - itemList.get(com.get(i)-1).getPrice();
 			}
 
-			bm.updateNonOptimizeItemListwithCompulsory(event_object.getID(), item_list); //update with compulsory flag
+			bm.updateNonOptimizeItemListwithCompulsory(currentEvent.getID(), itemList); //update with compulsory flag
 		}
-		number = compute_list.size();
+		number = computeList.size();
 
-		differentiateCostandSatisfaction(satisfaction_choice);
+		differentiateCostandSatisfaction(satisfactionChoice);
 	}
 
 	/**
 	 * Description: Differentiate the cost and satisfaction between compulsory list and compute list.
-	 * @param satisfaction_choice
+	 * @param satisfactionChoice
 	 */
 
-	public void differentiateCostandSatisfaction(int satisfaction_choice) {
-		compulsory_cost = 0;
-		compulsory_satisfaction = 0;
-		non_compulsory_cost = 0;
-		non_compulsory_satisfaction = 0;
+	public void differentiateCostandSatisfaction(int satisfactionChoice) {
+		compulsoryCost = 0;
+		compulsorySatisfaction = 0;
+		nonCompulsoryCost = 0;
+		nonCompulsorySatisfaction = 0;
 
-		for(int i=0; i<item_list.size(); i++) {
-			if(item_list.get(i).getCompulsory() == 'Y') 
+		for(int i=0; i<itemList.size(); i++) {
+			if(itemList.get(i).getCompulsory() == 'Y') 
 			{
-				compulsory_cost = compulsory_cost + item_list.get(i).getPrice();
-				if(satisfaction_choice == 1)
-					compulsory_satisfaction = compulsory_satisfaction + item_list.get(i).getSatisfaction_value();
+				compulsoryCost = compulsoryCost + itemList.get(i).getPrice();
+				if(satisfactionChoice == 1)
+					compulsorySatisfaction = compulsorySatisfaction + itemList.get(i).getSatisfactionValue();
 			}
 			else {
-				non_compulsory_cost = non_compulsory_cost + item_list.get(i).getPrice();
-				if(satisfaction_choice == 1)
-					non_compulsory_satisfaction = non_compulsory_satisfaction + item_list.get(i).getSatisfaction_value();
+				nonCompulsoryCost = nonCompulsoryCost + itemList.get(i).getPrice();
+				if(satisfactionChoice == 1)
+					nonCompulsorySatisfaction = nonCompulsorySatisfaction + itemList.get(i).getSatisfactionValue();
 			}
 		}	
 	}
@@ -148,7 +147,7 @@ public class ControllerBudget {
 	 */
 
 	public double budgetleft() {
-		double left = ((double) temp_budget)/100;
+		double left = ((double) tempBudget)/100;
 		return left;
 	}
 
@@ -160,33 +159,33 @@ public class ControllerBudget {
 	 */
 	public String findOptimalShopList(int hastype, int hassatisfaction) {
 		soln = new Solution();
-		recursive_fnc_budget = ((double) temp_budget)/100;	
+		recursiveFunctionBudget = ((double) tempBudget)/100;	
 		return analysis(hastype, hassatisfaction);
 	}
 
 	/**
 	 * Description: Calling the respective method according to type and satisfaction option.
 	 * @param type
-	 * @param satisfaction_choice
+	 * @param satisfactionChoice
 	 * @return
 	 */
-	public String analysis(int type, int satisfaction_choice) {
+	public String analysis(int type, int satisfactionChoice) {
 		String resultText = "";
 		typeOfResult = 0;
 		int noOfCombination = 0;
-		Collections.sort(compute_list);
+		Collections.sort(computeList);
 		hasEmptySet = false;
 
-		if(compulsory_list.size() == item_list.size()){ //All items checked as compulsory and budget is enough to buy all.
+		if(compulsoryList.size() == itemList.size()){ //All items checked as compulsory and budget is enough to buy all.
 			typeOfResult = 1;
 			noOfCombination = 1;	
 		}
-		else if(non_compulsory_cost <= temp_budget) { //cost of all non compulsory items is lower then budget, buy all.
+		else if(nonCompulsoryCost <= tempBudget) { //cost of all non compulsory items is lower then budget, buy all.
 			typeOfResult = 1;
 			noOfCombination = 1;	
 		}
-		else if(compute_list.get(compute_list.size()-1).getPrice() > temp_budget) { //budget left is not enough to buy the cheapest items left
-			if (compute_list.size() == item_list.size()) {//no compulsory item
+		else if(computeList.get(computeList.size()-1).getPrice() > tempBudget) { //budget left is not enough to buy the cheapest items left
+			if (computeList.size() == itemList.size()) {//no compulsory item
 				typeOfResult = 0; // take nothing
 				noOfCombination = 0;
 
@@ -199,9 +198,9 @@ public class ControllerBudget {
 		else { //use solution set algorithm
 			typeOfResult = 3;
 			if(type == 1)
-				generateType(satisfaction_choice);
+				generateType(satisfactionChoice);
 			else
-				generate(satisfaction_choice);
+				generate(satisfactionChoice);
 
 			noOfCombination = soln.getSolnSetSize();
 			for(int i=0 ;i<soln.getSolnSetSize(); i++) {
@@ -209,18 +208,19 @@ public class ControllerBudget {
 					hasEmptySet = true;
 					noOfCombination--;
 				}
-					
+
 			}
 			if(noOfCombination == 0)
 				typeOfResult = 4; //No solution set.
 		}
 
 		totalCombination = noOfCombination;
-		resultText = displayResultNoSolutionSet(satisfaction_choice, typeOfResult, noOfCombination); 
+		resultText = displayResultNoSolutionSet(satisfactionChoice, typeOfResult, noOfCombination); 
 		return resultText;
 	}
 
-	public String displayResultNoSolutionSet(int satisfaction_choice, int type, int combination) {
+	public String displayResultNoSolutionSet(int satisfactionChoice, int type, int combination) {
+		DecimalFormat myFormatter = new DecimalFormat("##.##");
 		String text = "";
 
 		int index;
@@ -229,34 +229,34 @@ public class ControllerBudget {
 			text = "The budget is not enough to buy anything. \nIncrease your budget and try again.";
 		else if(type == 1) {
 			index = 1;
-			if(satisfaction_choice == 1)
-				text = "Total combination:\t"+combination+"\nMax satisfaction:\t" + (compulsory_satisfaction+non_compulsory_satisfaction) + "\nTotal cost: \t$" + myFormatter.format(((double) (compulsory_cost+non_compulsory_cost))/100) +"\n";
+			if(satisfactionChoice == 1)
+				text = "Total combination:\t"+combination+"\nMax satisfaction:\t" + (compulsorySatisfaction+nonCompulsorySatisfaction) + "\nTotal cost: \t$" + myFormatter.format(((double) (compulsoryCost+nonCompulsoryCost))/100) +"\n";
 			else
-				text = "Total combination:\t"+combination+"\nTotal cost: \t$" + myFormatter.format(((double) (compulsory_cost+non_compulsory_cost))/100) +"\n";	
+				text = "Total combination:\t"+combination+"\nTotal cost: \t$" + myFormatter.format(((double) (compulsoryCost+nonCompulsoryCost))/100) +"\n";	
 			text +="***********Combination 1***********\n";
-			for(int i=0; i<item_list.size(); i++) {
-				text += concatItemListResult(index, i, satisfaction_choice, 1); // 1 refer to take initial item list
+			for(int i=0; i<itemList.size(); i++) {
+				text += concatItemListResult(index, i, satisfactionChoice, 1); // 1 refer to take initial item list
 				index++;
 			}
 		}
 		else if(type == 2) {
 			index = 1;
-			if (satisfaction_choice == 1) 
-				text = "Total combination:\t"+combination+"\nMax satisfaction:\t" + compulsory_satisfaction + "\nTotal cost: $\t" + myFormatter.format(((double) compulsory_cost)/100) +"\n";
+			if (satisfactionChoice == 1) 
+				text = "Total combination:\t"+combination+"\nMax satisfaction:\t" + compulsorySatisfaction + "\nTotal cost: $\t" + myFormatter.format(((double) compulsoryCost)/100) +"\n";
 			else
-				text = "Total combination:\t"+combination+"\nTotal cost: $\t" + myFormatter.format(((double) compulsory_cost)/100) +"\n";
+				text = "Total combination:\t"+combination+"\nTotal cost: $\t" + myFormatter.format(((double) compulsoryCost)/100) +"\n";
 			text +="***********Combination 1***********\n";
-			for(int i=0; i<item_list.size(); i++) {
-				if(item_list.get(i).getCompulsory() == 'Y') 
+			for(int i=0; i<itemList.size(); i++) {
+				if(itemList.get(i).getCompulsory() == 'Y') 
 				{
-					text += concatItemListResult(index, i, satisfaction_choice, 1); // 1 refer to take initial item list
+					text += concatItemListResult(index, i, satisfactionChoice, 1); // 1 refer to take initial item list
 					index++;
 				}
 			}
 		}
 		else if (type == 3) {
-			if (satisfaction_choice == 1)
-				text = "Total combination:\t"+combination+"\nMax satisfaction:\t" + (soln.getSvalue()+compulsory_satisfaction) +"\n";
+			if (satisfactionChoice == 1)
+				text = "Total combination:\t"+combination+"\nMax satisfaction:\t" + (soln.getSvalue()+compulsorySatisfaction) +"\n";
 			else
 				text = "Total combination:\t"+combination+"\n";
 
@@ -266,14 +266,14 @@ public class ControllerBudget {
 				if(bitmask.isEmpty() == false) {
 					text +="***********Combination "+solutionCounter+"***********\n";
 					index = 1;
-					text +="Total cost: \t$" + myFormatter.format((soln.getSolnCostSet().get(i)+((double) compulsory_cost)/100)) +"\n";
-					for(int k=0; k<compulsory_list.size();k++) {
-						text += concatItemListResult(index, k, satisfaction_choice, 2); // 2 refer to take compulsory item list
+					text +="Total cost: \t$" + myFormatter.format((soln.getSolnCostSet().get(i)+((double) compulsoryCost)/100)) +"\n";
+					for(int k=0; k<compulsoryList.size();k++) {
+						text += concatItemListResult(index, k, satisfactionChoice, 2); // 2 refer to take compulsory item list
 						index++;
 					}	
 					for(int j=0; j<number; j++) {
 						if(bitmask.get(j)) {
-							text += concatItemListResult(index, j, satisfaction_choice, 3); // 2 refer to take compulsory item list
+							text += concatItemListResult(index, j, satisfactionChoice, 3); // 2 refer to take compulsory item list
 							index++;
 						}
 					}
@@ -288,23 +288,23 @@ public class ControllerBudget {
 		return text;
 	}
 
-	public String concatItemListResult(int index, int currentItem, int satisfaction_choice, int type) {
+	public String concatItemListResult(int index, int currentItem, int satisfactionChoice, int type) {
 		String text = "";
 		double price;
-		Vector<Item> concat_list = null;
+		Vector<Item> concatList = null;
 		if(type == 1)
-			concat_list = item_list;
+			concatList = itemList;
 		else if (type == 2)
-			concat_list = compulsory_list;
+			concatList = compulsoryList;
 		else if(type == 3)
-			concat_list = compute_list;
+			concatList = computeList;
 
 		text +=index+"\t";
-		text +=concat_list.get(currentItem).getQuantity() + "x of " + concat_list.get(currentItem).getItem()+" for $";
-		price = ((double) concat_list.get(currentItem).getPrice())/100;
-		if(satisfaction_choice == 1) {
+		text +=concatList.get(currentItem).getQuantity() + "x of " + concatList.get(currentItem).getItem()+" for $";
+		price = ((double) concatList.get(currentItem).getPrice())/100;
+		if(satisfactionChoice == 1) {
 			text += price + " for ";
-			text +=concat_list.get(currentItem).getSatisfaction_value()+" satisfaction.\n";
+			text +=concatList.get(currentItem).getSatisfactionValue()+" satisfaction.\n";
 		}
 		else {
 			text += price+"\n";
@@ -314,17 +314,17 @@ public class ControllerBudget {
 
 	/**
 	 * Description: Type choice is flag as false and it will call the respective method according to satisfaction option.
-	 * @param satisfaction_choice
+	 * @param satisfactionChoice
 	 */
-	public  void generate(int satisfaction_choice) {
+	public  void generate(int satisfactionChoice) {
 		BitSet bitmask = new BitSet(number);
-		if(satisfaction_choice == 1) {
+		if(satisfactionChoice == 1) {
 			for (int i=0; i<number; i++)
-				recurse(i, bitmask, recursive_fnc_budget, 0);
+				recurse(i, bitmask, recursiveFunctionBudget, 0);
 		}
 		else {
 			for (int i=0; i<number; i++)
-				recurseNoSatisfaction(i, bitmask, recursive_fnc_budget);
+				recurseNoSatisfaction(i, bitmask, recursiveFunctionBudget);
 		}
 	}
 
@@ -338,15 +338,15 @@ public class ControllerBudget {
 	public  void recurseNoSatisfaction (int cur, BitSet bitmask, double subbudget) {
 
 		BitSet bitmask2 = (BitSet) bitmask.clone();
-		if (((double) compute_list.get(cur).getPrice())/100 <= subbudget) {
-			subbudget -= ((double) compute_list.get(cur).getPrice())/100;
+		if (((double) computeList.get(cur).getPrice())/100 <= subbudget) {
+			subbudget -= ((double) computeList.get(cur).getPrice())/100;
 			bitmask2.set(cur);
 			for (int i=cur+1 ; i<number; i++)
 				recurseNoSatisfaction(i, bitmask2 , subbudget);
 		}
 
 		if (DupCheck(bitmask2) == 0) {
-			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
+			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 	}
 
@@ -361,9 +361,9 @@ public class ControllerBudget {
 	public  void recurse (int cur, BitSet bitmask, double subbudget, int max) {
 
 		BitSet bitmask2 = (BitSet) bitmask.clone();
-		if (((double) compute_list.get(cur).getPrice())/100 <= subbudget) {
-			max += compute_list.get(cur).getSatisfaction_value();
-			subbudget -= ((double) compute_list.get(cur).getPrice())/100;
+		if (((double) computeList.get(cur).getPrice())/100 <= subbudget) {
+			max += computeList.get(cur).getSatisfactionValue();
+			subbudget -= ((double) computeList.get(cur).getPrice())/100;
 			bitmask2.set(cur);
 			for (int i=cur+1 ; i<number; i++)
 				recurse(i, bitmask2 , subbudget, max);
@@ -373,11 +373,11 @@ public class ControllerBudget {
 		if (max > soln.getSvalue()) {
 			soln.setSvalue(max);
 			soln.clearAll();
-			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
+			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 
 		else if (max == soln.getSvalue() && DupCheck(bitmask2) == 0) {
-			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
+			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 	}
 
@@ -395,19 +395,19 @@ public class ControllerBudget {
 	}
 	/**
 	 * Description: Type choice is flag as true and it will call the respective method according to satisfaction choice.
-	 * @param satisfaction_choice
+	 * @param satisfactionChoice
 	 */
 
-	public void generateType(int satisfaction_choice) {
+	public void generateType(int satisfactionChoice) {
 		BitSet bitmask = new BitSet(number);
-		if(satisfaction_choice == 1) {
+		if(satisfactionChoice == 1) {
 			for (int i=0; i<number; i++) {
-				recurseType(i, bitmask, recursive_fnc_budget, 0);
+				recurseType(i, bitmask, recursiveFunctionBudget, 0);
 			}
 		}
 		else {
 			for (int i=0; i<number; i++) {
-				recurseTypeNoSatisfaction(i, bitmask, recursive_fnc_budget);
+				recurseTypeNoSatisfaction(i, bitmask, recursiveFunctionBudget);
 			}
 		}
 	}
@@ -422,14 +422,14 @@ public class ControllerBudget {
 	public  void recurseTypeNoSatisfaction (int cur, BitSet bitmask, double subbudget) {
 
 		BitSet bitmask2 = (BitSet) bitmask.clone();
-		if (((double) compute_list.get(cur).getPrice())/100 <= subbudget && TypeChecker(bitmask2, cur) == 0) {
-			subbudget -= ((double) compute_list.get(cur).getPrice())/100;
+		if (((double) computeList.get(cur).getPrice())/100 <= subbudget && TypeChecker(bitmask2, cur) == 0) {
+			subbudget -= ((double) computeList.get(cur).getPrice())/100;
 			bitmask2.set(cur);
 			for (int i=cur+1 ; i<number; i++)
 				recurseTypeNoSatisfaction(i, bitmask2 , subbudget);
 		}
 		if (DupCheck(bitmask2) == 0)
-			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
+			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 	}
 
 	/**
@@ -443,9 +443,9 @@ public class ControllerBudget {
 	public  void recurseType (int cur, BitSet bitmask, double subbudget, int max) {
 
 		BitSet bitmask2 = (BitSet) bitmask.clone();
-		if (((double) compute_list.get(cur).getPrice())/100 <= subbudget && TypeChecker(bitmask2, cur) == 0) {
-			max += compute_list.get(cur).getSatisfaction_value();
-			subbudget -= ((double) compute_list.get(cur).getPrice())/100;
+		if (((double) computeList.get(cur).getPrice())/100 <= subbudget && TypeChecker(bitmask2, cur) == 0) {
+			max += computeList.get(cur).getSatisfactionValue();
+			subbudget -= ((double) computeList.get(cur).getPrice())/100;
 			bitmask2.set(cur);
 			for (int i=cur+1 ; i<number; i++)
 				recurseType(i, bitmask2 , subbudget, max);
@@ -455,10 +455,10 @@ public class ControllerBudget {
 		if (max > soln.getSvalue()) {
 			soln.setSvalue(max);
 			soln.clearAll();
-			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
+			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 		else if (max == soln.getSvalue() && DupCheck(bitmask2) == 0)
-			soln.addSet(bitmask2, recursive_fnc_budget - subbudget);
+			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 	}
 
 	/**
@@ -471,7 +471,7 @@ public class ControllerBudget {
 	public  int TypeChecker (BitSet bitmask, int cur) {
 		for (int i=0; i<number; i++) {
 			if (bitmask.get(i)) {
-				if (compute_list.get(i).getType().compareTo(compute_list.get(cur).getType()) == 0) 
+				if (computeList.get(i).getType().compareTo(computeList.get(cur).getType()) == 0) 
 					return 1;
 			}
 		}
@@ -493,23 +493,23 @@ public class ControllerBudget {
 	 */
 
 	public void saveOptimizeOption(int select) {
-		db_list = new Vector<Item>();
+		Vector<Item> databaseList = new Vector<Item>();//store the list to be send to database
 
 		if(typeOfResult == 1) { //take all item. Budget is enough to buy everything.
-			for(int i=0; i<item_list.size(); i++) {
-				db_list.add(item_list.get(i));
+			for(int i=0; i<itemList.size(); i++) {
+				databaseList.add(itemList.get(i));
 			}
 		}
 		else if (typeOfResult == 2) {//Budget is only enough to buy compulsory item. Take compulsory list*
-			for(int i=0; i<compulsory_list.size(); i++) {
-				db_list.add(compulsory_list.get(i));
+			for(int i=0; i<compulsoryList.size(); i++) {
+				databaseList.add(compulsoryList.get(i));
 			}
 		}
 		else if (typeOfResult == 3) { //There is solution set
 
 			//If there is compulsory list we will add them first.
-			for(int i=0; i<compulsory_list.size(); i++) {
-				db_list.add(compulsory_list.get(i));
+			for(int i=0; i<compulsoryList.size(); i++) {
+				databaseList.add(compulsoryList.get(i));
 			}
 
 			if(hasEmptySet == true)
@@ -518,21 +518,21 @@ public class ControllerBudget {
 			BitSet bitmask = soln.getSolnSet().get(select);
 			for(int i=0; i<number; i++) {
 				if(bitmask.get(i)) {
-					db_list.add(compute_list.get(i));
+					databaseList.add(computeList.get(i));
 				}
 			}
 		}
 
-		bm.saveOptimizedList(event_object.getID(), db_list);
-		
-		event_object.setitem_list(bm.getOptimizeItemList(event_object.getID()));
+		bm.saveOptimizedList(currentEvent.getID(), databaseList);
+
+		currentEvent.setitem_list(bm.getOptimizeItemList(currentEvent.getID()));
 	}
-	
-	public void deleteBudgetItem(int event_id, int item_id) {
-		bm.deleteBudgetItem(event_id, item_id);
+
+	public void deleteBudgetItem(int eventId, int itemId) {
+		bm.deleteBudgetItem(eventId, itemId);
 	}
-	
-	public Vector<Item> getOptimizeItemList(int event_id) {
-		return bm.getOptimizeItemList(event_id);
+
+	public Vector<Item> getOptimizeItemList(int eventId) {
+		return bm.getOptimizeItemList(eventId);
 	}
 }

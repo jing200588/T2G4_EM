@@ -6,7 +6,7 @@ public class Item implements Comparable {
 	private int id;
 	private String item;
 	private int price;
-	private int satisfaction_value;
+	private int satisfactionValue;
 	private char compulsory;
 	private String type;
 	private int quantity;
@@ -14,30 +14,30 @@ public class Item implements Comparable {
 
 	/**
 	 * Description: Create item object with no type.
-	 * @param input_item
-	 * @param input_price
-	 * @param input_value
+	 * @param inputItem
+	 * @param inputPrice
+	 * @param inputValue
 	 */
-	public Item(String input_item, double input_price, int input_value) {
-		this.item = input_item;
-		this.price = (int) (input_price*100);
-		this.satisfaction_value = input_value;
+	public Item(String inputItem, double inputPrice, int inputValue) {
+		this.item = inputItem;
+		this.price = (int) (inputPrice*100);
+		this.satisfactionValue = inputValue;
 		this.compulsory = 'N';
 		this.quantity = 1;
 	}
 	
 	/**
 	 * Description: Create item object with type.
-	 * @param input_item
-	 * @param input_price
-	 * @param input_value
-	 * @param type
+	 * @param inputItem
+	 * @param inputPrice
+	 * @param inputValue
+	 * @param inputType
 	 */
-	public Item(String input_item, double input_price, int input_value, String type) {
-		this.item = input_item;
-		this.price = (int) (input_price*100);
-		this.satisfaction_value = input_value;
-		this.type = type;
+	public Item(String inputItem, double inputPrice, int inputValue, String inputType) {
+		this.item = inputItem;
+		this.price = (int) (inputPrice*100);
+		this.satisfactionValue = inputValue;
+		this.type = inputType;
 		this.compulsory = 'N';
 		this.quantity = 1;
 	}
@@ -45,17 +45,17 @@ public class Item implements Comparable {
 	/**
 	 * Description: Create item object with type for database manipulation.
 	 * @param id
-	 * @param input_item
-	 * @param input_price
-	 * @param input_value
-	 * @param type
+	 * @param inputItem
+	 * @param inputPrice
+	 * @param inputValue
+	 * @param inputType
 	 */
-	public Item(int id, String input_item, int input_price, int input_value, String type) {
+	public Item(int id, String inputItem, int inputPrice, int inputValue, String inputType) {
 	this.id = id;
-	this.item = input_item;
-	this.price = input_price;
-	this.satisfaction_value = input_value;
-	this.type = type;
+	this.item = inputItem;
+	this.price = inputPrice;
+	this.satisfactionValue = inputValue;
+	this.type = inputType;
 	this.compulsory = 'N';
 	this.quantity = 1;
 	}
@@ -123,16 +123,16 @@ public class Item implements Comparable {
 	 * Decription: Return satisfaction value of item.
 	 * @return
 	 */
-	public int getSatisfaction_value() {
-		return satisfaction_value;
+	public int getSatisfactionValue() {
+		return satisfactionValue;
 	}
 	
 	/**
 	 * Decription: Set Satisfaction value of item
-	 * @param satisfaction_value
+	 * @param satisfactionValue
 	 */
-	public void setSatisfaction_value(int satisfaction_value) {
-		this.satisfaction_value = satisfaction_value;
+	public void setSatisfactionValue(int satisfactionValue) {
+		this.satisfactionValue = satisfactionValue;
 	}
 	
 	/**
@@ -176,8 +176,8 @@ public class Item implements Comparable {
 	public int compareTo(Object o) {
 		if(this.price != ((Item) o).getPrice())
 			return ((Item) o).getPrice() - this.price;
-		else if (this.satisfaction_value != ((Item) o).getSatisfaction_value())
-			return ((Item) o).getSatisfaction_value() - this.satisfaction_value;
+		else if (this.satisfactionValue != ((Item) o).getSatisfactionValue())
+			return ((Item) o).getSatisfactionValue() - this.satisfactionValue;
 		else
 			return this.getItem().hashCode() - ((Item) o).getItem().hashCode();
 			

@@ -7,9 +7,9 @@ import java.util.Vector;
 
 
 public class ModelBudget {
-	private int event_id;
-	private Vector<Item> item_list;
-	private Vector<Item> confirm_list;
+	private int eventId;
+	private Vector<Item> itemList;
+	private Vector<Item> confirmList;
 
 	EMDBII db;
 	
@@ -23,84 +23,78 @@ public class ModelBudget {
 
 	/**
 	 * Description: Saving non-optimized list to database.
-	 * @param id
-	 * @param i_list
+	 * @param inputId
+	 * @param inputItemList
 	 */
-	public void saveNonOptimizedList(int id, Vector<Item> i_list) { 
-		event_id = id;
-		item_list = i_list;
+	public void saveNonOptimizedList(int inputId, Vector<Item> inputItemList) { 
+		eventId = inputId;
+		itemList = inputItemList;
 		
-		db.budgetDB().deleteBudgetList(id);
-		db.budgetDB().addBudgetList(i_list, id);
+		db.budgetDB().deleteBudgetList(inputId);
+		db.budgetDB().addBudgetList(inputItemList, inputId);
 		
 		
 	}
 
 	/**
 	 * Description: Saving optimized list to database.
-	 * @param id
-	 * @param i_list
+	 * @param inputId
+	 * @param inputItemList
 	 */
-	public void saveOptimizedList(int id, Vector<Item> i_list) { 
-		event_id = id;
-		confirm_list = i_list;
+	public void saveOptimizedList(int inputId, Vector<Item> inputItemList) { 
+		eventId = inputId;
+		confirmList = inputItemList;
 		
-		db.budgetDB().deleteBudgetListOptimized(id);
-		db.budgetDB().addBudgetListOptimized(i_list, id);
+		db.budgetDB().deleteBudgetListOptimized(inputId);
+		db.budgetDB().addBudgetListOptimized(inputItemList, inputId);
 		
 	}
 
 	/**
 	 * Description: Update the non-optimize item list.
-	 * @param id
-	 * @param i_list
+	 * @param inputId
+	 * @param inputItemList
 	 */
-	public void updateNonOptimizeItemListwithCompulsory(int id, Vector<Item> i_list) {
+	public void updateNonOptimizeItemListwithCompulsory(int inputId, Vector<Item> inputItemList) {
 
-		item_list = i_list;
+		itemList = inputItemList;
 
-		this.deleteNonOptimizeItemList(id);
-		this.saveNonOptimizedList(id, i_list);
+		this.deleteNonOptimizeItemList(inputId);
+		this.saveNonOptimizedList(inputId, inputItemList);
 
 	}
 	
 	/**
 	 * Description: Delete the non-optimize item list.
-	 * @param id
+	 * @param inputId
 	 */
 
-	public void deleteNonOptimizeItemList(int id){
+	public void deleteNonOptimizeItemList(int inputId){
 
-		db.budgetDB().deleteBudgetList(id);
+		db.budgetDB().deleteBudgetList(inputId);
 
 	}
 	
 	/**
 	 * Description: Retrieve the non-optimize item list.
-	 * @param id
+	 * @param inputId
 	 * @return
 	 */
-	public Vector<Item> getNonOptimizeItemList(int id) {
+	public Vector<Item> getNonOptimizeItemList(int inputId) {
 		
-		item_list = db.budgetDB().getBudgetList(id);
-		return item_list;
+		itemList = db.budgetDB().getBudgetList(inputId);
+		return itemList;
 	}
 	
-	/* To be use in v0.2
-	public void update_budget(int id, double budget) {
-		//event_object.getID(), ((double)budget)/100);
-	}
-	*/
-	
-	public void deleteBudgetItem(int event_id, int item_id) {
-		db.eventDB().dMsg("TO DEL" + item_id);
+	public void deleteBudgetItem(int inputEvenId, int inputItemId) {
+		db.eventDB().dMsg("TO DEL" + inputItemId);
 		
-		db.budgetDB().deleteBudgetOptimized(item_id);
+		db.budgetDB().deleteBudgetOptimized(inputItemId);
 	}
 	
-	public Vector<Item> getOptimizeItemList(int id) {
+	public Vector<Item> getOptimizeItemList(int inputId) {
 
-		return db.budgetDB().getBudgetListOptimized(id);
+		return db.budgetDB().getBudgetListOptimized(inputId);
 	}
 
 }

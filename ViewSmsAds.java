@@ -30,11 +30,10 @@ import au.com.bytecode.opencsv.CSVReader;
 
 
 public class ViewSmsAds extends Composite {
-	private Eventitem current_event;
-	protected errormessageDialog errordiag;
+	private Eventitem currentEvent;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
 	private Text txtToInputBox;
-	private Composite mainComposite;
+	private Composite compSmsMain;
 	private Label lblTo;
 	private Label lblMessage;
 	private Text txtMessageInputBox;
@@ -52,7 +51,7 @@ public class ViewSmsAds extends Composite {
 				formToolkit.dispose();
 			}
 		});
-		current_event = input_ei;
+		currentEvent = input_ei;
 
 		formToolkit.adapt(this);
 		formToolkit.paintBordersFor(this);
@@ -67,12 +66,12 @@ public class ViewSmsAds extends Composite {
 		 *Main screen composite 
 		 **********************************************************************************/
 		ViewSmsAdsForm.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
-		mainComposite = new Composite(ViewSmsAdsForm.getBody(), SWT.NONE);
-		mainComposite.setLayout(new FormLayout());
-		formToolkit.adapt(mainComposite);
-		formToolkit.paintBordersFor(mainComposite);
+		compSmsMain = new Composite(ViewSmsAdsForm.getBody(), SWT.NONE);
+		compSmsMain.setLayout(new FormLayout());
+		formToolkit.adapt(compSmsMain);
+		formToolkit.paintBordersFor(compSmsMain);
 
-		lblTo = new Label(mainComposite, SWT.NONE);
+		lblTo = new Label(compSmsMain, SWT.NONE);
 		FormData fd_lblTo = new FormData();
 		fd_lblTo.right = new FormAttachment(0, 65);
 		fd_lblTo.top = new FormAttachment(5, 2);
@@ -81,7 +80,7 @@ public class ViewSmsAds extends Composite {
 		formToolkit.adapt(lblTo, true, true);
 		lblTo.setText("To:");
 
-		txtToInputBox = new Text(mainComposite, SWT.BORDER);
+		txtToInputBox = new Text(compSmsMain, SWT.BORDER);
 		FormData fd_txtToInputBox = new FormData();
 		fd_txtToInputBox.right = new FormAttachment(95);
 		fd_txtToInputBox.top = new FormAttachment(5);
@@ -89,7 +88,7 @@ public class ViewSmsAds extends Composite {
 		txtToInputBox.setLayoutData(fd_txtToInputBox);
 		formToolkit.adapt(txtToInputBox, true, true);
 
-		lblMessage = new Label(mainComposite, SWT.NONE);
+		lblMessage = new Label(compSmsMain, SWT.NONE);
 		FormData fd_lblMessage = new FormData();
 
 		fd_lblMessage.right = new FormAttachment(txtMessageInputBox, 65);
@@ -98,17 +97,17 @@ public class ViewSmsAds extends Composite {
 		formToolkit.adapt(lblMessage, true, true);
 		lblMessage.setText("Message:");
 
-		txtMessageInputBox = new Text(mainComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+		txtMessageInputBox = new Text(compSmsMain, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		FormData fd_txtMessageInputBox = new FormData();
 		fd_txtMessageInputBox.bottom = new FormAttachment(90);
 		fd_txtMessageInputBox.right = new FormAttachment(95);
 		fd_txtMessageInputBox.left = new FormAttachment(0, 71);
 		txtMessageInputBox.setLayoutData(fd_txtMessageInputBox);
 		formToolkit.adapt(txtMessageInputBox, true, true);
-		String start = current_event.getStartDateTime().getDateRepresentation() + " - " + current_event.getStartDateTime().getTimeRepresentation();
-		String end = current_event.getEndDateTime().getDateRepresentation() + " - " + current_event.getEndDateTime().getTimeRepresentation();
-		txtMessageInputBox.setText("Upcoming event: " + current_event.getName()+".\nStart date: " + start + ".\nEnd date: " + end +".");
-		btnSend = new Button(mainComposite, SWT.NONE);
+		String start = currentEvent.getStartDateTime().getDateRepresentation() + " - " + currentEvent.getStartDateTime().getTimeRepresentation();
+		String end = currentEvent.getEndDateTime().getDateRepresentation() + " - " + currentEvent.getEndDateTime().getTimeRepresentation();
+		txtMessageInputBox.setText("Upcoming event: " + currentEvent.getName()+".\nStart date: " + start + ".\nEnd date: " + end +".");
+		btnSend = new Button(compSmsMain, SWT.NONE);
 		FormData fd_btnSend = new FormData();
 		fd_btnSend.right = new FormAttachment(0, 490);
 		fd_btnSend.top = new FormAttachment(0, 282);
@@ -149,13 +148,12 @@ public class ViewSmsAds extends Composite {
 		formToolkit.adapt(btnSend, true, true);
 		btnSend.setText("Send");
 		
-		Button btnImportNumber = new Button(mainComposite, SWT.NONE);
+		Button btnImportNumber = new Button(compSmsMain, SWT.NONE);
 		fd_lblMessage.top = new FormAttachment(btnImportNumber, 10);
 		fd_txtMessageInputBox.top = new FormAttachment(btnImportNumber, 10);
 		FormData fd_btnImportNumber = new FormData();
 		fd_btnImportNumber.width = 110;
 		fd_btnImportNumber.top = new FormAttachment(txtToInputBox, 10);
-//		fd_btnImportNumber.left = new FormAttachment(0, 248);
 		btnImportNumber.setLayoutData(fd_btnImportNumber);
 		btnImportNumber.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -169,19 +167,18 @@ public class ViewSmsAds extends Composite {
 		formToolkit.adapt(btnImportNumber, true, true);
 		btnImportNumber.setText("Import Number");
 		
-		Button btnNotifyParticipants = new Button(mainComposite, SWT.NONE);
+		Button btnNotifyParticipants = new Button(compSmsMain, SWT.NONE);
 		fd_btnImportNumber.right = new FormAttachment(btnNotifyParticipants, -10);
 		FormData fd_btnNotifyParticipants = new FormData();
 		fd_btnNotifyParticipants.width = 110;
-	//	fd_btnNotifyParticipants.left = new FormAttachment(btnImportNumber, 5);
 		fd_btnNotifyParticipants.top = new FormAttachment(txtToInputBox, 10);
 		fd_btnNotifyParticipants.right = new FormAttachment(95);
 		btnNotifyParticipants.setLayoutData(fd_btnNotifyParticipants);
 		btnNotifyParticipants.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				String participantsContact = "";
-				for(int i=0 ; i< current_event.getParticipantList().size(); i++) {
-					participantsContact += current_event.getParticipantList().get(i).getContact() + " ";
+				for(int i=0 ; i< currentEvent.getParticipantList().size(); i++) {
+					participantsContact += currentEvent.getParticipantList().get(i).getContact() + " ";
 				}
 				
 				System.out.println("Here " + participantsContact);
@@ -195,6 +192,7 @@ public class ViewSmsAds extends Composite {
 	}
 	
 	public void ImportCSV (String filepath) {
+		errormessageDialog errordiag;
 		try {
 			String importedText = "";
 			CSVReader reader = new CSVReader(new FileReader(filepath));

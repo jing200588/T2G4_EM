@@ -1145,10 +1145,10 @@ public class ViewEvent extends Composite {
 			item.setText(0, "Item " + (loopIndex+1));
 			item.setText(1, item_list.get(loopIndex).getItem());
 			item.setText(2, "$"+((double) item_list.get(loopIndex).getPrice())/100);
-			if(item_list.get(loopIndex).getSatisfaction_value() == -1)
+			if(item_list.get(loopIndex).getSatisfactionValue() == -1)
 				item.setText(3, "");
 			else
-				item.setText(3, ""+item_list.get(loopIndex).getSatisfaction_value());
+				item.setText(3, ""+item_list.get(loopIndex).getSatisfactionValue());
 			if(item_list.get(loopIndex).getType() == null)
 				item.setText(4, "");
 			else

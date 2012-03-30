@@ -376,7 +376,7 @@ class EMDBBudget extends EMDBBase{
 								.addColumn(this.optBudgetEventID, aEventID)
 								.addColumn(this.optBudgetName, current.getItem())
 								.addColumn(this.optBudgetPrice, current.getPrice())
-								.addColumn(this.optBudgetSatisfaction, current.getSatisfaction_value())
+								.addColumn(this.optBudgetSatisfaction, current.getSatisfactionValue())
 								.addColumn(this.optBudgetType, current.getType())
 								.addColumn(this.optBudgetQuantity, current.getQuantity())
 								.validate().toString();
@@ -385,7 +385,7 @@ class EMDBBudget extends EMDBBase{
 								.addColumn(this.budgetEventID, aEventID)
 								.addColumn(this.budgetName, current.getItem())
 								.addColumn(this.budgetPrice, current.getPrice())
-								.addColumn(this.budgetSatisfaction, current.getSatisfaction_value())
+								.addColumn(this.budgetSatisfaction, current.getSatisfactionValue())
 								.addColumn(this.budgetType, current.getType())
 								.addColumn(this.budgetQuantity, current.getQuantity())
 								.validate().toString();
