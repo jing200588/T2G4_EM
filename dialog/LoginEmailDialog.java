@@ -34,7 +34,7 @@ public class LoginEmailDialog extends Dialog {
 	private Button btnLogin;
 	private Button btnCancel;
 	private Label lblPassword;
-	private String userName;
+	private String username;
 	private String password;
 	private String domain;
 	private boolean loginSuccessful;
@@ -144,7 +144,7 @@ public class LoginEmailDialog extends Dialog {
 					
 					txtUsername.getText().trim();
 					if(txtUsername.getText().length() == 0) throw new Exception("Username must not be empty.");
-					userName = txtUsername.getText();
+					username = txtUsername.getText();
 					txtPassword.getText().trim();
 					if(txtPassword.getText().length() == 0) throw new Exception("Password must not be empty.");
 					password = txtPassword.getText();
@@ -153,7 +153,14 @@ public class LoginEmailDialog extends Dialog {
 					loginSuccessful = false; //Change this to your method of login.
 					
 					
-					String user = domain + "\\" + userName;
+					String user = "";
+					if (domain.compareTo("No Domain") == 0)
+						user = username;
+					else
+						user = domain + "\\" + username;
+					
+					
+					
 					System.out.println(user);
 					MailSender mail = new MailSender();
 					mail.server("smtp.nus.edu.sg", 25);
@@ -176,12 +183,14 @@ public class LoginEmailDialog extends Dialog {
 					mail.logout();
 					mail.print();
 					mail.disconnect();
-				
-					
-					
+					 
+					/*
+					loginSuccessful = true;
+					String user = "dummy";
+					*/
 					if(loginSuccessful == true) {
 						shellMain.close();
-						ViewMain.EmailAds(currentEvent, user, password);//need to store the sesson somewhere anot? If yes I am not sure how you do it actually. 
+						ViewMain.EmailAds(currentEvent, username, domain, password);//need to store the sesson somewhere anot? If yes I am not sure how you do it actually. 
 					}
 					else {
 						throw new Exception("Incorrect Username/Password.");

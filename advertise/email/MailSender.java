@@ -368,7 +368,7 @@ public class MailSender {
 	public void sendData(){
 		String data;
 		data  = "From:" + this.fieldFrom + "\r\n";
-		data += "To:" + this.fieldTo + "\r\n";
+		//data += "To:" + this.fieldTo + "\r\n";
 		data += "Subject:" + this.fieldSubject + "\r\n";
 		data += this.fieldMessage;
 		data += ".";

@@ -329,8 +329,8 @@ public class ViewMain extends ApplicationWindow {
 	 * @param aPass 
 	 * @param aName 
 	 */
-	public static void EmailAds(Eventitem curevent, String aName, String aPass) {
-		ViewEmailAds ea = new ViewEmailAds(c2, SWT.NONE, curevent, aName, aPass);
+	public static void EmailAds(Eventitem curevent, String aName, String aDomain, String aPass) {
+		ViewEmailAds ea = new ViewEmailAds(c2, SWT.NONE, curevent, aName, aDomain, aPass);
 		layout.topControl = ea;
 		c2.layout(true);
 	}

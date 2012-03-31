@@ -1,5 +1,14 @@
 package advertise.email;
 
+import java.awt.Color;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+
+import dialog.errormessageDialog;
+import emdb.EMDBSettings;
 import event.*;
 
 import org.eclipse.swt.SWT;
@@ -17,9 +26,9 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
-
 
 public class ViewEmailAds extends Composite {
 	private Eventitem currentEvent;
@@ -31,13 +40,16 @@ public class ViewEmailAds extends Composite {
 	private Label lblSubject;
 	private Label lblMessage;
 	private Text txtMessageInputBox;
+	private Label lblError;
 
+
+	
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEmailAds(Composite parent, int style, Eventitem input_ei, String aUser, String aPass) {
+	public ViewEmailAds(Composite parent, int style, Eventitem input_ei, final String aUser, final String aDomain, final String aPass) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -62,51 +74,213 @@ public class ViewEmailAds extends Composite {
 		 **********************************************************************************/
 		compMain = new Composite(formViewEmailAds.getBody(), SWT.NONE);
 		FormData fd_compMain = new FormData();
-		fd_compMain.top = new FormAttachment(50, -160);
+		fd_compMain.top = new FormAttachment(40, -160);
 		fd_compMain.bottom = new FormAttachment (50, 180);
 		fd_compMain.left = new FormAttachment(50, -350);
 		fd_compMain.right = new FormAttachment(50, 350);
+		
+		
 		compMain.setLayoutData(fd_compMain);
 		formToolkit.adapt(compMain);
 		formToolkit.paintBordersFor(compMain);
+
+		
+		lblError  = new Label(compMain, SWT.None);
+		lblError.setBounds(10, 0,  474, 60);
+		formToolkit.adapt(lblError, true, true);
+		
 		
 		lblTo = new Label(compMain, SWT.NONE);
-		lblTo.setBounds(10, 56, 55, 15);
+		lblTo.setBounds(10, 86, 55, 15);
 		formToolkit.adapt(lblTo, true, true);
 		lblTo.setText("To:");
 		
 		lblSubject = new Label(compMain, SWT.NONE);
-		lblSubject.setBounds(10, 94, 55, 15);
+		lblSubject.setBounds(10, 124, 55, 15);
 		formToolkit.adapt(lblSubject, true, true);
 		lblSubject.setText("Subject:");
 		
 		lblMessage = new Label(compMain, SWT.NONE);
-		lblMessage.setBounds(10, 138, 55, 15);
+		lblMessage.setBounds(10, 168, 55, 15);
 		formToolkit.adapt(lblMessage, true, true);
 		lblMessage.setText("Message:");
 		
 		txtToInputBox = new Text(compMain, SWT.BORDER);
-		txtToInputBox.setBounds(71, 53, 419, 21);
+		txtToInputBox.setBounds(71, 83, 419, 21);
 		formToolkit.adapt(txtToInputBox, true, true);
 		
 		txtSubjectInputBox = new Text(compMain, SWT.BORDER);
-		txtSubjectInputBox.setBounds(71, 94, 419, 21);
+		txtSubjectInputBox.setBounds(71, 124, 419, 21);
 		formToolkit.adapt(txtSubjectInputBox, true, true);
 		
 		txtMessageInputBox = new Text(compMain, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		txtMessageInputBox.setBounds(71, 138, 419, 144);
+		txtMessageInputBox.setBounds(71, 168, 419, 144);
 		formToolkit.adapt(txtMessageInputBox, true, true);
 		
+
 		Button btnSend = new Button(compMain, SWT.NONE);
-		btnSend.setBounds(415, 305, 75, 25);
+		btnSend.setBounds(415, 335, 75, 25);
 		formToolkit.adapt(btnSend, true, true);
 		btnSend.setText("Send");
 
+		
+		
+
+		
+		
 		btnSend.addSelectionListener(new SelectionAdapter() {
+			
 			public void widgetSelected(SelectionEvent e) {
 				
-				System.out.println("SENDING...");
+				
+				
+				String errorMsg = "";
+				boolean sendOK = true;
+				boolean allOK = true;
+				
+				
+				if(txtToInputBox.getText().trim().isEmpty()){
+					errorMsg += "\nPlease include a recipient";
+					sendOK = false;
+				}
+				
+				if(txtSubjectInputBox.getText().trim().isEmpty()){
+					errorMsg += "\nPlease fill in a Subject";
+					sendOK = false;
+				}
+				
+				if(txtMessageInputBox.getText().trim().isEmpty()){
+					errorMsg += "\nPlease fill in a Message";
+					sendOK = false;
+				}
+				
+				if (sendOK){
+					if(EMDBSettings.DEVELOPMENT){
+						EMDBSettings.dMsg("<EMMS> SENDING EMAIL...");
+					}
+					StringTokenizer toToken = new StringTokenizer(txtToInputBox.getText(), ",");
+					String[] to = new String[toToken.countTokens()];
+					for (int i = 0; i < to.length; i++) {
+						to[i] = toToken.nextToken();
+					}
+					
+					
+					/*
+					 * Send Mail Process
+					 */
+					
+					String response = "";
+					MailSender smail = new MailSender();
+					smail.server("smtp.nus.edu.sg", 25);
+					smail.connect();
+					
+					if(EMDBSettings.DEVELOPMENT){
+						EMDBSettings.dMsg("<EMMS> "+ smail.getOne());
+					}
+					smail.clearServerResponse();
+					
+					smail.user(aDomain+"/"+aUser, aPass);
+					smail.login();
+					
+					response = smail.getOne();
+					if ( response.substring(0,3).compareTo("235") == 0){
+						if(EMDBSettings.DEVELOPMENT){
+							EMDBSettings.dMsg("<EMMS> "+ response);
+						}
+						
+						smail.setFrom(aUser+"@nus.edu.sg");
+						smail.sendFrom();
+						response =  smail.getOne();
+						if(EMDBSettings.DEVELOPMENT){EMDBSettings.dMsg("<EMMS> "+ response);}
+						
+						if (response.substring(0,3).compareTo("250") == 0){
+						
+							for (int i=0; i<to.length; i++){
+								smail.setTo(to[i]);
+								smail.sendTo();
+								responseOut(smail.getQueue());
+							}
+							
+							smail.clearMessage();
+						
+							
+							smail.setSubject(txtSubjectInputBox.getText());
+							smail.setMessage(txtMessageInputBox.getText());
+							smail.setData();
+							responseOut(smail.getQueue());
+							
+							smail.sendData();
+							response =  smail.getOne();
+							if(EMDBSettings.DEVELOPMENT){EMDBSettings.dMsg("<EMMS> "+ response);}
+							
+							smail.logout();
+							if(EMDBSettings.DEVELOPMENT){EMDBSettings.dMsg("<EMMS> "+ smail.getOne());}
+							
+							if (response.substring(0, 3).compareTo("250") != 0){
+								allOK = false;
+							}
+						}
+					}
+					
+					
+					
+					
+				/*
+
+					
+					 for (int i=0; i<to.length; i++){
+						smail.setTo(to[i]);
+						smail.sendTo();
+						if(EMDBSettings.DEVELOPMENT){
+							EMDBSettings.dMsg("<EMMS> "+ smail.getOne());
+						}
+			         }
+					 
+					 
+					smail.setSubject(txtSubjectInputBox.getText());
+					smail.clearMessage();
+					smail.setMessage(txtMessageInputBox.getText());
+					smail.clearServerResponse();
+					
+					smail.setData();
+					smail.sendData();
+					response = smail.getOne();
+					
+					if (response.substring(0, 3).compareTo("250") != 0){
+						if(EMDBSettings.DEVELOPMENT){
+							EMDBSettings.dMsg("<EMMS> "+ response);
+						}
+						allOK = false;
+					}*/
+					
+				}else{
+					if(EMDBSettings.DEVELOPMENT){
+						EMDBSettings.dMsg("<EMMS> EMPTY FIELDL...");
+					}
+					
+					allOK = false;
+				}
+
+				if (!allOK){
+					errormessageDialog messageBoard = new errormessageDialog(new Shell(),
+							"An Error has occurred in sending your email",
+							"Error");
+					messageBoard.open();
+				}
+				
+				lblError.setText(errorMsg);
 			}
 		});
+	}
+	
+	
+	
+	
+	private void responseOut(Queue<String> store){
+		if (EMDBSettings.DEVELOPMENT){while(true){
+			if (store.isEmpty() || store.peek() == null)
+				break;
+			EMDBSettings.dMsg("<EMMS> " + store.poll());
+		}}
 	}
 }
