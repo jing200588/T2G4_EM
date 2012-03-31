@@ -255,7 +255,7 @@ public class ViewEmailAds extends Composite {
 					
 				}else{
 					if(EMDBSettings.DEVELOPMENT){
-						EMDBSettings.dMsg("<EMMS> EMPTY FIELDL...");
+						EMDBSettings.dMsg("<EMMS> EMPTY FIELD...");
 					}
 					
 					allOK = false;

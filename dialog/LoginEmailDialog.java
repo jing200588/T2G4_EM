@@ -139,9 +139,7 @@ public class LoginEmailDialog extends Dialog {
 					
 					if(comboDomain.getText().length() == 0) throw new Exception("Please choose a domain.");
 					domain = comboDomain.getText();
-					System.out.println(domain);
-					
-					
+		
 					txtUsername.getText().trim();
 					if(txtUsername.getText().length() == 0) throw new Exception("Username must not be empty.");
 					username = txtUsername.getText();
@@ -158,10 +156,7 @@ public class LoginEmailDialog extends Dialog {
 						user = username;
 					else
 						user = domain + "\\" + username;
-					
-					
-					
-					System.out.println(user);
+
 					MailSender mail = new MailSender();
 					mail.server("smtp.nus.edu.sg", 25);
 					mail.connect();
@@ -169,10 +164,7 @@ public class LoginEmailDialog extends Dialog {
 					mail.user(user, password);
 					mail.login();
 					String response = mail.getOne();
-					
-					if (EMDBSettings.DEVELOPMENT){
-						EMDBSettings.dMsg(response, "<Mail TS> ");
-					}
+					if (EMDBSettings.DEVELOPMENT){EMDBSettings.dMsg("<EMMS> " + response);}
 					
 					
 					if (response.compareTo("235 2.7.0 Authentication successful") == 0){
@@ -181,7 +173,8 @@ public class LoginEmailDialog extends Dialog {
 						loginSuccessful = false;
 					}
 					mail.logout();
-					mail.print();
+					response = mail.getOne();
+					if (EMDBSettings.DEVELOPMENT){EMDBSettings.dMsg("<EMMS> " + response);}
 					mail.disconnect();
 					 
 					/*
