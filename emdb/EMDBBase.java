@@ -393,7 +393,7 @@ public class EMDBBase{
 	 * Shortcut to print out strings.
 	 * @param msg
 	 */
-	public void dMsg(String aMsg){
+	protected void dMsg(String aMsg){
 		System.out.println("EMDB - " + aMsg);
 	}
 	

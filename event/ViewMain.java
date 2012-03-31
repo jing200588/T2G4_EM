@@ -326,9 +326,11 @@ public class ViewMain extends ApplicationWindow {
 	/**
 	 * Description: Initialize ViewEmailAds and set the page of composite c2 to ViewEmailAds
 	 * @param curevent The event item of the particulars that is to be edited
+	 * @param aPass 
+	 * @param aName 
 	 */
-	public static void EmailAds(Eventitem curevent) {
-		ViewEmailAds ea = new ViewEmailAds(c2, SWT.NONE, curevent);
+	public static void EmailAds(Eventitem curevent, String aName, String aPass) {
+		ViewEmailAds ea = new ViewEmailAds(c2, SWT.NONE, curevent, aName, aPass);
 		layout.topControl = ea;
 		c2.layout(true);
 	}

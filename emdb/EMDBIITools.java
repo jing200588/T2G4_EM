@@ -110,9 +110,7 @@ public class EMDBIITools {
 					dMsg("POPULATING VENUES");
 					populateVenues(db);
 					break;
-				case 3:
-					break;
-				case 4: 
+				case 3: 
 					dMsgS("Confirm TRUNCATE / Clear Database? (y/n) : ");
 					String temp4 = sc.next();
 					if (temp4.compareTo("Y") == 0 || temp4.compareTo("y") == 0){
@@ -124,7 +122,7 @@ public class EMDBIITools {
 						dMsg("Cancelled");
 					}
 					break;
-				case 5:
+				case 4:
 					break;
 				default:
 					break;
@@ -181,8 +179,8 @@ public class EMDBIITools {
 		dMsgN("---------------------");
 		dMsgN("1 : Re-Initialize Database");
 		dMsgN("2 : Populate Venues");
-		dMsgN("4 : Clear / Truncate Tables");
-		dMsgN("5 : Run Test Suite");
+		dMsgN("3 : Clear / Truncate Tables");
+		dMsgN("4 : Run Test Suite");
 		dMsgN("9 : Exit");
 	
 		dMsgN("");

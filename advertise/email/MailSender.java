@@ -27,16 +27,16 @@ public class MailSender {
 
 	
 	//configs
-	private String smtp_server = "";
-	private int smtp_port = 25;
+	private String smtpServer = "";
+	private int smtpPort = 25;
 	private String username = "";
 	private String password = "";
 	
 	//inputs
-	private String field_From = "";
-	private String field_To = "";
-	private String field_Subject = "";
-	private String field_Message = "";
+	private String fieldFrom = "";
+	private String fieldTo = "";
+	private String fieldSubject = "";
+	private String fieldMessage = "";
 	
 
 	
@@ -67,9 +67,9 @@ public class MailSender {
 	 * @param smtp
 	 * @param port
 	 */
-	public void server(String smtp, int port){
-		smtp_server = smtp;
-		smtp_port = port;
+	public void server(String aSmtp, int aPort){
+		this.smtpServer = aSmtp;
+		this.smtpPort = aPort;
 	}
 	
 	
@@ -78,9 +78,9 @@ public class MailSender {
 	 * @param user
 	 * @param pass
 	 */
-	public void user(String user, String pass){
-		username = Base64Coder.encodeString(user);
-		password = Base64Coder.encodeString(pass);
+	public void user(String aUser, String aPass){
+		this.username = Base64Coder.encodeString(aUser);
+		this.password = Base64Coder.encodeString(aPass);
 	}	
 	
 	
@@ -102,17 +102,17 @@ public class MailSender {
 	 */
 	public void connect(){
 		try {
-			s = new Socket(smtp_server, smtp_port);
+			this.s = new Socket(smtpServer, smtpPort);
 			
-			os= s.getOutputStream();
-			serverWriter = new DataOutputStream(os); 
-			isrServer = new InputStreamReader(s.getInputStream());
-			serverReader = new BufferedReader(isrServer);	
+			this.os= s.getOutputStream();
+			this.serverWriter = new DataOutputStream(os); 
+			this.isrServer = new InputStreamReader(s.getInputStream());
+			this.serverReader = new BufferedReader(isrServer);	
 			
 			
-			serverReader.readLine();
+			this.serverReader.readLine();
 
-			query("EHLO "+smtp_server);
+			query("EHLO "+this.smtpServer);
 		
 		} catch (UnknownHostException e) {
 		} catch (IOException e) {
@@ -129,7 +129,7 @@ public class MailSender {
 	public void disconnect(){
 		
 		try {
-			s.close();
+			this.s.close();
 			
 		} catch (IOException e) {
 		}
@@ -142,12 +142,12 @@ public class MailSender {
 	public void login(){
 		
 		try {
-			query("AUTH LOGIN " + username);
+			query("AUTH LOGIN " + this.username);
 			//print();
 			
-			serverReader.readLine();
+			this.serverReader.readLine();
 			
-			query(password);
+			query(this.password);
 			//print();
 		
 		} catch (IOException e) {
@@ -179,39 +179,39 @@ public class MailSender {
 	 * Set the sender.
 	 * @param from_field
 	 */
-	public void set_From(String from_field){
-		field_From = from_field;
+	public void setFrom(String aFromfield){
+		this.fieldFrom = aFromfield;
 	}
 
 	/**
 	 * Set the receiver.
 	 * @param to_field
 	 */
-	public void set_To(String to_field){
-		field_To = to_field;		
+	public void setTo(String aFieldTo){
+		this.fieldTo = aFieldTo;		
 	}
 
 	/**
 	 * Set Subject.
 	 * @param subject_field
 	 */
-	public void set_Subject(String subject_field){
-		field_Subject = subject_field;
+	public void setSubject(String aFieldSubject){
+		this.fieldSubject = aFieldSubject;
 	}
 
 	/**
 	 * Add the message.
 	 * @param message_field
 	 */
-	public void set_Message(String message_field){
-		field_Message += message_field + "\r\n";
+	public void setMessage(String aFieldMessage){
+		this.fieldMessage += aFieldMessage + "\r\n";
 	}
 	
 	/**
 	 * Reset the message.
 	 */
-	public void clear_Message(){
-		field_Message = "";
+	public void clearMessage(){
+		this.fieldMessage = "";
 	}
 
 	
@@ -230,11 +230,11 @@ public class MailSender {
 	 * Write into the data stream
 	 * @param data
 	 */
-	public void query(String data){
+	public void query(String aData){
 		try {
-			serverWriter.flush();
-			if (data.length() > 0){
-				serverWriter.writeBytes(data+"\r\n");
+			this.serverWriter.flush();
+			if (aData.length() > 0){
+				this.serverWriter.writeBytes(aData+"\r\n");
 			}
 			
 		} catch (IOException e) {
@@ -251,12 +251,12 @@ public class MailSender {
 		
 		try {
 			String response;
-			response = serverReader.readLine();
+			response = this.serverReader.readLine();
 			while (true){
 				System.out.println(response);
-				if (!serverReader.ready())
+				if (!this.serverReader.ready())
 					break;
-				response = serverReader.readLine();
+				response = this.serverReader.readLine();
 			}
 			
 		} catch (IOException e) {
@@ -272,7 +272,7 @@ public class MailSender {
 	public String getOne(){
 		String response = "";
 		try {
-			response = serverReader.readLine();
+			response = this.serverReader.readLine();
 			
 		} catch (IOException e) {
 		}
@@ -289,12 +289,12 @@ public class MailSender {
 		
 		try {
 			String response;
-			response = serverReader.readLine();
+			response = this.serverReader.readLine();
 			while (true){
 				store.add(response);
-				if (!serverReader.ready())
+				if (!this.serverReader.ready())
 					break;
-				response = serverReader.readLine();
+				response = this.serverReader.readLine();
 			}
 		} catch (IOException e) {	
 		}
@@ -303,23 +303,41 @@ public class MailSender {
 	} 
 	
 	
+	
+	
+	
+	
+
+	
+	/**
+	 * Clear server responses
+	 */
+	public void clearServerResponse(){
+		this.getQueue();
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * Collate and send message
 	 */
 	public void send(){
-		query("MAIL FROM:"+field_From);
+		query("MAIL FROM:"+this.fieldFrom);
 		//print();
-		query("RCPT TO:"+field_To);
+		query("RCPT TO:"+this.fieldTo);
 		//print();
 		
 		query("DATA");
 		//print();
 		
 		String data;
-		data  = "From:" + field_From + "\r\n";
-		data += "To:" + field_To + "\r\n";
-		data += "Subject:" + field_Subject + "\r\n";
-		data += field_Message;
+		data  = "From:" + this.fieldFrom + "\r\n";
+		data += "To:" + this.fieldTo + "\r\n";
+		data += "Subject:" + this.fieldSubject + "\r\n";
+		data += this.fieldMessage;
 		query(data);
 		
 		query(".");
@@ -329,35 +347,37 @@ public class MailSender {
 	/**
 	 * Send Sender
 	 */
-	public void send_from(){
-		query("MAIL FROM:"+field_From);
+	public void sendFrom(){
+		query("MAIL FROM:"+this.fieldFrom);
 	}
 	/**
 	 * Send Receiver
 	 */
-	public void send_to(){
-		query("RCPT TO:"+field_To);
+	public void sendTo(){
+		query("RCPT TO:"+this.fieldTo);
 	}
 	/**
 	 * Set the data
 	 */
-	public void set_data(){
+	public void setData(){
 		query("DATA");
 	}
 	/**
 	 * Send the data
 	 */
-	public void send_data(){
+	public void sendData(){
 		String data;
-		data  = "From:" + field_From + "\r\n";
-		data += "To:" + field_To + "\r\n";
-		data += "Subject:" + field_Subject + "\r\n";
-		data += field_Message;
+		data  = "From:" + this.fieldFrom + "\r\n";
+		data += "To:" + this.fieldTo + "\r\n";
+		data += "Subject:" + this.fieldSubject + "\r\n";
+		data += this.fieldMessage;
 		data += ".";
 		
 		query(data);
 	}
 
+	
+	
 
 	
 }

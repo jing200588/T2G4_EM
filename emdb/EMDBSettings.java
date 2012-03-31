@@ -22,4 +22,16 @@ public class EMDBSettings {
 	public static final String	TABLE_PARTICIPANTS			=	"EM_PARTICIPANTS";
 	
 	
+	
+	/**
+	 * Shortcut to print out strings.
+	 * @param msg
+	 */
+	public static void dMsg(String aMsg){
+		System.out.println(aMsg);
+	}
+	public static void dMsg(String aMsg, String aPrefix){
+		System.out.println(aPrefix + " - " + aMsg);
+	}
+	
 }

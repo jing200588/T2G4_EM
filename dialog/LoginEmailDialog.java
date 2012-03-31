@@ -1,5 +1,6 @@
 package dialog;
 
+import emdb.EMDBSettings;
 import event.*;
 
 import org.eclipse.swt.SWT;
@@ -10,6 +11,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -19,6 +21,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.events.SelectionAdapter;
+
+import advertise.email.MailSender;
 
 
 public class LoginEmailDialog extends Dialog {
@@ -32,6 +36,7 @@ public class LoginEmailDialog extends Dialog {
 	private Label lblPassword;
 	private String userName;
 	private String password;
+	private String domain;
 	private boolean loginSuccessful;
 	private Eventitem currentEvent;
 	protected errormessageDialog errordiag;
@@ -91,6 +96,19 @@ public class LoginEmailDialog extends Dialog {
 		new Label(composite, SWT.NONE);
 	    new Label(composite, SWT.NONE);
 	    
+	    
+	    Label lblDomains = new Label(composite, SWT.NONE);
+	    lblDomains.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+	    lblDomains.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+	    lblDomains.setText("Domain:");   
+	    
+	    String[] domains = new String[]{"NUSSTU", "NUSSTF"};
+	    final Combo comboDomain = new Combo(composite, SWT.VERTICAL| SWT.BORDER  |SWT.READ_ONLY);
+	    comboDomain.setItems(domains);
+	    GridData gd_comboDomain = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+	    gd_comboDomain.widthHint = 188;
+	    comboDomain.setLayoutData(gd_comboDomain);
+	    
 	    Label lblUsername = new Label(composite, SWT.NONE);
 	    lblUsername.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
 	    lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -107,6 +125,7 @@ public class LoginEmailDialog extends Dialog {
 		lblPassword.setText("Password");
 		
 		txtPassword = new Text(composite, SWT.BORDER);
+		txtPassword.setEchoChar('*');
 		GridData gd_txtPassword = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtPassword.widthHint = 188;
 		txtPassword.setLayoutData(gd_txtPassword);
@@ -117,6 +136,12 @@ public class LoginEmailDialog extends Dialog {
 				loginSuccessful = false; //alway reset to false
 				
 				try {
+					
+					if(comboDomain.getText().length() == 0) throw new Exception("Please choose a domain.");
+					domain = comboDomain.getText();
+					System.out.println(domain);
+					
+					
 					txtUsername.getText().trim();
 					if(txtUsername.getText().length() == 0) throw new Exception("Username must not be empty.");
 					userName = txtUsername.getText();
@@ -124,16 +149,43 @@ public class LoginEmailDialog extends Dialog {
 					if(txtPassword.getText().length() == 0) throw new Exception("Password must not be empty.");
 					password = txtPassword.getText();
 				
-				//TODO: DO THE NECESSARY CHECKING AND THEN LOGIN USE A BOOLEAN FUNCTION.
-				loginSuccessful = false; //Change this to your method of login.
+					//TODO: DO THE NECESSARY CHECKING AND THEN LOGIN USE A BOOLEAN FUNCTION.
+					loginSuccessful = false; //Change this to your method of login.
+					
+					
+					String user = domain + "\\" + userName;
+					System.out.println(user);
+					MailSender mail = new MailSender();
+					mail.server("smtp.nus.edu.sg", 25);
+					mail.connect();
+					mail.clearServerResponse();
+					mail.user(user, password);
+					mail.login();
+					String response = mail.getOne();
+					
+					if (EMDBSettings.DEVELOPMENT){
+						EMDBSettings.dMsg(response, "<Mail TS> ");
+					}
+					
+					
+					if (response.compareTo("235 2.7.0 Authentication successful") == 0){
+						loginSuccessful = true;
+					}else{
+						loginSuccessful = false;
+					}
+					mail.logout();
+					mail.print();
+					mail.disconnect();
 				
-				if(loginSuccessful == true) {
-					shellMain.close();
-					ViewMain.EmailAds(currentEvent);//need to store the sesson somewhere anot? If yes I am not sure how you do it actually. 
-				}
-				else {
-					throw new Exception("Incorrect Username/Password.");
-				}
+					
+					
+					if(loginSuccessful == true) {
+						shellMain.close();
+						ViewMain.EmailAds(currentEvent, user, password);//need to store the sesson somewhere anot? If yes I am not sure how you do it actually. 
+					}
+					else {
+						throw new Exception("Incorrect Username/Password.");
+					}
 				
 				} catch (Exception ex) {
 					errordiag = new errormessageDialog(new Shell(), ex.getMessage());

@@ -5,6 +5,8 @@ import event.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -35,7 +37,7 @@ public class ViewEmailAds extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEmailAds(Composite parent, int style, Eventitem input_ei) {
+	public ViewEmailAds(Composite parent, int style, Eventitem input_ei, String aUser, String aPass) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -100,6 +102,11 @@ public class ViewEmailAds extends Composite {
 		formToolkit.adapt(btnSend, true, true);
 		btnSend.setText("Send");
 
-
+		btnSend.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				
+				System.out.println("SENDING...");
+			}
+		});
 	}
 }

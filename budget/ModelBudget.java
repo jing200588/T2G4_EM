@@ -87,7 +87,6 @@ public class ModelBudget {
 	}
 	
 	public void deleteBudgetItem(int inputEvenId, int inputItemId) {
-		db.eventDB().dMsg("TO DEL" + inputItemId);
 		
 		db.budgetDB().deleteBudgetOptimized(inputItemId);
 	}
