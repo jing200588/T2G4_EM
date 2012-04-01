@@ -1,11 +1,7 @@
 package advertise.email;
 
-import java.awt.Color;
 import java.util.Queue;
 import java.util.StringTokenizer;
-
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
 
 import dialog.errormessageDialog;
 import emdb.EMDBSettings;
@@ -126,7 +122,14 @@ public class ViewEmailAds extends Composite {
 		
 		
 
+		txtSubjectInputBox.setText("<ADV> Join us at " + input_ei.getName());
 		
+		String newMsg = "";
+		
+		newMsg += "Date: " + input_ei.getStartDateTime().getDateRepresentation() + " - " + input_ei.getEndDateTime().getDateRepresentation();
+		newMsg += "\n\n" + input_ei.getDescription();
+		
+		txtMessageInputBox.setText(newMsg);
 		
 		btnSend.addSelectionListener(new SelectionAdapter() {
 			
