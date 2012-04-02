@@ -40,7 +40,7 @@ public class ControllerBudget {
 	 * @throws Exception
 	 */
 	public ControllerBudget(String input, int budget, int typeChoice, int satisfactionChoice, Eventitem inputEventitem) throws Exception {
-
+		
 		itemList = new Vector<Item>();
 		currentEvent = inputEventitem;
 		Scanner sc = new Scanner(input);
@@ -229,7 +229,7 @@ public class ControllerBudget {
 		int index;
 
 		if(type == 0) 
-			text = "The budget is not enough to buy anything. \nIncrease your budget and try again.";
+			text = "The budget is not enough to buy anything.\nIncrease your budget and try again.";
 		else if(type == 1) {
 			index = 1;
 			if(satisfactionChoice == 1)
@@ -537,5 +537,34 @@ public class ControllerBudget {
 
 	public Vector<Item> getOptimizeItemList(int eventId) {
 		return bm.getOptimizeItemList(eventId);
+	}
+	
+	/* The codes below are all use for Junit Test purpose*/
+	public int getSolutionSize() {
+		return soln.getSolnSetSize();
+	}
+	
+	public int getSolutionSatisfaction() {
+		return soln.getSvalue();
+	}
+	
+	public double getSolutionCost(int inputNum) {
+		return soln.getSolnCostSet().get(inputNum);
+	}
+	
+	public int getAllItemSatisfaction() {
+		return compulsorySatisfaction + nonCompulsorySatisfaction;
+	}
+	
+	public int getAllItemCost() {
+		return compulsoryCost + nonCompulsoryCost ;
+	}
+	
+	public int getCompulsoryItemSatisfaction() {
+		return compulsorySatisfaction;
+	}
+	
+	public int getCompulsoryItemCost() {
+		return compulsoryCost;
 	}
 }

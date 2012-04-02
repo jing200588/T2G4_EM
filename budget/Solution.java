@@ -3,7 +3,7 @@ package budget;
 import java.util.BitSet;
 import java.util.Vector;
 
-class Solution {
+public class Solution {
 	Vector<BitSet> bitmask;
 	Vector<Double> cost;
 	int satisfactionValue;
