@@ -549,7 +549,8 @@ public class ControllerBudget {
 	}
 	
 	public double getSolutionCost(int inputNum) {
-		return soln.getSolnCostSet().get(inputNum);
+		DecimalFormat myFormatter = new DecimalFormat("##.##");
+		return (Double.parseDouble(myFormatter.format(soln.getSolnCostSet().get(inputNum))));
 	}
 	
 	public int getAllItemSatisfaction() {
