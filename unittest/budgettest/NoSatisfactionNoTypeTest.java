@@ -10,23 +10,23 @@ import static org.junit.Assert.*;
 import org.eclipse.jface.text.Assert;
 import org.junit.Test;
 
-public class WithSatisfactionWithTypeTest {
+public class NoSatisfactionNoTypeTest {
 
 	private Vector<Integer> compulsoryList;
 	private String input;
 
-	public WithSatisfactionWithTypeTest() throws Exception{
+	public NoSatisfactionNoTypeTest() throws Exception{
 
-		input = "Apple_Ipad 600 7 Tablet\n" +
-				"ACER_NETBOOK 1300.8 10 Tablet\n" +
-				"Nikon_Cam 634.5 9 Camera\n" +
-				"Monster_Earpiece 64.7 7 Earpiece\n" +
-				"OCZ_120GB_SSD 320.88 8 Harddisk\n" +
-				"Canon_DSLR 1000.5 11 Camera\n" +
-				"Western_Digital_HD_50GB 180.6 4 Harddisk\n" +
-				"Windows_7_Basic 200 8 Software\n" +
-				"World_of_Warcraft 49.99 4 Software\n" +
-				"Software_Engineering_For_Dummies 419.4 7 Book\n";	
+		input = "Apple_Ipad 600\n" +
+				"ACER_NETBOOK 1300.8\n" +
+				"Nikon_Cam 634.5\n" +
+				"Monster_Earpiece 64.7\n" +
+				"OCZ_120GB_SSD 320.88\n" +
+				"Canon_DSLR 1000.5\n" +
+				"Western_Digital_HD_50GB 180.6\n" +
+				"Windows_7_Basic 200\n" +
+				"World_of_Warcraft 49.99\n" +
+				"Software_Engineering_For_Dummies 419.4\n";	
 	}
 	/**
 	 * This test case will cover the budget is zero dollar and no compulsory item are checked.
@@ -43,11 +43,11 @@ public class WithSatisfactionWithTypeTest {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
-		ControllerBudget cb = new ControllerBudget(input, 0, 1, 1, currentEvent); //Budget = $0
+		ControllerBudget cb = new ControllerBudget(input, 0, 0, 0, currentEvent); //Budget = $0
 
-		cb.differentiateCompulsory(compulsoryList, 1); // compulsory list is empty
+		cb.differentiateCompulsory(compulsoryList, 0); // compulsory list is empty
 
-		cb.findOptimalShopList(1, 1);
+		cb.findOptimalShopList(0, 0);
 		
 		boolean compareResult = true;
 		if(cb.noOfCombination() != 0) 
@@ -71,16 +71,14 @@ public class WithSatisfactionWithTypeTest {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
-		ControllerBudget cb = new ControllerBudget(input, 477137, 1, 1, currentEvent); //Budget = $4771.37 
+		ControllerBudget cb = new ControllerBudget(input, 477137, 0, 0, currentEvent); //Budget = $4771.37 
 
-		cb.differentiateCompulsory(compulsoryList, 1); // compulsory list is empty
+		cb.differentiateCompulsory(compulsoryList, 0); // compulsory list is empty
 
-		cb.findOptimalShopList(1, 1);
+		cb.findOptimalShopList(0, 0);
 		
 		boolean compareResult = true;
 		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemSatisfaction() != 75)
 			compareResult = false;
 		if(cb.getAllItemCost() != 477137)
 			compareResult = false;
@@ -102,19 +100,17 @@ public class WithSatisfactionWithTypeTest {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 		
-		ControllerBudget cb = new ControllerBudget(input, 477137, 1, 1, currentEvent); //Budget = $4771.37 
+		ControllerBudget cb = new ControllerBudget(input, 477137, 0, 0, currentEvent); //Budget = $4771.37 
 		
 		compulsoryList.add(3); // flag Nikon_Cam as compulsory, cost is $634.5
 		compulsoryList.add(8); // flag Windows_7_Basic as compulsory, cost is $200.8
 
-		cb.differentiateCompulsory(compulsoryList, 1); // compulsory list is not empty
+		cb.differentiateCompulsory(compulsoryList, 0); // compulsory list is not empty
 
-		cb.findOptimalShopList(1, 1);
+		cb.findOptimalShopList(0, 0);
 
 		boolean compareResult = true;
 		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemSatisfaction() != 75)
 			compareResult = false;
 		if(cb.getAllItemCost() != 477137)
 			compareResult = false;
@@ -136,20 +132,18 @@ public class WithSatisfactionWithTypeTest {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 		
-		ControllerBudget cb = new ControllerBudget(input, 477137, 1, 1, currentEvent); //Budget = $4771.37 
+		ControllerBudget cb = new ControllerBudget(input, 477137, 0, 0, currentEvent); //Budget = $4771.37 
 		
 		//Add everything to compulsory list.
 		for(int i=1; i<=10; i++)
 			compulsoryList.add(i);
 
-		cb.differentiateCompulsory(compulsoryList, 1); // all item is compulsory
+		cb.differentiateCompulsory(compulsoryList, 0); // all item is compulsory
 
-		cb.findOptimalShopList(1, 1);
+		cb.findOptimalShopList(0, 0);
 		
 		boolean compareResult = true;
 		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemSatisfaction() != 75)
 			compareResult = false;
 		if(cb.getAllItemCost() != 477137)
 			compareResult = false;
@@ -173,11 +167,11 @@ public class WithSatisfactionWithTypeTest {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
-		ControllerBudget cb = new ControllerBudget(input, 4998, 1, 1, currentEvent); //Budget = $49.98; cheapest item = $49.99 
+		ControllerBudget cb = new ControllerBudget(input, 4998, 0, 0, currentEvent); //Budget = $49.98; cheapest item = $49.99 
 
-		cb.differentiateCompulsory(compulsoryList, 1); 
+		cb.differentiateCompulsory(compulsoryList, 0); 
 
-		cb.findOptimalShopList(1, 1);
+		cb.findOptimalShopList(0, 0);
 		
 		boolean compareResult = true;
 		if(cb.noOfCombination() != 0) 
@@ -202,7 +196,7 @@ public class WithSatisfactionWithTypeTest {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
-		ControllerBudget cb = new ControllerBudget(input, 115618, 1, 1, currentEvent); //Budget = $1156.18; Compulsory item cost = $1156.18 
+		ControllerBudget cb = new ControllerBudget(input, 115618, 0, 0, currentEvent); //Budget = $1156.18; Compulsory item cost = $1156.18 
 
 		compulsoryList.add(3); // flag Nikon_Cam as compulsory, cost is $634.5 for 9 satisfaction
 		compulsoryList.add(5); //flag OCZ_120GB_SSD as compulsory, cost is $320.88 for 8 satisfaction
@@ -210,14 +204,12 @@ public class WithSatisfactionWithTypeTest {
 		
 		//Total cost will be = $1156.18
 		
-		cb.differentiateCompulsory(compulsoryList, 1); // all item is compulsory
+		cb.differentiateCompulsory(compulsoryList, 0); // all item is compulsory
 
-		cb.findOptimalShopList(1, 1);
+		cb.findOptimalShopList(0, 0);
 
 		boolean compareResult = true;
 		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getCompulsoryItemSatisfaction() != 25)
 			compareResult = false;
 		if(cb.getCompulsoryItemCost() != 115538)
 			compareResult = false;
@@ -239,22 +231,16 @@ public class WithSatisfactionWithTypeTest {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
-		ControllerBudget cb = new ControllerBudget(input, 220000, 1, 1, currentEvent); //Budget = $2200.00
+		ControllerBudget cb = new ControllerBudget(input, 50000, 0, 0, currentEvent); //Budget = $500.00
 		
-		cb.differentiateCompulsory(compulsoryList, 1); // all item is compulsory
+		cb.differentiateCompulsory(compulsoryList, 0); // all item is compulsory
 
-		cb.findOptimalShopList(1, 1);
+		cb.findOptimalShopList(0, 0);
 		
 		boolean compareResult = true;
-		if(cb.getSolutionSize() != 2) 
+		if(cb.getSolutionSize() != 23) //inclusive of empty set 
 			compareResult = false;
-		if(cb.getSolutionSatisfaction() != 42)
-			compareResult = false;
-		if(cb.getSolutionCost(0) != 2089.47)
-			compareResult = false;
-		if(cb.getSolutionCost(1) != 2099.2)
-			compareResult =false;
-
+		
 		assertEquals(true, compareResult);
 	}
 	
@@ -272,29 +258,21 @@ public class WithSatisfactionWithTypeTest {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
-		ControllerBudget cb = new ControllerBudget(input, 220000, 1, 1, currentEvent); //Budget = $2200.00
+		ControllerBudget cb = new ControllerBudget(input, 50000, 0, 0, currentEvent); //Budget = $500.00
 		
-		compulsoryList.add(2); // flag Acer_Netbook as compulsory, cost is $1300.8
-		compulsoryList.add(3); // flag Nikon_Cam as compulsory, cost is $634.5
-		
+		compulsoryList.add(5); //flag OCZ_120GB_SSD as compulsory, cost is $320.88 for 8 satisfaction
 
-		
-		cb.differentiateCompulsory(compulsoryList, 1); // all item is compulsory
+		cb.differentiateCompulsory(compulsoryList, 0); // all item is compulsory
 
-		cb.findOptimalShopList(1, 1);
+		cb.findOptimalShopList(0, 0);
 		
 		/*This portion of the test data do not consist of any compulsory item*/
 		boolean compareResult = true;
-		if(cb.getSolutionSize() != 2) 
+		if(cb.getSolutionSize() != 4) //inclusive of empty set
 			compareResult = false;
-		if(cb.getSolutionSatisfaction() != 11)
-			compareResult = false;
-		if(cb.getSolutionCost(0) != 245.3)
-			compareResult = false;
-		if(cb.getSolutionCost(1) != 114.69)
-			compareResult =false;
-		
+
 		assertEquals(true, compareResult);
 	}
 
+	
 }
