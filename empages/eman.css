@@ -106,10 +106,10 @@ form.inline p {margin-bottom:0;}
 /*standards*/
 .clear {clear:both;}
 
-#eman{width: 80%; margin: 0 auto; }
+#eman{margin: 0 auto; }
 
-#header{ padding: 2em 0;}
-#main-section{margin: 4em 0; position: relative;}
+#header{ padding: 2em 10%; background: #f2f2f2;}
+#main-section{width: 80%; margin: 4em auto; position: relative;}
 #main-section ul {list-style-type: none; margin-bottom: 1em;}
 
 
