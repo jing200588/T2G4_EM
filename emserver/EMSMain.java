@@ -24,7 +24,7 @@ public class EMSMain {
 	    handleSet[0] = new AppContextBuilder().build();
 		contexts.setHandlers(handleSet);
 
-		EMSService server = new EMSService();
+		final EMSService server = new EMSService();
 	    server.setHandler(contexts);
 	    
 	    server.start();
