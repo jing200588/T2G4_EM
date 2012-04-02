@@ -121,5 +121,5 @@ form.inline p {margin-bottom:0;}
 
 #main-section #upcoming{width: 70%; float: right; border-left: 1px #888 solid; padding-left: 5%;}
 #main-section #upcoming h2{color: #600; font-weight: bold;}
-#main-section #upcoming ul{font-size: 1.2em;}
+#main-section #upcoming ul{font-size: 1.2em; margin-bottom: 2em;}
 #main-section #upcoming .title{font-size: 3em;}

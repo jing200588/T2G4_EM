@@ -126,10 +126,10 @@ public class ViewEmailAds extends Composite {
 		
 		String newMsg = "";
 		
-		newMsg += "Date: " + input_ei.getStartDateTime().getDateRepresentation() + " - " + input_ei.getEndDateTime().getDateRepresentation();
+		newMsg += "Date - " + input_ei.getStartDateTime().getDateRepresentation() + " to " + input_ei.getEndDateTime().getDateRepresentation();
 		newMsg += "\n\n" + input_ei.getDescription();
-		
 		txtMessageInputBox.setText(newMsg);
+		
 		
 		btnSend.addSelectionListener(new SelectionAdapter() {
 			
@@ -216,51 +216,23 @@ public class ViewEmailAds extends Composite {
 							response =  smail.getOne();
 							if(EMDBSettings.DEVELOPMENT){EMDBSettings.dMsg("<EMMS> "+ response);}
 							
-							smail.logout();
-							if(EMDBSettings.DEVELOPMENT){EMDBSettings.dMsg("<EMMS> "+ smail.getOne());}
-							
 							if (response.substring(0, 3).compareTo("250") != 0){
 								allOK = false;
 							}
+							
+							smail.logout();
+							response =  smail.getOne();
+							if(EMDBSettings.DEVELOPMENT){EMDBSettings.dMsg("<EMMS> "+ response);}
+							
+							
 						}
 					}
-					
-					
-					
-					
-				/*
 
-					
-					 for (int i=0; i<to.length; i++){
-						smail.setTo(to[i]);
-						smail.sendTo();
-						if(EMDBSettings.DEVELOPMENT){
-							EMDBSettings.dMsg("<EMMS> "+ smail.getOne());
-						}
-			         }
-					 
-					 
-					smail.setSubject(txtSubjectInputBox.getText());
-					smail.clearMessage();
-					smail.setMessage(txtMessageInputBox.getText());
-					smail.clearServerResponse();
-					
-					smail.setData();
-					smail.sendData();
-					response = smail.getOne();
-					
-					if (response.substring(0, 3).compareTo("250") != 0){
-						if(EMDBSettings.DEVELOPMENT){
-							EMDBSettings.dMsg("<EMMS> "+ response);
-						}
-						allOK = false;
-					}*/
 					
 				}else{
 					if(EMDBSettings.DEVELOPMENT){
 						EMDBSettings.dMsg("<EMMS> EMPTY FIELD...");
 					}
-					
 					allOK = false;
 				}
 
@@ -269,6 +241,14 @@ public class ViewEmailAds extends Composite {
 							"An Error has occurred in sending your email",
 							"Error");
 					messageBoard.open();
+				}else{
+					txtToInputBox.setText("");
+					
+					errormessageDialog messageBoard = new errormessageDialog(new Shell(),
+							"Your mail has been sent!",
+							"Sent!");
+					messageBoard.open();
+					
 				}
 				
 				lblError.setText(errorMsg);

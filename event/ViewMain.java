@@ -3,6 +3,9 @@ package event;
 import budget.*;
 import participant.*;
 import emdb.*;
+import emserver.AppContextBuilder;
+import emserver.EMSService;
+import emserver.ViewServer;
 import advertise.sms.*;
 import advertise.facebook.*;
 import advertise.email.*;
@@ -19,6 +22,10 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
@@ -65,6 +72,7 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class ViewMain extends ApplicationWindow {
 	private Action exitaction;
+	private Action serverControl;
 	private Composite maincomposite;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Composite c1;
@@ -87,6 +95,8 @@ public class ViewMain extends ApplicationWindow {
   //  private static int tc2vBarOnWidth, tc2vBarOffWidth;
   //  private static int firstruncheck = 0;
     
+    private final EMSService server;
+    
 	/**
 	 * Create the application window.
 	 */
@@ -99,10 +109,26 @@ public class ViewMain extends ApplicationWindow {
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
 		addStatusLine();
-		
 
 		
+		WebAppContext context = new WebAppContext();
+		context.setDescriptor(context + "/WEB-INF/web.xml");
+		context.setResourceBase(".");
+		context.setContextPath("/");
+
+	    ContextHandlerCollection contexts = new ContextHandlerCollection();
+	    Handler[] handleSet = new Handler[1];
+	    handleSet[0] = new AppContextBuilder().build();
+		contexts.setHandlers(handleSet);
+		
+		server = new EMSService();
+	    server.setHandler(contexts);
+
+		
+		
 	}
+	
+	
 
 	/************************************************************
 	 * DELETE ITEM
@@ -863,6 +889,18 @@ public class ViewMain extends ApplicationWindow {
 		
 		}
 		
+		
+		{
+			serverControl = new Action("Start/Stop Server") {
+					public void run() {
+						ViewServer vs = new ViewServer(c2, SWT.NONE, server);
+						layout.topControl = vs;
+						c2.layout(true);
+					}
+			};
+			serverControl.setAccelerator(SWT.ALT | SWT.F10);
+			serverControl.setToolTipText("Start the Server");
+		}	
 	}
 
 	/**
@@ -875,10 +913,19 @@ public class ViewMain extends ApplicationWindow {
 			MenuManager FileMenu = new MenuManager("File");
 			menuManager.add(FileMenu);
 			FileMenu.add(exitaction);
+			
+			
+			MenuManager ServerMenu = new MenuManager("Server");
+			menuManager.add(ServerMenu);
+			ServerMenu.add(serverControl);
 		}
 		return menuManager;
 	}
 
+	
+	
+	
+	
 	/**
 	 * Description: Create the toolbar manager.
 	 * @return the toolbar manager
@@ -902,16 +949,21 @@ public class ViewMain extends ApplicationWindow {
 	 * @param args
 	 */
 	public static void main(String args[]) {
+
 		try {
 			
 			db = new EMDBII();
 			db.systemCheck();
+
 			
 			ViewMain window = new ViewMain();
 			window.setBlockOnOpen(true);
 			window.open();
+			
+			
 			Display.getCurrent().dispose();
 
+		    
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -938,4 +990,23 @@ public class ViewMain extends ApplicationWindow {
 	protected Point getInitialSize() {
 		return new Point(1200, 526);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Handle shell close
+	 */
+	protected void handleShellCloseEvent() {
+		try{
+			server.stop();
+		}catch(Exception e){}
+		System.exit(0);
+	}
+	
+	
 }
