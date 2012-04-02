@@ -86,11 +86,21 @@ public class ModelBudget {
 		return itemList;
 	}
 	
+	/**
+	 * Description: Delete a single item from database.
+	 * @param inputEvenId
+	 * @param inputItemId
+	 */
 	public void deleteBudgetItem(int inputEvenId, int inputItemId) {
 		
 		db.budgetDB().deleteBudgetOptimized(inputItemId);
 	}
 	
+	/**
+	 * Description: Return the optimize item list upon request.
+	 * @param inputId
+	 * @return
+	 */
 	public Vector<Item> getOptimizeItemList(int inputId) {
 
 		return db.budgetDB().getBudgetListOptimized(inputId);

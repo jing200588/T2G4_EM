@@ -61,6 +61,7 @@ public class ViewBudget extends Composite {
 	private int satisfactionChoice;
 	protected errormessageDialog errordiag;
 	/*My declaration end here.*/
+
 	private Composite compBigContent;
 	private Button btnStepInputDetails;
 	private Button btnStepSelectCompulsoy;
@@ -346,7 +347,7 @@ public class ViewBudget extends Composite {
 		txtDirectory.setEditable(false);
 		txtDirectory.setBounds(303, 190, 286, 21);
 		formToolkit.adapt(txtDirectory, true, true);
-		
+
 		Button btnBack = new Button(compStep1, SWT.NONE);
 		btnBack.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -363,8 +364,6 @@ public class ViewBudget extends Composite {
 		compStep2.setBounds(0, 0, 675, 260);
 		formToolkit.adapt(compStep2);
 		formToolkit.paintBordersFor(compStep2);
-
-
 
 		tableListItem = new Table(compStep2, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);			
 		tableListItem.setHeaderVisible(true);
@@ -556,7 +555,7 @@ public class ViewBudget extends Composite {
 		lblNoteAllChanges.setText("Note: All changes to item quantity will be lost if you click back to Step 1!");
 
 		/**********************************************************************************
-		 * Composite that will that display the all the different optimize list.
+		 * Composite that will that display all the different optimize list.
 		 **********************************************************************************/
 		compStep3 = new Composite(compBigContent, SWT.NONE);
 		compStep3.setBounds(0, 80, 700, 300);
@@ -605,6 +604,11 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");
 	}
+
+	/**
+	 * Description: Algorithm to sort the selected column.
+	 * @param columnNo
+	 */
 
 	public void sortColumn(int columnNo) {
 
@@ -678,6 +682,9 @@ public class ViewBudget extends Composite {
 		refreshTable();
 	}
 
+	/**
+	 * Description: Re-display the table.
+	 */
 	public void refreshTable() {
 
 		tableListItem.removeAll();
@@ -697,6 +704,10 @@ public class ViewBudget extends Composite {
 		}
 	}
 
+	/**
+	 * Description: CSV importing.
+	 * @param filepath
+	 */
 
 	public void ImportCSV (String filepath) {
 		try {
@@ -724,6 +735,10 @@ public class ViewBudget extends Composite {
 
 	}
 
+	/**
+	 * Description: CSV Exporting
+	 * @param filepath
+	 */
 	public void ExportCSV (String filepath) {
 		try {
 			CSVWriter writer = new CSVWriter(new FileWriter(filepath));
@@ -738,25 +753,10 @@ public class ViewBudget extends Composite {
 				writer.writeNext(entries);
 
 			}
-			/*String[] headers = new String[table.getColumnCount()];
-			for (int i=0; i<table.getColumnCount(); i++) {
-				headers[i] = table.getColumns()[i].getText();
-			}
 
-			writer.writeNext(headers);
-
-			for (int i=0; i<table.getItemCount(); i++) {
-				String[] entries = new String[table.getColumnCount()];
-				for (int j=0; j<table.getColumnCount(); j++) 
-					entries[j] = table.getItem(i).getText(j);
-				writer.writeNext(entries);
-			}*/
-
-			//for(int i=0; i<)
 			writer.close();
 			new errormessageDialog(new Shell(), "The file was exported successfully!").open();		
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error exporting");
 			new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
 			e.printStackTrace();

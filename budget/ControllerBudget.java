@@ -221,6 +221,14 @@ public class ControllerBudget {
 		resultText = displayResultNoSolutionSet(satisfactionChoice, typeOfResult, noOfCombination); 
 		return resultText;
 	}
+	
+	/**
+	 * Description: Format the result to be printed.
+	 * @param satisfactionChoice
+	 * @param type
+	 * @param combination
+	 * @return
+	 */
 
 	public String displayResultNoSolutionSet(int satisfactionChoice, int type, int combination) {
 		DecimalFormat myFormatter = new DecimalFormat("##.##");
@@ -259,7 +267,7 @@ public class ControllerBudget {
 		}
 		else if (type == 3) {
 			if (satisfactionChoice == 1)
-				text = "Total combination:\t"+combination+"\nMax satisfaction:\t" + (soln.getSvalue()+compulsorySatisfaction) +"\n";
+				text = "Total combination:\t"+combination+"\nMax satisfaction:\t" + (soln.getSatisfactionvalue()+compulsorySatisfaction) +"\n";
 			else
 				text = "Total combination:\t"+combination+"\n";
 
@@ -290,6 +298,15 @@ public class ControllerBudget {
 		text+="\n\n";
 		return text;
 	}
+	
+	/**
+	 * Description: Concatenate the details of each item to be printed.
+	 * @param index
+	 * @param currentItem
+	 * @param satisfactionChoice
+	 * @param type
+	 * @return
+	 */
 
 	public String concatItemListResult(int index, int currentItem, int satisfactionChoice, int type) {
 		String text = "";
@@ -373,13 +390,13 @@ public class ControllerBudget {
 		}
 
 		//by right only the deepest level will perform this
-		if (max > soln.getSvalue()) {
-			soln.setSvalue(max);
+		if (max > soln.getSatisfactionvalue()) {
+			soln.setSatisfactionvalue(max);
 			soln.clearAll();
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 
-		else if (max == soln.getSvalue() && DupCheck(bitmask2) == 0) {
+		else if (max == soln.getSatisfactionvalue() && DupCheck(bitmask2) == 0) {
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 	}
@@ -455,12 +472,12 @@ public class ControllerBudget {
 		}
 
 		//by right only the deepest level will perform this
-		if (max > soln.getSvalue()) {
-			soln.setSvalue(max);
+		if (max > soln.getSatisfactionvalue()) {
+			soln.setSatisfactionvalue(max);
 			soln.clearAll();
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
-		else if (max == soln.getSvalue() && DupCheck(bitmask2) == 0)
+		else if (max == soln.getSatisfactionvalue() && DupCheck(bitmask2) == 0)
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 	}
 
@@ -530,14 +547,26 @@ public class ControllerBudget {
 
 		currentEvent.setitem_list(bm.getOptimizeItemList(currentEvent.getID()));
 	}
+	
+	/**
+	 * Description: Remove a single item that was deleted by the user from database.
+	 * @param eventId
+	 * @param itemId
+	 */
 
 	public void deleteBudgetItem(int eventId, int itemId) {
 		bm.deleteBudgetItem(eventId, itemId);
 	}
 
+	/**
+	 * Description: Retrieve the optimize item list from database.
+	 * @param eventId
+	 * @return
+	 */
 	public Vector<Item> getOptimizeItemList(int eventId) {
 		return bm.getOptimizeItemList(eventId);
 	}
+	
 	
 	/* The codes below are all use for Junit Test purpose*/
 	public int getSolutionSize() {
@@ -545,7 +574,7 @@ public class ControllerBudget {
 	}
 	
 	public int getSolutionSatisfaction() {
-		return soln.getSvalue();
+		return soln.getSatisfactionvalue();
 	}
 	
 	public double getSolutionCost(int inputNum) {
