@@ -8,6 +8,11 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.Vector;
 
+/**
+ * 
+ * @author Chua Hong Jing
+ *
+ */
 
 public class ControllerBudget {
 

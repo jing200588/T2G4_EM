@@ -32,7 +32,11 @@ Web:	www.Java-System.com
 
 */
 
-
+/**
+ * 
+ * @author Marco Tozzini Java-System Use by Chua Hong Jing
+ *
+ */
 import java.util.BitSet;
 
 public class ComputeSmsData {

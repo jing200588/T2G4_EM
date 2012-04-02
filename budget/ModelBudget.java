@@ -4,7 +4,11 @@ import java.util.Iterator;
 import java.util.Vector;
 import emdb.*;
 
-
+/**
+ * 
+ * @author Chua Hong Jing/Yeo Junzhi
+ *
+ */
 
 public class ModelBudget {
 	private int eventId;

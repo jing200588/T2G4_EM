@@ -35,6 +35,11 @@ import org.eclipse.swt.events.SelectionEvent;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+/**
+ * 
+ * @author Chua Hong Jing
+ *
+ */
 
 public class ViewSmsAds extends Composite {
 	private Eventitem currentEvent;

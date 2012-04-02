@@ -1,5 +1,10 @@
 package budget;
 
+/**
+ * 
+ * @author Chua Hong Jing
+ *
+ */
 public class Item implements Comparable {
 	private int id;
 	private String item;

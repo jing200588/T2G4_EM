@@ -10,6 +10,11 @@ import static org.junit.Assert.*;
 import org.eclipse.jface.text.Assert;
 import org.junit.Test;
 
+/**
+ * 
+ * @author Chua Hong Jing
+ *
+ */
 public class WithSatisfactionWithTypeTest {
 
 	private Vector<Integer> compulsoryList;

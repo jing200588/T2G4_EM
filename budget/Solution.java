@@ -3,6 +3,11 @@ package budget;
 import java.util.BitSet;
 import java.util.Vector;
 
+/**
+ * 
+ * @author Tan Swee Khoon
+ *
+ */
 public class Solution {
 	Vector<BitSet> bitmask;
 	Vector<Double> cost;

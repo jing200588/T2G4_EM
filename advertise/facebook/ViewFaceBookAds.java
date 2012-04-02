@@ -6,6 +6,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+/**
+ * 
+ * @author Chua Hong Jing
+ *
+ */
+
 public class ViewFaceBookAds extends Composite {
 
 	public ViewFaceBookAds(Composite parent) {

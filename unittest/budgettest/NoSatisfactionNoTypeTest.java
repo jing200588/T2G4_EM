@@ -10,6 +10,12 @@ import static org.junit.Assert.*;
 import org.eclipse.jface.text.Assert;
 import org.junit.Test;
 
+/**
+ * 
+ * @author Chua Hong Jing
+ *
+ */
+
 public class NoSatisfactionNoTypeTest {
 
 	private Vector<Integer> compulsoryList;
