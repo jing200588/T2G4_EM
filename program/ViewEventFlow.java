@@ -104,6 +104,7 @@ public class ViewEventFlow extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 				
 		Form VenueViewForm = toolkit.createForm(this);
+		VenueViewForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		VenueViewForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		VenueViewForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		VenueViewForm.setBounds(0, 0, 700, 400);

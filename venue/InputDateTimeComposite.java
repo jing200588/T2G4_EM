@@ -13,6 +13,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 
 
 public class InputDateTimeComposite extends Composite {
@@ -46,50 +51,37 @@ public class InputDateTimeComposite extends Composite {
 		hasChosenTimeFrom = false;
 		hasChosenTimeTo = false;
 		m_isEnabled = false;
+		setLayout(new FormLayout());
 		
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setBounds(10, 10, 303, 90);
+		FormData fd_composite = new FormData();
+		fd_composite.bottom = new FormAttachment(100);
+		fd_composite.right = new FormAttachment(100);
+		fd_composite.top = new FormAttachment(20);
+		fd_composite.left = new FormAttachment(0);
+		composite.setLayoutData(fd_composite);
 		toolkit.adapt(composite);
 		toolkit.paintBordersFor(composite);
+		composite.setLayout(new GridLayout(4, false));
 		
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Preferred Time Slot:");
-		label.setBounds(10, 10, 104, 15);
-		toolkit.adapt(label, true, true);
+		Label label_1 = new Label(composite, SWT.NONE);
+		label_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		label_1.setText("From:");
+		toolkit.adapt(label_1, true, true);
 		
 		dateTimeFrom = new DateTime(composite, SWT.DROP_DOWN);
+		dateTimeFrom.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		dateTimeFrom.setEnabled(false);
-		dateTimeFrom.setBounds(86, 31, 85, 24);
 		toolkit.adapt(dateTimeFrom);
 		toolkit.paintBordersFor(dateTimeFrom);
 		
-		Label label_1 = new Label(composite, SWT.NONE);
-		label_1.setText("From:");
-		label_1.setBounds(39, 32, 41, 15);
-		toolkit.adapt(label_1, true, true);
-		
 		Label label_2 = new Label(composite, SWT.NONE);
+		label_2.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		label_2.setText("at");
-		label_2.setBounds(177, 31, 15, 15);
 		toolkit.adapt(label_2, true, true);
 		
-		Label label_3 = new Label(composite, SWT.NONE);
-		label_3.setText("To:");
-		label_3.setBounds(39, 61, 41, 15);
-		toolkit.adapt(label_3, true, true);
-		
-		dateTimeTo = new DateTime(composite, SWT.DROP_DOWN);
-		dateTimeTo.setEnabled(false);
-		dateTimeTo.setBounds(86, 60, 85, 24);
-		toolkit.adapt(dateTimeTo);
-		toolkit.paintBordersFor(dateTimeTo);
-		
-		Label label_4 = new Label(composite, SWT.NONE);
-		label_4.setText("at");
-		label_4.setBounds(177, 60, 15, 15);
-		toolkit.adapt(label_4, true, true);
-		
 		comboTimeFrom = new Combo(composite, SWT.READ_ONLY);
+		comboTimeFrom.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboTimeFrom.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -98,11 +90,27 @@ public class InputDateTimeComposite extends Composite {
 		});
 		comboTimeFrom.setEnabled(false);
 		comboTimeFrom.setItems(new String[] {"00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"});
-		comboTimeFrom.setBounds(205, 31, 91, 23);
 		toolkit.adapt(comboTimeFrom);
 		toolkit.paintBordersFor(comboTimeFrom);
 		
+		Label label_3 = new Label(composite, SWT.NONE);
+		label_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		label_3.setText("To:");
+		toolkit.adapt(label_3, true, true);
+		
+		dateTimeTo = new DateTime(composite, SWT.DROP_DOWN);
+		dateTimeTo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		dateTimeTo.setEnabled(false);
+		toolkit.adapt(dateTimeTo);
+		toolkit.paintBordersFor(dateTimeTo);
+		
+		Label label_4 = new Label(composite, SWT.NONE);
+		label_4.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		label_4.setText("at");
+		toolkit.adapt(label_4, true, true);
+		
 		comboTimeTo = new Combo(composite, SWT.READ_ONLY);
+		comboTimeTo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboTimeTo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -111,9 +119,16 @@ public class InputDateTimeComposite extends Composite {
 		});
 		comboTimeTo.setEnabled(false);
 		comboTimeTo.setItems(new String[] {"00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"});
-		comboTimeTo.setBounds(205, 61, 91, 23);
 		toolkit.adapt(comboTimeTo);
 		toolkit.paintBordersFor(comboTimeTo);
+		
+		Label label = new Label(this, SWT.NONE);
+		FormData fd_label = new FormData();
+		fd_label.top = new FormAttachment(0);
+		fd_label.left = new FormAttachment(0, 5);
+		label.setLayoutData(fd_label);
+		label.setText("Preferred Time Slot:");
+		toolkit.adapt(label, true, true);
 	}
 	
 	/**
