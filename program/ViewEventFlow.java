@@ -62,8 +62,13 @@ public class ViewEventFlow extends Composite {
 	
 	private Eventitem eventObj;
 	private Vector<EventFlowEntry> listEventFlow;
+	private Vector<EventFlowEntry> filterList;
+	private Vector<Integer> filterIndices;
 	private Text textFilePath;
-
+	private Text importTextFilePath;
+	private Button btnFilter;
+	private Text textSave;
+	private boolean isEntireListShowed;		// True if the table displays the whole list. False otherwise.
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -80,6 +85,7 @@ public class ViewEventFlow extends Composite {
 		// Initialize some variables 
 		eventObj = event;
 		listEventFlow = eventObj.getEventFlow();
+		isEntireListShowed = true;
 		
 		/////////////////////////////////////////////////////////////////////////////////////
 		/// 
@@ -104,7 +110,6 @@ public class ViewEventFlow extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 				
 		Form VenueViewForm = toolkit.createForm(this);
-		VenueViewForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		VenueViewForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		VenueViewForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		VenueViewForm.setBounds(0, 0, 700, 400);
@@ -124,7 +129,7 @@ public class ViewEventFlow extends Composite {
 		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
 		tableComposite.setLayout(tcl_tableComposite);
 		FormData fd_tableComposite = new FormData();
-		fd_tableComposite.bottom = new FormAttachment(80);
+		fd_tableComposite.bottom = new FormAttachment(80, -13);
 		fd_tableComposite.right = new FormAttachment(80);
 		fd_tableComposite.top = new FormAttachment(0, 10);
 		fd_tableComposite.left = new FormAttachment(5);
@@ -154,7 +159,23 @@ public class ViewEventFlow extends Composite {
 						if(decision == 1)
 						{
 							// Delete the entry
-							listEventFlow.remove(chosenIndex);
+							if(isEntireListShowed == true)
+								listEventFlow.remove(chosenIndex);
+							else
+							{
+								listEventFlow.remove((int) filterIndices.get(chosenIndex));
+								
+								// Delete in the filter list as well as update new indices
+								int wholeTableIndex = filterIndices.get(chosenIndex);
+								filterList.remove(chosenIndex);
+								filterIndices.remove(chosenIndex);
+								for(int index = 0; index < filterIndices.size(); index++)
+									if(filterIndices.get(index) > wholeTableIndex)
+									{
+										filterIndices.set(index, filterIndices.get(index) - 1);
+									}
+										
+							}
 							tableViewEventFlow.refresh();
 						}
 					}
@@ -243,10 +264,9 @@ public class ViewEventFlow extends Composite {
 		
 		Button btnReturnToEvent = new Button(mainComposite, SWT.NONE);
 		FormData fd_btnReturnToEvent = new FormData();
-		fd_btnReturnToEvent.width = 100;
+		fd_btnReturnToEvent.right = new FormAttachment(100, -23);
 		fd_btnReturnToEvent.left = new FormAttachment(tableComposite, 10);
-
-		fd_btnReturnToEvent.right = new FormAttachment(95);
+		fd_btnReturnToEvent.width = 100;
 	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
 		btnReturnToEvent.setLayoutData(fd_btnReturnToEvent);
 		btnReturnToEvent.addSelectionListener(new SelectionAdapter() {
@@ -266,7 +286,7 @@ public class ViewEventFlow extends Composite {
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
 		fd_btnReturnToEvent.top = new FormAttachment(btnAdd, 10);
 		FormData fd_btnAdd = new FormData();
-		fd_btnAdd.right = new FormAttachment(95);
+		fd_btnAdd.right = new FormAttachment(100, -23);
 		fd_btnAdd.left = new FormAttachment(tableComposite, 10);
 		fd_btnAdd.width = 100;
 		fd_btnAdd.top = new FormAttachment(0, 10);
@@ -283,7 +303,13 @@ public class ViewEventFlow extends Composite {
 				if(newEntry != null)
 				{
 					ControllerEventFlow.insertSortedList(listEventFlow, newEntry);
+					// Show the whole list again.
+					tableViewEventFlow.setInput(listEventFlow);
 					tableViewEventFlow.refresh();
+					
+					btnFilter.setText("Filter");
+					
+					isEntireListShowed = true;
 				}
 			}
 		});
@@ -292,9 +318,8 @@ public class ViewEventFlow extends Composite {
 		
 		Composite composite = new Composite(mainComposite, SWT.NONE);
 		FormData fd_composite = new FormData();
-		fd_composite.top = new FormAttachment(tableComposite, 10);
-		fd_composite.right = new FormAttachment(80, 5);
-		fd_composite.left = new FormAttachment(5, -5);
+		fd_composite.left = new FormAttachment(tableComposite, 0, SWT.LEFT);
+		fd_composite.right = new FormAttachment(80, 10);
 		composite.setLayoutData(fd_composite);
 		toolkit.adapt(composite);
 		toolkit.paintBordersFor(composite);
@@ -322,7 +347,7 @@ public class ViewEventFlow extends Composite {
 				String filePath = fileDialog.open();
 				if (filePath != null) 
 				{
-					if (filePath.toLowerCase().endsWith(".csv") == false);
+					if (filePath.toLowerCase().endsWith(".csv") == false)
 						filePath += ".csv";
 					textFilePath.setText(filePath);
 				}
@@ -392,20 +417,20 @@ public class ViewEventFlow extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				// Update in the database
 				ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
+				
+				showSaveStatus();
 			}
 		});
 		btnNewButton.setSelection(true);
 		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.width = 100;
-		fd_btnNewButton.right = new FormAttachment(btnReturnToEvent, 0, SWT.RIGHT);
-		fd_btnNewButton.top = new FormAttachment(btnReturnToEvent, 11);
+		fd_btnNewButton.right = new FormAttachment(100, -23);
 		fd_btnNewButton.left = new FormAttachment(tableComposite, 10);
+		fd_btnNewButton.top = new FormAttachment(btnReturnToEvent, 11);
+		fd_btnNewButton.width = 100;
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		toolkit.adapt(btnNewButton, true, true);
 		btnNewButton.setText("Save");
-		
-
-		
+				
 /*		tableViewEventFlow = new TableViewer(mainComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableEventFlow = tableViewEventFlow.getTable();
 		FormData fd_tableEventFlow = new FormData();
@@ -415,7 +440,194 @@ public class ViewEventFlow extends Composite {
 		fd_tableEventFlow.left = new FormAttachment(5);
 		tableEventFlow.setLayoutData(fd_tableEventFlow);*/
 	
-			
+		Composite composite_1 = new Composite(mainComposite, SWT.NONE);
+		fd_composite.bottom = new FormAttachment(composite_1, -6);
+		composite_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		composite_1.setLayout(new GridLayout(4, false));
+		FormData fd_composite_1 = new FormData();
+		fd_composite_1.bottom = new FormAttachment(100);
+		fd_composite_1.left = new FormAttachment(tableComposite, 0, SWT.LEFT);
+		fd_composite_1.right = new FormAttachment(100, -120);
+		composite_1.setLayoutData(fd_composite_1);
+		toolkit.adapt(composite_1);
+		toolkit.paintBordersFor(composite_1);
+		
+		Label lblInput = new Label(composite_1, SWT.NONE);
+		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblInput.setText("Input file:");
+		lblInput.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		toolkit.adapt(lblInput, true, true);
+		
+		importTextFilePath = new Text(composite_1, SWT.BORDER);
+		importTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		toolkit.adapt(importTextFilePath, true, true);
+		
+		Button button = new Button(composite_1, SWT.NONE);
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fileDialog = new FileDialog(new Shell());
+				String[] extension = {"*.csv"};
+				fileDialog.setFilterExtensions(extension);
+				
+				String filePath = fileDialog.open();
+				if(filePath != null)
+					importTextFilePath.setText(filePath);
+			}
+		});
+		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_button.widthHint = 60;
+		button.setLayoutData(gd_button);
+		button.setText("Browse");
+		button.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		toolkit.adapt(button, true, true);
+		
+		Button btnImport = new Button(composite_1, SWT.NONE);
+		btnImport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try
+				{
+					boolean overwrite = false;
+					
+					if(listEventFlow.isEmpty() == false)
+					{
+						TwoChoiceDialog message = new TwoChoiceDialog(new Shell(), "Message",
+								"Do you want to append the existing list or overwrite it?", 
+								"Append", "Overwrite");
+						String decision = (String) message.open();
+						if(decision.equals("Append") == true)
+							overwrite = false;
+						else
+							overwrite = true;
+					}
+					
+					Vector<EventFlowEntry> newList = importCSVFile(importTextFilePath.getText());	
+				}
+				catch(Exception exception)
+				{
+					errormessageDialog errorBoard = new errormessageDialog(new Shell(), 
+							"There was an error importing the file.");
+					errorBoard.open();
+				}
+			}
+		});
+		GridData gd_btnImport = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnImport.widthHint = 60;
+		btnImport.setLayoutData(gd_btnImport);
+		btnImport.setText("Import");
+		btnImport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		toolkit.adapt(btnImport, true, true);	
+		
+		btnFilter = new Button(mainComposite, SWT.NONE);
+		btnFilter.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try
+				{
+					if(btnFilter.getText().equals("Filter") == true)
+					{
+						InputFilterDialog filterDialog = new InputFilterDialog(new Shell(), SWT.NONE,
+								eventObj.getBVI_list());
+						String[] outputStr = (String []) filterDialog.open();
+						
+						if(outputStr == null)
+							return;			// Nothing to do.
+						// Check if all elements in outputStr are null
+						boolean allNull = true;
+						for(int index = 0; index < 4; index++)
+							if(outputStr[index] != null)
+							{
+								allNull = false;
+								break;
+							}
+						if(allNull == true)
+							return;
+						
+						// Filter by time slot first
+						Vector<Integer> indexVector = new Vector<Integer>();
+						if(outputStr[0] != null && outputStr[1] != null)
+						{
+							TimeSlot inputTimeSlot = new TimeSlot(new MyDateTime(outputStr[0]),
+									new MyDateTime(outputStr[1]));
+							indexVector = ControllerEventFlow.filterByTimeSlot(listEventFlow, inputTimeSlot);
+						}
+						
+						// Next, filter by activity name
+						if(outputStr[2] != null)
+						{
+							if(indexVector.isEmpty() == true)
+								indexVector = ControllerEventFlow.filterByActivityName(listEventFlow, outputStr[2]);
+							else
+								// If after filtering by time slot, we have some candidates. Then we filter
+								// in the result of the first step.s
+								indexVector = ControllerEventFlow.filterByActivityName(listEventFlow, 
+										indexVector, outputStr[2]);
+						}
+						
+						// Finally, filter by venue ID.
+						if(outputStr[3] != null)
+						{
+							int venueID = Integer.parseInt(outputStr[3]);
+							if(indexVector.isEmpty() == true)
+								indexVector = ControllerEventFlow.filterByVenue(listEventFlow, venueID);
+							else
+								indexVector = ControllerEventFlow.filterByVenue(listEventFlow, indexVector, venueID);
+						}
+						
+						filterIndices = indexVector;
+						filterList = ControllerEventFlow.selectEntry(listEventFlow, filterIndices);
+						
+						if(filterList.isEmpty() == true)
+						{
+							errormessageDialog errorBoard = new errormessageDialog(new Shell(), "Message",
+									"There is no result satisfying your criteria");
+							errorBoard.open();
+						}
+						else
+						{
+							// Show the result
+							tableViewEventFlow.setInput(filterList);
+							tableViewEventFlow.refresh();
+							btnFilter.setText("Show All");
+							
+							isEntireListShowed = false;
+						}
+					}
+					else
+					{
+						// The option is "Show All"
+						tableViewEventFlow.setInput(listEventFlow);
+						tableViewEventFlow.refresh();
+						btnFilter.setText("Filter");
+						
+						isEntireListShowed = true;
+					}
+				}
+				catch(Exception exception)
+				{
+					errormessageDialog errorBoard = new errormessageDialog(new Shell(), exception.getMessage());
+					errorBoard.open();
+				}
+			}
+		});
+		FormData fd_btnFilter = new FormData();
+		fd_btnFilter.right = new FormAttachment(btnReturnToEvent, 0, SWT.RIGHT);
+		fd_btnFilter.top = new FormAttachment(btnNewButton, 13);
+		fd_btnFilter.left = new FormAttachment(btnReturnToEvent, 0, SWT.LEFT);
+		btnFilter.setLayoutData(fd_btnFilter);
+		toolkit.adapt(btnFilter, true, true);
+		btnFilter.setText("Filter");
+		
+		textSave = new Text(mainComposite, SWT.READ_ONLY | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
+		textSave.setText("The list is not saved.");
+		FormData fd_textSave = new FormData();
+		fd_textSave.bottom = new FormAttachment(btnFilter, 86, SWT.BOTTOM);
+		fd_textSave.right = new FormAttachment(btnReturnToEvent, 23, SWT.RIGHT);
+		fd_textSave.top = new FormAttachment(btnFilter, 29);
+		fd_textSave.left = new FormAttachment(btnReturnToEvent, 0, SWT.LEFT);
+		textSave.setLayoutData(fd_textSave);
+		toolkit.adapt(textSave, true, true);
 			
 
 
@@ -430,7 +642,11 @@ public class ViewEventFlow extends Composite {
 		int chosenIndex = tableEventFlow.getSelectionIndex();
 		if(chosenIndex >= 0)
 		{
-			EventFlowEntry chosenEntry = listEventFlow.get(chosenIndex);
+			EventFlowEntry chosenEntry = null;		// Dummy value
+			if(isEntireListShowed == true)
+				chosenEntry = listEventFlow.get(chosenIndex);
+			else
+				chosenEntry = filterList.get(chosenIndex);
 			
 			InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(),
 					chosenEntry, eventObj.getBVI_list());
@@ -439,11 +655,41 @@ public class ViewEventFlow extends Composite {
 			// There may be modification in the chosen EventFlowEntry object
 			if(newEntry != null)
 			{
-				listEventFlow.remove(chosenIndex);
+				// First determine which list is displayed on the table (the whole list or filtered list)
+				if(isEntireListShowed == true)
+				{
+					listEventFlow.remove(chosenIndex);
+					System.out.println("chosenIndex = " + chosenIndex);
+				}
+				else
+				{
+					listEventFlow.remove((int) filterIndices.get(chosenIndex));
+					for(int i = 0; i < listEventFlow.size(); i++)
+						System.out.println(listEventFlow.get(i).getActivityName());
+					System.out.println("delete at index = " + filterIndices.get(chosenIndex));
+				}
 				ControllerEventFlow.insertSortedList(listEventFlow, newEntry);
+				
+				// Show the whole list again
+				tableViewEventFlow.setInput(listEventFlow);
 				tableViewEventFlow.refresh();
+				
+				btnFilter.setText("Filter");
+				
+				isEntireListShowed = true;
 			}
 		}
+	}
+	
+	/**
+	 * This method is to update the last time the user saves his list.
+	 */
+	private void showSaveStatus()
+	{
+		MyDateTime currentTime = MyDateTime.getCurrentDateTime();
+		
+		textSave.setText("Last saved by " + currentTime.getDateRepresentation() + " " + 
+				currentTime.getTimeRepresentation());
 	}
 	
 	public static void main(String[] args)
