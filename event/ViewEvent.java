@@ -508,9 +508,9 @@ public class ViewEvent extends Composite {
 					// TODO Auto-generated catch block
 					System.out.println("Error exporting");
 					new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
-					ex.printStackTrace();
-				} catch(Exception ex) {
-					new errormessageDialog(new Shell(), "There is nothing to export.").open();
+					//ex.printStackTrace();
+				} catch(NullPointerException ex) {
+					//User close the file browser with cancel button or 'X' button.
 				}
 		}
 	});
@@ -1233,8 +1233,6 @@ public void ExportCSV (String filepath, Table inputTable, CSVWriter writer) {
 
 
 		Table processingTable = inputTable;
-		System.out.println("LAI2:" + processingTable.getColumnCount());
-		System.out.println("LAI:" + processingTable.getItemCount());
 		/*
 		 * Booked Venue
 		 */
