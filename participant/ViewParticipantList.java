@@ -104,40 +104,39 @@ public class ViewParticipantList extends Composite {
 			tvc[i].getColumn().pack();
 		}
 		
-//		if (!cevent.getParticipantList().isEmpty()) {
-			tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-			for (int i=0; i<HEADERS.length; i++) {
-				tvc[i].setLabelProvider(new ColumnLabelProvider() {
-					public String getText(Object element)
-					{
-						if (index == HEADERS.length)
-							index = 0;						
-						Participant parti = (Participant) element;
-						switch (index)	{
-							case 0:
-								index++;
-								return parti.getName();
-							case 1:
-								index++;
-								return parti.getMatric();
-							case 2:
-								index++;
-								return parti.getContact();
-							case 3:
-								index++;
-								return parti.getEmail();
-							case 4:
-								index++;
-								return parti.getAddress();
-							case 5:
-								index++;
-								return parti.getRemark();
-							default:
-								return null;
-						}
+		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+		for (int i=0; i<HEADERS.length; i++) {
+			tvc[i].setLabelProvider(new ColumnLabelProvider() {
+				public String getText(Object element)
+				{
+					if (index == HEADERS.length)
+						index = 0;						
+					Participant parti = (Participant) element;
+					switch (index)	{
+						case 0:
+							index++;
+							return parti.getName();
+						case 1:
+							index++;
+							return parti.getMatric();
+						case 2:
+							index++;
+							return parti.getContact();
+						case 3:
+							index++;
+							return parti.getEmail();
+						case 4:
+							index++;
+							return parti.getAddress();
+						case 5:
+							index++;
+							return parti.getRemark();
+						default:
+							return null;
 					}
-				});
-			}
+				}
+			});
+		}
 
 			tableViewer.setInput(tempEntries);
 			for (int i=0; i<HEADERS.length; i++)

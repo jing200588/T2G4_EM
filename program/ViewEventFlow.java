@@ -242,9 +242,10 @@ public class ViewEventFlow extends Composite {
 		
 		Button btnReturnToEvent = new Button(mainComposite, SWT.NONE);
 		FormData fd_btnReturnToEvent = new FormData();
+		fd_btnReturnToEvent.width = 100;
 		fd_btnReturnToEvent.left = new FormAttachment(tableComposite, 10);
 
-		fd_btnReturnToEvent.right = new FormAttachment(95, 10);
+		fd_btnReturnToEvent.right = new FormAttachment(95);
 	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
 		btnReturnToEvent.setLayoutData(fd_btnReturnToEvent);
 		btnReturnToEvent.addSelectionListener(new SelectionAdapter() {
@@ -264,6 +265,7 @@ public class ViewEventFlow extends Composite {
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
 		fd_btnReturnToEvent.top = new FormAttachment(btnAdd, 10);
 		FormData fd_btnAdd = new FormData();
+		fd_btnAdd.right = new FormAttachment(95);
 		fd_btnAdd.left = new FormAttachment(tableComposite, 10);
 		fd_btnAdd.width = 100;
 		fd_btnAdd.top = new FormAttachment(0, 10);
@@ -393,9 +395,10 @@ public class ViewEventFlow extends Composite {
 		});
 		btnNewButton.setSelection(true);
 		FormData fd_btnNewButton = new FormData();
+		fd_btnNewButton.width = 100;
 		fd_btnNewButton.right = new FormAttachment(btnReturnToEvent, 0, SWT.RIGHT);
 		fd_btnNewButton.top = new FormAttachment(btnReturnToEvent, 11);
-		fd_btnNewButton.left = new FormAttachment(tableEventFlow, 10);
+		fd_btnNewButton.left = new FormAttachment(tableComposite, 10);
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		toolkit.adapt(btnNewButton, true, true);
 		btnNewButton.setText("Save");
