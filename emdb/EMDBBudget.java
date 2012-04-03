@@ -285,19 +285,19 @@ public class EMDBBudget extends EMDBBase{
 		if (aTableType.compareTo("optimized") == 0){
 				sql = new InsertQuery(this.optBudgetTable)
 							.addColumn(this.optBudgetEventID, aEventID)
-							.addColumn(this.optBudgetName, aName)
+							.addColumn(this.optBudgetName, aName.replaceAll("[\']", ""))
 							.addColumn(this.optBudgetPrice, aPrice)
 							.addColumn(this.optBudgetSatisfaction, aSatisfaction)
-							.addColumn(this.optBudgetType, aType)
+							.addColumn(this.optBudgetType, aType.replaceAll("[\']", ""))
 							.addColumn(this.optBudgetQuantity, aQuantity)
 							.validate().toString();
 		}else{
 				sql = new InsertQuery(this.budgetTable)
 							.addColumn(this.budgetEventID, aEventID)
-							.addColumn(this.budgetName, aName)
+							.addColumn(this.budgetName, aName.replaceAll("[\']", ""))
 							.addColumn(this.budgetPrice, aPrice)
 							.addColumn(this.budgetSatisfaction, aSatisfaction)
-							.addColumn(this.budgetType, aType)
+							.addColumn(this.budgetType, aType.replaceAll("[\']", ""))
 							.addColumn(this.budgetQuantity, aQuantity)
 							.validate().toString();
 		}
@@ -377,19 +377,19 @@ public class EMDBBudget extends EMDBBase{
 			if (aTableType.compareTo("optimized") == 0){
 					sql = new InsertQuery(this.optBudgetTable)
 								.addColumn(this.optBudgetEventID, aEventID)
-								.addColumn(this.optBudgetName, current.getItem())
+								.addColumn(this.optBudgetName, current.getItem().replaceAll("[\']", ""))
 								.addColumn(this.optBudgetPrice, current.getPrice())
 								.addColumn(this.optBudgetSatisfaction, current.getSatisfactionValue())
-								.addColumn(this.optBudgetType, current.getType())
+								.addColumn(this.optBudgetType, current.getType().replaceAll("[\']", ""))
 								.addColumn(this.optBudgetQuantity, current.getQuantity())
 								.validate().toString();
 			}else{
 					sql = new InsertQuery(this.budgetTable)
 								.addColumn(this.budgetEventID, aEventID)
-								.addColumn(this.budgetName, current.getItem())
+								.addColumn(this.budgetName, current.getItem().replaceAll("[\']", ""))
 								.addColumn(this.budgetPrice, current.getPrice())
 								.addColumn(this.budgetSatisfaction, current.getSatisfactionValue())
-								.addColumn(this.budgetType, current.getType())
+								.addColumn(this.budgetType, current.getType().replaceAll("[\']", ""))
 								.addColumn(this.budgetQuantity, current.getQuantity())
 								.validate().toString();
 			}
@@ -575,19 +575,19 @@ public class EMDBBudget extends EMDBBase{
 
 		if (aTableType.compareTo("optimized") == 0){
 				sql = new UpdateQuery(this.optBudgetTable)
-							.addSetClause(this.optBudgetName, aName)
+							.addSetClause(this.optBudgetName, aName.replaceAll("[\']", ""))
 							.addSetClause(this.optBudgetPrice, aPrice)
 							.addSetClause(this.optBudgetSatisfaction, aSatisfaction)
-							.addSetClause(this.optBudgetType, aType)
+							.addSetClause(this.optBudgetType, aType.replaceAll("[\']", ""))
 							.addSetClause(this.optBudgetQuantity, aQuantity)
 							.addCondition(BinaryCondition.equalTo(this.optBudgetID, aBudgetID))
 							.validate().toString();
 		}else{
 				sql = new UpdateQuery(this.budgetTable)
-							.addSetClause(this.budgetName, aName)
+							.addSetClause(this.budgetName, aName.replaceAll("[\']", ""))
 							.addSetClause(this.budgetPrice, aPrice)
 							.addSetClause(this.budgetSatisfaction, aSatisfaction)
-							.addSetClause(this.budgetType, aType)
+							.addSetClause(this.budgetType, aType.replaceAll("[\']", ""))
 							.addSetClause(this.budgetQuantity, aQuantity)
 							.addCondition(BinaryCondition.equalTo(this.budgetID, aBudgetID))
 							.validate().toString();

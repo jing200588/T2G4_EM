@@ -4,12 +4,8 @@ import java.io.File;
 import java.sql.*;
 import java.util.Vector;
 
-import com.healthmarketscience.sqlbuilder.BinaryCondition;
-import com.healthmarketscience.sqlbuilder.ComboCondition;
-import com.healthmarketscience.sqlbuilder.CreateTableQuery;
-import com.healthmarketscience.sqlbuilder.DropQuery;
-import com.healthmarketscience.sqlbuilder.SelectQuery;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 
 
 /**
@@ -132,7 +128,7 @@ public class EMDBBase{
 	 * @return
 	 */
 	public void connect(){
-		try {
+		try {			
 			this.dbCon = DriverManager.getConnection("jdbc:sqlite:"+dbName);
 			this.dbQuery = this.dbCon.createStatement();
 			
@@ -230,9 +226,15 @@ public class EMDBBase{
 		
 		if (this.dbDebug){
 			this.dMsg("RUNNING QUERY (NORMAL)");
+			try {
+				if(this.dbCon.isReadOnly()){
+					this.dMsg("Database LOCKED");
+				}
+			} catch (SQLException e) {}
 		}
 		
 		try {	
+			
 			Statement query = this.dbCon.createStatement();
 			query.executeQuery(aSql);
 			
@@ -253,10 +255,15 @@ public class EMDBBase{
 		
 		if (this.dbDebug){
 			this.dMsg("RUNNING QUERY (RESULTS)");
+			try {
+				if(this.dbCon.isReadOnly()){
+					this.dMsg("Database LOCKED");
+				}
+			} catch (SQLException e) {}
 		}
 		
 		try {	
-	
+			
 			PreparedStatement query = this.dbCon.prepareStatement(aSql, Statement.RETURN_GENERATED_KEYS);
 			query.execute();
 			ResultSet rs = query.getResultSet();
@@ -300,7 +307,6 @@ public class EMDBBase{
 		if (this.dbDebug){
 			this.dMsg("ADDING TO QUEUE");
 		}
-		
 		this.queue.add(aSql);
 	}
 	
@@ -316,15 +322,20 @@ public class EMDBBase{
 		
 		if (this.dbDebug){
 			this.dMsg("COMMIT ALL QUERIES");
+			try {
+				if(this.dbCon.isReadOnly()){
+					this.dMsg("Database LOCKED");
+				}
+			} catch (SQLException e) {}
 		}
 		
 		
 		try {
 
 			if(!this.queue.isEmpty()){
-							
-				this.connect();
-							
+				this.connect();	
+				this.dbQuery.setQueryTimeout(60);
+				
 				//insert all the batch queries.
 				int size = this.queue.size();
 				for (int i=0; i< size; i++){
@@ -339,7 +350,6 @@ public class EMDBBase{
 				//run the batch queries
 				this.dbCon.setAutoCommit(false);
 				this.dbQuery.executeBatch();
-				this.dbCon.commit();
 				this.dbCon.setAutoCommit(true);
 
 				//DC and clear the temp vector queue.

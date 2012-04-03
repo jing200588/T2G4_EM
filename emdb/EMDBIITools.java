@@ -196,30 +196,28 @@ public class EMDBIITools {
 	
 	
 	public static void populateVenues(EMDBII db){
-		db.venueDB().addVenue("DR1 (COM1-B-14B)", "", "", 6, 1000);
-		db.venueDB().addVenue("DR2 (COM1-B-14A)", "", "", 6, 1200);
-		db.venueDB().addVenue("DR3 (COM1-B-07)", "", "", 5, 1000);
-		db.venueDB().addVenue("DR4 (COM1-B-06)", "", "", 5, 1951);
-		db.venueDB().addVenue("DR5 (ICUBE-03-18)", "", "", 8, 1639);
-		db.venueDB().addVenue("DR6 (COM2-02-12)", "", "", 8, 4754);
-		db.venueDB().addVenue("DR7 (COM2-03-14)", "", "", 8, 35);
-		db.venueDB().addVenue("DR8 (COM2-03-15)", "", "", 8, 325);
-		db.venueDB().addVenue("DR9 (COM2-04-06)", "", "", 8, 72);
-		db.venueDB().addVenue("DR10 (COM2-02-24)", "", "", 8, 963);
-		db.venueDB().addVenue("DR11 (COM2-02-23)", "", "", 8, 43);
-		db.venueDB().addVenue("Executive Classroom (COM2-04-02)", "", "", 25, 10000);
-		db.venueDB().addVenue("MR1 (COM1-03-19)", "", "", 7, 48);
-		db.venueDB().addVenue("MR2 (COM1-03-28)", "", "", 7, 753);
-		db.venueDB().addVenue("MR3 (COM2-02-26)", "", "", 7, 2625);
-		db.venueDB().addVenue("MR4 (COM1-01-22)", "", "", 7, 2452);
-		db.venueDB().addVenue("MR5 (COM1-01-18)", "", "", 7, 25);
-		db.venueDB().addVenue("MR6 (AS6-05-10)", "", "", 8, 436);
-		db.venueDB().addVenue("MR7 (ICUBE-03-01)", "", "", 12, 425);
-		db.venueDB().addVenue("MR8 (ICUBE-03-48)", "", "", 12, 234);
-		db.venueDB().addVenue("MR9 (ICUBE-03-49)", "", "", 12, 242);
-		db.venueDB().addVenue("Video Conferencing Room (COM1-02-13)", "", "", 30, 15000);
-		
-		db.clearConnections();
+		db.venueDB().addVenue("DR1", "COM1-B-14B", "Discussion Room 1", 6, 1000);
+		db.venueDB().addVenue("DR2", "COM1-B-14A", "Discussion Room 2", 6, 1200);
+		db.venueDB().addVenue("DR3", "COM1-B-07", "Discussion Room 3", 5, 1000);
+		db.venueDB().addVenue("DR4", "COM1-B-06", "Discussion Room 4", 5, 1951);
+		db.venueDB().addVenue("DR5", "ICUBE-03-18", "Discussion Room 5", 8, 1639);
+		db.venueDB().addVenue("DR6", "COM2-02-12", "Discussion Room 6", 8, 4754);
+		db.venueDB().addVenue("DR7", "COM2-03-14", "Discussion Room 7", 8, 35);
+		db.venueDB().addVenue("DR8", "COM2-03-15", "Discussion Room 8", 8, 325);
+		db.venueDB().addVenue("DR9", "COM2-04-06", "Discussion Room 9", 8, 72);
+		db.venueDB().addVenue("DR10", "COM2-02-24", "Discussion Room 10", 8, 963);
+		db.venueDB().addVenue("DR11", "COM2-02-23", "Discussion Room 11", 8, 43);
+		db.venueDB().addVenue("Executive Classroom", "COM2-04-02", "EC Room", 25, 10000);
+		db.venueDB().addVenue("MR1", "COM1-03-19", "Meeting Room 1", 7, 48);
+		db.venueDB().addVenue("MR2", "COM1-03-28", "Meeting Room 2", 7, 753);
+		db.venueDB().addVenue("MR3", "COM2-02-26", "Meeting Room 3", 7, 2625);
+		db.venueDB().addVenue("MR4", "COM1-01-22", "Meeting Room 4", 7, 2452);
+		db.venueDB().addVenue("MR5", "COM1-01-18", "Meeting Room 5", 7, 25);
+		db.venueDB().addVenue("MR6", "AS6-05-10", "Meeting Room 6", 8, 436);
+		db.venueDB().addVenue("MR7", "ICUBE-03-01", "Meeting Room 7", 12, 425);
+		db.venueDB().addVenue("MR8", "ICUBE-03-48", "Meeting Room 8", 12, 234);
+		db.venueDB().addVenue("MR9", "ICUBE-03-49", "Meeting Room 9", 12, 242);
+		db.venueDB().addVenue("Video Conferencing Room", "COM1-02-13", "VC Room", 30, 15000);
 		
 		db.clearConnections();
 	}

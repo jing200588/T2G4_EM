@@ -188,19 +188,19 @@ public class EMDBParticipant extends EMDBBase{
 		
 		if (!list.isEmpty()){
 			int size = list.size();
-			
+			this.connect();
 			for (int i=0; i< size; i++){
 				
 				Participant row = list.get(i);
 				
 				sql = new InsertQuery(this.participantTable)
 							.addColumn(this.participantEventID, aEventID)
-							.addColumn(this.participantName, row.getName())
-							.addColumn(this.participantContact, row.getContact())
-							.addColumn(this.participantEmail, row.getEmail())
-							.addColumn(this.participantAddress, row.getAddress())
-							.addColumn(this.participantMatric, row.getMatric())
-							.addColumn(this.participantRemarks, row.getRemark())
+							.addColumn(this.participantName, row.getName().replaceAll("[\']", ""))
+							.addColumn(this.participantContact, row.getContact().replaceAll("[\']", ""))
+							.addColumn(this.participantEmail, row.getEmail().replaceAll("[\']", ""))
+							.addColumn(this.participantAddress, row.getAddress().replaceAll("[\']", ""))
+							.addColumn(this.participantMatric, row.getMatric().replaceAll("[\']", ""))
+							.addColumn(this.participantRemarks, row.getRemark().replaceAll("[\']", ""))
 							.validate().toString();
 				
 				
@@ -211,16 +211,17 @@ public class EMDBParticipant extends EMDBBase{
 				}
 				
 				this.queue(sql);
+				//this.runQuery(sql);
 				
 			}
-			
+			this.disconnect();
 			if (this.dbDebug){
 				this.dMsg("COMMIT PARICIPANT IN QUEUE");
 			}
 			
 			
 			int result = this.commit();
-			
+			//int result = 1;
 		
 		
 			return result;
