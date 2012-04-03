@@ -82,6 +82,7 @@ public class ModelEvent {
 			expired.get(i).addBVI(db.venueDB().getEventBookings(pid));	
 			expired.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(pid));
 			expired.get(i).setParticipantList(db.participantDB().getParticipantList(pid));
+			expired.get(i).setIsExpired(true);
 		}
 		
 		return expired;

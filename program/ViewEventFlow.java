@@ -23,6 +23,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.TableColumn;
@@ -40,6 +41,8 @@ import org.eclipse.swt.widgets.Text;
 import au.com.bytecode.opencsv.CSVWriter;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.ColumnPixelData;
 
 public class ViewEventFlow extends Composite {
 	
@@ -60,6 +63,7 @@ public class ViewEventFlow extends Composite {
 	private Eventitem eventObj;
 	private Vector<EventFlowEntry> listEventFlow;
 	private Text textFilePath;
+
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -115,14 +119,20 @@ public class ViewEventFlow extends Composite {
 		toolkit.paintBordersFor(mainComposite);
 		mainComposite.setLayout(new FormLayout());
 		
-		tableViewEventFlow = new TableViewer(mainComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		Composite tableComposite = new Composite(mainComposite, SWT.NONE);
+		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
+		tableComposite.setLayout(tcl_tableComposite);
+		FormData fd_tableComposite = new FormData();
+		fd_tableComposite.bottom = new FormAttachment(80);
+		fd_tableComposite.right = new FormAttachment(80);
+		fd_tableComposite.top = new FormAttachment(0, 10);
+		fd_tableComposite.left = new FormAttachment(5);
+		tableComposite.setLayoutData(fd_tableComposite);
+		toolkit.adapt(tableComposite);
+		toolkit.paintBordersFor(tableComposite);
+		
+		tableViewEventFlow = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableEventFlow = tableViewEventFlow.getTable();
-		FormData fd_tableEventFlow = new FormData();
-		fd_tableEventFlow.bottom = new FormAttachment(80);
-		fd_tableEventFlow.right = new FormAttachment(80);
-		fd_tableEventFlow.top = new FormAttachment(0, 10);
-		fd_tableEventFlow.left = new FormAttachment(5);
-		tableEventFlow.setLayoutData(fd_tableEventFlow);
 		tableEventFlow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -157,15 +167,16 @@ public class ViewEventFlow extends Composite {
 				}
 			}
 		}); 
-	
+		
 		tableEventFlow.setTouchEnabled(true);
 		tableEventFlow.setLinesVisible(true);
 		tableEventFlow.setHeaderVisible(true);
 		tableViewEventFlow.setContentProvider(ArrayContentProvider.getInstance());
+		toolkit.paintBordersFor(tableEventFlow);
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColStartDateTime = tableViewerColumn_4.getColumn();
-		ColStartDateTime.setWidth(100);
+		tcl_tableComposite.setColumnData(ColStartDateTime, new ColumnWeightData(30));
 		ColStartDateTime.setText(STARTDATETIME);
 		tableViewerColumn_4.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -178,7 +189,7 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColEndDateTime = tableViewerColumn_3.getColumn();
-		ColEndDateTime.setWidth(100);
+		tcl_tableComposite.setColumnData(ColEndDateTime, new ColumnPixelData(100, true, true));
 		ColEndDateTime.setText(ENDDATETIME);
 		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -191,7 +202,7 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColActivity = tableViewerColumn_2.getColumn();
-		ColActivity.setWidth(100);
+		tcl_tableComposite.setColumnData(ColActivity, new ColumnPixelData(100, true, true));
 		ColActivity.setText(ACTIVITY);
 		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -203,7 +214,7 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColVenue = tableViewerColumn_1.getColumn();
-		ColVenue.setWidth(100);
+		tcl_tableComposite.setColumnData(ColVenue, new ColumnPixelData(100, true, true));
 		ColVenue.setText(VENUE);
 		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -215,7 +226,7 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColNote = tableViewerColumn.getColumn();
-		ColNote.setWidth(100);
+		tcl_tableComposite.setColumnData(ColNote, new ColumnPixelData(100, true, true));
 		ColNote.setText(NOTE);
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -227,7 +238,7 @@ public class ViewEventFlow extends Composite {
 		
 		Button btnReturnToEvent = new Button(mainComposite, SWT.NONE);
 		FormData fd_btnReturnToEvent = new FormData();
-		fd_btnReturnToEvent.left = new FormAttachment(tableEventFlow, 10);
+		fd_btnReturnToEvent.left = new FormAttachment(tableComposite, 10);
 
 		fd_btnReturnToEvent.right = new FormAttachment(95);
 	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
@@ -248,7 +259,7 @@ public class ViewEventFlow extends Composite {
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
 		FormData fd_btnAdd = new FormData();
-		fd_btnAdd.left = new FormAttachment(tableEventFlow, 10);
+		fd_btnAdd.left = new FormAttachment(tableComposite, 10);
 		fd_btnAdd.width = 100;
 		fd_btnAdd.right = new FormAttachment(95);
 		fd_btnAdd.top = new FormAttachment(0, 10);
@@ -275,8 +286,8 @@ public class ViewEventFlow extends Composite {
 		
 		Composite composite = new Composite(mainComposite, SWT.NONE);
 		FormData fd_composite = new FormData();
+		fd_composite.top = new FormAttachment(tableComposite, 10);
 		fd_composite.right = new FormAttachment(80, 5);
-		fd_composite.top = new FormAttachment(tableEventFlow, 10);
 		fd_composite.left = new FormAttachment(5, -5);
 		composite.setLayoutData(fd_composite);
 		toolkit.adapt(composite);
@@ -379,12 +390,27 @@ public class ViewEventFlow extends Composite {
 		});
 		btnNewButton.setSelection(true);
 		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.left = new FormAttachment(tableEventFlow, 10);
+		fd_btnNewButton.left = new FormAttachment(tableComposite, 10);
 		fd_btnNewButton.top = new FormAttachment(btnReturnToEvent, 11);
 		fd_btnNewButton.right = new FormAttachment(95);
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		toolkit.adapt(btnNewButton, true, true);
 		btnNewButton.setText("Save");
+		
+
+		
+/*		tableViewEventFlow = new TableViewer(mainComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		tableEventFlow = tableViewEventFlow.getTable();
+		FormData fd_tableEventFlow = new FormData();
+		fd_tableEventFlow.bottom = new FormAttachment(80);
+		fd_tableEventFlow.right = new FormAttachment(80);
+		fd_tableEventFlow.top = new FormAttachment(0, 10);
+		fd_tableEventFlow.left = new FormAttachment(5);
+		tableEventFlow.setLayoutData(fd_tableEventFlow);*/
+	
+			
+			
+
 
 	
 	}

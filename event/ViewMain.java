@@ -16,8 +16,6 @@ import venue.*;
 
 import com.ibm.icu.text.Collator;
 
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -54,8 +52,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.DateTime;
@@ -76,7 +72,7 @@ public class ViewMain extends ApplicationWindow {
 	private Composite maincomposite;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Composite c1;
-	private static Table table;
+	private static Table EventListTable;
 	private static Composite c2;
 	private static Vector<Eventitem> eventlist;
 	private static StackLayout layout = new StackLayout();
@@ -87,14 +83,10 @@ public class ViewMain extends ApplicationWindow {
     private static ViewEvent view;
     private static ViewHomepage hp;
     private static EMDBII db;
-  //  private static boolean vBarOn;
-    private static TableColumn tc1, tc2, tc3;
-    private static TableColumn etc1, etc2, etc3;
-    private static Table table_1;
+    private static TableColumn tc1, tc2;
+    private static TableColumn etc1, etc2;
+    private static Table ExpiredTable;
     private static Vector<Eventitem> expiredlist;
-  //  private static int tc2vBarOnWidth, tc2vBarOffWidth;
-  //  private static int firstruncheck = 0;
-    
     private final EMSService server;
     
 	/**
@@ -137,22 +129,8 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Deletes the selected item from the table and set the current page to Homepage by calling Homepage()
 	 */
 	public static void DeleteItem() {
-		table.remove(table.getSelectionIndices());
+		EventListTable.remove(EventListTable.getSelectionIndices());
 		Homepage();
-/*		
-        if (vBarOn && tc2.getWidth() != tc2vBarOnWidth) {
-        	System.out.println("running");
-        	tc1.setWidth(tc1.getWidth());
-        	tc2.setWidth(tc2.getWidth() -30);
-        	tc3.setWidth(tc2.getWidth() -30);
-        }
-        
-        else if (!vBarOn && tc2.getWidth() != tc2vBarOffWidth) {
-      	  	tc1.setWidth(tc1.getWidth());
-      	  	tc2.setWidth(tc2.getWidth() +30);
-      	  	tc3.setWidth(tc2.getWidth() +30);
-      }
-  */      
 	}
 	
 	/************************************************************
@@ -166,12 +144,12 @@ public class ViewMain extends ApplicationWindow {
 
 		TableItem item;
 		int i;
-		if (table.getItemCount() == 0)	//adds whole vector if table empty 
+		if (EventListTable.getItemCount() == 0)	//adds whole vector if table empty 
 			i=0;
 		
-		else if (table.getItemCount() == eventlist.size()) {						//updates vector list (done when returning view)
-			item = table.getItem(table.getSelectionIndex());						//Gets current selected row in table
-			item.setText(0, eventlist.get(table.getSelectionIndex()).getName());	//Replace the String with new updated string 
+		else if (EventListTable.getItemCount() == eventlist.size()) {						//updates vector list (done when returning view)
+			item = EventListTable.getItem(EventListTable.getSelectionIndex());						//Gets current selected row in table
+			item.setText(0, eventlist.get(EventListTable.getSelectionIndex()).getName());	//Replace the String with new updated string 
 			layout.topControl = view;
 			c2.layout(true);
 			return;
@@ -180,29 +158,10 @@ public class ViewMain extends ApplicationWindow {
 			i = eventlist.size()-1;		//add the last item into table
 		
 		for (; i<eventlist.size(); i++) {			
-			item = new TableItem(table,SWT.NONE);
+			item = new TableItem(EventListTable,SWT.NONE);
 			item.setText(eventlist.get(i).getName());
 			item.setText(1,eventlist.get(i).getStartDateTime().getDateRepresentation());
-/*			item.setText(1, "5");
-			item.setBackground(1, red);
-	    	item.setText(2, "X");
-	    	item.setBackground(2,blue);
-	    	*/
 		}
-		/*
-        if (vBarOn && tc2.getWidth() != tc2vBarOnWidth) {
-        	System.out.println("running");
-        	tc1.setWidth(tc1.getWidth());
-        	tc2.setWidth(tc2.getWidth() -30);
-        	tc3.setWidth(tc2.getWidth() -30);
-        }
-        
-        else if (!vBarOn && tc2.getWidth() != tc2vBarOffWidth) {
-      	  	tc1.setWidth(tc1.getWidth());
-      	  	tc2.setWidth(tc2.getWidth() +30);
-      	  	tc3.setWidth(tc2.getWidth() +30);
-      }*/
-        
 	}
 	
 	/************************************************************
@@ -216,21 +175,16 @@ public class ViewMain extends ApplicationWindow {
 
 		TableItem item;
 		int i;
-		if (table_1.getItemCount() == 0)	//adds whole vector if table empty 
+		if (ExpiredTable.getItemCount() == 0)	//adds whole vector if table empty 
 			i=0;
 
 		else
-			i = table_1.getItemCount() + 1;		//add the last item into table
+			i = ExpiredTable.getItemCount() + 1;		//add the last item into table
 		
 		for (; i<expiredlist.size(); i++) {			
-			item = new TableItem(table_1,SWT.NONE);
+			item = new TableItem(ExpiredTable,SWT.NONE);
 			item.setText(expiredlist.get(i).getName());
 			item.setText(1,expiredlist.get(i).getEndDateTime().getDateRepresentation());
-/*			item.setText(1, "5");
-			item.setBackground(1, red);
-	    	item.setText(2, "X");
-	    	item.setBackground(2,blue);
-	    	*/
 		}
 	}
 	
@@ -245,7 +199,7 @@ public class ViewMain extends ApplicationWindow {
 		int prevExpIndex = expiredlist.size();
 		
 		//shifts expired events into expired list & remove from event list table
-		for (int i=0; i<eventlist.size(); i++) {
+/*		for (int i=0; i<eventlist.size(); i++) {
 			if (eventlist.get(i).isExpired()) {
 //				System.out.println("expired " + i);
 //				TableItem tb = new TableItem(table, 0);
@@ -256,22 +210,45 @@ public class ViewMain extends ApplicationWindow {
 				System.out.println("Expired - " + expiredlist.size());
 			}
 		}
+		*/
+		
+		for (int i=0; i<eventlist.size(); i++) {
+			if (eventlist.get(i).isExpired()) {
+				expiredlist.add(eventlist.get(i));
+				System.out.println(eventlist.get(i).getName());
+				System.out.println("Expired - " + expiredlist.size());
+			}
+		}
 		
 		ModelEvent.UpdateExpiredList(expiredlist.subList(prevExpIndex, expiredlist.size()));
 		//Remove the expired events from event list
-		
+		/*
 		for (int i=0; i<eventlist.size(); i++) {
 			if (eventlist.get(i).isExpired()) {
 				eventlist.remove(i);
 				i--;
 			}
-		}
+		}*/
 		System.out.println("Expired - " + expiredlist.size());
 		System.out.println("OK List - " + eventlist.size());
+		EventListTable.removeAll();
+		ExpiredTable.removeAll();
+		UpdateTable();
 		UpdateExpiredTable();
 		System.out.println("RAN");
 		
 	}
+	
+	/************************************************************
+	 * SETPAGE
+	 ***********************************************************/
+	/**
+	 * Description: Initialize ViewHomepage and set the page of composite c2 to ViewHomepage
+	 */
+	public static void setPage (String page) {
+		
+	}
+	
 	/************************************************************
 	 * HOMEPAGE
 	 ***********************************************************/
@@ -291,7 +268,7 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Initialize ViewBudget and set the page of composite c2 to ViewBudget
 	 */
 	public static void CalcBudget () {		
-		ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
 		layout.topControl = bv;
 		c2.layout(true);
 	}
@@ -303,7 +280,7 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Initialize ViewBookingSystem and set the page of composite c2 to ViewBookingSystem
 	 */
 	public static void BookVenue() {
-		ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
 		layout.topControl = bookgui;
 		c2.layout(true);
 	}
@@ -328,7 +305,7 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Initialize ViewEventFlow and set the page of composite c2 to ViewEventFlow
 	 */
 	public static void EventFlow () {		
-		ViewEventFlow ef = new ViewEventFlow(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		ViewEventFlow ef = new ViewEventFlow(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
 		layout.topControl = ef;
 		c2.layout(true);
 	}
@@ -394,22 +371,14 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Sets the page of composite c2 to ViewEvent
 	 */
 	public static void ReturnView() {
-		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
 		layout.topControl = newview;
 		c2.layout(true);
 		
 	}
 	
 	public static void CheckExpiry() {
-        // Task here ...
-/*	        	GregorianCalendar date = new GregorianCalendar();
-    	date.setTimeInMillis(System.currentTimeMillis());
-    	date.set(GregorianCalendar.MILLISECOND, 0);
-    	SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
-    	String curtime = sdf.format(date.getTime());	//gets the current time in string
-    	     	
-    	sdf = new SimpleDateFormat("YYYYMMdd");
-    	*/
+
     	MyDateTime currentDT = MyDateTime.getCurrentDateTime();
     	boolean flag = false;
     	for (int i=0; i<eventlist.size(); i++) {
@@ -446,8 +415,6 @@ public class ViewMain extends ApplicationWindow {
 			maincomposite.setLayout(new GridLayout(3, false));
 			
 			c1 = new Composite(maincomposite, SWT.NONE);
-		//	maincomposite.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\Pictures\\b34wl.jpg"));
-		//	c1.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\Pictures\\b34wl.jpg"));
 			c1.setLayout(new GridLayout(1, false));
 			GridData gd_c1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 			gd_c1.heightHint = 415;
@@ -469,7 +436,7 @@ public class ViewMain extends ApplicationWindow {
 			btnCreateEvent.setForeground(SWTResourceManager.getColor(0, 0, 0));
 			btnCreateEvent.setCursor(SWTResourceManager.getCursor(SWT.CURSOR_HAND));
 			btnCreateEvent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-			btnCreateEvent.setFont(SWTResourceManager.getFont("Tekton Pro Ext", 16, SWT.BOLD));
+			btnCreateEvent.setFont(SWTResourceManager.getFont("Chaparral Pro", 16, SWT.NORMAL));
 			btnCreateEvent.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					
@@ -498,13 +465,13 @@ public class ViewMain extends ApplicationWindow {
 			 c1.addControlListener(new ControlAdapter() {
 				    public void controlResized(ControlEvent e) {
 				      Rectangle area = c1.getClientArea();
-				      Point preferredSize = table.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				      int width = area.width - 2*table.getBorderWidth();
+				      Point preferredSize = EventListTable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				      int width = area.width - 2*EventListTable.getBorderWidth();
 				      
-				      if (preferredSize.y > area.height + table.getHeaderHeight()) {
+				      if (preferredSize.y > area.height + EventListTable.getHeaderHeight()) {
 				        // Subtract the scrollbar width from the total column width
 				        // if a vertical scrollbar will be required
-				        Point vBarSize = table.getVerticalBar().getSize();
+				        Point vBarSize = EventListTable.getVerticalBar().getSize();
 				        width -= vBarSize.x;
 				      }
 				      Point oldSize = c1.getSize();
@@ -512,56 +479,7 @@ public class ViewMain extends ApplicationWindow {
 				      tc2.setWidth((width - tc1.getWidth()) -24);        
 				      etc1.setWidth(width/3*2);
 				      etc2.setWidth((width - etc1.getWidth()) -24);  
-			/*
-				        table.addPaintListener(new PaintListener() {
-				            public void paintControl(PaintEvent e) {
-				                Rectangle rect = table.getClientArea ();
-				                int itemHeight = table.getItemHeight ();
-				                int headerHeight = table.getHeaderHeight ();
-				                int visibleCount = (rect.height - headerHeight + itemHeight - 1) / itemHeight;
-				                System.out.println("Vertical Scroll Visible - [" + (table.getItemCount()>= visibleCount)+"]");
 
-				                vBarOn = table.getItemCount() >= visibleCount;
-				                	
-				            }
-				        });
-				        
-				        if (firstruncheck == 0) {
-				        	System.out.println("first run");
-				            if (vBarOn) {
-				            	System.out.println("first running");
-				            	tc1.setWidth(tc1.getWidth());
-				            	tc2.setWidth(tc2.getWidth() -30);
-				            	tc3.setWidth(tc2.getWidth() -30);
-				            	tc2vBarOnWidth = tc2.getWidth();
-				            	tc2vBarOffWidth = tc2.getWidth() + 30;
-				            }
-				            
-				            else {
-				            	tc2vBarOnWidth = tc2.getWidth() - 30;
-				            	tc2vBarOffWidth = tc2.getWidth();
-				            }
-				            	
-
-				           firstruncheck = 1;
-				        }
-				        else {
-				        	System.out.println("first else running");
-				        	System.out.println(tc2.getWidth()+", "+ tc2vBarOnWidth);
-					        if (vBarOn && tc2.getWidth() != tc2vBarOnWidth) {
-					        	System.out.println("running");
-					        	tc1.setWidth(tc1.getWidth());
-					        	tc2.setWidth(tc2.getWidth() -30);
-					        	tc3.setWidth(tc2.getWidth() -30);
-					        }
-					        
-					        else if (!vBarOn && tc2.getWidth() != tc2vBarOffWidth) {
-					        	System.out.println("running2");
-					      	  	tc1.setWidth(tc1.getWidth());
-					      	  	tc2.setWidth(tc2.getWidth() +30);
-					      	  	tc3.setWidth(tc2.getWidth() +30);
-					      }
-				        }*/
 				    }
 				    
 			 });
@@ -578,19 +496,19 @@ public class ViewMain extends ApplicationWindow {
 			tbtmUpcomingEvents.setText("       Upcoming Events       ");
 			
 			//Event List Table
-			table = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
-			tbtmUpcomingEvents.setControl(table);
-			table.addMouseTrackListener(new MouseTrackAdapter() {
+			EventListTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			tbtmUpcomingEvents.setControl(EventListTable);
+			EventListTable.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override
 				public void mouseHover(MouseEvent e) {
-					 TableItem item = table.getItem(new Point(e.x, e.y));
+					 TableItem item = EventListTable.getItem(new Point(e.x, e.y));
 					 if (item != null)
-						 table.setToolTipText(item.getText(0));
+						 EventListTable.setToolTipText(item.getText(0));
 				}
 			});
-			table.setToolTipText("");
-			table.setTouchEnabled(true);
-			table.addListener(SWT.Selection, new Listener() {
+			EventListTable.setToolTipText("");
+			EventListTable.setTouchEnabled(true);
+			EventListTable.addListener(SWT.Selection, new Listener() {
 		     public void handleEvent(Event event) {
 
 		      //dispose of all children that currently is in c2
@@ -601,13 +519,13 @@ public class ViewMain extends ApplicationWindow {
 				}
 			
 				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
-				view = new ViewEvent(c2, SWT.NONE, eventlist.get(table.getSelectionIndex()));
+				view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
 		        layout.topControl = view;
 				c2.layout(true);
 		     }
 			});
-			tc1 = new TableColumn(table, SWT.LEFT);
-			tc2 = new TableColumn(table,SWT.CENTER);
+			tc1 = new TableColumn(EventListTable, SWT.LEFT);
+			tc2 = new TableColumn(EventListTable,SWT.CENTER);
 	//		tc3 = new TableColumn(table,SWT.CENTER);
 			
 		    tc1.setText("Event Title");
@@ -627,7 +545,7 @@ public class ViewMain extends ApplicationWindow {
 			tc1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
 					//sort name
-					TableItem[] items = table.getItems();
+					TableItem[] items = EventListTable.getItems();
 					Collator collator = Collator.getInstance(Locale.getDefault());
 					for (int i = 1; i<items.length; i++) {
 						String value1 = items[i].getText(0);
@@ -636,9 +554,9 @@ public class ViewMain extends ApplicationWindow {
 							if(collator.compare(value1, value2) < 0) {
 								String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2)};
 								items[i].dispose();
-								TableItem item = new TableItem(table, SWT.NONE, j);	//j could be the final index
+								TableItem item = new TableItem(EventListTable, SWT.NONE, j);	//j could be the final index
 								item.setText(values);
-								items = table.getItems();
+								items = EventListTable.getItems();
 								break;
 							}
 						}
@@ -646,15 +564,15 @@ public class ViewMain extends ApplicationWindow {
 				}
 			});
 			
-			table.getHorizontalBar().setVisible(true);
-			table.getHorizontalBar().setEnabled(false);
-			formToolkit.adapt(table);
-			formToolkit.paintBordersFor(table);
-			table.setHeaderVisible(true);
-			table.setLinesVisible(false);
+			EventListTable.getHorizontalBar().setVisible(true);
+			EventListTable.getHorizontalBar().setEnabled(false);
+			formToolkit.adapt(EventListTable);
+			formToolkit.paintBordersFor(EventListTable);
+			EventListTable.setHeaderVisible(true);
+			EventListTable.setLinesVisible(false);
 			UpdateTable();
-			Menu menu = new Menu(table);
-			table.setMenu(menu);
+			Menu menu = new Menu(EventListTable);
+			EventListTable.setMenu(menu);
 			
 			/************************************************************
 			 * DELETE EVENT
@@ -665,10 +583,10 @@ public class ViewMain extends ApplicationWindow {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					try {
-						TableItem tb = table.getItem(table.getSelectionIndex());
+						TableItem tb = EventListTable.getItem(EventListTable.getSelectionIndex());
 						deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 						if ((Integer) confirm.open() == 1) {
-							ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
+							ModelEvent.DeleteEvent(eventlist.get(EventListTable.getSelectionIndex()));	//Finds the selected event and deletes it from vector
 							DeleteItem();
 						}
 					} catch (Exception ex) {
@@ -684,19 +602,19 @@ public class ViewMain extends ApplicationWindow {
 			tbtmPastEvents.setText("          Past Events          ");
 			
 			//Past Event List Table
-			table_1 = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
-			tbtmPastEvents.setControl(table_1);			
-			table_1.addMouseTrackListener(new MouseTrackAdapter() {
+			ExpiredTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			tbtmPastEvents.setControl(ExpiredTable);			
+			ExpiredTable.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override
 				public void mouseHover(MouseEvent e) {
-					 TableItem item = table_1.getItem(new Point(e.x, e.y));
+					 TableItem item = ExpiredTable.getItem(new Point(e.x, e.y));
 					 if (item != null)
-						 table_1.setToolTipText(item.getText(0));
+						 ExpiredTable.setToolTipText(item.getText(0));
 				}
 			});
-			table_1.setToolTipText("");
-			table_1.setTouchEnabled(true);
-			table_1.addListener(SWT.Selection, new Listener() {
+			ExpiredTable.setToolTipText("");
+			ExpiredTable.setTouchEnabled(true);
+			ExpiredTable.addListener(SWT.Selection, new Listener() {
 		     public void handleEvent(Event event) {
 
 		      //dispose of all children that currently is in c2
@@ -707,13 +625,13 @@ public class ViewMain extends ApplicationWindow {
 				}
 			
 				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
-				view = new ViewEvent(c2, SWT.NONE, expiredlist.get(table_1.getSelectionIndex()));
+				view = new ViewEvent(c2, SWT.NONE, expiredlist.get(ExpiredTable.getSelectionIndex()));
 		        layout.topControl = view;
 				c2.layout(true);
 		     }
 			});
-			etc1 = new TableColumn(table_1, SWT.LEFT);
-			etc2 = new TableColumn(table_1,SWT.CENTER);
+			etc1 = new TableColumn(ExpiredTable, SWT.LEFT);
+			etc2 = new TableColumn(ExpiredTable,SWT.CENTER);
 	//		etc3 = new TableColumn(table_1,SWT.CENTER);
 			
 		    etc1.setText("Event Title");
@@ -733,7 +651,7 @@ public class ViewMain extends ApplicationWindow {
 			etc1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
 					//sort name
-					TableItem[] items = table_1.getItems();
+					TableItem[] items = ExpiredTable.getItems();
 					Collator collator = Collator.getInstance(Locale.getDefault());
 					for (int i = 1; i<items.length; i++) {
 						String value1 = items[i].getText(0);
@@ -742,9 +660,9 @@ public class ViewMain extends ApplicationWindow {
 							if(collator.compare(value1, value2) < 0) {
 								String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2)};
 								items[i].dispose();
-								TableItem item = new TableItem(table_1, SWT.NONE, j);	//j could be the final index
+								TableItem item = new TableItem(ExpiredTable, SWT.NONE, j);	//j could be the final index
 								item.setText(values);
-								items = table_1.getItems();
+								items = ExpiredTable.getItems();
 								break;
 							}
 						}
@@ -752,16 +670,16 @@ public class ViewMain extends ApplicationWindow {
 				}
 			});
 			
-			table_1.getHorizontalBar().setVisible(true);
-			table_1.getHorizontalBar().setEnabled(false);
-			formToolkit.adapt(table_1);
-			formToolkit.paintBordersFor(table_1);
-			table_1.setHeaderVisible(true);
-			table_1.setLinesVisible(false);
+			ExpiredTable.getHorizontalBar().setVisible(true);
+			ExpiredTable.getHorizontalBar().setEnabled(false);
+			formToolkit.adapt(ExpiredTable);
+			formToolkit.paintBordersFor(ExpiredTable);
+			ExpiredTable.setHeaderVisible(true);
+			ExpiredTable.setLinesVisible(false);
 			UpdateExpiredTable();
 			CheckExpiry();
-			Menu menu2 = new Menu(table_1);
-			table_1.setMenu(menu2);
+			Menu menu2 = new Menu(ExpiredTable);
+			ExpiredTable.setMenu(menu2);
 			
 			/************************************************************
 			 * DELETE PAST EVENT
@@ -772,7 +690,7 @@ public class ViewMain extends ApplicationWindow {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					try {
-					TableItem tb = table_1.getItem(table_1.getSelectionIndex());
+					TableItem tb = ExpiredTable.getItem(ExpiredTable.getSelectionIndex());
 					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 					if ((Integer) confirm.open() == 1) {
 				//		ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector

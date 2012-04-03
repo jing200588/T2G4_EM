@@ -47,15 +47,16 @@ import com.ibm.icu.text.Collator;
 
 public class ViewEvent extends Composite {
 	private static Table BudgetResult, VenueResult, FlowResult, ParticipantResult;
-	private static boolean budgetflag, venueflag, flowflag, participantflag;
+	private static boolean BudgetFlag, VenueFlag, FlowFlag, ParticipantFlag;
 	private static Eventitem cevent;
-	private static Composite Budgetcomp, Bookvenuecomp, Eprogflowcomp, Plistcomp;
-	private static Label Edescription, Startdate, Starttime, Enddate, Endtime, Ename;
+	private static Composite BudgetComp, BookVenueComp, EventFlowComp, ParticipantListComp;
+	private static Label Edescription, StartDate, StartTime, EndDate, EndTime, Ename;
 	private static ScrolledComposite sc1;
-	private static Composite maincomp;
+	private static Composite MainComp;
 	private static int budgetTableSelectedIndex;
 	private static ControllerBudget bc;
 	protected LoginEmailDialog loginDiag; 
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -69,115 +70,120 @@ public class ViewEvent extends Composite {
 		sc1.setExpandHorizontal(true);
 		sc1.setExpandVertical(true);
 
-		maincomp = new Composite(sc1, SWT.NONE);
-		maincomp.setLayout(new FormLayout());
-		budgetflag = false;
-		venueflag = false;
+		MainComp = new Composite(sc1, SWT.NONE);
+		MainComp.setLayout(new FormLayout());
+		BudgetFlag = false;
+		VenueFlag = false;
 		cevent = curevent;
 
 		//View Event title label
-		Label Title = new Label(maincomp, SWT.NONE);
-		Title.setText("View Event:");
-		Title.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
-		FormData fd_Title = new FormData();
-		fd_Title.top = new FormAttachment(0, 10);
-		fd_Title.left = new FormAttachment(0, 10);
-		Title.setLayoutData(fd_Title);
+		Label lblViewEvent = new Label(MainComp, SWT.NONE);
+		lblViewEvent.setText("View Event:");
+		lblViewEvent.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		FormData fd_lblViewTitle = new FormData();
+		fd_lblViewTitle.top = new FormAttachment(0, 10);
+		fd_lblViewTitle.left = new FormAttachment(0, 10);
+		lblViewEvent.setLayoutData(fd_lblViewTitle);
 
 		/**********************************************************************************************
 		 * 
 		 * EVENT PARTICULARS COMPOSITE SECTION
 		 * 
 		 *********************************************************************************************/
-		Composite EparticularsComp = new Composite(maincomp, SWT.NONE);
-		FormData fd_EparticularsComp = new FormData();
-		fd_EparticularsComp.right = new FormAttachment(90);
-		fd_EparticularsComp.top = new FormAttachment(Title, 30);
-		fd_EparticularsComp.left = new FormAttachment(10);
-		EparticularsComp.setLayoutData(fd_EparticularsComp);
-		EparticularsComp.setLayout(new GridLayout(3, false));
+		Composite eventParticularsComp = new Composite(MainComp, SWT.NONE);
+		FormData fd_eventParticularsComp = new FormData();
+		fd_eventParticularsComp.right = new FormAttachment(90);
+		fd_eventParticularsComp.top = new FormAttachment(lblViewEvent, 30);
+		fd_eventParticularsComp.left = new FormAttachment(10);
+		eventParticularsComp.setLayoutData(fd_eventParticularsComp);
+		eventParticularsComp.setLayout(new GridLayout(4, false));
 
-		Label Eparticulars = new Label(EparticularsComp, SWT.NONE);
-		Eparticulars.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		Eparticulars.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
-		Eparticulars.setText("Event Particulars");
-		new Label(EparticularsComp, SWT.NONE);
+		Label lblEventParticulars = new Label(eventParticularsComp, SWT.NONE);
+		lblEventParticulars.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblEventParticulars.setText("Event Particulars");
+		new Label(eventParticularsComp, SWT.NONE);
 
 		/**********************************************************************************************
 		 * 
 		 * EDIT EVENT PARTICULARS BUTTON
 		 * 
 		 *********************************************************************************************/
-		Button Epartedit = new Button(EparticularsComp, SWT.NONE);
-		/*
-		Epartedit.addMouseTrackListener(new MouseTrackAdapter() {
-			@Override
-			public void mouseHover(MouseEvent e) {
-				ViewMain.
-			}
-		});*/
-		Epartedit.addSelectionListener(new SelectionAdapter() {
+		new Label(eventParticularsComp, SWT.NONE);
+		Button btnEventParticulars = new Button(eventParticularsComp, SWT.NONE);
+
+		btnEventParticulars.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.EventParticulars(cevent);
 			}
 		});
-		GridData gd_Epartedit = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_Epartedit.widthHint = 85;
-		Epartedit.setLayoutData(gd_Epartedit);
-		Epartedit.setText("Edit");
-		new Label(EparticularsComp, SWT.NONE);
-		new Label(EparticularsComp, SWT.NONE);
-		new Label(EparticularsComp, SWT.NONE);
+		GridData gd_btnEventParticulars = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_btnEventParticulars.widthHint = 85;
+		btnEventParticulars.setLayoutData(gd_btnEventParticulars);
+		btnEventParticulars.setText("Edit");
+		new Label(eventParticularsComp, SWT.NONE);
+		new Label(eventParticularsComp, SWT.NONE);
+		new Label(eventParticularsComp, SWT.NONE);
+		new Label(eventParticularsComp, SWT.NONE);
 
-		Label Enamelabel = new Label(EparticularsComp, SWT.NONE);
-		Enamelabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-		Enamelabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		Enamelabel.setText("Event Name:");
+		Label lblEname = new Label(eventParticularsComp, SWT.NONE);
+		lblEname.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblEname.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblEname.setText("Event Name:");
 
-		Ename = new Label(EparticularsComp, SWT.WRAP);
-		Ename.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		Ename.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
+		Ename = new Label(eventParticularsComp, SWT.WRAP);
+		Ename.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+		Ename.setFont(SWTResourceManager.getFont("Century Gothic", 12, SWT.NORMAL));
 		Ename.setText(cevent.getName());
 
-		Label Startdntlabel = new Label(EparticularsComp, SWT.NONE);
-		Startdntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-		Startdntlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		Startdntlabel.setText("Start Date and Time:");
+		Label lblStartDnT = new Label(eventParticularsComp, SWT.NONE);
+		lblStartDnT.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblStartDnT.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblStartDnT.setText("Start Date:");
 
-		Startdate = new Label(EparticularsComp, SWT.NONE);
-		Startdate.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		Startdate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Startdate.setText(cevent.getStartDateTime().getDateRepresentation());
+		StartDate = new Label(eventParticularsComp, SWT.NONE);
+		StartDate.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		StartDate.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		StartDate.setText(cevent.getStartDateTime().getDateRepresentation());
+		
+		Label lblStartTime = new Label(eventParticularsComp, SWT.NONE);
+		lblStartTime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		lblStartTime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblStartTime.setText("Start Time:");
 
-		Starttime = new Label(EparticularsComp, SWT.NONE);
-		Starttime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		Starttime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Starttime.setText(cevent.getStartDateTime().getTimeRepresentation()+"HRS");
+		StartTime = new Label(eventParticularsComp, SWT.NONE);
+		StartTime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		StartTime.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		StartTime.setText(cevent.getStartDateTime().getTimeRepresentation()+"HRS");
 
-		Label Enddntlabel = new Label(EparticularsComp, SWT.NONE);
-		Enddntlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-		Enddntlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		Enddntlabel.setText("End Date and Time:");
+		Label lblEndDnT = new Label(eventParticularsComp, SWT.NONE);
+		lblEndDnT.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblEndDnT.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblEndDnT.setText("End Date:");
 
-		Enddate = new Label(EparticularsComp, SWT.NONE);
-		Enddate.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		Enddate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Enddate.setText(cevent.getEndDateTime().getDateRepresentation());
+		EndDate = new Label(eventParticularsComp, SWT.NONE);
+		EndDate.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		EndDate.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		EndDate.setText(cevent.getEndDateTime().getDateRepresentation());
+		
+		Label lblEndTime = new Label(eventParticularsComp, SWT.NONE);
+		lblEndTime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblEndTime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		lblEndTime.setText("End Time:");
 
-		Endtime = new Label(EparticularsComp, SWT.NONE);
-		Endtime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		Endtime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		Endtime.setText(cevent.getEndDateTime().getTimeRepresentation()+"HRS");
+		EndTime = new Label(eventParticularsComp, SWT.NONE);
+		EndTime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		EndTime.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		EndTime.setText(cevent.getEndDateTime().getTimeRepresentation()+"HRS");
 
-		Label Edescriptionlabel = new Label(EparticularsComp, SWT.NONE);
-		Edescriptionlabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-		Edescriptionlabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		Edescriptionlabel.setText("Description:");
+		Label lblEdescription = new Label(eventParticularsComp, SWT.NONE);
+		lblEdescription.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblEdescription.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblEdescription.setText("Description:");
 
-		Edescription = new Label(EparticularsComp, SWT.WRAP);
-		Edescription.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		GridData gd_Edescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
+		Edescription = new Label(eventParticularsComp, SWT.WRAP | SWT.SHADOW_NONE);
+		Edescription.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		GridData gd_Edescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		gd_Edescription.widthHint = 90;
 		Edescription.setLayoutData(gd_Edescription);
 		Edescription.setText(cevent.getDescription());
@@ -186,27 +192,27 @@ public class ViewEvent extends Composite {
 		 *********************************************************************************************/
 
 		//Divider1
-		Label divider1 = createdivider(maincomp, EparticularsComp);
+		Label divider1 = createDivider(MainComp, eventParticularsComp);
 
 		/**********************************************************************************************
 		 * 
 		 * BOOK VENUE SECTION
 		 * 
 		 *********************************************************************************************/
-		Bookvenuecomp = new Composite(maincomp, SWT.NONE);
-		Bookvenuecomp.setLayout(new GridLayout(3, false));
-		FormData fd_Bookvenuecomp = new FormData();
-		fd_Bookvenuecomp.right = new FormAttachment(90);
-		fd_Bookvenuecomp.left = new FormAttachment(10);
-		fd_Bookvenuecomp.top = new FormAttachment(divider1, 30);
-		Bookvenuecomp.setLayoutData(fd_Bookvenuecomp);
+		BookVenueComp = new Composite(MainComp, SWT.NONE);
+		BookVenueComp.setLayout(new GridLayout(3, false));
+		FormData fd_BookVenueComp = new FormData();
+		fd_BookVenueComp.right = new FormAttachment(90);
+		fd_BookVenueComp.left = new FormAttachment(10);
+		fd_BookVenueComp.top = new FormAttachment(divider1, 30);
+		BookVenueComp.setLayoutData(fd_BookVenueComp);
 
-		Label lblBookVenue = new Label(Bookvenuecomp, SWT.NONE);
+		Label lblBookVenue = new Label(BookVenueComp, SWT.NONE);
 		lblBookVenue.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblBookVenue.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
 		lblBookVenue.setText("Book Venue");
 
-		Label dummy = new Label(Bookvenuecomp, SWT.NONE);
+		Label dummy = new Label(BookVenueComp, SWT.NONE);
 		GridData gd_dummy = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_dummy.widthHint = 27;
 		dummy.setLayoutData(gd_dummy);
@@ -216,43 +222,43 @@ public class ViewEvent extends Composite {
 		 * BOOK VENUE BUTTON
 		 * 
 		 *********************************************************************************************/
-		Button Bookvenueedit = new Button(Bookvenuecomp, SWT.NONE);
-		Bookvenueedit.addSelectionListener(new SelectionAdapter() {
+		Button btnBookVenue = new Button(BookVenueComp, SWT.NONE);
+		btnBookVenue.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.BookVenue();
 			}
 		});
-		GridData gd_Bookvenueedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		gd_Bookvenueedit.widthHint = 85;
-		Bookvenueedit.setLayoutData(gd_Bookvenueedit);
-		Bookvenueedit.setText("Edit");
+		GridData gd_btnBookVenue = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+		gd_btnBookVenue.widthHint = 85;
+		btnBookVenue.setLayoutData(gd_btnBookVenue);
+		btnBookVenue.setText("Edit");
 		/**********************************************************************************************
 		 * END OF BOOK VENUE
 		 *********************************************************************************************/
 
 		//Divider 2
-		Label divider2 = createdivider(maincomp, Bookvenuecomp);
+		Label divider2 = createDivider(MainComp, BookVenueComp);
 
 		/**********************************************************************************************
 		 * 
 		 * CALCULATE BUDGET SECTION
 		 * 
 		 *********************************************************************************************/
-		Budgetcomp = new Composite(maincomp, SWT.NONE);
-		Budgetcomp.setLayout(new GridLayout(3, false));
-		FormData fd_Budgetcomp = new FormData();
-		fd_Budgetcomp.right = new FormAttachment(90);
-		fd_Budgetcomp.left = new FormAttachment(10);
-		fd_Budgetcomp.top = new FormAttachment(divider2, 30);
-		Budgetcomp.setLayoutData(fd_Budgetcomp);
+		BudgetComp = new Composite(MainComp, SWT.NONE);
+		BudgetComp.setLayout(new GridLayout(3, false));
+		FormData fd_BudgetComp = new FormData();
+		fd_BudgetComp.right = new FormAttachment(90);
+		fd_BudgetComp.left = new FormAttachment(10);
+		fd_BudgetComp.top = new FormAttachment(divider2, 30);
+		BudgetComp.setLayoutData(fd_BudgetComp);
 
-		Label Cbudget = new Label(Budgetcomp, SWT.NONE);
-		Cbudget.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		Cbudget.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
-		Cbudget.setText("Optimal Purchase");
+		Label lblOptimizeBudget = new Label(BudgetComp, SWT.NONE);
+		lblOptimizeBudget.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblOptimizeBudget.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblOptimizeBudget.setText("Optimal Purchase");
 
-		Label dummy3 = new Label(Budgetcomp, SWT.NONE);
+		Label dummy3 = new Label(BudgetComp, SWT.NONE);
 		GridData gd_dummy3 = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_dummy3.widthHint = 49;
 		dummy3.setLayoutData(gd_dummy3);
@@ -262,23 +268,23 @@ public class ViewEvent extends Composite {
 		 * CALCULATE BUDGET BUTTON
 		 * 
 		 *********************************************************************************************/
-		Button btnCalculate = new Button(Budgetcomp, SWT.NONE);
-		btnCalculate.addSelectionListener(new SelectionAdapter() {
+		Button btnOptimizeBudget = new Button(BudgetComp, SWT.NONE);
+		btnOptimizeBudget.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.CalcBudget();
 			}
 		});
-		GridData gd_btnCalculate = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		gd_btnCalculate.widthHint = 85;
-		btnCalculate.setLayoutData(gd_btnCalculate);
-		btnCalculate.setText("Calculate");
+		GridData gd_btnOptimizeBudget = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+		gd_btnOptimizeBudget.widthHint = 85;
+		btnOptimizeBudget.setLayoutData(gd_btnOptimizeBudget);
+		btnOptimizeBudget.setText("Calculate");
 		/**********************************************************************************************
 		 * END OF CALCULATE BUDGET
 		 *********************************************************************************************/
 
 		//Divider 3
-		Label divider3 = createdivider(maincomp, Budgetcomp);
+		Label divider3 = createDivider(MainComp, BudgetComp);
 
 
 		/**********************************************************************************************
@@ -286,20 +292,20 @@ public class ViewEvent extends Composite {
 		 * EVENT PROGRAM FLOW SECTION
 		 * 
 		 *********************************************************************************************/
-		Eprogflowcomp = new Composite(maincomp, SWT.NONE);
-		Eprogflowcomp.setLayout(new GridLayout(3, false));
-		FormData fd_Eprogflowcomp = new FormData();
-		fd_Eprogflowcomp.right = new FormAttachment(90);
-		fd_Eprogflowcomp.left = new FormAttachment(10);
-		fd_Eprogflowcomp.top = new FormAttachment(divider3, 30);
-		Eprogflowcomp.setLayoutData(fd_Eprogflowcomp);
+		EventFlowComp = new Composite(MainComp, SWT.NONE);
+		EventFlowComp.setLayout(new GridLayout(3, false));
+		FormData fd_EventFlowComp = new FormData();
+		fd_EventFlowComp.right = new FormAttachment(90);
+		fd_EventFlowComp.left = new FormAttachment(10);
+		fd_EventFlowComp.top = new FormAttachment(divider3, 30);
+		EventFlowComp.setLayoutData(fd_EventFlowComp);
 
-		Label EProgramFlow = new Label(Eprogflowcomp, SWT.NONE);
-		EProgramFlow.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		EProgramFlow.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
-		EProgramFlow.setText("Event Program Flow");
+		Label lblEventFlow = new Label(EventFlowComp, SWT.NONE);
+		lblEventFlow.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblEventFlow.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblEventFlow.setText("Event Program Flow");
 
-		Label lblNewLabel_1 = new Label(Eprogflowcomp, SWT.NONE);
+		Label lblNewLabel_1 = new Label(EventFlowComp, SWT.NONE);
 		GridData gd_lblNewLabel_1 = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_lblNewLabel_1.widthHint = 38;
 		lblNewLabel_1.setLayoutData(gd_lblNewLabel_1);
@@ -310,43 +316,43 @@ public class ViewEvent extends Composite {
 		 * EDIT EVENT FLOW BUTTON
 		 * 
 		 *********************************************************************************************/
-		Button Eprogflowedit = new Button(Eprogflowcomp, SWT.NONE);
-		Eprogflowedit.addSelectionListener(new SelectionAdapter() {
+		Button btnEventFlow = new Button(EventFlowComp, SWT.NONE);
+		btnEventFlow.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.EventFlow();
 			}
 		});
-		GridData gd_Eprogflowedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		gd_Eprogflowedit.widthHint = 85;
-		Eprogflowedit.setLayoutData(gd_Eprogflowedit);
-		Eprogflowedit.setText("Edit");
+		GridData gd_btnEventFlow = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+		gd_btnEventFlow.widthHint = 85;
+		btnEventFlow.setLayoutData(gd_btnEventFlow);
+		btnEventFlow.setText("Edit");
 		/**********************************************************************************************
 		 * END OF EVENT PROGRAM FLOW
 		 *********************************************************************************************/
 
 		//Divider 4
-		Label divider4 = createdivider(maincomp, Eprogflowcomp);
+		Label divider4 = createDivider(MainComp, EventFlowComp);
 
 		/**********************************************************************************************
 		 * 
 		 * PARTICIPANT LIST SECTION
 		 * 
 		 *********************************************************************************************/
-		Plistcomp = new Composite(maincomp, SWT.NONE);
-		Plistcomp.setLayout(new GridLayout(3, false));
-		FormData fd_Plistcomp = new FormData();
-		fd_Plistcomp.left = new FormAttachment(10);
-		fd_Plistcomp.right = new FormAttachment(90);
-		fd_Plistcomp.top = new FormAttachment(divider4, 30);
-		Plistcomp.setLayoutData(fd_Plistcomp);
+		ParticipantListComp = new Composite(MainComp, SWT.NONE);
+		ParticipantListComp.setLayout(new GridLayout(3, false));
+		FormData fd_ParticipantListComp = new FormData();
+		fd_ParticipantListComp.left = new FormAttachment(10);
+		fd_ParticipantListComp.right = new FormAttachment(90);
+		fd_ParticipantListComp.top = new FormAttachment(divider4, 30);
+		ParticipantListComp.setLayoutData(fd_ParticipantListComp);
 
-		Label ParticipantList = new Label(Plistcomp, SWT.NONE);
-		ParticipantList.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		ParticipantList.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
-		ParticipantList.setText("Participant List");
+		Label lblParticipantList = new Label(ParticipantListComp, SWT.NONE);
+		lblParticipantList.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblParticipantList.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblParticipantList.setText("Participant List");
 
-		Label dummy4 = new Label(Plistcomp, SWT.NONE);
+		Label dummy4 = new Label(ParticipantListComp, SWT.NONE);
 		dummy4.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 
 		/**********************************************************************************************
@@ -354,45 +360,56 @@ public class ViewEvent extends Composite {
 		 * EDIT PARTICIPANT LIST SECTION
 		 * 
 		 *********************************************************************************************/
-		Button btnEdit = new Button(Plistcomp, SWT.NONE);
-		btnEdit.addSelectionListener(new SelectionAdapter() {
+		Button btnParticipantList = new Button(ParticipantListComp, SWT.NONE);
+		btnParticipantList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.ParticipantList(cevent);
 			}
 		});
-		GridData gd_btnEdit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		gd_btnEdit.widthHint = 85;
-		btnEdit.setLayoutData(gd_btnEdit);
-		btnEdit.setText("Edit");
+		GridData gd_btnParticipantList = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
+		gd_btnParticipantList.widthHint = 85;
+		btnParticipantList.setLayoutData(gd_btnParticipantList);
+		btnParticipantList.setText("Edit");
 		/**********************************************************************************************
 		 * END OF PARTICIPANT LIST
 		 *********************************************************************************************/
 		//Divider 5
-		Label divider5 = createdivider(maincomp, Plistcomp);
-		Composite Advertcomp = new Composite(maincomp, SWT.NONE);
-		Advertcomp.setLayout(new GridLayout(3, false));
-		FormData fd_Advertcomp = new FormData();
-		fd_Advertcomp.top = new FormAttachment(divider5, 30);
-		fd_Advertcomp.left = new FormAttachment(10);
-		fd_Advertcomp.right = new FormAttachment(90);
-		Advertcomp.setLayoutData(fd_Advertcomp);
+		Label divider5 = createDivider(MainComp, ParticipantListComp);
+		
 
-		Label Advertising = new Label(Advertcomp, SWT.NONE);
-		Advertising.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		Advertising.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
-		Advertising.setText("Advertising");
+		/**********************************************************************************************
+		 * 
+		 * ADVERTISMENT SECTION
+		 * 
+		 *********************************************************************************************/
+		Composite AdvertComp = new Composite(MainComp, SWT.NONE);
+		AdvertComp.setLayout(new GridLayout(3, false));
+		FormData fd_AdvertisementComp = new FormData();
+		fd_AdvertisementComp.top = new FormAttachment(divider5, 30);
+		fd_AdvertisementComp.left = new FormAttachment(10);
+		fd_AdvertisementComp.right = new FormAttachment(90);
+		fd_AdvertisementComp.bottom = new FormAttachment(95);
+		AdvertComp.setLayoutData(fd_AdvertisementComp);
 
-		Label dummy5 = new Label(Advertcomp, SWT.NONE);
+		Label lblAdvertisement = new Label(AdvertComp, SWT.NONE);
+		lblAdvertisement.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblAdvertisement.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblAdvertisement.setText("Advertising");
+
+		Label dummy5 = new Label(AdvertComp, SWT.NONE);
 		dummy5.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-
+		new Label(AdvertComp, SWT.NONE);
+		new Label(AdvertComp, SWT.NONE);
+		new Label(AdvertComp, SWT.NONE);
+		new Label(AdvertComp, SWT.NONE);
 		/**********************************************************************************************
 		 * 
 		 * ADVERTISE BUTTON
 		 * 
 		 *********************************************************************************************/
-		Button Advertemail = new Button(Advertcomp, SWT.NONE);
-		Advertemail.addSelectionListener(new SelectionAdapter() {
+		Button btnAdvertEmail = new Button(AdvertComp, SWT.NONE);
+		btnAdvertEmail.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				loginDiag = new LoginEmailDialog(new Shell(), SWT.NONE, cevent);
@@ -400,40 +417,36 @@ public class ViewEvent extends Composite {
 
 			}
 		});
-		GridData gd_Advertedit = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		gd_Advertedit.widthHint = 85;
-		Advertemail.setLayoutData(gd_Advertedit);
-		Advertemail.setText("E-Mail");
+		GridData gd_btnAdvertEmail = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_btnAdvertEmail.widthHint = 85;
+		btnAdvertEmail.setLayoutData(gd_btnAdvertEmail);
+		btnAdvertEmail.setText("E-Mail");
 
-		new Label(Advertcomp, SWT.NONE);
-		new Label(Advertcomp, SWT.NONE);
-		Button Advertfb = new Button(Advertcomp, SWT.NONE);
-		Advertfb.addSelectionListener(new SelectionAdapter() {
+		Button btnAdvertFB = new Button(AdvertComp, SWT.NONE);
+		btnAdvertFB.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.FaceBookAds();
 			}
 		});
-		GridData gd_Advertfb = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		gd_Advertfb.widthHint = 85;
-		Advertfb.setLayoutData(gd_Advertfb);
-		Advertfb.setText("Facebook");
-		new Label(Advertcomp, SWT.NONE);
-		new Label(Advertcomp, SWT.NONE);
+		GridData gd_btnAdvertFB = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_btnAdvertFB.widthHint = 85;
+		btnAdvertFB.setLayoutData(gd_btnAdvertFB);
+		btnAdvertFB.setText("Facebook");
 
-		Button AdvertSMS = new Button(Advertcomp, SWT.NONE);
-		AdvertSMS.addSelectionListener(new SelectionAdapter() {
+		Button btnAdvertSMS = new Button(AdvertComp, SWT.NONE);
+		btnAdvertSMS.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.SMSAds(cevent);
 			}
 		});
-		GridData gd_AdvertSMS = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
-		gd_AdvertSMS.widthHint = 85;
-		AdvertSMS.setLayoutData(gd_AdvertSMS);
-		AdvertSMS.setText("SMS");
-		new Label(Advertcomp, SWT.NONE);
-		new Label(Advertcomp, SWT.NONE);
-		new Label(Advertcomp, SWT.NONE);
+		GridData gd_btnAdvertSMS = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_btnAdvertSMS.widthHint = 85;
+		btnAdvertSMS.setLayoutData(gd_btnAdvertSMS);
+		btnAdvertSMS.setText("SMS");
+		new Label(AdvertComp, SWT.NONE);
+		new Label(AdvertComp, SWT.NONE);
+		new Label(AdvertComp, SWT.NONE);
 		/**********************************************************************************************
 		 * END OF ADVERTISING
 		 *********************************************************************************************/
@@ -443,7 +456,8 @@ public class ViewEvent extends Composite {
 		 * DELETE EVENT BUTTON
 		 * 
 		 *********************************************************************************************/
-		Button btnDeleteEvent = new Button(maincomp, SWT.NONE);
+		Button btnDeleteEvent = new Button(MainComp, SWT.NONE);
+		btnDeleteEvent.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -456,12 +470,13 @@ public class ViewEvent extends Composite {
 			}
 		});
 		FormData fd_btnDeleteEvent = new FormData();
-		fd_btnDeleteEvent.bottom = new FormAttachment(Title, 0, SWT.BOTTOM);
+		fd_btnDeleteEvent.width = 100;
+		fd_btnDeleteEvent.bottom = new FormAttachment(lblViewEvent, 0, SWT.BOTTOM);
 		fd_btnDeleteEvent.right = new FormAttachment(divider1, 0, SWT.RIGHT);
 		btnDeleteEvent.setLayoutData(fd_btnDeleteEvent);
-		btnDeleteEvent.setText("DELETE EVENT");
+		btnDeleteEvent.setText("Delete");
 
-		Button btnExport = new Button(maincomp, SWT.NONE);
+		Button btnExport = new Button(MainComp, SWT.NONE);
 		btnExport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 
@@ -515,29 +530,33 @@ public class ViewEvent extends Composite {
 		}
 	});
 		FormData fd_btnExport = new FormData();
-		fd_btnExport.left = new FormAttachment(btnDeleteEvent, -86, SWT.LEFT);
-		fd_btnExport.bottom = new FormAttachment(Title, 0, SWT.BOTTOM);
-		fd_btnExport.right = new FormAttachment(btnDeleteEvent, -9);
+		fd_btnExport.width = 100;
+		//fd_btnExport.left = new FormAttachment(lblViewEvent, 282);
+		fd_btnExport.right = new FormAttachment(btnDeleteEvent, -10);
+		fd_btnExport.bottom = new FormAttachment(lblViewEvent, 0, SWT.BOTTOM);
 		btnExport.setLayoutData(fd_btnExport);
 		btnExport.setText("Export");
 
-		//Checks and refreshes the individual sections and scroll space
+		//Checks and refreshes the individual sections
 		RefreshBudget();
 		RefreshVenue();
 		RefreshFlow();
 		RefreshParticipant();
+
+		//Removes ability to edit if event is archived
 		if (cevent.isExpired()) {
-			Epartedit.setEnabled(false);
-			Bookvenueedit.setEnabled(false);
-			btnEdit.setEnabled(false);
-			Eprogflowedit.setEnabled(false);
-			Advertemail.setEnabled(false);
-			Advertfb.setEnabled(false);
-			AdvertSMS.setEnabled(false);
+			btnEventParticulars.setEnabled(false);
+			btnBookVenue.setEnabled(false);
+			btnParticipantList.setEnabled(false);
+			btnOptimizeBudget.setEnabled(false);
+			btnEventFlow.setEnabled(false);
+			btnAdvertEmail.setEnabled(false);
+			btnAdvertFB.setEnabled(false);
+			btnAdvertSMS.setEnabled(false);
 
 		}
-		sc1.setContent(maincomp);
-		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		sc1.setContent(MainComp);
+		sc1.setMinSize(MainComp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 }
 
 /**
@@ -546,7 +565,7 @@ public class ViewEvent extends Composite {
  * @param object The composite the divider is going to attach to
  * @return The created divider is returned
  */
-public Label createdivider (Composite container, Composite object) {
+public Label createDivider (Composite container, Composite object) {
 	Label divider = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
 	FormData fd_divider = new FormData();
 	fd_divider.top = new FormAttachment(object, 30);
@@ -556,35 +575,15 @@ public Label createdivider (Composite container, Composite object) {
 
 	return divider;
 }
-/*	//For use in version 0.2
-	public static void UpdateEvent(Eventitem event) {
-		cevent = event;
-		RefreshParticulars();
-		RefreshBudget();
-		RefreshVenue();
-		sc1.layout(true);
-		sc1.setContent(maincomp);
-		sc1.setMinSize(maincomp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-	}
 
-	public static void RefreshParticulars() {
-		Startdate.setText(cevent.getStartDate());
-		Starttime.setText(cevent.getStartTime()+"HRS");
-		Enddate.setText(cevent.getEndDate());
-		Endtime.setText(cevent.getEndTime()+"HRS");
-		Edescription.setText(cevent.getDescription());
-		Ename.setText(cevent.getName());
-		System.out.println("refreshed");
-		System.out.println(cevent.getDescription());
-	}*/
 /**
  * Description: Refreshes the budget table in the Optimize Budget section of View Event by disposing the current one (if any) and replacing with a new table.
  * Table will only be created if there is any entry.
  */
 public static void RefreshBudget() {
-	if (budgetflag)
+	if (BudgetFlag)
 		BudgetResult.dispose();
-	BudgetResult = OptimizedTable();
+	BudgetResult = BudgetTable();
 
 }
 
@@ -593,39 +592,50 @@ public static void RefreshBudget() {
  * Table will only be created if there is any entry.
  */
 public static void RefreshVenue() {
-	if (venueflag)
+	if (VenueFlag)
 		VenueResult.dispose();
 	VenueResult = VenueTable();
 
 }
 
 public static void RefreshFlow() {
-	if (flowflag)
+	if (FlowFlag)
 		FlowResult.dispose();
 	FlowResult = FlowTable();
 
 }
 
 public static void RefreshParticipant() {
-	if (participantflag)
+	if (ParticipantFlag)
 		ParticipantResult.dispose();
 	ParticipantResult = ParticipantTable();
 
 }
 
+
+/**********************************************************************************************
+ * 
+ * PARTICIPANTTABLE 
+ * 
+ *********************************************************************************************/
+/**
+ * Description: Creates a table of participant details in the ViewEvent page. 
+ * @return Table containing participant details or null if ParticipantList is empty 
+ */
 public static Table ParticipantTable() {
 	List<Participant> participant_list = cevent.getParticipantList();
 
 
 	//Checks if there is any entry before creating the table
 	if (participant_list.isEmpty()) {
-		participantflag = false;	
+		ParticipantFlag = false;	
 		return null;
 	}
 
 
-	ParticipantResult = new Table(Plistcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
-	ParticipantResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+	ParticipantResult = new Table(ParticipantListComp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
+	GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+	ParticipantResult.setLayoutData(data);
 	ParticipantResult.setHeaderVisible(true);
 	ParticipantResult.getVerticalBar().setEnabled(false);
 
@@ -661,9 +671,9 @@ public static Table ParticipantTable() {
 
 
 	//Column Resize with table fix
-	Plistcomp.addControlListener(new ControlAdapter() {
+	ParticipantListComp.addControlListener(new ControlAdapter() {
 		public void controlResized(ControlEvent e) {
-			Rectangle area = Plistcomp.getClientArea();
+			Rectangle area = ParticipantListComp.getClientArea();
 			Point preferredSize = ParticipantResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			int width = area.width - 2*ParticipantResult.getBorderWidth();
 			if (preferredSize.y > area.height + ParticipantResult.getHeaderHeight()) {
@@ -673,33 +683,12 @@ public static Table ParticipantTable() {
 				width -= vBarSize.x;
 
 			}
-			Point oldSize = ParticipantResult.getSize();
-			if (oldSize.x > area.width) {
-				// table is getting smaller so make the columns 
-				// smaller first and then resize the table to
-				// match the client area width
-				col0.setWidth(width/6+10);
-				col1.setWidth(width/6+10);
-				col2.setWidth(width/6+20);
-				col3.setWidth(width/6+20);
-				col4.setWidth(width/6-20);
-				col5.setWidth(width/6-20);
-
-				//    System.out.println("width "+ width);
-				//BudgetResult.setSize(area.width, area.height);
-			} else {
-				// table is getting bigger so make the table 
-				// bigger first and then make the columns wider
-				// to match the client area width
-				//BudgetResult.setSize(area.width, area.height);
-				col0.setWidth(width/5-10);
-				col1.setWidth(width/5-10);
-				col2.setWidth(width/5+20);
-				col3.setWidth(width/5+20);
-				col4.setWidth(width/5-20);
-				col5.setWidth(width/6-20);
-
-			}
+			col1.pack();
+			col2.pack();
+			col4.setWidth((width - col1.getWidth() - col2.getWidth())/3);
+			col0.setWidth((width - col1.getWidth() - col2.getWidth() - col4.getWidth())*2/5);
+			col3.setWidth((width - col1.getWidth() - col2.getWidth() - col4.getWidth())*2/5-10);
+			col5.setWidth(width - col1.getWidth() - col2.getWidth() - col4.getWidth() - col3.getWidth() - col0.getWidth()-10);
 		}
 	});
 
@@ -708,7 +697,6 @@ public static Table ParticipantTable() {
 		@Override
 		public void mouseHover(MouseEvent e) {
 			TableItem item = ParticipantResult.getItem(new Point(e.x, e.y)); 
-			//	 BudgetResult.setToolTipText(item.getText(0));
 
 			if (item != null) {
 				//tooltip for every column
@@ -725,8 +713,12 @@ public static Table ParticipantTable() {
 		}
 	});
 
-
-	participantflag = true;
+	//Dictates when vertical scrollbar appears
+	if (ParticipantResult.getItemCount() > 10) {
+		data.heightHint = 11 * ParticipantResult.getItemHeight();
+		ParticipantResult.getVerticalBar().setEnabled(true);
+	}
+	ParticipantFlag = true;
 	return ParticipantResult;
 }
 
@@ -739,13 +731,14 @@ public static Table VenueTable() {
 
 	//Checks if there is any entry before creating the table
 	if (venue_list.isEmpty()) {
-		venueflag = false;	
+		VenueFlag = false;	
 		return null;
 	}
 
 
-	VenueResult = new Table(Bookvenuecomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
-	VenueResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+	VenueResult = new Table(BookVenueComp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);
+	GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+	VenueResult.setLayoutData(data);
 	VenueResult.setHeaderVisible(true);
 	VenueResult.getVerticalBar().setEnabled(false);
 
@@ -783,9 +776,9 @@ public static Table VenueTable() {
 
 
 	//Column Resize with table fix
-	Bookvenuecomp.addControlListener(new ControlAdapter() {
+	BookVenueComp.addControlListener(new ControlAdapter() {
 		public void controlResized(ControlEvent e) {
-			Rectangle area = Bookvenuecomp.getClientArea();
+			Rectangle area = BookVenueComp.getClientArea();
 			Point preferredSize = VenueResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			int width = area.width - 2*VenueResult.getBorderWidth();
 			if (preferredSize.y > area.height + VenueResult.getHeaderHeight()) {
@@ -795,33 +788,13 @@ public static Table VenueTable() {
 				width -= vBarSize.x;
 
 			}
-			Point oldSize = VenueResult.getSize();
-			if (oldSize.x > area.width) {
-				// table is getting smaller so make the columns 
-				// smaller first and then resize the table to
-				// match the client area width
-				col0.setWidth(width/5-10);
-				col1.setWidth((width - col0.getWidth())/6-10);
-				col3.setWidth((width - col0.getWidth())/6+4);
-				col4.setWidth((width - col0.getWidth())/6-4);
-				col5.setWidth((width - col0.getWidth())/6+4);
-				col6.setWidth((width - col0.getWidth())/6-4);
-				col2.setWidth(width - col0.getWidth() - col1.getWidth() - col3.getWidth() - col4.getWidth() -col5.getWidth() -col6.getWidth()-10);
-				//    System.out.println("width "+ width);
-				//BudgetResult.setSize(area.width, area.height);
-			} else {
-				// table is getting bigger so make the table 
-				// bigger first and then make the columns wider
-				// to match the client area width
-				//BudgetResult.setSize(area.width, area.height);
-				col0.setWidth(width/5-10);
-				col1.setWidth((width - col0.getWidth())/6-10);
-				col3.setWidth((width - col0.getWidth())/6+4);
-				col4.setWidth((width - col0.getWidth())/6-4);
-				col5.setWidth((width - col0.getWidth())/6+4);
-				col6.setWidth((width - col0.getWidth())/6-4);
-				col2.setWidth(width - col0.getWidth() - col1.getWidth() - col3.getWidth() - col4.getWidth() -col5.getWidth() -col6.getWidth()-10);
-			}
+			col0.setWidth(width/5-10);
+			col1.setWidth((width - col0.getWidth())/6-10);
+			col3.setWidth((width - col0.getWidth())/6+4);
+			col4.setWidth((width - col0.getWidth())/6-4);
+			col5.setWidth((width - col0.getWidth())/6+4);
+			col6.setWidth((width - col0.getWidth())/6-4);
+			col2.setWidth(width - col0.getWidth() - col1.getWidth() - col3.getWidth() - col4.getWidth() -col5.getWidth() -col6.getWidth()-10);
 		}
 	});
 
@@ -830,7 +803,6 @@ public static Table VenueTable() {
 		@Override
 		public void mouseHover(MouseEvent e) {
 			TableItem item = VenueResult.getItem(new Point(e.x, e.y));
-			//	 BudgetResult.setToolTipText(item.getText(0));
 
 			if (item != null) {
 				//tooltip for every column
@@ -847,8 +819,12 @@ public static Table VenueTable() {
 		}
 	});
 
-
-	venueflag = true;
+	//Dictates when vertical scrollbar appears
+	if (VenueResult.getItemCount() > 10) {
+		data.heightHint = 11 * VenueResult.getItemHeight();
+		VenueResult.getVerticalBar().setEnabled(true);
+	}
+	VenueFlag = true;
 	return VenueResult;
 }
 
@@ -863,13 +839,14 @@ public static Table FlowTable() {
 
 	//Checks if there is any entry before creating the table
 	if (flow_list.isEmpty()) {
-		flowflag = false;	
+		FlowFlag = false;	
 		return null;
 	}
 
 
-	FlowResult = new Table(Eprogflowcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
-	FlowResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+	FlowResult = new Table(EventFlowComp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
+	GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+	FlowResult.setLayoutData(data);
 	FlowResult.setHeaderVisible(true);
 	FlowResult.getVerticalBar().setEnabled(false);
 
@@ -904,9 +881,9 @@ public static Table FlowTable() {
 
 
 	//Column Resize with table fix
-	Eprogflowcomp.addControlListener(new ControlAdapter() {
+	EventFlowComp.addControlListener(new ControlAdapter() {
 		public void controlResized(ControlEvent e) {
-			Rectangle area = Eprogflowcomp.getClientArea();
+			Rectangle area = EventFlowComp.getClientArea();
 			Point preferredSize = FlowResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			int width = area.width - 2*FlowResult.getBorderWidth();
 			if (preferredSize.y > area.height + FlowResult.getHeaderHeight()) {
@@ -916,31 +893,12 @@ public static Table FlowTable() {
 				width -= vBarSize.x;
 
 			}
-			Point oldSize = FlowResult.getSize();
-			if (oldSize.x > area.width) {
-				// table is getting smaller so make the columns 
-				// smaller first and then resize the table to
-				// match the client area width
-				col0.setWidth(width/5+10);
-				col1.setWidth(width/5+10);
-				col2.setWidth(width/5+20);
-				col3.setWidth(width/5+20);
-				col4.setWidth(width/5-20);
 
-				//    System.out.println("width "+ width);
-				//BudgetResult.setSize(area.width, area.height);
-			} else {
-				// table is getting bigger so make the table 
-				// bigger first and then make the columns wider
-				// to match the client area width
-				//BudgetResult.setSize(area.width, area.height);
-				col0.setWidth(width/5-10);
-				col1.setWidth(width/5-10);
-				col2.setWidth(width/5+20);
-				col3.setWidth(width/5+20);
-				col4.setWidth(width/5-20);
-
-			}
+			col0.pack();
+			col1.pack();
+			col2.setWidth((width - col0.getWidth() - col1.getWidth() - 10)/3);
+			col3.setWidth((width - col0.getWidth() - col1.getWidth() - 10)/3);
+			col4.setWidth((width - col0.getWidth() - col1.getWidth() - 10)/3);
 		}
 	});
 
@@ -967,7 +925,12 @@ public static Table FlowTable() {
 	});
 
 
-	flowflag = true;
+	//Dictates when vertical scrollbar appears
+	if (FlowResult.getItemCount() > 10) {
+		data.heightHint = 11 * FlowResult.getItemHeight();
+		FlowResult.getVerticalBar().setEnabled(true);
+	}
+	FlowFlag = true;
 	return FlowResult;
 }
 
@@ -975,26 +938,27 @@ public static Table FlowTable() {
  * Description: Creates a sortable table that is populated with items of the event's optimized item list
  * @return A table is returned if there are entries in the list, else null is returned
  */
-public static Table OptimizedTable() {
+public static Table BudgetTable() {
 	final Vector<Item> item_list = cevent.getitem_list();
 
 	//Checks if there is any entry before creating the table
 	if (item_list.isEmpty()) {
-		budgetflag = false;	
+		BudgetFlag = false;	
 		return null;
 	}
 
 
-	BudgetResult = new Table(Budgetcomp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);		
-	BudgetResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+	BudgetResult = new Table(BudgetComp, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);
+	GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+	BudgetResult.setLayoutData(data);
 	BudgetResult.setHeaderVisible(true);
 
 	final TableColumn col0 = new TableColumn(BudgetResult, SWT.LEFT);
 	final TableColumn col1 = new TableColumn(BudgetResult, SWT.LEFT);
-	final TableColumn col2 = new TableColumn(BudgetResult, SWT.NULL);
-	final TableColumn col3 = new TableColumn(BudgetResult, SWT.NULL);
-	final TableColumn col4 = new TableColumn(BudgetResult, SWT.NULL);
-	final TableColumn col5 = new TableColumn(BudgetResult, SWT.NULL);
+	final TableColumn col2 = new TableColumn(BudgetResult, SWT.LEFT);
+	final TableColumn col3 = new TableColumn(BudgetResult, SWT.CENTER);
+	final TableColumn col4 = new TableColumn(BudgetResult, SWT.CENTER);
+	final TableColumn col5 = new TableColumn(BudgetResult, SWT.CENTER);
 
 	col0.setText("No.");
 	col1.setText("Item Name");
@@ -1043,9 +1007,9 @@ public static Table OptimizedTable() {
 
 
 	//Column Resize with table fix
-	Budgetcomp.addControlListener(new ControlAdapter() {
+	BudgetComp.addControlListener(new ControlAdapter() {
 		public void controlResized(ControlEvent e) {
-			Rectangle area = Budgetcomp.getClientArea();
+			Rectangle area = BudgetComp.getClientArea();
 			Point preferredSize = BudgetResult.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			int width = area.width - 2*BudgetResult.getBorderWidth();
 			if (preferredSize.y > area.height + BudgetResult.getHeaderHeight()) {
@@ -1054,31 +1018,13 @@ public static Table OptimizedTable() {
 				Point vBarSize = BudgetResult.getVerticalBar().getSize();
 				width -= vBarSize.x;
 			}
-			Point oldSize = BudgetResult.getSize();
-			if (oldSize.x > area.width) {
-				// table is getting smaller so make the columns 
-				// smaller first and then resize the table to
-				// match the client area width
-				col1.setWidth(width/2-50);
-				col0.setWidth((width - col1.getWidth())/5);
-				col2.setWidth((width - col1.getWidth())/5);
-				col3.setWidth((width - col1.getWidth())/4);
-				col4.setWidth((width - col1.getWidth())/5);
-				col5.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -col4.getWidth() + 30);
-				//BudgetResult.setSize(area.width, area.height);
-			} else {
-				// table is getting bigger so make the table 
-				// bigger first and then make the columns wider
-				// to match the client area width
-				//BudgetResult.setSize(area.width, area.height);
-				col1.setWidth(width/2-50);
-				col0.setWidth((width - col1.getWidth())/5);
-				col2.setWidth((width - col1.getWidth())/5);
-				col3.setWidth((width - col1.getWidth())/4);
-				col4.setWidth((width - col1.getWidth())/5 + 10);
-				col5.setWidth(width - col0.getWidth() - col1.getWidth() - col2.getWidth() - col3.getWidth() -col4.getWidth() + 30);
+			col0.pack();
+			col2.pack();
+			col3.pack();
+			col4.pack();
+			col5.pack();
+			col1.setWidth(width - col0.getWidth() - col2.getWidth() - col3.getWidth() - col4.getWidth() - col5.getWidth() -10);
 
-			}
 		}
 	});
 
@@ -1089,17 +1035,18 @@ public static Table OptimizedTable() {
 			TableItem item = BudgetResult.getItem(new Point(e.x, e.y));
 			//	 BudgetResult.setToolTipText(item.getText(0));
 
-			//tooltip for every column
-			for (int i=0; i<BudgetResult.getColumnCount()-1; i++) {
-				if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
-					BudgetResult.setToolTipText(item.getText(i));
-					break;
+			if (item != null) {
+				//tooltip for every column
+				for (int i=0; i<BudgetResult.getColumnCount()-1; i++) {
+					if (e.x > item.getBounds(i).x && e.x < item.getBounds(i+1).x) {
+						BudgetResult.setToolTipText(item.getText(i));
+						break;
+					}
+	
+					else if (i == BudgetResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
+						BudgetResult.setToolTipText(item.getText(++i));
 				}
-
-				else if (i == BudgetResult.getColumnCount()-2 && (e.x > item.getBounds(i+1).x))
-					BudgetResult.setToolTipText(item.getText(++i));
 			}
-
 		}
 	});
 
@@ -1123,7 +1070,16 @@ public static Table OptimizedTable() {
 	});
 	mntmDeleteEvent.setText("Delete Item");
 
-	budgetflag = true;
+	if (cevent.isExpired()) {
+		mntmDeleteEvent.setEnabled(false);
+	}
+	
+	//Dictates when vertical scrollbar appears
+	if (BudgetResult.getItemCount() > 10) {
+		data.heightHint = 11 * BudgetResult.getItemHeight();
+		BudgetResult.getVerticalBar().setEnabled(true);
+	}
+	BudgetFlag = true;
 	return BudgetResult;
 }
 

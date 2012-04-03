@@ -223,25 +223,41 @@ public class ViewParticipantList extends Composite {
 		btnImportFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (table.getItemCount() != 0) {
-					deleteconfirmDialog dialog = new deleteconfirmDialog(new Shell(), "confirm",
-							"Importing a new file will replace the current table. Do you want to continue?");
-					if ((Integer) dialog.open() == 1) {
-						//Clears the tables b4 import.
-						table.setRedraw(false);
-						table.removeAll();
-						table.setRedraw(true);
-						tempEntries.clear();
+				try {
+					if (!txtimportfile.getText().endsWith(".csv"))
+						throw new Exception("Import file must be in .csv format");
+					
+					if (table.getItemCount() != 0) {
+						deleteconfirmDialog dialog = new deleteconfirmDialog(new Shell(), "confirm",
+								"Importing a new file will replace the current table. Do you want to continue?");
+						if ((Integer) dialog.open() == 1) {
+							//Clears the tables b4 import.
+							table.setRedraw(false);
+							table.removeAll();
+							table.setRedraw(true);
+							tempEntries.clear();
+							ImportCSV(txtimportfile.getText());
+						}
+					}
+					
+					else {
 						ImportCSV(txtimportfile.getText());
 					}
+					tableViewer.refresh();
+					for (int i=0; i<HEADERS.length; i++)
+						tvc[i].getColumn().pack();
+					
+				} catch (FileNotFoundException exception) {
+					System.out.println("File not found.");
+					new errormessageDialog(new Shell(), "The file specified cannot be found.").open();
+					exception.printStackTrace();
+					
+				} catch (Exception exception) {
+					errormessageDialog errordiag = new errormessageDialog(new Shell(), exception.getMessage());
+					errordiag.open();
 				}
 				
-				else {
-					ImportCSV(txtimportfile.getText());
-				}
-				tableViewer.refresh();
-				for (int i=0; i<HEADERS.length; i++)
-					tvc[i].getColumn().pack();
+				
 			}
 		});
 		btnImportFile.setText("Import File");
@@ -353,6 +369,7 @@ public class ViewParticipantList extends Composite {
 		btnGoBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				ModelParticipantList.PullParticipantList(cevent);
 				ViewMain.ReturnView();
 			}
 		});
@@ -438,7 +455,7 @@ public void ExportCSV (String filepath) {
 	}
 }
 
-public void ImportCSV (String filepath) {
+public void ImportCSV (String filepath) throws Exception {
 	try {
 		CSVReader reader = new CSVReader(new FileReader(filepath));
 		
@@ -558,9 +575,7 @@ public void ImportCSV (String filepath) {
 		
 	} catch (FileNotFoundException e) {
 		// TODO Auto-generated catch block
-		System.out.println("File not found.");
-		new errormessageDialog(new Shell(), "The file specified cannot be found.").open();
-		e.printStackTrace();
+		throw e;
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		System.out.println(e);
@@ -571,6 +586,7 @@ public void ImportCSV (String filepath) {
 	public static void addParticipant(Participant newparticipant) {
 		tempEntries.add(newparticipant);
 	}
+	
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
