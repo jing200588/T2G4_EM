@@ -176,7 +176,9 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColStartDateTime = tableViewerColumn_4.getColumn();
-		tcl_tableComposite.setColumnData(ColStartDateTime, new ColumnWeightData(30));
+		ColStartDateTime.setAlignment(SWT.CENTER);
+		tcl_tableComposite.setColumnData(ColStartDateTime, new ColumnWeightData(15));
+		//ColStartDateTime.pack();
 		ColStartDateTime.setText(STARTDATETIME);
 		tableViewerColumn_4.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -189,7 +191,9 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColEndDateTime = tableViewerColumn_3.getColumn();
-		tcl_tableComposite.setColumnData(ColEndDateTime, new ColumnPixelData(100, true, true));
+		ColEndDateTime.setAlignment(SWT.CENTER);
+		tcl_tableComposite.setColumnData(ColEndDateTime, new ColumnWeightData(15));
+		//ColEndDateTime.pack();
 		ColEndDateTime.setText(ENDDATETIME);
 		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -202,7 +206,7 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColActivity = tableViewerColumn_2.getColumn();
-		tcl_tableComposite.setColumnData(ColActivity, new ColumnPixelData(100, true, true));
+		tcl_tableComposite.setColumnData(ColActivity, new ColumnWeightData(20));
 		ColActivity.setText(ACTIVITY);
 		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -214,7 +218,7 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColVenue = tableViewerColumn_1.getColumn();
-		tcl_tableComposite.setColumnData(ColVenue, new ColumnPixelData(100, true, true));
+		tcl_tableComposite.setColumnData(ColVenue, new ColumnWeightData(20));
 		ColVenue.setText(VENUE);
 		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -226,7 +230,7 @@ public class ViewEventFlow extends Composite {
 		
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn ColNote = tableViewerColumn.getColumn();
-		tcl_tableComposite.setColumnData(ColNote, new ColumnPixelData(100, true, true));
+		tcl_tableComposite.setColumnData(ColNote, new ColumnWeightData(20));
 		ColNote.setText(NOTE);
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
