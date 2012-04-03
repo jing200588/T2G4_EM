@@ -204,26 +204,6 @@ public class EventFlowEntry implements Comparable<EventFlowEntry> {
 		return 0;
 	}
 	
-	/**
-	 * Add an EventFlowEntry object into an already sorted list of EventFlowEntry objects.
-	 * 
-	 * @param sortedList - Vector<EventFlowEntry>
-	 * @param newEntry - EventFlowEntry
-	 * 
-	 * Assumption: sortedList should be in increasing order of EventFlowEntry objects.
-	 */
-	public static void insertSortedList(Vector<EventFlowEntry> sortedList, EventFlowEntry newEntry)
-	{
-		int index = sortedList.size() - 1;
-		
-		while(index >= 0 && sortedList.get(index).compareTo(newEntry) > 0)
-		{
-			index--;
-		}
-		
-		sortedList.add(index + 1, newEntry);
-	}
-	
 	/* For testing purpose */
 	public static void main(String[] args)
 	{

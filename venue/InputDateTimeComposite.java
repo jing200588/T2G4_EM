@@ -10,7 +10,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -25,6 +24,7 @@ public class InputDateTimeComposite extends Composite {
 	private Combo comboTimeTo;
 	private boolean hasChosenTimeFrom;
 	private boolean hasChosenTimeTo;
+	private boolean m_isEnabled;
 	
 	/**
 	 * Create the composite.
@@ -45,6 +45,7 @@ public class InputDateTimeComposite extends Composite {
 		// Initialize some variables
 		hasChosenTimeFrom = false;
 		hasChosenTimeTo = false;
+		m_isEnabled = false;
 		
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setBounds(10, 10, 303, 90);
@@ -129,6 +130,7 @@ public class InputDateTimeComposite extends Composite {
 		dateTimeTo.setEnabled(isEnabled);
 		comboTimeFrom.setEnabled(isEnabled);
 		comboTimeTo.setEnabled(isEnabled);
+		m_isEnabled = isEnabled; 
 	}
 	
 	/**
@@ -193,10 +195,19 @@ public class InputDateTimeComposite extends Composite {
 	 */
 	public void reset()
 	{
-		comboTimeFrom.setText("");
-		comboTimeTo.setText("");
+		comboTimeFrom.deselectAll();
+		comboTimeTo.deselectAll();
 		hasChosenTimeTo = hasChosenTimeFrom = false;
 	}
+	
+	/**
+	 * Return if this composite is enabled or not
+	 */
+	public boolean isEnabled()
+	{
+		return m_isEnabled;
+	}
+	
 	public static void main(String[] args){
 		Display display = new Display();
 		display = Display.getDefault();

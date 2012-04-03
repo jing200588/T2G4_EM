@@ -244,7 +244,7 @@ public class ViewEventFlow extends Composite {
 		FormData fd_btnReturnToEvent = new FormData();
 		fd_btnReturnToEvent.left = new FormAttachment(tableComposite, 10);
 
-		fd_btnReturnToEvent.right = new FormAttachment(95);
+		fd_btnReturnToEvent.right = new FormAttachment(95, 10);
 	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
 		btnReturnToEvent.setLayoutData(fd_btnReturnToEvent);
 		btnReturnToEvent.addSelectionListener(new SelectionAdapter() {
@@ -259,15 +259,14 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		toolkit.adapt(btnReturnToEvent, true, true);
-		btnReturnToEvent.setText("Save & Return");
+		btnReturnToEvent.setText("Save and Return");
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
+		fd_btnReturnToEvent.top = new FormAttachment(btnAdd, 10);
 		FormData fd_btnAdd = new FormData();
 		fd_btnAdd.left = new FormAttachment(tableComposite, 10);
 		fd_btnAdd.width = 100;
-		fd_btnAdd.right = new FormAttachment(95);
 		fd_btnAdd.top = new FormAttachment(0, 10);
-		fd_btnReturnToEvent.top = new FormAttachment(btnAdd, 10);
 //		fd_btnAdd.left = new FormAttachment(0, 571);
 		btnAdd.setLayoutData(fd_btnAdd);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
@@ -280,7 +279,7 @@ public class ViewEventFlow extends Composite {
 				// User might press 'Cancel' because they do not want to create a new entry anymore!
 				if(newEntry != null)
 				{
-					EventFlowEntry.insertSortedList(listEventFlow, newEntry);
+					ControllerEventFlow.insertSortedList(listEventFlow, newEntry);
 					tableViewEventFlow.refresh();
 				}
 			}
@@ -394,9 +393,9 @@ public class ViewEventFlow extends Composite {
 		});
 		btnNewButton.setSelection(true);
 		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.left = new FormAttachment(tableComposite, 10);
+		fd_btnNewButton.right = new FormAttachment(btnReturnToEvent, 0, SWT.RIGHT);
 		fd_btnNewButton.top = new FormAttachment(btnReturnToEvent, 11);
-		fd_btnNewButton.right = new FormAttachment(95);
+		fd_btnNewButton.left = new FormAttachment(tableEventFlow, 10);
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		toolkit.adapt(btnNewButton, true, true);
 		btnNewButton.setText("Save");
@@ -437,7 +436,7 @@ public class ViewEventFlow extends Composite {
 			if(newEntry != null)
 			{
 				listEventFlow.remove(chosenIndex);
-				EventFlowEntry.insertSortedList(listEventFlow, newEntry);
+				ControllerEventFlow.insertSortedList(listEventFlow, newEntry);
 				tableViewEventFlow.refresh();
 			}
 		}

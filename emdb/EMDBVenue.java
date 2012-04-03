@@ -230,9 +230,9 @@ public class EMDBVenue extends EMDBBase{
 			)
 	{
 		String sql	=	new InsertQuery(this.venueTable)
-						  		.addColumn(this.venueName, aName)
-						  		.addColumn(this.venueAddress, aAddress)
-						  		.addColumn(this.venueDescription, aDescription)
+						  		.addColumn(this.venueName, aName.replaceAll("[\']", ""))
+						  		.addColumn(this.venueAddress, aAddress.replaceAll("[\']", ""))
+						  		.addColumn(this.venueDescription, aDescription.replaceAll("[\']", ""))
 						  		.addColumn(this.venueCapacity, aCapacity)
 						  		.addColumn(this.venueCost, aCost)
 						  		.validate().toString();
@@ -633,7 +633,13 @@ public class EMDBVenue extends EMDBBase{
 		String sql = new SelectQuery()
 							.addAllColumns()
 							.addFromTable(this.venueTable)
-							.addCondition(BinaryCondition.like(this.venueName, "%"+aSearchTerm+"%"))
+							.addCondition(
+								ComboCondition.or(
+										BinaryCondition.like(this.venueName, "%"+aSearchTerm+"%"),
+										BinaryCondition.like(this.venueAddress, "%"+aSearchTerm+"%"),
+										BinaryCondition.like(this.venueDescription, "%"+aSearchTerm+"%")
+								)
+							)
 							.validate().toString();
 		
 		
@@ -698,9 +704,9 @@ public class EMDBVenue extends EMDBBase{
 			)
 	{
 		String sql	=	new UpdateQuery(this.venueTable)
-								.addSetClause(this.venueName, aName)
-								.addSetClause(this.venueAddress, aDescription)
-								.addSetClause(this.venueDescription, aDescription)
+								.addSetClause(this.venueName, aName.replaceAll("[\']", ""))
+								.addSetClause(this.venueAddress, aAddress.replaceAll("[\']", ""))
+								.addSetClause(this.venueDescription, aDescription.replaceAll("[\']", ""))
 								.addSetClause(this.venueCapacity, aCapacity)
 								.addSetClause(this.venueCost, aCost)
 								.addCondition(BinaryCondition.equalTo(this.venueID, aVenueID))

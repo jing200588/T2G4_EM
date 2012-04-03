@@ -241,14 +241,14 @@ public class EMDBEvent extends EMDBBase{
 			)
 	{
 		String sql	=	new InsertQuery(this.eventsTable)
-					      		.addColumn(this.eventsName, aName)
-					      		.addColumn(this.eventsDescription, aDescription)
+					      		.addColumn(this.eventsName, aName.replaceAll("[\']", ""))
+					      		.addColumn(this.eventsDescription, aDescription.replaceAll("[\']", ""))
 					      		.addColumn(this.eventsBudget, aBudget)
 					      		.addColumn(this.eventsStartDate, aStartDate)
 					      		.addColumn(this.eventsEndDate, aEndDate)
 					      		.addColumn(this.eventsStartTime, aStartTime)
 					      		.addColumn(this.eventsEndTime, aEndTime)
-					      		.addColumn(this.eventsSchedule, aSchedule)
+					      		.addColumn(this.eventsSchedule, aSchedule.replaceAll("[\']", ""))
 					      		.validate().toString();
 		
 		
@@ -459,14 +459,14 @@ public class EMDBEvent extends EMDBBase{
 			)
 	{
 		String sql	=	new UpdateQuery(this.eventsTable)
-								.addSetClause(this.eventsName, aName)
-								.addSetClause(this.eventsDescription, aDescription)
+								.addSetClause(this.eventsName, aName.replaceAll("[\']", ""))
+								.addSetClause(this.eventsDescription, aDescription.replaceAll("[\']", ""))
 								.addSetClause(this.eventsBudget, aBudget)
 								.addSetClause(this.eventsStartDate, aStartDate)
 								.addSetClause(this.eventsEndDate, aEndDate)
 								.addSetClause(this.eventsStartTime, aStartTime)
 								.addSetClause(this.eventsEndTime, aEndTime)	
-								.addSetClause(this.eventsSchedule, aSchedule)
+								.addSetClause(this.eventsSchedule, aSchedule.replaceAll("[\']", ""))
 								.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 								.validate().toString();
 		
@@ -577,14 +577,14 @@ public class EMDBEvent extends EMDBBase{
 	private String generateArchiveQuery(Eventitem item){
 		String sql	=	new InsertQuery(this.archiveTable)
 								.addColumn(this.archiveEventID, item.getID())
-					      		.addColumn(this.archiveName, item.getName())
-					      		.addColumn(this.archiveDescription, item.getDescription())
+					      		.addColumn(this.archiveName, item.getName().replaceAll("[\']", ""))
+					      		.addColumn(this.archiveDescription, item.getDescription().replaceAll("[\']", ""))
 					      		.addColumn(this.archiveBudget, item.getBudget())
 					      		.addColumn(this.archiveStartDate, item.getStartDateTime().getDateRepresentation())
 					      		.addColumn(this.archiveEndDate, item.getEndDateTime().getDateRepresentation())
 					      		.addColumn(this.archiveStartTime, item.getStartDateTime().getTimeRepresentation())
 					      		.addColumn(this.archiveEndTime, item.getEndDateTime().getTimeRepresentation())
-					      		.addColumn(this.archiveSchedule, EventFlowEntry.getStringRepresentation( item.getEventFlow() ))
+					      		.addColumn(this.archiveSchedule, EventFlowEntry.getStringRepresentation( item.getEventFlow() ).replaceAll("[\']", ""))
 					      		.validate().toString();
 		
 		return sql;

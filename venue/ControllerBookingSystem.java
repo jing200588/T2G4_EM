@@ -75,28 +75,8 @@ public class ControllerBookingSystem {
 	}
 	
 	/**
-	 * Adds a venue which is not in the database of venues. It is provided by the user. However, such
-	 * a venue is not supported by the system. That is, the system will not book the venue. Event 
-	 * manager has to do the booking and time checking on his / her own.
-	 * The method updates the information about the outside venue in the record of an event specified by eventID.
-	 * Currently, this method is under heavy construction.
-	 * 
-	 * @param eventID - int
-	 * @param outside - Venue
-	 * @param wanted - TimeSlot
-	 * @return true if the information is updated in the database successfully.
-	 * @return false if the updating cannot be done.
-	 */
-	public static boolean chooseOutsideVenue(int eventID, Venue outside, TimeSlot wanted)
-	{
-		// Update in the database of event
-		
-		return true;
-	}
-	
-	/**
-	 * Looks up in the database and returns the venues whose names contain the input string as a
-	 * substring. Case-insensitivity is considered.
+	 * Looks up in the database and returns the venues whose names or addresses or descriptions 
+	 * contain the input string as a substring. Case-insensitivity is considered.
 	 *  
 	 * @param venueName - String
 	 * @return list - Vector<Venue>
@@ -265,13 +245,7 @@ public class ControllerBookingSystem {
 	{
 		int index = findIndex(currentSearchResult, venueID);
 	
-		String[] infoPieces = currentSearchResult.get(index).getAllVenueInformation();
-		
-		String output = "Name: " + infoPieces[0] + "\nAddress: " + infoPieces[1] + 
-				"\nDescription: " + infoPieces[2] + "\nMaximum Capacity: " + infoPieces[3] +
-				"\nCost: $" + infoPieces[4];
-		
-		return output;
+		return currentSearchResult.get(index).getAllVenueInformation();
 	}
 	
 	/**
@@ -389,7 +363,7 @@ public class ControllerBookingSystem {
 	}
 	
 	/**
-	 * Selects venues in the given list of venues such that their name contains
+	 * Selects venues in the given list of venues such that their name or address or description contains
 	 * 		the given input string as a substring. Case-insensitivity is considered.
 	 * 
 	 * @param listVenue - Vector<Venue>
@@ -398,11 +372,14 @@ public class ControllerBookingSystem {
 	 */
 	private Vector<Venue> shortListByName(Vector<Venue> listVenue, String subString)
 	{
+		subString = subString.toUpperCase();
 		Vector<Venue> returnList = new Vector<Venue>();
 		
 		for(int index = 0; index < listVenue.size(); index++)
 			// Check if subString is a substring of the name of the venue.
-			if(listVenue.get(index).getName().toUpperCase().indexOf(subString.toUpperCase()) >= 0)
+			if(listVenue.get(index).getName().toUpperCase().indexOf(subString) >= 0 ||
+			   listVenue.get(index).getAddress().toUpperCase().indexOf(subString) >= 0 ||
+			   listVenue.get(index).getDescription().toUpperCase().indexOf(subString) >= 0)
 				returnList.add(listVenue.get(index));
 		
 		return returnList;

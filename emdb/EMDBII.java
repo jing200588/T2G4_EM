@@ -108,10 +108,26 @@ public class EMDBII{
 	 * Clears and ensures all connections are closed.
 	 */
 	public void clearConnections(){
-		this.event.disconnect();
-		this.budget.disconnect();
-		this.venue.disconnect();
-		this.participant.disconnect();
+		try{
+			this.event.disconnect();
+		}catch(Exception e){}
+		
+		try{
+			this.budget.disconnect();
+		}catch(Exception e){}
+		
+		try{
+			this.venue.disconnect();
+		}catch(Exception e){}
+		
+		try{
+			this.budget.disconnect();
+		}catch(Exception e){}
+		
+		try{
+			this.participant.disconnect();
+		}catch(Exception e){}
+		
 	}
 	
 	
