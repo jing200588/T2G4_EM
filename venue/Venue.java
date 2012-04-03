@@ -22,13 +22,7 @@ public class Venue {
 	private int m_maxCapacity;
 	private int m_cost;
 	private int m_venueID;					// Its value will be assigned by database
-	private Vector<TimeSlot> m_bookedTimeSlots;
-	
-	// With a venue supported by the system, you can request the system to book it for you online
-	// with your valid specified time slot. Its information is automatically updated by the system.
-	// On the other hand, with a venue that is not supported by the system, the system just keeps 
-	// track of it for you. You have to do the booking and updating by yourself.
-	private boolean isSupportedBySystem;	 	
+	private Vector<TimeSlot> m_bookedTimeSlots; 	
 	
 	/************************************************************************
 	 * Constructor
@@ -123,26 +117,36 @@ public class Venue {
 	}
 	
 	/**
-	 * Returns a list of pieces of venue information. All pieces are of type String.
-	 * 
-	 * @return an array of String objects where
-	 * 		+ String[0] - name of the venue
-	 * 		+ String[1] - address
-	 * 		+ String[2] - description
-	 * 		+ String[3] - maximum capacity
-	 * 		+ String[4] - cost (in cents)
-	 * 	
+	 * Returns a list of pieces of venue information. All pieces are of type String.	
 	 */
-	public String[] getAllVenueInformation()
+	public String getAllVenueInformation()
 	{
-		String[] allInfo = new String[5];
-		allInfo[0] = m_name;
-		allInfo[1] = m_address;
-		allInfo[2] = m_description;
-		allInfo[3] = Integer.toString(m_maxCapacity);
-		allInfo[4] = Double.toString(m_cost / 100.0);
+		StringBuffer strBuff = new StringBuffer();
 		
-		return allInfo;
+		strBuff.append("Name: ").append(m_name).append("\n");
+		strBuff.append("Address: ").append(m_address).append("\n");
+		strBuff.append("Description: ").append(m_description).append("\n");
+		strBuff.append("Maximum Capacity: ").append(m_maxCapacity).append("\n");
+		strBuff.append("Price: ").append(m_cost / 100.0).append("\n\n");
+		
+		if(m_bookedTimeSlots.isEmpty() == true)
+			strBuff.append("This venue has no history of booked time slots.\n");
+		else
+		{
+			strBuff.append("The following is the history of booked time slots:\n");
+			for(int index = 0; index < m_bookedTimeSlots.size(); index++)
+			{
+				strBuff.append(index + 1).append(") FROM:");
+				strBuff.append(m_bookedTimeSlots.get(index).getStartDateTime().getDateRepresentation());
+				strBuff.append(" ").append(m_bookedTimeSlots.get(index).getStartDateTime().getTimeRepresentation());
+				strBuff.append(" TO: ");
+				strBuff.append(m_bookedTimeSlots.get(index).getEndDateTime().getDateRepresentation());
+				strBuff.append(" ").append(m_bookedTimeSlots.get(index).getEndDateTime().getTimeRepresentation());
+				strBuff.append("\n\n");
+			}
+		}
+		
+		return strBuff.toString();
  	}
 	
 	/*************************************************************************
