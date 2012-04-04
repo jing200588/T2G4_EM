@@ -66,8 +66,6 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 						throw new Exception("Start and end date time are the same!");
 					if(compareResult > 0)
 						throw new Exception("Start and end date time are not in chronological order");
-					if(startDT.compareTo(MyDateTime.getCurrentDateTime()) < 0)
-						throw new Exception("Start date time of an event must not be in the past");
 					curevent.setName(eventname);
 					curevent.setDescription(txtDescription.getText());
 					curevent.setStartTime(StartTime.getHours(), StartTime.getMinutes());

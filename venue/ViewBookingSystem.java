@@ -28,8 +28,10 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
@@ -95,6 +97,7 @@ public class ViewBookingSystem extends Composite {
 	private Composite composite_3;
 	private Label lblCostFrom;
 	private Composite ButtonComp;
+	private Composite composite_4;
 	
 	/**
 	 * Create the composite.
@@ -560,7 +563,13 @@ public class ViewBookingSystem extends Composite {
 		ResultPageCompo.setBounds(0, 70, 330, 238);
 		toolkit.adapt(ResultPageCompo);
 		toolkit.paintBordersFor(ResultPageCompo);
+		ResultPageCompo.setLayout(new FormLayout());
 		BookVenueButton = new Button(ResultPageCompo, SWT.NONE);
+		FormData fd_BookVenueButton = new FormData();
+		fd_BookVenueButton.width = 100;
+		fd_BookVenueButton.bottom = new FormAttachment(100);
+		fd_BookVenueButton.right = new FormAttachment(100, -5);
+		BookVenueButton.setLayoutData(fd_BookVenueButton);
 		BookVenueButton.setEnabled(false);
 		BookVenueButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -618,18 +627,21 @@ public class ViewBookingSystem extends Composite {
 				}
 			}
 		});
-		BookVenueButton.setBounds(531, 240, 139, 25);
 		toolkit.adapt(BookVenueButton, true, true);
 		BookVenueButton.setText("Book Venue");
+		
+		composite_4 = new Composite(ResultPageCompo, SWT.NONE);
+		FormData fd_composite_4 = new FormData();
+		fd_composite_4.bottom = new FormAttachment(70);
+		fd_composite_4.top = new FormAttachment(0);
+		fd_composite_4.left = new FormAttachment(0);
+		composite_4.setLayoutData(fd_composite_4);
+		toolkit.adapt(composite_4);
+		toolkit.paintBordersFor(composite_4);
+		composite_4.setLayout(new GridLayout(1, false));
 
-		Label lblVenueDetails = new Label(ResultPageCompo, SWT.NONE);
-		lblVenueDetails.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
-		lblVenueDetails.setBounds(450, 0, 100, 20);
-		toolkit.adapt(lblVenueDetails, true, true);
-		lblVenueDetails.setText("Venue Details:");
-
-		Label lblSearchResult = new Label(ResultPageCompo, SWT.NONE);
-		lblSearchResult.setBounds(10, 0, 94, 20);
+		Label lblSearchResult = new Label(composite_4, SWT.NONE);
+		lblSearchResult.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblSearchResult.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
 		toolkit.adapt(lblSearchResult, true, true);
 		lblSearchResult.setText("Search Result:");
@@ -639,8 +651,18 @@ public class ViewBookingSystem extends Composite {
 		 * Table selection listener
 		 * 
 		 ***************************************************************************************/
-		tableViewer = new TableViewer(ResultPageCompo, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		Composite tableComposite = new Composite(composite_4, SWT.NONE);
+		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
+		tableComposite.setLayout(tcl_tableComposite);
+		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		toolkit.adapt(tableComposite);
+		toolkit.paintBordersFor(tableComposite);
+		
+		tableViewer = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		DisplayTable = tableViewer.getTable();
+	//	GridData gd_DisplayTable = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+	//	gd_DisplayTable.heightHint = 148;
+	//	DisplayTable.setLayoutData(gd_DisplayTable);
 		DisplayTable.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -666,13 +688,13 @@ public class ViewBookingSystem extends Composite {
 			}
 		});
 		DisplayTable.setHeaderVisible(true);
-		DisplayTable.setBounds(10, 26, 411, 160);
 		toolkit.paintBordersFor(DisplayTable);
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnVenueid = tableViewerColumn_3.getColumn();
-		tblclmnVenueid.setWidth(57);
+		tcl_tableComposite.setColumnData(tblclmnVenueid, new ColumnWeightData(20));
+		//tblclmnVenueid.setWidth(57);
 		tblclmnVenueid.setText("Venue ID");
 		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -681,10 +703,12 @@ public class ViewBookingSystem extends Composite {
 				return ((Integer) venue.getVenueID()).toString();
 			}
 		});
-
+		tblclmnVenueid.pack();
+		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnVenuename = tableViewerColumn_2.getColumn();
-		tblclmnVenuename.setWidth(192);
+		tcl_tableComposite.setColumnData(tblclmnVenuename, new ColumnWeightData(30));
+		//tblclmnVenuename.setWidth(192);
 		tblclmnVenuename.setText("Venue Name");
 		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -696,7 +720,8 @@ public class ViewBookingSystem extends Composite {
 
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnCapacity = tableViewerColumn_1.getColumn();
-		tblclmnCapacity.setWidth(69);
+		tcl_tableComposite.setColumnData(tblclmnCapacity, new ColumnWeightData(20));
+		//tblclmnCapacity.setWidth(69);
 		tblclmnCapacity.setText("Capacity");
 		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -705,10 +730,12 @@ public class ViewBookingSystem extends Composite {
 				return ((Integer) venue.getMaxCapacity()).toString();
 			}
 		});
-
+		tblclmnCapacity.pack();
+		
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnCost = tableViewerColumn.getColumn();
-		tblclmnCost.setWidth(70);
+		tcl_tableComposite.setColumnData(tblclmnCost, new ColumnWeightData(15));
+		//tblclmnCost.setWidth(70);
 		tblclmnCost.setText("Cost");
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
@@ -717,23 +744,50 @@ public class ViewBookingSystem extends Composite {
 				return ((Double) (venue.getCost() / 100.0)).toString();
 			}
 		});
-
+		//tblclmnCost.pack();
+		
 		ViewCompo = new Composite(ResultPageCompo, SWT.NONE);
-		ViewCompo.setBounds(439, 14, 241, 226);
+		FormData fd_ViewCompo = new FormData();
+		//	fd_ViewCompo.left = new FormAttachment(composite_4);
+		fd_ViewCompo.bottom = new FormAttachment(BookVenueButton);
+		fd_composite_4.right = new FormAttachment(ViewCompo);
+		fd_ViewCompo.left = new FormAttachment(65);
+		fd_ViewCompo.right = new FormAttachment(100);
+		fd_ViewCompo.top = new FormAttachment(0);
+		ViewCompo.setLayoutData(fd_ViewCompo);
 		toolkit.adapt(ViewCompo);
 		toolkit.paintBordersFor(ViewCompo);
+		ViewCompo.setLayout(new GridLayout(1, false));
+		
+				Label lblVenueDetails = new Label(ViewCompo, SWT.NONE);
+				lblVenueDetails.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+				lblVenueDetails.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
+				toolkit.adapt(lblVenueDetails, true, true);
+				lblVenueDetails.setText("Venue Details:");
 
 		VenueDetailTextbox = new Text(ViewCompo, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
+		GridData gd_VenueDetailTextbox = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_VenueDetailTextbox.heightHint = 65;
+		VenueDetailTextbox.setLayoutData(gd_VenueDetailTextbox);
 		VenueDetailTextbox.setEditable(false);
-		VenueDetailTextbox.setBounds(10, 10, 221, 212);
 		toolkit.adapt(VenueDetailTextbox, true, true);
 
 		dt_SearchResult = new InputDateTimeComposite(ResultPageCompo, SWT.NONE);
-		dt_SearchResult.setBounds(20, 170, 313, 100);
+		FormData fd_dt_SearchResult = new FormData();
+		fd_dt_SearchResult.top = new FormAttachment(composite_4, 5);
+		fd_dt_SearchResult.right = new FormAttachment(composite_4, 0, SWT.RIGHT);
+		fd_dt_SearchResult.bottom = new FormAttachment(100);
+		fd_dt_SearchResult.left = new FormAttachment(0);
+		dt_SearchResult.setLayoutData(fd_dt_SearchResult);
 		toolkit.adapt(dt_SearchResult);
 		toolkit.paintBordersFor(dt_SearchResult);
 
 		ButtonConfirmBookTime = new Button(ResultPageCompo, SWT.NONE);
+		FormData fd_ButtonConfirmBookTime = new FormData();
+		fd_ButtonConfirmBookTime.top = new FormAttachment(BookVenueButton, 0, SWT.TOP);
+		fd_ButtonConfirmBookTime.right = new FormAttachment(BookVenueButton, -6);
+		fd_ButtonConfirmBookTime.left = new FormAttachment(0, 450);
+		ButtonConfirmBookTime.setLayoutData(fd_ButtonConfirmBookTime);
 		ButtonConfirmBookTime.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -769,7 +823,6 @@ public class ViewBookingSystem extends Composite {
 				}
 			}
 		});
-		ButtonConfirmBookTime.setBounds(339, 240, 75, 25);
 		toolkit.adapt(ButtonConfirmBookTime, true, true);
 		ButtonConfirmBookTime.setText("Confirm");
 
