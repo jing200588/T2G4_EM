@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 
 public class ViewEmailAds extends Composite {
 	private Eventitem currentEvent;
@@ -59,6 +61,9 @@ public class ViewEmailAds extends Composite {
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		Form formViewEmailAds = formToolkit.createForm(this);
+		formViewEmailAds.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		formViewEmailAds.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
+		formViewEmailAds.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		formViewEmailAds.setBounds(0, 0, 700, 400);
 		formViewEmailAds.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		formToolkit.paintBordersFor(formViewEmailAds);
@@ -69,6 +74,7 @@ public class ViewEmailAds extends Composite {
 		 * Overview Budget optimization composite 
 		 **********************************************************************************/
 		compMain = new Composite(formViewEmailAds.getBody(), SWT.NONE);
+		compMain.setLayout(new GridLayout(2, false));
 		FormData fd_compMain = new FormData();
 		fd_compMain.top = new FormAttachment(40, -160);
 		fd_compMain.bottom = new FormAttachment (50, 180);
@@ -80,42 +86,57 @@ public class ViewEmailAds extends Composite {
 		formToolkit.adapt(compMain);
 		formToolkit.paintBordersFor(compMain);
 
-		
+		new Label(compMain, SWT.NONE);
+		new Label(compMain, SWT.NONE);
 		lblError  = new Label(compMain, SWT.None);
-		lblError.setBounds(10, 0,  474, 60);
+		lblError.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		formToolkit.adapt(lblError, true, true);
 		
 		
 		lblTo = new Label(compMain, SWT.NONE);
-		lblTo.setBounds(10, 86, 55, 15);
+		lblTo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(lblTo, true, true);
 		lblTo.setText("To:");
 		
+		txtToInputBox = new Text(compMain, SWT.BORDER);
+		txtToInputBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		formToolkit.adapt(txtToInputBox, true, true);
+		
+		new Label(compMain, SWT.NONE);
+		new Label(compMain, SWT.NONE);
+		
 		lblSubject = new Label(compMain, SWT.NONE);
-		lblSubject.setBounds(10, 124, 55, 15);
+		lblSubject.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(lblSubject, true, true);
 		lblSubject.setText("Subject:");
 		
+		txtSubjectInputBox = new Text(compMain, SWT.BORDER);
+		txtSubjectInputBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		formToolkit.adapt(txtSubjectInputBox, true, true);
+		
+		new Label(compMain, SWT.NONE);
+		new Label(compMain, SWT.NONE);
+		new Label(compMain, SWT.NONE);
+		new Label(compMain, SWT.NONE);
+		
 		lblMessage = new Label(compMain, SWT.NONE);
-		lblMessage.setBounds(10, 168, 55, 15);
+		lblMessage.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(lblMessage, true, true);
 		lblMessage.setText("Message:");
 		
-		txtToInputBox = new Text(compMain, SWT.BORDER);
-		txtToInputBox.setBounds(71, 83, 419, 21);
-		formToolkit.adapt(txtToInputBox, true, true);
-		
-		txtSubjectInputBox = new Text(compMain, SWT.BORDER);
-		txtSubjectInputBox.setBounds(71, 124, 419, 21);
-		formToolkit.adapt(txtSubjectInputBox, true, true);
-		
 		txtMessageInputBox = new Text(compMain, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		txtMessageInputBox.setBounds(71, 168, 419, 144);
+		txtMessageInputBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		formToolkit.adapt(txtMessageInputBox, true, true);
+		//Label label = new Label(compMain, SWT.NONE);
+		//formToolkit.adapt(label, true, true);
 		
-
+		//new Label(compMain, SWT.NONE);
+		new Label(compMain, SWT.NONE);
+		
 		Button btnSend = new Button(compMain, SWT.NONE);
-		btnSend.setBounds(415, 335, 75, 25);
+		GridData gd_btnSend = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_btnSend.widthHint = 100;
+		btnSend.setLayoutData(gd_btnSend);
 		formToolkit.adapt(btnSend, true, true);
 		btnSend.setText("Send");
 
@@ -254,6 +275,16 @@ public class ViewEmailAds extends Composite {
 				lblError.setText(errorMsg);
 			}
 		});
+		
+
+		compMain.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblError.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblTo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblSubject.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblMessage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+
+	//	new Label(compMain, SWT.NONE);
+	//	new Label(compMain, SWT.NONE);
 	}
 	
 	

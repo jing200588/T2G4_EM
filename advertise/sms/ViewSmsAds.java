@@ -69,6 +69,9 @@ public class ViewSmsAds extends Composite {
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		Form ViewSmsAdsForm = formToolkit.createForm(this);
+		ViewSmsAdsForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
+		ViewSmsAdsForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		ViewSmsAdsForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		ViewSmsAdsForm.setBounds(0, 0, 700, 400);
 		ViewSmsAdsForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		formToolkit.paintBordersFor(ViewSmsAdsForm);
@@ -121,9 +124,9 @@ public class ViewSmsAds extends Composite {
 		txtMessageInputBox.setText("Upcoming event: " + currentEvent.getName()+".\nStart date: " + start + ".\nEnd date: " + end +".");
 		btnSend = new Button(compSmsMain, SWT.NONE);
 		FormData fd_btnSend = new FormData();
+		fd_btnSend.width = 100;
 		fd_btnSend.top = new FormAttachment(txtMessageInputBox, 19);
 		fd_btnSend.right = new FormAttachment(txtToInputBox, 0, SWT.RIGHT);
-		fd_btnSend.left = new FormAttachment(0, 590);
 		btnSend.setLayoutData(fd_btnSend);
 		btnSend.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -199,8 +202,13 @@ public class ViewSmsAds extends Composite {
 		});
 		formToolkit.adapt(btnNotifyParticipants, true, true);
 		btnNotifyParticipants.setText("Notify Participants");
-
-
+		
+		compSmsMain.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblTo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblMessage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnSend.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnNotifyParticipants.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnImportNumber.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	}
 	
 	public void ImportCSV (String filepath) {
