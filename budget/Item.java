@@ -27,6 +27,7 @@ public class Item implements Comparable {
 		this.satisfactionValue = inputValue;
 		this.compulsory = 'N';
 		this.quantity = 1;
+		this.type = "";
 	}
 	
 	/**

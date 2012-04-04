@@ -53,14 +53,45 @@ public class ControllerEventFlow {
 	}
 	
 	/**
+	 * Finds all EventFlowEntry objects whose activity names contains the input string as a substring. 
+	 * We base on case-insensitivity criteria. The indices of elements we consider are given in the
+	 * input parameters.
+	 * 
+	 * In case an entry in the list of indices is not a valid index value of the list of EventFlowEntry
+	 * 		objects, we ignore that index entry.
+	 *  
+	 * @param entireList - Vector<EventFlowEntry>
+	 * @param indexList - Vector<Integer>
+	 * @param activityName - String
+	 * @return listIndex - Vector<Integer> - It contains the indices of all satisfying EventFlowEntry objects.
+	 */
+	public static Vector<Integer> filterByActivityName(Vector<EventFlowEntry> entireList, 
+			Vector<Integer> indexList, String activityName)
+	{
+		if(activityName == null || indexList == null || entireList == null)
+			return new Vector<Integer>();
+		
+		activityName = activityName.toLowerCase();
+		Vector<Integer> resultListIndex = new Vector<Integer>();
+		
+		for(int index = 0; index < indexList.size(); index++)
+		{
+			if(indexList.get(index) >= 0 && indexList.get(index) < entireList.size() &&
+					entireList.get(indexList.get(index)).getActivityName().toLowerCase().indexOf(activityName) >= 0)
+				resultListIndex.add(indexList.get(index));
+		}
+		
+		return resultListIndex;
+	}
+	
+	/**
 	 * Finds all EventFlowEntry objects whose duration are within the input TimeSlot object. 
 	 * 
 	 * @param entireList - Vector<EventFlowEntry>
 	 * @param inputTimeSlot - TimeSlot
 	 * @return listIndex - Vector<Integer> - It contains the indices of all satisfying EventFlowEntry objects.
 	 */
-	public static Vector<Integer> filterByActivityName(Vector<EventFlowEntry> entireList,
-			TimeSlot inputTimeSlot)
+	public static Vector<Integer> filterByTimeSlot(Vector<EventFlowEntry> entireList, TimeSlot inputTimeSlot)
 	{
 		if(entireList == null || inputTimeSlot == null)
 			return new Vector<Integer>();
@@ -75,13 +106,42 @@ public class ControllerEventFlow {
 	}
 	
 	/**
+	 * Finds all EventFlowEntry objects whose duration are within the input TimeSlot object. The indices 
+	 * 		of elements we consider are given in the input parameters.
+	 * 
+	 * In case an entry in the list of indices is not a valid index value of the list of EventFlowEntry
+	 * 		objects, we ignore that index entry.
+	 * 
+	 * @param entireList - Vector<EventFlowEntry>
+	 * @param indexList - Vector<Integer>
+	 * @param inputTimeSlot - TimeSlot
+	 * @return listIndex - Vector<Integer> - It contains the indices of all satisfying EventFlowEntry objects.
+	 */
+	public static Vector<Integer> filterByTimeSlot(Vector<EventFlowEntry> entireList, 
+			Vector<Integer> indexList, TimeSlot inputTimeSlot)
+	{
+		if(entireList == null || indexList == null || inputTimeSlot == null)
+			return new Vector<Integer>();
+		
+		Vector<Integer> resultListIndex = new Vector<Integer>();
+		
+		for(int index = 0; index < entireList.size(); index++)
+			if(indexList.get(index) >= 0 && indexList.get(index) < entireList.size() &&
+					entireList.get(indexList.get(index)).getDuration().isContained(inputTimeSlot) == true)
+				resultListIndex.add(indexList.get(index));
+		
+		return resultListIndex;
+	}
+	
+	
+	/**
 	 * Finds all EventFlowEntry objects in the entireList with the input venueID 
 	 * 
 	 * @param entireList - Vector<EventFlowEntry>
 	 * @param inputTimeSlot - TimeSlot
 	 * @return listIndex - Vector<Integer> - It contains the indices of all satisfying EventFlowEntry objects.
 	 */
-	public static Vector<Integer> filterByActivityName(Vector<EventFlowEntry> entireList, int venueID)
+	public static Vector<Integer> filterByVenue(Vector<EventFlowEntry> entireList, int venueID)
 	{
 		if(entireList == null)
 			return new Vector<Integer>();
@@ -93,6 +153,34 @@ public class ControllerEventFlow {
 				listIndex.add((Integer) index);
 		
 		return listIndex;
+	}
+	
+	/**
+	 * Finds all EventFlowEntry objects in the entireList with the input venueID. The indices 
+	 * 		of elements we consider are given in the input parameters.
+	 * 
+	 * In case an entry in the list of indices is not a valid index value of the list of EventFlowEntry
+	 * 		objects, we ignore that index entry.
+	 * 
+	 * @param entireList - Vector<EventFlowEntry>
+	 * @param indexList - Vector<Integer>
+	 * @param inputTimeSlot - TimeSlot
+	 * @return listIndex - Vector<Integer> - It contains the indices of all satisfying EventFlowEntry objects.
+	 */
+	public static Vector<Integer> filterByVenue(Vector<EventFlowEntry> entireList,
+			Vector<Integer> indexList, int venueID)
+	{
+		if(entireList == null || indexList == null)
+			return new Vector<Integer>();
+		
+		Vector<Integer> resultListIndex = new Vector<Integer>();
+		
+		for(int index = 0; index < entireList.size(); index++)
+			if(indexList.get(index) >= 0 && indexList.get(index) < entireList.size() &&
+					entireList.get(indexList.get(index)).getVenueID() == venueID)
+				resultListIndex.add(indexList.get(index));
+		
+		return resultListIndex;
 	}
 	
 	/**

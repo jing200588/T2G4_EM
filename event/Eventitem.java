@@ -8,42 +8,42 @@ import program.*;
 
 
 public class Eventitem {
-	private int _id;
-	private String _name;
-	private String _description;
-	private Vector<Item> _item_list = new Vector<Item>();
-	private double _budget;
-	private Vector<BookedVenueInfo> _BVI_list;
-	private MyDateTime _startDateTime;
-	private MyDateTime _endDateTime;
-	private List<Participant> _participant_list =  new Vector<Participant>();
-	private Vector<EventFlowEntry> _eventFlow = new Vector<EventFlowEntry>();
-	private boolean _expired;
+	private int eventId;
+	private String eventName;
+	private String eventDescription;
+	private Vector<Item> eventItemList = new Vector<Item>();
+	private double eventBudget;
+	private Vector<BookedVenueInfo> eventBviList;
+	private MyDateTime eventStartDateTime;
+	private MyDateTime eventEndDateTime;
+	private List<Participant> eventParticipantList =  new Vector<Participant>();
+	private Vector<EventFlowEntry> eventFlow = new Vector<EventFlowEntry>();
+	private boolean expired;
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters 
-	 * @param name Event Name 
-	 * @param sy Start Year
-	 * @param sm Start Month
-	 * @param sd Start Day 
-	 * @param ey End Year
-	 * @param em End Month
-	 * @param ed End Day
- 	 * @param shour Start Hour 
-	 * @param smin Start Minute
-	 * @param ehour End Hour
-	 * @param emin End Minute
+	 * @param inputName Event Name 
+	 * @param inputStartYear Start Year
+	 * @param inputStartMonth Start Month
+	 * @param inputStartDay Start Day 
+	 * @param inputEndYear End Year
+	 * @param inputEndMonth End Month
+	 * @param inputEndDay End Day
+ 	 * @param inputStartHour Start Hour 
+	 * @param inputStartMin Start Minute
+	 * @param inputEndHour End Hour
+	 * @param inputEndMin End Minute
 	 */
-	public Eventitem (String name, int sy, int sm, int sd, int ey, int em, int ed, int shour, int smin, int ehour, int emin, String descript) {
-		_name = name;
-		_startDateTime = new MyDateTime (sy, sm, sd, shour, smin);
-		_endDateTime = new MyDateTime(ey, em, ed, ehour, emin);
-		_description = descript;
-		_BVI_list = new Vector<BookedVenueInfo>();
-		_expired = false;
+	public Eventitem (String inputName, int inputStartYear, int inputStartMonth, int inputStartDay, int inputEndYear, int inputEndMonth, int inputEndDay, int inputStartHour, int inputStartMin, int inputEndHour, int inputEndMin, String inputDescription) {
+		eventName = inputName;
+		eventStartDateTime = new MyDateTime (inputStartYear, inputStartMonth, inputStartDay, inputStartHour, inputStartMin);
+		eventEndDateTime = new MyDateTime(inputEndYear, inputEndMonth, inputEndDay, inputEndHour, inputEndMin);
+		eventDescription = inputDescription;
+		eventBviList = new Vector<BookedVenueInfo>();
+		expired = false;
 	//	_participant_list = new Vector<Participant>();
-		_participant_list.add(new Participant("Jonathan", "A1234567", "65554493", "chuichui@gmail.com", "Block 123 Tamp street 81", "-"));
-		System.out.println("hello " + _participant_list.size());
+		eventParticipantList.add(new Participant("Jonathan", "A1234567", "65554493", "chuichui@gmail.com", "Block 123 Tamp street 81", "-"));
+		//System.out.println("hello " + _participant_list.size());
 	}
 	
 	/**
@@ -58,12 +58,12 @@ public class Eventitem {
 	 * @param BVI_list List of booked venue information
 	 */
 	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget, Vector<BookedVenueInfo> BVI_list){
-		_name = name;
-		_startDateTime = new MyDateTime(startdate, starttime);
-		_endDateTime = new MyDateTime(enddate, endtime);
-		_item_list = item_list;
-		_budget = budget;
-		_BVI_list = BVI_list;
+		eventName = name;
+		eventStartDateTime = new MyDateTime(startdate, starttime);
+		eventEndDateTime = new MyDateTime(enddate, endtime);
+		eventItemList = item_list;
+		eventBudget = budget;
+		eventBviList = BVI_list;
 	}
 	
 	/**
@@ -75,9 +75,9 @@ public class Eventitem {
 	 * @param endtime
 	 */
 	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime) {
-		_name = name;
-		_startDateTime = new MyDateTime(startdate, starttime);
-		_endDateTime = new MyDateTime(enddate, endtime);
+		eventName = name;
+		eventStartDateTime = new MyDateTime(startdate, starttime);
+		eventEndDateTime = new MyDateTime(enddate, endtime);
 	}
 	
 	/**********************************************************************************************
@@ -86,23 +86,23 @@ public class Eventitem {
 	 * 
 	 *********************************************************************************************/
 	public void setDescription (String descript) {
-		_description = descript;
+		eventDescription = descript;
 	}
 	
 	public void setID(int id){
-		_id = id;
+		eventId = id;
 	}
 	
 	public String getDescription () {
-		return _description;
+		return eventDescription;
 	}
 	
 	public void setName(String name) {
-		_name = name;
+		eventName = name;
 	}
 	
 	public String getName () {
-		return _name;
+		return eventName;
 	}
 	
 //	public void setStartDate (String start) {
@@ -110,12 +110,12 @@ public class Eventitem {
 //	}
 	
 	public void setStartDate (int y, int m, int d) {
-		_startDateTime = new MyDateTime(y, m, d, _startDateTime.getHour(), _startDateTime.getMinute());
+		eventStartDateTime = new MyDateTime(y, m, d, eventStartDateTime.getHour(), eventStartDateTime.getMinute());
 	}
 	
 	
 	public MyDateTime getStartDateTime () {
-		return _startDateTime;
+		return eventStartDateTime;
 	}
 	
 //	public void setEndDate (String end) {
@@ -123,11 +123,11 @@ public class Eventitem {
 //	}
 	
 	public void setEndDate (int y, int m, int d) {
-		_endDateTime = new MyDateTime(y, m, d, _endDateTime.getHour(), _endDateTime.getMinute());
+		eventEndDateTime = new MyDateTime(y, m, d, eventEndDateTime.getHour(), eventEndDateTime.getMinute());
 	}
 	
 	public MyDateTime getEndDateTime () {
-		return _endDateTime;
+		return eventEndDateTime;
 	}	
 	
 //	public void setStartTime (String start) {
@@ -135,8 +135,8 @@ public class Eventitem {
 //	}
 	
 	public void setStartTime (int hr, int min) {
-		_startDateTime = new MyDateTime(_startDateTime.getYear(), _startDateTime.getMonth(),
-				_startDateTime.getDay(), hr, min);
+		eventStartDateTime = new MyDateTime(eventStartDateTime.getYear(), eventStartDateTime.getMonth(),
+				eventStartDateTime.getDay(), hr, min);
 	}
 	
 	
@@ -145,70 +145,70 @@ public class Eventitem {
 //	}
 	
 	public void setEndTime (int hr, int min) {
-		_endDateTime = new MyDateTime(_endDateTime.getYear(), _endDateTime.getMonth(),
-				_endDateTime.getDay(), hr, min);
+		eventEndDateTime = new MyDateTime(eventEndDateTime.getYear(), eventEndDateTime.getMonth(),
+				eventEndDateTime.getDay(), hr, min);
 	}
 	
 	
 	public int getID(){
-		return _id;
+		return eventId;
 	}
 
 
-	public Vector<Item> getitem_list() {
-		return _item_list;
+	public Vector<Item> getItemList() {
+		return eventItemList;
 	}
 
 	public Vector<EventFlowEntry> getEventFlow()
 	{
-		return _eventFlow;
+		return eventFlow;
 	}
 
-	public void setitem_list(Vector<Item> item_list) {
-		_item_list = item_list;
+	public void setItemList(Vector<Item> inputItemList) {
+		eventItemList = inputItemList;
 	}
 
 
 	public double getBudget() {
-		return _budget;
+		return eventBudget;
 	}
 
 
 	public void setBudget(double budget) {
-		_budget = budget;
+		eventBudget = budget;
 	}
 
 
-	public Vector<BookedVenueInfo> getBVI_list() {
-		return _BVI_list;
+	public Vector<BookedVenueInfo> getBviList() {
+		return eventBviList;
 	}
 
 
 	public void addBVI(BookedVenueInfo BVI) {
-		_BVI_list.add(BVI);
+		eventBviList.add(BVI);
 	}
 	
 	public void addBVI(Vector<BookedVenueInfo> BVI){
-		_BVI_list = BVI;
+		eventBviList = BVI;
 
 	}
 
 	public void setParticipantList(List<Participant> newlist) {
-		_participant_list = newlist;
+		eventParticipantList = newlist;
 	}
 	
 	public List<Participant> getParticipantList() {
-		return _participant_list;
+		return eventParticipantList;
 	}
 	
 	public void setIsExpired(boolean flag) {
-		_expired = flag;
+		expired = flag;
 	}
 	public void setEventFlow(Vector<EventFlowEntry> newEventFlow)
 	{
-		_eventFlow = newEventFlow;
+		eventFlow = newEventFlow;
 	}
 	public boolean isExpired() {
-		return _expired;
+		return expired;
 	}
 }

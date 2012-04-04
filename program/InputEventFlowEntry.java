@@ -19,7 +19,7 @@ import org.eclipse.swt.events.SelectionEvent;
 
 
 public class InputEventFlowEntry extends Composite {
-	public final String OTHERVENUE = "Other";
+	public static final String OTHERVENUE = "Other";
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
 	private Text textActivity;
 	private Text textNote;

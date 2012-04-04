@@ -93,6 +93,7 @@ public class ViewBudget extends Composite {
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
 	private Text txtDirectory;
 	private Button btnImport;
+	private Label lblNoteAllChanges;
 
 	/**
 	 * Create the composite.
@@ -114,6 +115,7 @@ public class ViewBudget extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		Form ViewBudgetForm = formToolkit.createForm(this);
+
 		ViewBudgetForm.setBounds(0, 0, 700, 400);
 		ViewBudgetForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		formToolkit.paintBordersFor(ViewBudgetForm);
@@ -146,6 +148,7 @@ public class ViewBudget extends Composite {
 		 * Composite that will display the global navigation button
 		 **********************************************************************************/
 		Composite compButtonComposite = new Composite(compMain, SWT.NONE);
+
 		compButtonComposite.setBounds(10, 10, 680, 57);
 		formToolkit.adapt(compButtonComposite);
 		formToolkit.paintBordersFor(compButtonComposite);
@@ -199,6 +202,7 @@ public class ViewBudget extends Composite {
 		 * Composite that will that display fields for the user to input.
 		 **********************************************************************************/
 		compStep1 = new Composite(compBigContent, SWT.NONE);
+
 		compStep1.setBounds(0, 0, 675, 260);
 		formToolkit.adapt(compStep1);
 		formToolkit.paintBordersFor(compStep1);
@@ -281,12 +285,15 @@ public class ViewBudget extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				selectedCompulsoryIndexList.removeAllElements();
 				try {	
-
 					txtBudget.getText().trim();
 					if(txtBudget.getText().length() == 0) throw new IOException("Please enter a budget.");
 
 					budget = (int) (Double.parseDouble(txtBudget.getText()) * 100);
-
+					
+					if(budget < 0) throw new IOException ("Budget cannot be less than 0.");
+					
+					if(budget == 2147483647) throw new IOException ("Budget is out of range the system can take.");
+					
 					if(btnWithoutType.getSelection() == true)
 						typeChoice = 0;
 					else if(btnWithType.getSelection() == true)
@@ -301,7 +308,6 @@ public class ViewBudget extends Composite {
 
 					budgetPersonalAssistant  = new ControllerBudget(txtInputList.getText(), budget, typeChoice, satisfactionChoice, currentEvent);
 					itemList = budgetPersonalAssistant.getItemList();
-
 					stackLayout.topControl = compStep2;
 					compBigContent.layout();	
 
@@ -317,6 +323,12 @@ public class ViewBudget extends Composite {
 						errordiag = new ErrorMessageDialog(new Shell(), "Input list must not be empty.");
 					else if(ie.getMessage().equals("Cost should not be negative")) 
 						errordiag = new ErrorMessageDialog(new Shell(), "Cost should not be negative");	
+					else if(ie.getMessage().equals("Budget cannot be less than 0.")) 
+						errordiag = new errormessageDialog(new Shell(), "Budget cannot be less than 0.");	
+					else if(ie.getMessage().equals("Budget is out of range the system can take.")) 
+						errordiag = new errormessageDialog(new Shell(), "Budget is out of range the system can take.");	
+					else if(ie.getMessage().equals("Budget is out of range the system can take.")) 
+						errordiag = new errormessageDialog(new Shell(), "Budget is out of range the system can take.");	
 					else 
 						errordiag = new ErrorMessageDialog(new Shell(), "Incorrect input format.");
 
@@ -553,7 +565,7 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(btnNext, true, true);
 		btnNext.setText("Next");
 
-		Label lblNoteAllChanges = new Label(compStep2, SWT.NONE);
+		lblNoteAllChanges = new Label(compStep2, SWT.NONE);
 		lblNoteAllChanges.setBounds(25, 213, 404, 15);
 		formToolkit.adapt(lblNoteAllChanges, true, true);
 		lblNoteAllChanges.setText("Note: All changes to item quantity will be lost if you click back to Step 1!");
@@ -607,6 +619,30 @@ public class ViewBudget extends Composite {
 		lblListOfAll.setBounds(10, 10, 249, 15);
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");
+		
+		/**Set background color of everthing to grey.**/
+		compMain.setBackground(SWTResourceManager.getColor(240,240,240));
+		ViewBudgetForm.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
+		ViewBudgetForm.getBody().setBackground(SWTResourceManager.getColor(240,240,240));
+		compStep1.setBackground(SWTResourceManager.getColor(240,240,240));
+		compStep2.setBackground(SWTResourceManager.getColor(240,240,240));
+		compStep3.setBackground(SWTResourceManager.getColor(240,240,240));
+		compTypeOption.setBackground(SWTResourceManager.getColor(240,240,240));
+		compSatisfactionOption.setBackground(SWTResourceManager.getColor(240,240,240));
+		compBigContent.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblEventBudget.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblListOfItems.setBackground(SWTResourceManager.getColor(240,240,240));
+		compButtonComposite.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblSelectTypeOption.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblSelectSatisfactionOption.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblInputList.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnWithoutType.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnWithType.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnWithoutSatisfaction.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnWithSatisfaction.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblNoteAllChanges.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblListOfAll.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblSelectAnCombination.setBackground(SWTResourceManager.getColor(240,240,240));
 	}
 
 	/**

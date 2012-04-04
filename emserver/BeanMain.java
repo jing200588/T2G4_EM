@@ -21,7 +21,7 @@ public class BeanMain {
 		for (int i=0; i<size; i++){
 			int pid = list.get(i).getID();
 			list.get(i).addBVI(db.venueDB().getEventBookings(pid));	
-			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(pid));
+			list.get(i).setItemList(db.budgetDB().getBudgetListOptimized(pid));
 			list.get(i).setParticipantList(db.participantDB().getParticipantList(pid));
 		}
 		

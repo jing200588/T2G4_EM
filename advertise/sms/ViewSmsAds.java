@@ -68,20 +68,17 @@ public class ViewSmsAds extends Composite {
 		formToolkit.adapt(this);
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
-		Form ViewSmsAdsForm = formToolkit.createForm(this);
-		ViewSmsAdsForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
-		ViewSmsAdsForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		ViewSmsAdsForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		ViewSmsAdsForm.setBounds(0, 0, 700, 400);
-		ViewSmsAdsForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
-		formToolkit.paintBordersFor(ViewSmsAdsForm);
-		ViewSmsAdsForm.setText("SMS Advertising");
+		Form formViewSmsAds = formToolkit.createForm(this);
+		formViewSmsAds.setBounds(0, 0, 700, 400);
+		formViewSmsAds.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		formToolkit.paintBordersFor(formViewSmsAds);
+		formViewSmsAds.setText("SMS Advertising");
 
 		/**********************************************************************************
 		 *Main screen composite 
 		 **********************************************************************************/
-		ViewSmsAdsForm.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
-		compSmsMain = new Composite(ViewSmsAdsForm.getBody(), SWT.NONE);
+		formViewSmsAds.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
+		compSmsMain = new Composite(formViewSmsAds.getBody(), SWT.NONE);
 		compSmsMain.setLayout(new FormLayout());
 		formToolkit.adapt(compSmsMain);
 		formToolkit.paintBordersFor(compSmsMain);
@@ -203,12 +200,13 @@ public class ViewSmsAds extends Composite {
 		formToolkit.adapt(btnNotifyParticipants, true, true);
 		btnNotifyParticipants.setText("Notify Participants");
 		
-		compSmsMain.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		lblTo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		lblMessage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnSend.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnNotifyParticipants.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnImportNumber.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		/**Set background color of everthing to grey.**/
+		compSmsMain.setBackground(SWTResourceManager.getColor(240,240,240));
+		formViewSmsAds.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
+		formViewSmsAds.getBody().setBackground(SWTResourceManager.getColor(240,240,240));
+		lblTo.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblMessage.setBackground(SWTResourceManager.getColor(240,240,240));
+		
 	}
 	
 	public void ImportCSV (String filepath) {

@@ -275,16 +275,16 @@ public class ViewEmailAds extends Composite {
 				lblError.setText(errorMsg);
 			}
 		});
+
+		/**Set background color of everthing to grey.**/
+		compMain.setBackground(SWTResourceManager.getColor(240,240,240));
+		formViewEmailAds.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
+		formViewEmailAds.getBody().setBackground(SWTResourceManager.getColor(240,240,240));
+		lblTo.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblSubject.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblMessage.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblError.setBackground(SWTResourceManager.getColor(240,240,240));
 		
-
-		compMain.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		lblError.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		lblTo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		lblSubject.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		lblMessage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-
-	//	new Label(compMain, SWT.NONE);
-	//	new Label(compMain, SWT.NONE);
 	}
 	
 	

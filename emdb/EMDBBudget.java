@@ -370,7 +370,6 @@ public class EMDBBudget extends EMDBBase{
 		
 		int size = list.size();
 		for (int i=0; i< size; i++){
-			
 			Item current = list.get(i);
 			
 			String sql = "";
