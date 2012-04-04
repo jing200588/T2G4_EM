@@ -63,7 +63,7 @@ public class ViewBudget extends Composite {
 	private int budget;
 	private int typeChoice;
 	private int satisfactionChoice;
-	protected errormessageDialog errordiag;
+	protected ErrorMessageDialog errordiag;
 	/*My declaration end here.*/
 
 	private Composite compBigContent;
@@ -318,19 +318,19 @@ public class ViewBudget extends Composite {
 				catch (Exception ie) {
 
 					if(ie.getMessage().equals("Please enter a budget."))
-						errordiag = new errormessageDialog(new Shell(), "Please enter a budget.");
+						errordiag = new ErrorMessageDialog(new Shell(), "Please enter a budget.");
 					else if(ie.getMessage().equals("Input list must not be empty."))
-						errordiag = new errormessageDialog(new Shell(), "Input list must not be empty.");
+						errordiag = new ErrorMessageDialog(new Shell(), "Input list must not be empty.");
 					else if(ie.getMessage().equals("Cost should not be negative")) 
-						errordiag = new errormessageDialog(new Shell(), "Cost should not be negative.");	
+						errordiag = new ErrorMessageDialog(new Shell(), "Cost should not be negative");	
 					else if(ie.getMessage().equals("Budget cannot be less than 0.")) 
-						errordiag = new errormessageDialog(new Shell(), "Budget cannot be less than 0.");	
+						errordiag = new ErrorMessageDialog(new Shell(), "Budget cannot be less than 0.");	
 					else if(ie.getMessage().equals("Budget is out of range the system can take.")) 
-						errordiag = new errormessageDialog(new Shell(), "Budget is out of range the system can take.");	
+						errordiag = new ErrorMessageDialog(new Shell(), "Budget is out of range the system can take.");	
 					else if(ie.getMessage().equals("Budget is out of range the system can take.")) 
-						errordiag = new errormessageDialog(new Shell(), "Budget is out of range the system can take.");	
+						errordiag = new ErrorMessageDialog(new Shell(), "Budget is out of range the system can take.");	
 					else 
-						errordiag = new errormessageDialog(new Shell(), "Incorrect input format.");
+						errordiag = new ErrorMessageDialog(new Shell(), "Incorrect input format.");
 
 					errordiag.open();
 				}
@@ -430,7 +430,7 @@ public class ViewBudget extends Composite {
 						}
 						catch (Exception qe) {
 							text.setText("1");
-							errordiag = new errormessageDialog(new Shell(), "Quantity can only be integer.");
+							errordiag = new ErrorMessageDialog(new Shell(), "Quantity can only be integer.");
 							errordiag.open();
 						}
 						editor.getItem().setText(EDITABLECOLUMN, text.getText());
@@ -546,13 +546,13 @@ public class ViewBudget extends Composite {
 					}
 
 				} catch(Exception ie) {
-					errordiag = new errormessageDialog(new Shell(), ie.getMessage());
+					errordiag = new ErrorMessageDialog(new Shell(), ie.getMessage());
 					errordiag.open();
 				} catch(OutOfMemoryError outofmemo)
 				{
 					dropdownSelection.setEnabled(false);
 					btnFinish.setEnabled(false);
-					errordiag = new errormessageDialog(new Shell(), "There is not enough memory space to perform the task.\n"
+					errordiag = new ErrorMessageDialog(new Shell(), "There is not enough memory space to perform the task.\n"
 							+ "Please restart the program and reduce your input size.\n");
 					errordiag.open();
 					btnStepInputDetails.setEnabled(false);
@@ -766,10 +766,10 @@ public class ViewBudget extends Composite {
 			txtInputList.setText(importedText);
 
 		} catch (FileNotFoundException e) {
-			errordiag = new errormessageDialog(new Shell(), "File not found.");
+			errordiag = new ErrorMessageDialog(new Shell(), "File not found.");
 			errordiag.open();
 		} catch (IOException e) {
-			errordiag = new errormessageDialog(new Shell(), "Incorrect file format.");
+			errordiag = new ErrorMessageDialog(new Shell(), "Incorrect file format.");
 			errordiag.open();
 		}
 
@@ -795,10 +795,10 @@ public class ViewBudget extends Composite {
 			}
 
 			writer.close();
-			new errormessageDialog(new Shell(), "The file was exported successfully!").open();		
+			new ErrorMessageDialog(new Shell(), "The file was exported successfully!").open();		
 		} catch (IOException e) {
 			System.out.println("Error exporting");
-			new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
+			new ErrorMessageDialog(new Shell(), "There was an error exporting the file.").open();
 			e.printStackTrace();
 		}
 	}

@@ -141,8 +141,8 @@ public class ViewEventFlow extends Composite {
 					int chosenIndex = tableEventFlow.getSelectionIndex();
 					if(chosenIndex >= 0)
 					{
-						deleteconfirmDialog deleteDialog = new deleteconfirmDialog(new Shell(),
-								deleteconfirmDialog.STATE_TYPE, "this entry");
+						DeleteConfirmDialog deleteDialog = new DeleteConfirmDialog(new Shell(),
+								DeleteConfirmDialog.STATE_TYPE, "this entry");
 						int decision = (Integer) deleteDialog.open();
 						if(decision == 1)
 						{
@@ -372,12 +372,12 @@ public class ViewEventFlow extends Composite {
 					}
 					
 					writer.close();
-					new errormessageDialog(new Shell(), "The file was exported successfully!").open();  		
+					new ErrorMessageDialog(new Shell(), "The file was exported successfully!").open();  		
 				} 
 				catch (Exception excetion) 
 				{
 					// TODO Auto-generated catch block
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), 
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), 
 							"There was an error exporting the file.");
 					errorBoard.open();
 				}
@@ -509,7 +509,7 @@ public class ViewEventFlow extends Composite {
 				}
 				catch(Exception exception)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), 
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), 
 							exception.getMessage());
 					errorBoard.open();
 				}
@@ -583,7 +583,7 @@ public class ViewEventFlow extends Composite {
 						
 						if(filterList.isEmpty() == true)
 						{
-							errormessageDialog errorBoard = new errormessageDialog(new Shell(),
+							ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(),
 									"There is no result satisfying your criteria", "Message");
 							errorBoard.open();
 						}
@@ -609,7 +609,7 @@ public class ViewEventFlow extends Composite {
 				}
 				catch(Exception exception)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), exception.getMessage());
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errorBoard.open();
 				}
 			}

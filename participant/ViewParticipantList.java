@@ -57,11 +57,10 @@ public class ViewParticipantList extends Composite {
 	private TableViewer tableViewer;
 	private Text txtexportfile;
 	private Button btnDelete;
-	private int columnNo = 0;
 	private int index = 0;
 	private static List<Participant> tempEntries;
 	private TableViewerColumn[] tvc= new TableViewerColumn[6];
-	private Table table_1;
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -98,15 +97,7 @@ public class ViewParticipantList extends Composite {
 		TableColumnLayout tcl_TableViewerComp = new TableColumnLayout();
 		TableViewerComp.setLayout(tcl_TableViewerComp);
 		TableViewerComp.setLayoutData(new FormData());
-		//New Tableviewer
-/*		TableViewer tableViewer_1 = new TableViewer(TableViewerComp, SWT.BORDER | SWT.FULL_SELECTION);
-		table_1 = tableViewer_1.getTable();
-		FormData fd_table_1 = new FormData();
-		fd_table_1.bottom = new FormAttachment(75, -8);
-		fd_table_1.right = new FormAttachment(85);
-		table_1.setLayoutData(fd_table_1);
-		table_1.setHeaderVisible(true);
-	*/	
+
 		tableViewer = new TableViewer(TableViewerComp, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
 		
@@ -168,9 +159,9 @@ public class ViewParticipantList extends Composite {
 			
 			CellEditor[] editors = new CellEditor[HEADERS.length];
 			//set headers for the table. set cell editors for each column.
-					for (int i=0; i<HEADERS.length; i++) 	
-						editors[i] = new TextCellEditor(table);
-			
+			for (int i=0; i<HEADERS.length; i++) 	
+				editors[i] = new TextCellEditor(table);
+	
 			tableViewer.setColumnProperties(HEADERS);
 			tableViewer.setCellModifier(new ParticipantListCellModifier(tableViewer));
 			tableViewer.setCellEditors(editors);
@@ -247,7 +238,7 @@ public class ViewParticipantList extends Composite {
 						throw new Exception("Import file must be in .csv format");
 					
 					if (table.getItemCount() != 0) {
-						deleteconfirmDialog dialog = new deleteconfirmDialog(new Shell(), "confirm",
+						DeleteConfirmDialog dialog = new DeleteConfirmDialog(new Shell(), "confirm",
 								"Importing a new file will replace the current table. Do you want to continue?");
 						if ((Integer) dialog.open() == 1) {
 							//Clears the tables b4 import.
@@ -266,11 +257,11 @@ public class ViewParticipantList extends Composite {
 
 				} catch (FileNotFoundException exception) {
 					System.out.println("File not found.");
-					new errormessageDialog(new Shell(), "The file specified cannot be found.").open();
+					new ErrorMessageDialog(new Shell(), "The file specified cannot be found.").open();
 					exception.printStackTrace();
 					
 				} catch (Exception exception) {
-					errormessageDialog errordiag = new errormessageDialog(new Shell(), exception.getMessage());
+					ErrorMessageDialog errordiag = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errordiag.open();
 				}
 				
@@ -339,7 +330,6 @@ public class ViewParticipantList extends Composite {
 		fd_compositeside.left = new FormAttachment(TableViewerComp, 6);
 		fd_compositeside.right = new FormAttachment(100, 47);
 		fd_compositeside.bottom = new FormAttachment(75);
-//		fd_compositeside.bottom = new FormAttachment(75, 5);
 		fd_compositeside.top = new FormAttachment(1, 0);
 		compositeside.setLayoutData(fd_compositeside);
 		
@@ -375,6 +365,7 @@ public class ViewParticipantList extends Composite {
 		btnDelete.setText("Delete");
 		btnDelete.setEnabled(false);
 		
+		//Go Back button
 		Button btnGoBack = new Button(compositeside, SWT.NONE);
 		btnGoBack.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -433,12 +424,12 @@ public void ExportCSV (String filepath) {
 			writer.writeNext(entries);
 		}
 		writer.close();
-		new errormessageDialog(new Shell(), "The file was exported successfully!").open();
+		new ErrorMessageDialog(new Shell(), "The file was exported successfully!", "Success!").open();
 		         		
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		System.out.println("Error exporting");
-		new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
+		new ErrorMessageDialog(new Shell(), "There was an error exporting the file.").open();
 		e.printStackTrace();
 	}
 }

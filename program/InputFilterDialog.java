@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import dialog.TwoChoiceDialog;
-import dialog.errormessageDialog;
+import dialog.ErrorMessageDialog;
 
 import venue.BookedVenueInfo;
 
@@ -118,7 +118,7 @@ public class InputFilterDialog extends Dialog {
 				}
 				catch(Exception exception)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), exception.getMessage());
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errorBoard.open();
 				}
 			}

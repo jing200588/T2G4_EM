@@ -132,7 +132,7 @@ public class InputEventFlowDialog extends Dialog {
 				}
 				catch(Exception exception)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), exception.getMessage());
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errorBoard.open();
 				}
 			}

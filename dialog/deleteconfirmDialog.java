@@ -9,7 +9,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 
-public class deleteconfirmDialog extends errormessageDialog {
+public class DeleteConfirmDialog extends ErrorMessageDialog {
 	public final static String STATE_TYPE = "delconfirm";
 	
 	String state;
@@ -18,7 +18,7 @@ public class deleteconfirmDialog extends errormessageDialog {
 	 * @param parent
 	 * @param style
 	 */
-	public deleteconfirmDialog(Shell parent, String type, String Ename) {
+	public DeleteConfirmDialog(Shell parent, String type, String Ename) {
 		super(parent, Ename);
 		setText("Confirmation");
 		state = type;

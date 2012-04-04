@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 
-public class errormessageDialog extends Dialog {
+public class ErrorMessageDialog extends Dialog {
 
 	protected Object result;
 	protected Shell shell;
@@ -30,14 +30,14 @@ public class errormessageDialog extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public errormessageDialog(Shell parent, String msg) {
+	public ErrorMessageDialog(Shell parent, String msg) {
 		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		setText("Error");
 		string = msg;
 		result = 0;
 	}
 
-	public errormessageDialog(Shell parent, String msg, String header) {
+	public ErrorMessageDialog(Shell parent, String msg, String header) {
 		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		setText(header);
 		string = msg;

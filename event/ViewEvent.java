@@ -179,7 +179,7 @@ public class ViewEvent extends Composite {
 		lblEdescription.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEdescription.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		lblEdescription.setText("Description:");
-
+		
 		lblDynamicDescription = new Label(compEventParticulars, SWT.WRAP | SWT.SHADOW_NONE);
 		lblDynamicDescription.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		GridData gdDynamicDescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
@@ -224,6 +224,7 @@ public class ViewEvent extends Composite {
 		btnBookVenue.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.BookVenue();
+				//ViewMain.setPage(new ViewHomepage(ViewMain.getC2(),SWT.NONE));
 			}
 		});
 		GridData gdBookVenue = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -450,7 +451,7 @@ public class ViewEvent extends Composite {
 		btnDeleteEvent.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", currentEvent.getName());
+				DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", currentEvent.getName());
 				if ((Integer) confirm.open() == 1) {
 					ModelEvent.DeleteEvent(currentEvent);
 					ViewMain.DeleteItem();
@@ -506,11 +507,11 @@ public class ViewEvent extends Composite {
 						allEmptyTable = false;
 					}
 					if (allEmptyTable == true) throw new IOException();
-					new errormessageDialog(new Shell(), "The file was exported successfully!").open();
+					new ErrorMessageDialog(new Shell(), "The file was exported successfully!").open();
 					writer.close();
 				}catch (IOException ex) {
 					System.out.println("Error exporting");
-					new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
+					new ErrorMessageDialog(new Shell(), "There was an error exporting the file.").open();
 				} catch(NullPointerException ex) {
 					//User close the file browser with cancel button or 'X' button.
 				}
@@ -882,7 +883,7 @@ public class ViewEvent extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				TableItem tb = tableBudget.getItem(tableBudget.getSelectionIndex());
 				int itemToDelete = Integer.parseInt(tb.getText(0).substring(5, tb.getText(0).length()));
-				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(1));
+			DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(1));
 				if ((Integer) confirm.open() == 1) {
 					deleteBudgetItem(itemList, itemToDelete);
 				}

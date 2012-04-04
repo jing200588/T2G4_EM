@@ -105,6 +105,32 @@ public class ModelEvent {
 		list.remove(eitem);
 	}
 	
+	/************************************************************
+	 * DELETE EVENT	//Deletes expired event from DB and expired list.
+	 ***********************************************************/
+	/**
+	 * Description: Deletes the expired event from the database and expired list
+	 * @param eitem Event Item
+	 */
+	public static void DeleteExpiredEvent(Eventitem eitem) {
+
+		//TODO Remove the expired item from archive DB
+		expired.remove(eitem);
+	}
+	
+	/************************************************************
+	 * DELETE ALL EXPIRED EVENTS
+	 ***********************************************************/
+	/**
+	 * Description: Removes all expired events in the DB and local expired list
+	 * @param eitem Event Item
+	 */
+	public static void DeleteAllExpiredEvents() {
+
+		//TODO DROP EXPIRED TABLE FROM DB
+		expired.clear();
+	}
+	
 	/**********************************************************************
 	 * UPDATE PARTICULARS //Updates event particulars on DB and local list.
 	 **********************************************************************/

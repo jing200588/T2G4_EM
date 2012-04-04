@@ -39,7 +39,7 @@ public class LoginEmailDialog extends Dialog {
 	private String domain;
 	private boolean loginSuccessful;
 	private Eventitem currentEvent;
-	protected errormessageDialog errordiag;
+	protected ErrorMessageDialog errordiag;
 
 	/**
 	 * Create the dialog.
@@ -190,7 +190,7 @@ public class LoginEmailDialog extends Dialog {
 					}
 				
 				} catch (Exception ex) {
-					errordiag = new errormessageDialog(new Shell(), ex.getMessage());
+					errordiag = new ErrorMessageDialog(new Shell(), ex.getMessage());
 					errordiag.open();
 				}
 				

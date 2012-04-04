@@ -121,9 +121,9 @@ public class ViewSmsAds extends Composite {
 		txtMessageInputBox.setText("Upcoming event: " + currentEvent.getName()+".\nStart date: " + start + ".\nEnd date: " + end +".");
 		btnSend = new Button(compSmsMain, SWT.NONE);
 		FormData fd_btnSend = new FormData();
+		fd_btnSend.width = 100;
 		fd_btnSend.top = new FormAttachment(txtMessageInputBox, 19);
 		fd_btnSend.right = new FormAttachment(txtToInputBox, 0, SWT.RIGHT);
-		fd_btnSend.left = new FormAttachment(0, 590);
 		btnSend.setLayoutData(fd_btnSend);
 		btnSend.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -199,7 +199,7 @@ public class ViewSmsAds extends Composite {
 		});
 		formToolkit.adapt(btnNotifyParticipants, true, true);
 		btnNotifyParticipants.setText("Notify Participants");
-
+		
 		/**Set background color of everthing to grey.**/
 		compSmsMain.setBackground(SWTResourceManager.getColor(240,240,240));
 		formViewSmsAds.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
@@ -210,7 +210,7 @@ public class ViewSmsAds extends Composite {
 	}
 	
 	public void ImportCSV (String filepath) {
-		errormessageDialog errordiag;
+		ErrorMessageDialog errordiag;
 		try {
 			String importedText = "";
 			CSVReader reader = new CSVReader(new FileReader(filepath));
@@ -226,10 +226,10 @@ public class ViewSmsAds extends Composite {
 			txtToInputBox.setText(importedText);
 
 		} catch (FileNotFoundException e) {
-			errordiag = new errormessageDialog(new Shell(), "File not found.");
+			errordiag = new ErrorMessageDialog(new Shell(), "File not found.");
 			errordiag.open();
 		} catch (IOException e) {
-			errordiag = new errormessageDialog(new Shell(), "Incorrect file format.");
+			errordiag = new ErrorMessageDialog(new Shell(), "Incorrect file format.");
 			errordiag.open();
 		}
 
