@@ -114,8 +114,8 @@ public class EMDBVenue extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
 		
 		
@@ -132,20 +132,51 @@ public class EMDBVenue extends EMDBBase{
 	 * DROP the database tables
 	 */
 	public void cleanup(){
-		String sql 	=	DropQuery.dropTable(this.venueTable)
+		String 	sql =	DropQuery.dropTable(this.venueTable)
 							.validate().toString();
 		String sql2 =	DropQuery.dropTable(this.bookingTable)
 							.validate().toString();
 		
+		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
-
+		
 		this.queue(sql);
 		this.queue(sql2);
 		this.commit();
 	}
+	
+	
+	/**
+	 * DROP the database, some tables
+	 * @param aType
+	 */
+	public void cleanup(String aType){
+		String sql = "";
+		
+		if (aType.compareTo("venue") == 0){
+			sql 	=	DropQuery.dropTable(this.venueTable)
+							.validate().toString();
+				
+		}else if (aType.compareTo("booking") == 0){
+			sql =	DropQuery.dropTable(this.bookingTable)
+					.validate().toString();
+		}
+		
+		if (this.dbDebug){
+			this.dMsg(sql);
+		}
+		
+		if (!sql.isEmpty()){
+			this.queue(sql);
+			this.commit();
+		}
+			
+		
+	}
+	
 	
 	
 	
@@ -161,8 +192,8 @@ public class EMDBVenue extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
 
 		this.queue(sql);
@@ -171,8 +202,32 @@ public class EMDBVenue extends EMDBBase{
 	}
 	
 	
-	
-	
+	/**
+	 * "TRUNCATE" some database tables
+	 * @param aType
+	 */
+	public void truncate(String aType){
+		String sql = "";
+		
+		if (aType.compareTo("venue") == 0){
+			sql =	new DeleteQuery(this.venueTable)
+							.validate().toString();
+			
+		}else if (aType.compareTo("booking") == 0){
+			sql =	new DeleteQuery(this.bookingTable)
+						.validate().toString();
+		}
+		
+		if (this.dbDebug){
+			this.dMsg(sql);
+		}
+
+		if (!sql.isEmpty()){
+			this.queue(sql);
+			this.commit();
+		}
+
+	}	
 	
 	
 	

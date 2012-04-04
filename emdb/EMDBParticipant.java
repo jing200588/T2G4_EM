@@ -86,7 +86,7 @@ public class EMDBParticipant extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
+			this.dMsg(sql);
 		}
 		
 		
@@ -115,6 +115,28 @@ public class EMDBParticipant extends EMDBBase{
 	}
 	
 	
+	/**
+	 * DROP a specific database table
+	 * @param aType
+	 */
+	public void cleanup(String aType){
+		String sql 	= "";
+		
+		
+		if (aType.compareTo("optimized") == 0){
+			sql 	=	DropQuery.dropTable(this.participantTable)
+							.validate().toString();
+		}
+							
+		if (this.dbDebug){
+			this.dMsg(sql);
+		}
+		
+		if (!sql.isEmpty()){
+			this.queue(sql);
+			this.commit();
+		}
+	}
 	
 	
 	
@@ -127,7 +149,7 @@ public class EMDBParticipant extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
+			this.dMsg(sql);
 		}
 		
 		this.queue(sql);
@@ -135,6 +157,29 @@ public class EMDBParticipant extends EMDBBase{
 	}
 	
 	
+	
+	
+	/**
+	 * "TRUNCATE" a specific database table
+	 */
+	public void truncate(String aType){
+		String sql 	= "";
+		
+		
+		if (aType.compareTo("optimized") == 0){
+			sql =	new DeleteQuery(this.participantTable)
+							.validate().toString();
+		}
+
+		if (this.dbDebug){
+			this.dMsg(sql);
+		}
+		
+		if (!sql.isEmpty()){
+			this.queue(sql);
+			this.commit();
+		}
+	}
 	
 	
 	/**

@@ -115,6 +115,11 @@ public class ModelEvent {
 	public static void DeleteExpiredEvent(Eventitem eitem) {
 
 		//TODO Remove the expired item from archive DB
+		db.eventDB().deleteArchiveEvent(eitem.getID());
+		db.venueDB().deleteBookingAll(eitem.getID());
+		db.budgetDB().deleteBudgetList(eitem.getID());
+		db.budgetDB().deleteBudgetListOptimized(eitem.getID());
+		db.participantDB().deleteParticipantList(eitem.getID());
 		expired.remove(eitem);
 	}
 	
@@ -127,7 +132,15 @@ public class ModelEvent {
 	 */
 	public static void DeleteAllExpiredEvents() {
 
-		//TODO DROP EXPIRED TABLE FROM DB
+		Vector<Eventitem> dblist = PullExpiredList();
+		db.eventDB().truncate("archive");
+		for (int i=0; i<dblist.size(); i++){
+			int pid = dblist.get(i).getID();
+			db.venueDB().deleteBookingAll(pid);
+			db.budgetDB().deleteBudgetList(pid);
+			db.budgetDB().deleteBudgetListOptimized(pid);
+			db.participantDB().deleteParticipantList(pid);
+		}
 		expired.clear();
 	}
 	

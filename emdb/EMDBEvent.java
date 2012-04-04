@@ -121,8 +121,8 @@ public class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
 		
 		
@@ -144,14 +144,43 @@ public class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
 		
 		this.queue(sql);
 		this.queue(sql2);
 		this.commit();
 	}
+	
+	
+	
+	/**
+	 * DROP the a specific database table
+	 * @param aType
+	 */
+	public void cleanup(String aType){
+		String sql = "";
+		
+		if (aType.compareTo("events") == 0){
+			sql =	DropQuery.dropTable(this.eventsTable)
+						.validate().toString();
+				
+		}else if (aType.compareTo("archive") == 0){
+			sql =	DropQuery.dropTable(this.archiveTable)
+						.validate().toString();
+		}
+
+		if (this.dbDebug){
+			this.dMsg(sql);
+		}
+		
+		if (!sql.isEmpty()){
+			this.queue(sql);
+			this.commit();
+		}
+	}
+	
 	
 	
 	
@@ -166,8 +195,8 @@ public class EMDBEvent extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
 		
 		this.queue(sql);
@@ -175,6 +204,32 @@ public class EMDBEvent extends EMDBBase{
 		this.commit();
 	}
 	
+	
+	/**
+	 * "TRUNCATE" a specific database table
+	 * @param aType
+	 */
+	public void truncate(String aType){
+		String sql = "";
+		
+		if (aType.compareTo("events") == 0){
+			sql 	=	new DeleteQuery(this.eventsTable)
+							.validate().toString();
+				
+		}else if (aType.compareTo("archive") == 0){
+			sql =	new DeleteQuery(this.archiveTable)
+							.validate().toString();
+		}
+		
+		if (this.dbDebug){
+			this.dMsg(sql);
+		}
+		
+		if (!sql.isEmpty()){
+			this.queue(sql);
+			this.commit();
+		}
+	}
 	
 	/**
 	 * VERIFY the database tables
@@ -535,24 +590,48 @@ public class EMDBEvent extends EMDBBase{
 						.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 						.validate().toString();
 
-
-		if (this.dbDebug){
-			this.dMsg("DELETE EVENT #"+aEventID);
-			this.dMsg(sql);
-		}
-		
-		
-		this.connect();
-		int result = this.runQuery(sql);
-		this.disconnect();
-		
-		return result;
+		return this.deleteEventGateway(sql, aEventID);
 	}
 	
 	
 	
 	
+	/**
+	 * Deletes an Archived Event.
+	 * @param aEventID
+	 * @return
+	 */
+	public int deleteArchiveEvent(int aEventID){
+		String sql 	=	new DeleteQuery(this.archiveTable)
+						.addCondition(BinaryCondition.equalTo(this.archiveEventID, aEventID))
+						.validate().toString();
+		
+		return this.deleteEventGateway(sql, aEventID);
+	}
+	
+	
+	
+	
+	/**
+	 * Delete Gateway
+	 * @param aSql
+	 * @param aEventID
+	 * @return
+	 */
+	private int deleteEventGateway(String aSql, int aEventID){
 
+		if (this.dbDebug){
+			this.dMsg("DELETE EVENT/ARCHIVE EVENT #"+aEventID);
+			this.dMsg(aSql);
+		}
+		
+		
+		this.connect();
+		int result = this.runQuery(aSql);
+		this.disconnect();
+		
+		return result;
+	}
 
 	
 	
