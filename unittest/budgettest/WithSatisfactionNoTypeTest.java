@@ -7,7 +7,6 @@ import budget.*;
 
 import static org.junit.Assert.*;
 
-import org.eclipse.jface.text.Assert;
 import org.junit.Test;
 
 /**
@@ -241,7 +240,6 @@ public class WithSatisfactionNoTypeTest {
 
 	@Test
 	public void BudgetEnoughForSomeItemWithoutCompulsoryItem() throws Exception {
-		Solution soln = new Solution();
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
@@ -275,7 +273,6 @@ public class WithSatisfactionNoTypeTest {
 
 	@Test
 	public void BudgetEnoughForSomeItemWithCompulsoryItem() throws Exception {
-		Solution soln = new Solution();
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 

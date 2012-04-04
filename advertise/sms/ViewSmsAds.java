@@ -42,6 +42,8 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 
 public class ViewSmsAds extends Composite {
+	protected ErrorMessageDialog errordiag;
+
 	private Eventitem currentEvent;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
 	private Text txtToInputBox;
@@ -128,6 +130,20 @@ public class ViewSmsAds extends Composite {
 		btnSend.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 
+				try {
+					if (txtToInputBox.getText().length() == 0)  throw new IOException("No number entered detected.");
+
+					if (txtToInputBox.getText().length() < 8)  throw new IOException("Number entered is invalid");
+				} catch (Exception ex) {
+					if(ex.getMessage().equals("No number entered detected.")) 
+						errordiag = new ErrorMessageDialog(new Shell(), "No number entered detected.");	
+					else if(ex.getMessage().equals("Number entered is invalid")) 
+						errordiag = new ErrorMessageDialog(new Shell(), "Number entered is invalid");	
+					
+					errordiag.open();
+
+
+				}
 				Enumeration ports = CommPortIdentifier.getPortIdentifiers();  
 
 				String defaultPort="";
@@ -137,29 +153,29 @@ public class ViewSmsAds extends Composite {
 					defaultPort = port.getName();
 				}
 
-				String[] input_num = txtToInputBox.getText().split(" ");
-				System.out.println(input_num.length);
+				String[] inputNum = txtToInputBox.getText().split(" ");
+				System.out.println(inputNum.length);
 				String message = txtMessageInputBox.getText();
-								
+
 				/* to be use IFF required!
 				try {	
-					
+
 					SerialToGsm stg = new SerialToGsm(defaultPort);
-					for(int i=0; i<input_num.length; i++)
-						stg.sendSms(input_num[i],message);
-					
+					for(int i=0; i<inputNum.length; i++)
+						stg.sendSms(inputNum[i],message);
+
 					ViewMain.ReturnView();
 				} catch (Exception ex) {
-					errordiag = new errormessageDialog(new Shell(), "Check your GSM modem.");
+					errordiag = new errormessageDialog(new Shell(), "Check your GSM modem or handphone number entered.");
 					errordiag.open();
 				}
-				*/
+				 */
 
 			}
 		});
 		formToolkit.adapt(btnSend, true, true);
 		btnSend.setText("Send");
-		
+
 		Button btnImportNumber = new Button(compSmsMain, SWT.NONE);
 		fd_lblMessage.top = new FormAttachment(btnImportNumber, 10);
 		fd_txtMessageInputBox.top = new FormAttachment(btnImportNumber, 10);
@@ -178,7 +194,7 @@ public class ViewSmsAds extends Composite {
 		});
 		formToolkit.adapt(btnImportNumber, true, true);
 		btnImportNumber.setText("Import Number");
-		
+
 		Button btnNotifyParticipants = new Button(compSmsMain, SWT.NONE);
 		fd_btnImportNumber.right = new FormAttachment(btnNotifyParticipants, -10);
 		FormData fd_btnNotifyParticipants = new FormData();
@@ -192,23 +208,26 @@ public class ViewSmsAds extends Composite {
 				for(int i=0 ; i< currentEvent.getParticipantList().size(); i++) {
 					participantsContact += currentEvent.getParticipantList().get(i).getContact() + " ";
 				}
-				
+
 				System.out.println("Here " + participantsContact);
 				txtToInputBox.setText(participantsContact);
 			}
 		});
 		formToolkit.adapt(btnNotifyParticipants, true, true);
 		btnNotifyParticipants.setText("Notify Participants");
-		
+
 		/**Set background color of everthing to grey.**/
 		compSmsMain.setBackground(SWTResourceManager.getColor(240,240,240));
 		formViewSmsAds.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
 		formViewSmsAds.getBody().setBackground(SWTResourceManager.getColor(240,240,240));
 		lblTo.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblMessage.setBackground(SWTResourceManager.getColor(240,240,240));
-		
+		btnImportNumber.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnSend.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnNotifyParticipants.setBackground(SWTResourceManager.getColor(240,240,240));
+
 	}
-	
+
 	public void ImportCSV (String filepath) {
 		ErrorMessageDialog errordiag;
 		try {
