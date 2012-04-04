@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import dialog.TwoChoiceDialog;
 import dialog.errormessageDialog;
 
 import venue.BookedVenueInfo;
@@ -96,6 +97,23 @@ public class InputFilterDialog extends Dialog {
 				try
 				{
 					output = filterCompo.readInput();
+					
+					boolean allNull = true;
+					for(int index = 0; index < output.length; index++)
+						if(output[index] != null)
+						{
+							allNull = false;
+						}
+					if(allNull == true)
+					{
+						TwoChoiceDialog warning = new TwoChoiceDialog(new Shell(), "Warning",
+								"You have not chosen any criterion yet! Do you want to continue?", "Yes", "No");
+						String choice = (String) warning.open();
+						if(choice.equals("Yes") == false)
+							return;
+						else
+							output = null;
+					}
 					shell.close();
 				}
 				catch(Exception exception)

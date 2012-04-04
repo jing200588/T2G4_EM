@@ -4,7 +4,11 @@ import event.*;
 import dialog.*;
 import venue.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.swt.SWT;
@@ -38,11 +42,11 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.jface.layout.TableColumnLayout;
-import org.eclipse.jface.viewers.ColumnPixelData;
 
 public class ViewEventFlow extends Composite {
 	
@@ -69,6 +73,7 @@ public class ViewEventFlow extends Composite {
 	private Button btnFilter;
 	private Text textSave;
 	private boolean isEntireListShowed;		// True if the table displays the whole list. False otherwise.
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -86,23 +91,6 @@ public class ViewEventFlow extends Composite {
 		eventObj = event;
 		listEventFlow = eventObj.getEventFlow();
 		isEntireListShowed = true;
-		
-		/////////////////////////////////////////////////////////////////////////////////////
-		/// 
-		////////////////////////////////////////////////////////////////////////////////////
-		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// User presses Ctrl + S
-				System.out.println(e.keyCode);
-				if((e.stateMask & SWT.CTRL) != 0 && e.keyCode == (int) 's')
-				{
-					// Update in the database
-					System.out.println("Press Crl + S");
-					ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
-				}
-			}
-		});
 		
 		// Continue with the GUI
 		toolkit.adapt(this);
@@ -264,8 +252,6 @@ public class ViewEventFlow extends Composite {
 		
 		Button btnReturnToEvent = new Button(mainComposite, SWT.NONE);
 		FormData fd_btnReturnToEvent = new FormData();
-		fd_btnReturnToEvent.right = new FormAttachment(100, -23);
-		fd_btnReturnToEvent.left = new FormAttachment(tableComposite, 10);
 		fd_btnReturnToEvent.width = 100;
 	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
 		btnReturnToEvent.setLayoutData(fd_btnReturnToEvent);
@@ -281,10 +267,11 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		toolkit.adapt(btnReturnToEvent, true, true);
-		btnReturnToEvent.setText("Save and Return");
+		btnReturnToEvent.setText("Return");
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
-		fd_btnReturnToEvent.top = new FormAttachment(btnAdd, 10);
+		fd_btnReturnToEvent.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
+		fd_btnReturnToEvent.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
 		FormData fd_btnAdd = new FormData();
 		fd_btnAdd.right = new FormAttachment(100, -23);
 		fd_btnAdd.left = new FormAttachment(tableComposite, 10);
@@ -412,6 +399,7 @@ public class ViewEventFlow extends Composite {
 		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		
 		Button btnNewButton = new Button(mainComposite, SWT.NONE);
+		fd_btnReturnToEvent.top = new FormAttachment(btnNewButton, 14);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -423,9 +411,9 @@ public class ViewEventFlow extends Composite {
 		});
 		btnNewButton.setSelection(true);
 		FormData fd_btnNewButton = new FormData();
+		fd_btnNewButton.bottom = new FormAttachment(100, -246);
 		fd_btnNewButton.right = new FormAttachment(100, -23);
 		fd_btnNewButton.left = new FormAttachment(tableComposite, 10);
-		fd_btnNewButton.top = new FormAttachment(btnReturnToEvent, 11);
 		fd_btnNewButton.width = 100;
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		toolkit.adapt(btnNewButton, true, true);
@@ -502,12 +490,27 @@ public class ViewEventFlow extends Composite {
 							overwrite = true;
 					}
 					
-					Vector<EventFlowEntry> newList = importCSVFile(importTextFilePath.getText());	
+					Vector<EventFlowEntry> newList = importCSVFile(importTextFilePath.getText());
+					
+					if(overwrite == true)
+					{
+						listEventFlow = newList;
+						eventObj.setEventFlow(newList);
+					}
+					else
+					{
+						listEventFlow.addAll(newList);
+					}
+					
+					Collections.sort(listEventFlow);
+					
+					tableViewEventFlow.setInput(listEventFlow);
+					tableViewEventFlow.refresh();
 				}
 				catch(Exception exception)
 				{
 					errormessageDialog errorBoard = new errormessageDialog(new Shell(), 
-							"There was an error importing the file.");
+							exception.getMessage());
 					errorBoard.open();
 				}
 			}
@@ -580,8 +583,8 @@ public class ViewEventFlow extends Composite {
 						
 						if(filterList.isEmpty() == true)
 						{
-							errormessageDialog errorBoard = new errormessageDialog(new Shell(), "Message",
-									"There is no result satisfying your criteria");
+							errormessageDialog errorBoard = new errormessageDialog(new Shell(),
+									"There is no result satisfying your criteria", "Message");
 							errorBoard.open();
 						}
 						else
@@ -612,9 +615,9 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		FormData fd_btnFilter = new FormData();
-		fd_btnFilter.right = new FormAttachment(btnReturnToEvent, 0, SWT.RIGHT);
-		fd_btnFilter.top = new FormAttachment(btnNewButton, 13);
-		fd_btnFilter.left = new FormAttachment(btnReturnToEvent, 0, SWT.LEFT);
+		fd_btnFilter.right = new FormAttachment(100, -23);
+		fd_btnFilter.left = new FormAttachment(tableComposite, 10);
+		fd_btnFilter.bottom = new FormAttachment(btnNewButton, -14);
 		btnFilter.setLayoutData(fd_btnFilter);
 		toolkit.adapt(btnFilter, true, true);
 		btnFilter.setText("Filter");
@@ -622,10 +625,10 @@ public class ViewEventFlow extends Composite {
 		textSave = new Text(mainComposite, SWT.READ_ONLY | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
 		textSave.setText("The list is not saved.");
 		FormData fd_textSave = new FormData();
-		fd_textSave.bottom = new FormAttachment(btnFilter, 86, SWT.BOTTOM);
-		fd_textSave.right = new FormAttachment(btnReturnToEvent, 23, SWT.RIGHT);
-		fd_textSave.top = new FormAttachment(btnFilter, 29);
-		fd_textSave.left = new FormAttachment(btnReturnToEvent, 0, SWT.LEFT);
+		fd_textSave.top = new FormAttachment(btnReturnToEvent, 26);
+		fd_textSave.left = new FormAttachment(tableComposite, 10);
+		fd_textSave.right = new FormAttachment(100);
+		fd_textSave.bottom = new FormAttachment(100, -124);
 		textSave.setLayoutData(fd_textSave);
 		toolkit.adapt(textSave, true, true);
 			
@@ -690,6 +693,126 @@ public class ViewEventFlow extends Composite {
 		
 		textSave.setText("Last saved by " + currentTime.getDateRepresentation() + " " + 
 				currentTime.getTimeRepresentation());
+	}
+	
+	/**
+	 * Imports a list of EventFlowEntry objects from a CSV file.
+	 * 
+	 * @param filePath - String
+	 * @return listEntry - Vector<EventFlowEntry>
+	 * @throws Exception if the input file is not in the correct format.
+	 */
+	private Vector<EventFlowEntry> importCSVFile(String filePath) throws Exception
+	{
+		try
+		{
+			CSVReader readerFile = new CSVReader(new FileReader(filePath));
+		
+			List<String[]> allRows = readerFile.readAll();
+			
+			if(allRows.get(0).length != COLUMN_PROPS.length)
+				throw new Exception("The number of columns in the CSV file does not match! It should have "
+						+ COLUMN_PROPS.length + " columns");
+			
+			Vector<EventFlowEntry> newList = new Vector<EventFlowEntry>();
+			String delimiter = "[ /:]+";
+			// allRows.get(0) is the headers
+			for(int index = 1; index < allRows.size(); index++)
+			{
+				// Read the start date time
+				String [] startDateTimeArr = HelperFunctions.removeRedundantWhiteSpace(
+						allRows.get(index)[0]).split(delimiter);
+				if(startDateTimeArr.length != 5)
+					throw new Exception("The starting date time of entry at row " + (index + 1) +
+							"is not in the correct format. It should be '<day>/<month>/<year> <hour>:<minute>'");
+				int day = Integer.parseInt(startDateTimeArr[0]);
+				int month = Integer.parseInt(startDateTimeArr[1]);
+				int year = Integer.parseInt(startDateTimeArr[2]);
+				int hour = Integer.parseInt(startDateTimeArr[3]);
+				int minute = Integer.parseInt(startDateTimeArr[4]);
+				if(MyDateTime.isValidDateTime(year, month, day, hour, minute) == false)
+					throw new Exception("The starting date time of entry at row " + (index + 1) +
+							"is not a valid date time");
+				MyDateTime startDateTime = new MyDateTime(year, month, day, hour, minute);
+				
+				// Read the end date time
+				String [] endDateTimeArr = HelperFunctions.removeRedundantWhiteSpace(
+						allRows.get(index)[1]).split(delimiter);
+				if(endDateTimeArr.length != 5)
+					throw new Exception("The endinging date time of entry at row " + (index + 1) +
+							"is not in the correct format. It should be '<day>/<month>/<year> <hour>:<minute>'");
+				day = Integer.parseInt(endDateTimeArr[0]);
+				month = Integer.parseInt(endDateTimeArr[1]);
+				year = Integer.parseInt(endDateTimeArr[2]);
+				hour = Integer.parseInt(endDateTimeArr[3]);
+				minute = Integer.parseInt(endDateTimeArr[4]);
+				if(MyDateTime.isValidDateTime(year, month, day, hour, minute) == false)
+					throw new Exception("The ending date time of entry at row " + (index + 1) +
+							"is not a valid date time");
+				MyDateTime endDateTime = new MyDateTime(year, month, day, hour, minute);
+				
+				// Read the activity name
+				String activityName = HelperFunctions.removeRedundantWhiteSpace(
+						allRows.get(index)[2]);
+				
+				// Read the user's note
+				String note = HelperFunctions.removeRedundantWhiteSpace(
+						allRows.get(index)[4]);
+				
+				// Read the venue
+				String venueName = HelperFunctions.removeRedundantWhiteSpace(
+						allRows.get(index)[3]);
+				int venueIndex = getVenueID(eventObj.getBviList(), venueName);
+				int venueID = 0;		// Dummny value
+				if(venueIndex < 0)
+				{
+					note = "Note on venue: " + venueName + "\n" + note; 
+					venueName = InputEventFlowEntry.OTHERVENUE;
+					venueID = -1;
+				}
+				else
+				{
+					venueName = eventObj.getBviList().get(venueIndex).getName();
+					venueID = eventObj.getBviList().get(venueIndex).getVenueID();
+				}
+				
+				newList.add(new EventFlowEntry(new TimeSlot(startDateTime, endDateTime),
+						activityName, venueName, venueID, note));
+			}
+			
+			return newList;
+		}
+		catch(FileNotFoundException exception)
+		{
+			throw new Exception("The file path provided is not valid!");
+		}
+		catch(Exception exception)
+		{
+			throw exception;
+		}
+		
+		
+	}
+	
+	/**
+	 * Returns the index of the venue whose name is venueName in the list of BookedVenueInfo objects.
+	 * 
+	 * @param listVenue - Vector<BookedVenueInfo>
+	 * @param venueName - String
+	 * @return index - Integer 
+	 * @return -1 if there is no venue whose name is venueName in the list.
+	 * 
+	 * Assumption: There are two venues with the same name in the list.
+	 */
+	private int getVenueID(Vector<BookedVenueInfo> listVenue, String venueName)
+	{
+		venueName = venueName.toUpperCase();
+		
+		for(int index = 0; index < listVenue.size(); index++)
+			if(listVenue.get(index).getName().toUpperCase().equals(venueName) == true)
+				return index;
+		
+		return -1;
 	}
 	
 	public static void main(String[] args)
