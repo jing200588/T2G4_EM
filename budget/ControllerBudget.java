@@ -45,7 +45,7 @@ public class ControllerBudget {
 	 * @throws Exception
 	 */
 	public ControllerBudget(String input, int budget, int typeChoice, int satisfactionChoice, Eventitem inputEventitem) throws Exception {
-		
+
 		itemList = new Vector<Item>();
 		currentEvent = inputEventitem;
 		Scanner sc = new Scanner(input);
@@ -56,14 +56,13 @@ public class ControllerBudget {
 		int satisfaction;
 		String type;
 		this.budget = ((double)budget)/100;
-
 		while(sc.hasNextLine()) {
 			line = sc.nextLine();
 			if(line.length() > 0) {
 				component = line.split(" ");
 				name = component[0];
 				cost = Double.parseDouble(component[1]);
-				if(cost < 0) throw new IOException("Cost should not be negative");
+				if(cost < 0) throw new IOException("Cost should not be negative.");
 				if (typeChoice == 1) { //has type
 					if(satisfactionChoice == 1) { //has satisfaction
 						satisfaction = Integer.parseInt(component[2]);
@@ -550,7 +549,7 @@ public class ControllerBudget {
 
 		bm.saveOptimizedList(currentEvent.getID(), databaseList);
 
-		currentEvent.setitem_list(bm.getOptimizeItemList(currentEvent.getID()));
+		currentEvent.setItemList(bm.getOptimizeItemList(currentEvent.getID()));
 	}
 	
 	/**

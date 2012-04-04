@@ -60,7 +60,7 @@ public class ModelEvent {
 			
 			int pid = list.get(i).getID();
 			list.get(i).addBVI(db.venueDB().getEventBookings(pid));	
-			list.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(pid));
+			list.get(i).setItemList(db.budgetDB().getBudgetListOptimized(pid));
 			list.get(i).setParticipantList(db.participantDB().getParticipantList(pid));
 		}
 		return list;
@@ -80,7 +80,7 @@ public class ModelEvent {
 		for (int i=0; i<size; i++){
 			int pid = expired.get(i).getID();
 			expired.get(i).addBVI(db.venueDB().getEventBookings(pid));	
-			expired.get(i).setitem_list(db.budgetDB().getBudgetListOptimized(pid));
+			expired.get(i).setItemList(db.budgetDB().getBudgetListOptimized(pid));
 			expired.get(i).setParticipantList(db.participantDB().getParticipantList(pid));
 			expired.get(i).setIsExpired(true);
 		}

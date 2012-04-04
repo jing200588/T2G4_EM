@@ -296,7 +296,7 @@ public class ViewEventFlow extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(), null,
-						eventObj.getBVI_list());
+						eventObj.getBviList());
 				EventFlowEntry newEntry = inputDialog.open();
 				
 				// User might press 'Cancel' because they do not want to create a new entry anymore!
@@ -528,7 +528,7 @@ public class ViewEventFlow extends Composite {
 					if(btnFilter.getText().equals("Filter") == true)
 					{
 						InputFilterDialog filterDialog = new InputFilterDialog(new Shell(), SWT.NONE,
-								eventObj.getBVI_list());
+								eventObj.getBviList());
 						String[] outputStr = (String []) filterDialog.open();
 						
 						if(outputStr == null)
@@ -649,7 +649,7 @@ public class ViewEventFlow extends Composite {
 				chosenEntry = filterList.get(chosenIndex);
 			
 			InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(),
-					chosenEntry, eventObj.getBVI_list());
+					chosenEntry, eventObj.getBviList());
 			EventFlowEntry newEntry = inputDialog.open();
 			
 			// There may be modification in the chosen EventFlowEntry object

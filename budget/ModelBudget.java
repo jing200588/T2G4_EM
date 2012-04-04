@@ -33,11 +33,8 @@ public class ModelBudget {
 	public void saveNonOptimizedList(int inputId, Vector<Item> inputItemList) { 
 		eventId = inputId;
 		itemList = inputItemList;
-		
 		db.budgetDB().deleteBudgetList(inputId);
 		db.budgetDB().addBudgetList(inputItemList, inputId);
-		
-		
 	}
 
 	/**
