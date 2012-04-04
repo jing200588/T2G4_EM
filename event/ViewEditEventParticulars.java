@@ -79,7 +79,7 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 				}
 				catch(Exception exception)
 				{
-					errordiag = new errormessageDialog(new Shell(), exception.getMessage());
+					errordiag = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errordiag.open();
 				}
 			}

@@ -134,6 +134,28 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
+	 * DELETE EXPIRED ITEM
+	 ***********************************************************/
+	/**
+	 * Description: 
+	 */
+	public static void DeleteExpiredItem() {
+		ExpiredTable.remove(ExpiredTable.getSelectionIndices());
+		Homepage();
+	}
+	
+	/************************************************************
+	 * DELETE ALL EXPIRED ITEM
+	 ***********************************************************/
+	/**
+	 * Description:
+	 */
+	public static void DeleteAllExpiredItems() {
+		ExpiredTable.removeAll();
+		Homepage();
+	}
+	
+	/************************************************************
 	 * Method to update the table in c1
 	 ***********************************************************/
 	/**
@@ -243,10 +265,46 @@ public class ViewMain extends ApplicationWindow {
 	 * SETPAGE
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewHomepage and set the page of composite c2 to ViewHomepage
+	 * Description: Initialize pages based on which id it is passed in.
 	 */
-	public static void setPage (String page) {
+	public static void setPage (int idNo) {
+		Composite newComposite;
 		
+		switch (idNo) {
+		case 0:
+			newComposite = new ViewHomepage(c2, SWT.NONE);
+			layout.topControl = newComposite;
+			break;
+		case 1:
+			newComposite = new ViewEventParticulars(c2, SWT.NONE);
+			layout.topControl = newComposite;
+			break;
+		case 2:
+			newComposite = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+			layout.topControl = newComposite;
+			break;
+		case 3:
+			newComposite = new ViewBudget(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+			layout.topControl = newComposite;
+			break;
+		case 4:
+			newComposite = new ViewEventFlow(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+			layout.topControl = newComposite;
+			break;
+		case 5:
+			
+		default:
+			break;
+		}
+		c2.layout();
+		
+	}
+	public static Composite getC2 () {
+		return c2;
+	}
+	public static void setPage (Composite newComposite) {
+		layout.topControl = newComposite;
+		c2.layout();
 	}
 	
 	/************************************************************
@@ -584,13 +642,13 @@ public class ViewMain extends ApplicationWindow {
 				public void widgetSelected(SelectionEvent e) {
 					try {
 						TableItem tb = EventListTable.getItem(EventListTable.getSelectionIndex());
-						deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
+						DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 						if ((Integer) confirm.open() == 1) {
 							ModelEvent.DeleteEvent(eventlist.get(EventListTable.getSelectionIndex()));	//Finds the selected event and deletes it from vector
 							DeleteItem();
 						}
 					} catch (Exception ex) {
-						errormessageDialog errormsg = new errormessageDialog(new Shell(), "There was nothing selected!");
+						ErrorMessageDialog errormsg = new ErrorMessageDialog(new Shell(), "There was nothing selected!");
 						errormsg.open();
 					}
 				}
@@ -691,18 +749,36 @@ public class ViewMain extends ApplicationWindow {
 				public void widgetSelected(SelectionEvent e) {
 					try {
 					TableItem tb = ExpiredTable.getItem(ExpiredTable.getSelectionIndex());
-					deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(0));
+					DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 					if ((Integer) confirm.open() == 1) {
-				//		ModelEvent.DeleteEvent(eventlist.get(table.getSelectionIndex()));	//Finds the selected event and deletes it from vector
-					//	DeleteItem();
+						ModelEvent.DeleteExpiredEvent(expiredlist.get(ExpiredTable.getSelectionIndex()));
+						DeleteExpiredItem();
 					}
 					} catch (Exception ex) {
-						errormessageDialog errormsg = new errormessageDialog(new Shell(), "There was nothing selected!");
+						ErrorMessageDialog errormsg = new ErrorMessageDialog(new Shell(), "There was nothing selected!");
 						errormsg.open();
 					}
 				}
 			});
 			mntmDeletePastEvent.setText("Delete Event");
+			
+			MenuItem mntmDeleteAllPastEvent = new MenuItem(menu2, SWT.PUSH);
+			mntmDeleteAllPastEvent.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+					DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", "ALL past events");
+					if ((Integer) confirm.open() == 1) {
+						ModelEvent.DeleteAllExpiredEvents();
+						DeleteAllExpiredItems();
+					}
+					} catch (Exception ex) {
+						ErrorMessageDialog errormsg = new ErrorMessageDialog(new Shell(), "There was nothing selected!");
+						errormsg.open();
+					}
+				}
+			});
+			mntmDeleteAllPastEvent.setText("Delete All Past Events");
 			
 			DateTime Calender = new DateTime(c1, SWT.CALENDAR | SWT.LONG);
 			Calender.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
@@ -893,12 +969,10 @@ public class ViewMain extends ApplicationWindow {
 	 */
 	protected void configureShell(Shell newShell) {
 		newShell.setImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\workspace\\E-MAN\\Images\\thumbnail.jpg"));
-	//	newShell.setMinimumSize(new Point(1035, 526));
 		newShell.setMinimumSize(new Point(1200, 526));
 		super.configureShell(newShell);
 		newShell.setText("E-Man");
 		newShell.setSize(getInitialSize());
-		//newShell.setMaximized(true);
 
 	}
 
@@ -908,12 +982,6 @@ public class ViewMain extends ApplicationWindow {
 	protected Point getInitialSize() {
 		return new Point(1200, 526);
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	/**

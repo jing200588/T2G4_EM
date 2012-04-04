@@ -266,7 +266,7 @@ public class ViewBookingSystem extends Composite {
 				NameToSearch.setText(venueName);
 				if(venueName == null || venueName.equals("") == true)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), "You have not entered a venue name to search yet!");
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), "You have not entered a venue name to search yet!");
 					errorBoard.open();
 				}
 				else
@@ -276,7 +276,7 @@ public class ViewBookingSystem extends Composite {
 
 					if(searchResultList.size() == 0)
 					{
-						errormessageDialog messageBoard = new errormessageDialog(new Shell(),
+						ErrorMessageDialog messageBoard = new ErrorMessageDialog(new Shell(),
 								"There is no result satisfying your criteria. Please do another searching",
 								"Message");
 						messageBoard.open();
@@ -619,7 +619,7 @@ public class ViewBookingSystem extends Composite {
 				}
 				catch(Exception exception)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), exception.getMessage());
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errorBoard.open();
 					BookVenueButton.setEnabled(false);
 					ButtonConfirmBookTime.setText("Confirm");
@@ -817,7 +817,7 @@ public class ViewBookingSystem extends Composite {
 				}
 				catch(Exception exception)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(),
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(),
 							exception.getMessage());
 					errorBoard.open();
 				}
@@ -950,7 +950,7 @@ public class ViewBookingSystem extends Composite {
 										}
 										catch(Exception exception)
 										{
-											errormessageDialog errorBoard = new errormessageDialog(new Shell(), exception.getMessage());
+											ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), exception.getMessage());
 											errorBoard.open();
 										}
 									}
@@ -972,7 +972,7 @@ public class ViewBookingSystem extends Composite {
 
 								if(searchResultList.size() == 0)
 								{
-									errormessageDialog messageBoard = new errormessageDialog(new Shell(),
+									ErrorMessageDialog messageBoard = new ErrorMessageDialog(new Shell(),
 											"There is no result satisfying your criteria. Please do another searching!",
 											"Message");
 									messageBoard.open();

@@ -212,7 +212,7 @@ public class ViewSmsAds extends Composite {
 	}
 	
 	public void ImportCSV (String filepath) {
-		errormessageDialog errordiag;
+		ErrorMessageDialog errordiag;
 		try {
 			String importedText = "";
 			CSVReader reader = new CSVReader(new FileReader(filepath));
@@ -228,10 +228,10 @@ public class ViewSmsAds extends Composite {
 			txtToInputBox.setText(importedText);
 
 		} catch (FileNotFoundException e) {
-			errordiag = new errormessageDialog(new Shell(), "File not found.");
+			errordiag = new ErrorMessageDialog(new Shell(), "File not found.");
 			errordiag.open();
 		} catch (IOException e) {
-			errordiag = new errormessageDialog(new Shell(), "Incorrect file format.");
+			errordiag = new ErrorMessageDialog(new Shell(), "Incorrect file format.");
 			errordiag.open();
 		}
 

@@ -180,7 +180,7 @@ public class ViewEvent extends Composite {
 		lblEdescription.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEdescription.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		lblEdescription.setText("Description:");
-
+		
 		Edescription = new Label(eventParticularsComp, SWT.WRAP | SWT.SHADOW_NONE);
 		Edescription.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		GridData gd_Edescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
@@ -227,6 +227,7 @@ public class ViewEvent extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.BookVenue();
+				ViewMain.setPage(new ViewHomepage(ViewMain.getC2(),SWT.NONE));
 			}
 		});
 		GridData gd_btnBookVenue = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -461,7 +462,7 @@ public class ViewEvent extends Composite {
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", cevent.getName());
+				DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", cevent.getName());
 				if ((Integer) confirm.open() == 1) {
 					ModelEvent.DeleteEvent(cevent);
 					ViewMain.DeleteItem();
@@ -517,12 +518,12 @@ public class ViewEvent extends Composite {
 						allEmptyTable = false;
 					}
 					if (allEmptyTable == true) throw new IOException();
-					new errormessageDialog(new Shell(), "The file was exported successfully!").open();
+					new ErrorMessageDialog(new Shell(), "The file was exported successfully!").open();
 					writer.close();
 				}catch (IOException ex) {
 					// TODO Auto-generated catch block
 					System.out.println("Error exporting");
-					new errormessageDialog(new Shell(), "There was an error exporting the file.").open();
+					new ErrorMessageDialog(new Shell(), "There was an error exporting the file.").open();
 					//ex.printStackTrace();
 				} catch(NullPointerException ex) {
 					//User close the file browser with cancel button or 'X' button.
@@ -1062,7 +1063,7 @@ public static Table BudgetTable() {
 		public void widgetSelected(SelectionEvent e) {
 			TableItem tb = BudgetResult.getItem(BudgetResult.getSelectionIndex());
 			int itemToDelete = Integer.parseInt(tb.getText(0).substring(5, tb.getText(0).length()));
-			deleteconfirmDialog confirm = new deleteconfirmDialog(new Shell(), "delconfirm", tb.getText(1));
+			DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(1));
 			if ((Integer) confirm.open() == 1) {
 				deleteBudgetItem(item_list, itemToDelete);
 			}

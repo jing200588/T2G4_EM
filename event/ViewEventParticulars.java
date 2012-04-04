@@ -36,7 +36,7 @@ public class ViewEventParticulars extends Composite {
 	protected Form EventParticularsForm;
 	
 	
-	protected errormessageDialog errordiag;
+	protected ErrorMessageDialog errordiag;
 	
 	/**
 	 * Description: Create the composite.

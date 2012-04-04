@@ -3,7 +3,7 @@ package advertise.email;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-import dialog.errormessageDialog;
+import dialog.ErrorMessageDialog;
 import emdb.EMDBSettings;
 import event.*;
 
@@ -258,14 +258,14 @@ public class ViewEmailAds extends Composite {
 				}
 
 				if (!allOK){
-					errormessageDialog messageBoard = new errormessageDialog(new Shell(),
+					ErrorMessageDialog messageBoard = new ErrorMessageDialog(new Shell(),
 							"An Error has occurred in sending your email",
 							"Error");
 					messageBoard.open();
 				}else{
 					txtToInputBox.setText("");
 					
-					errormessageDialog messageBoard = new errormessageDialog(new Shell(),
+					ErrorMessageDialog messageBoard = new ErrorMessageDialog(new Shell(),
 							"Your mail has been sent!",
 							"Sent!");
 					messageBoard.open();
