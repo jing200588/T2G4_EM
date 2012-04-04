@@ -224,7 +224,7 @@ public class ViewEvent extends Composite {
 		btnBookVenue.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.BookVenue();
-				ViewMain.setPage(new ViewHomepage(ViewMain.getC2(),SWT.NONE));
+				//ViewMain.setPage(new ViewHomepage(ViewMain.getC2(),SWT.NONE));
 			}
 		});
 		GridData gdBookVenue = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -451,7 +451,7 @@ public class ViewEvent extends Composite {
 		btnDeleteEvent.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", cevent.getName());
+				DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", currentEvent.getName());
 				if ((Integer) confirm.open() == 1) {
 					ModelEvent.DeleteEvent(currentEvent);
 					ViewMain.DeleteItem();

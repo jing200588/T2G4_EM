@@ -509,7 +509,7 @@ public class ViewEventFlow extends Composite {
 				}
 				catch(Exception exception)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), 
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), 
 							exception.getMessage());
 					errorBoard.open();
 				}
@@ -583,7 +583,7 @@ public class ViewEventFlow extends Composite {
 						
 						if(filterList.isEmpty() == true)
 						{
-							errormessageDialog errorBoard = new errormessageDialog(new Shell(),
+							ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(),
 									"There is no result satisfying your criteria", "Message");
 							errorBoard.open();
 						}
@@ -609,7 +609,7 @@ public class ViewEventFlow extends Composite {
 				}
 				catch(Exception exception)
 				{
-					errormessageDialog errorBoard = new errormessageDialog(new Shell(), exception.getMessage());
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errorBoard.open();
 				}
 			}

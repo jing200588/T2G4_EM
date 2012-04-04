@@ -324,11 +324,11 @@ public class ViewBudget extends Composite {
 					else if(ie.getMessage().equals("Cost should not be negative")) 
 						errordiag = new ErrorMessageDialog(new Shell(), "Cost should not be negative");	
 					else if(ie.getMessage().equals("Budget cannot be less than 0.")) 
-						errordiag = new errormessageDialog(new Shell(), "Budget cannot be less than 0.");	
+						errordiag = new ErrorMessageDialog(new Shell(), "Budget cannot be less than 0.");	
 					else if(ie.getMessage().equals("Budget is out of range the system can take.")) 
-						errordiag = new errormessageDialog(new Shell(), "Budget is out of range the system can take.");	
+						errordiag = new ErrorMessageDialog(new Shell(), "Budget is out of range the system can take.");	
 					else if(ie.getMessage().equals("Budget is out of range the system can take.")) 
-						errordiag = new errormessageDialog(new Shell(), "Budget is out of range the system can take.");	
+						errordiag = new ErrorMessageDialog(new Shell(), "Budget is out of range the system can take.");	
 					else 
 						errordiag = new ErrorMessageDialog(new Shell(), "Incorrect input format.");
 
