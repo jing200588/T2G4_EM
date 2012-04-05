@@ -16,7 +16,7 @@ import event.Eventitem;
 public class EMDBIITest {
 	
 	
-	private EMDBII 				db				=	new EMDBII();
+	private EMDBII 				db;
 	
 	private Vector<Eventitem>	eventList		=	new Vector<Eventitem>();
 	private Vector<Venue>		venueList		=	new Vector<Venue>();
@@ -29,7 +29,8 @@ public class EMDBIITest {
 	
 	
 	public EMDBIITest(){		
-
+		db = new EMDBII("test.sqlite");
+		db.init();
 		
 		//Add 5 items to the list
 		eventList.add(new Eventitem("The NUS Event", "01/12/2014", "12/12/2014", "01:00", "13:00"));
@@ -54,14 +55,10 @@ public class EMDBIITest {
 		itemList.add(new Item("Food", 1000.00, 400));
 		itemList.add(new Item("Lodging", 23.00, 100));
 		
-		
 	}
+
 	
 	
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
 	
 	@Test
 	public void verifyDatabase() throws Exception{
@@ -77,18 +74,86 @@ public class EMDBIITest {
 	
 	@Test
 	public void saveAndRetrieveEvent() throws Exception {
-		Eventitem item = eventList.get(0);
-		db.eventDB().addEvent(
-				item.getName(), 
-				item.getDescription(), 
-				item.getBudget(), 
-				item.getStartDateTime().getDateRepresentation(), 
-				item.getEndDateTime().getDateRepresentation(),
-				item.getStartDateTime().getTimeRepresentation(), 
-				item.getEndDateTime().getTimeRepresentation(), 
-				EventFlowEntry.getStringRepresentation(item.getEventFlow())
+		
+		Eventitem itemOriginal 	= 	eventList.get(0);
+		Eventitem itemResult	=	null;
+		
+		int id = db.eventDB().addEvent(
+				itemOriginal.getName(), 
+				itemOriginal.getDescription(), 
+				itemOriginal.getBudget(), 
+				itemOriginal.getStartDateTime().getDateRepresentation(), 
+				itemOriginal.getEndDateTime().getDateRepresentation(),
+				itemOriginal.getStartDateTime().getTimeRepresentation(), 
+				itemOriginal.getEndDateTime().getTimeRepresentation(), 
+				EventFlowEntry.getStringRepresentation(itemOriginal.getEventFlow())
 				);
+		
+		assertTrue(	(id > 0) );
+		
+		itemResult = db.eventDB().getEvent(id);
+		
+		assertEquals(
+				itemOriginal.getName(), 
+				itemResult.getName()
+				);
+		
+		assertEquals(
+				itemOriginal.getDescription(), 
+				itemResult.getDescription()
+				);
+		
+		assertTrue(	(itemOriginal.getBudget() == itemResult.getBudget()) );
+		
+		assertEquals(
+				itemOriginal.getStartDateTime().getDateRepresentation(), 
+				itemResult.getStartDateTime().getDateRepresentation()
+				);
+		
+		assertEquals(
+				itemOriginal.getEndDateTime().getDateRepresentation(), 
+				itemResult.getEndDateTime().getDateRepresentation()
+				);
+		
+		assertEquals(
+				itemOriginal.getStartDateTime().getTimeRepresentation(), 
+				itemResult.getStartDateTime().getDateRepresentation()
+				);
+		
+		assertEquals(
+				itemOriginal.getEndDateTime().getTimeRepresentation(), 
+				itemResult.getEndDateTime().getTimeRepresentation()
+				);
+		
+		assertEquals(
+				EventFlowEntry.getStringRepresentation(itemOriginal.getEventFlow()),
+				EventFlowEntry.getStringRepresentation(itemResult.getEventFlow())
+				);
+		
 	}
 	
+	
+	
+	
+	
+	@Test
+	public void clearTables() throws Exception {
+		db.eventDB().truncate();
+		
+	}
 
+	
+	@Test
+	public void deleteTables() throws Exception {
+		db.eventDB().drop();
+		
+		db.venueDB().drop();
+		
+		db.budgetDB().drop();
+		
+		db.participantDB().drop();
+		
+	}
+	
+	
 }

@@ -148,7 +148,7 @@ public class EMDBBudget extends EMDBBase{
 	/**
 	 * DROP the database tables.
 	 */
-	public void cleanup(){
+	public void drop(){
 		String sql 	=	DropQuery.dropTable(this.budgetTable)
 						.validate().toString();
 		String sql2 =	DropQuery.dropTable(this.optBudgetTable)
@@ -170,7 +170,7 @@ public class EMDBBudget extends EMDBBase{
 	 * DROP a specific database table
 	 * @param aType
 	 */
-	public void cleanup(String aType){
+	public void drop(String aType){
 		String sql = "";
 		
 		if (aType.compareTo("budget") == 0){

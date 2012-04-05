@@ -144,7 +144,7 @@ public class EMDBII{
 		/*
 		 * Remove event tables
 		 */
-		this.event.cleanup();
+		this.event.drop();
 		if(this.event.verify() && this.debugState){
 			System.out.println("EMDB - EVENT TABLE CLEARED");
 		}
@@ -153,7 +153,7 @@ public class EMDBII{
 		/*
 		 * Remove budget tables
 		 */
-		this.budget.cleanup();
+		this.budget.drop();
 		if(this.budget.verify() && this.debugState){
 			System.out.println("EMDB - BUDGET TABLE CLEARED");
 		}
@@ -161,7 +161,7 @@ public class EMDBII{
 		/*
 		 * Remove venue tables
 		 */
-		this.venue.cleanup();
+		this.venue.drop();
 		if(this.venue.verify() && this.debugState){
 			System.out.println("EMDB - VENUE TABLE CLEARED");
 		}
@@ -169,7 +169,7 @@ public class EMDBII{
 		/*
 		 * Remove participant tables
 		 */
-		this.participant.cleanup();
+		this.participant.drop();
 		if(this.participant.verify() && this.debugState){
 			System.out.println("EMDB - PARTICIPANT TABLE CLEARED");
 		}
