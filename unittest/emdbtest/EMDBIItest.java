@@ -6,17 +6,22 @@ import java.util.Vector;
 
 import org.junit.Test;
 
+import program.EventFlowEntry;
+
 import budget.Item;
 import venue.Venue;
+import emdb.EMDBII;
 import event.Eventitem;
 
 public class EMDBIITest {
-	private Eventitem			itemStart;
+	
+	
+	private EMDBII 				db				=	new EMDBII();
+	
 	private Vector<Eventitem>	eventList		=	new Vector<Eventitem>();
 	private Vector<Venue>		venueList		=	new Vector<Venue>();
 	private Vector<Item> 		itemList		=	new Vector<Item>();
 	
-	private Eventitem			itemVar;
 	private Vector<Eventitem>	eventListVar	=	new Vector<Eventitem>();
 	private Vector<Venue>		venueListVar	=	new Vector<Venue>();
 	private Vector<Item> 		itemListVar		=	new Vector<Item>();
@@ -61,12 +66,28 @@ public class EMDBIITest {
 	@Test
 	public void verifyDatabase() throws Exception{
 		
+		boolean total 	= 	(this.db.eventDB().verify()
+						&& 	this.db.venueDB().verify()
+						&&	this.db.budgetDB().verify()
+						&&	this.db.participantDB().verify());
+		assertTrue(total);
+		
 	}
 	
 	
 	@Test
-	public void saveAndRetrieve() throws Exception {
-		
+	public void saveAndRetrieveEvent() throws Exception {
+		Eventitem item = eventList.get(0);
+		db.eventDB().addEvent(
+				item.getName(), 
+				item.getDescription(), 
+				item.getBudget(), 
+				item.getStartDateTime().getDateRepresentation(), 
+				item.getEndDateTime().getDateRepresentation(),
+				item.getStartDateTime().getTimeRepresentation(), 
+				item.getEndDateTime().getTimeRepresentation(), 
+				EventFlowEntry.getStringRepresentation(item.getEventFlow())
+				);
 	}
 	
 

@@ -249,7 +249,12 @@ public class EMDBBase{
 
 	
 	
-	
+	/**
+	 * Generic Query with Value Returned
+	 * Accepts a string, connect to DB, execute, and disconnect, but with results of query
+	 * @param aSql
+	 * @return
+	 */
 	protected Vector<Object[]> runQueryResults(String aSql){
 		
 		

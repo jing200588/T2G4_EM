@@ -143,12 +143,12 @@ public class ViewEmailAds extends Composite {
 		
 		
 
-		txtSubjectInputBox.setText("<ADV> Join us at " + input_ei.getName());
+		txtSubjectInputBox.setText("<ADV> Join us at " + currentEvent.getName());
 		
 		String newMsg = "";
 		
-		newMsg += "Date - " + input_ei.getStartDateTime().getDateRepresentation() + " to " + input_ei.getEndDateTime().getDateRepresentation();
-		newMsg += "\n\n" + input_ei.getDescription();
+		newMsg += "Date - " + currentEvent.getStartDateTime().getDateRepresentation() + " to " + currentEvent.getEndDateTime().getDateRepresentation();
+		newMsg += "\n\n" + currentEvent.getDescription();
 		txtMessageInputBox.setText(newMsg);
 		
 		
