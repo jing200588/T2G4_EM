@@ -535,7 +535,7 @@ public class ViewEvent extends Composite {
 		btnExport.setText("Export");
 
 		//Checks and refreshes the individual sections
-//		RefreshBudget();
+		RefreshBudget();
 		RefreshVenue();
 		RefreshFlow();
 		RefreshParticipant();
@@ -580,7 +580,8 @@ public class ViewEvent extends Composite {
 	public static void RefreshBudget() {
 		if (budgetFlag)
 			tableBudget.dispose();
-		tableBudget = BudgetJfaceTable();
+	//	tableBudget = BudgetJfaceTable();
+		tableBudget = BudgetTable();
 	}
 
 	/**
@@ -602,8 +603,8 @@ public class ViewEvent extends Composite {
 	public static void RefreshParticipant() {
 		if (participantFlag)
 			tableParticipant.dispose();
-		tableParticipant = ParticipantTable();
-	    //tableParticipant =  ParticipantJfaceTable();
+		//tableParticipant = ParticipantTable();
+	    tableParticipant =  ParticipantJfaceTable();
 	}
 
 	/**********************************************************************************************
@@ -676,7 +677,7 @@ public class ViewEvent extends Composite {
 		});
 
 		mouseOverPackage(tableParticipant, data);
-		setTableRowDisplayed(tableParticipant, data, 10);
+		setTableRowDisplayed(tableParticipant, data, 15);
 		participantFlag = true;
 		return tableParticipant;
 	}
@@ -711,7 +712,7 @@ public class ViewEvent extends Composite {
 		TableViewer tableViewerParticipant = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableParticipant = tableViewerParticipant.getTable();
 		tableParticipant.setHeaderVisible(true);
-		
+		tableParticipant.getVerticalBar().setEnabled(true);
 		//setting the column headers
 		for (int i=0; i<tvc.length; i++) {
 			tvc[i] = new TableViewerColumn (tableViewerParticipant, SWT.NONE);
@@ -763,10 +764,11 @@ public class ViewEvent extends Composite {
 			tableViewerParticipant.setInput(participantList);
 			tvc[1].getColumn().pack();
 			tvc[2].getColumn().pack();
+
 		
 			mouseOverPackage(tableParticipant, data);
 			//Dictates when vertical scrollbar appears
-			setTableRowDisplayed(tableParticipant, data, 10);
+			setTableRowDisplayed(tableParticipant, data, 15);
 			
 
 		participantFlag = true;
@@ -1149,7 +1151,7 @@ public class ViewEvent extends Composite {
 	*/	
 			mouseOverPackage(tableBudget, data);
 			//Dictates when vertical scrollbar appears
-			setTableRowDisplayed(tableBudget, data, 10);
+			setTableRowDisplayed(tableBudget, data, 15);
 			
 			Menu menu = new Menu(tableBudget);
 			tableBudget.setMenu(menu);

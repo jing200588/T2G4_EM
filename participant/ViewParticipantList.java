@@ -444,8 +444,8 @@ public void ImportCSV (String filepath) throws Exception {
 		
 		if (entries.get(0).length < 6)
 			throw new ArrayIndexOutOfBoundsException();
+		tempEntries.clear();
 		for (int i=0; i<entries.size(); i++) {
-			tempEntries.clear();
 			tempEntries.add(new Participant(entries.get(i)[0], entries.get(i)[1], entries.get(i)[2], entries.get(i)[3], entries.get(i)[4], entries.get(i)[5]));
 		}		
 	} catch (FileNotFoundException e) {
