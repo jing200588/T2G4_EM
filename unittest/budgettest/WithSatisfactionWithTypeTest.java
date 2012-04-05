@@ -109,7 +109,7 @@ public class WithSatisfactionWithTypeTest {
 		ControllerBudget cb = new ControllerBudget(input, 477137, 1, 1, currentEvent); //Budget = $4771.37 
 		
 		compulsoryList.add(3); // flag Nikon_Cam as compulsory, cost is $634.5
-		compulsoryList.add(8); // flag Windows_7_Basic as compulsory, cost is $200.8
+		compulsoryList.add(8); // flag Windows_7_Basic as compulsory, cost is $200
 
 		cb.differentiateCompulsory(compulsoryList, 1); // compulsory list is not empty
 

@@ -17,7 +17,7 @@ import java.util.Vector;
 public class ControllerBudget {
 
 	private int number; //store the number of item to undergo permutation algorithm
-	private double budget, recursiveFunctionBudget; 
+	private double recursiveFunctionBudget; 
 	private Solution soln;
 	private Eventitem currentEvent;
 	private int typeOfResult; //this will be use to determine how the database list will be manipulated.
@@ -25,7 +25,7 @@ public class ControllerBudget {
 	private Vector<Item> computeList; //store the item(s) to undergo permutation algorithm
 	private Vector<Item> compulsoryList;
 	private Vector<Item> itemList; //store the initial item list input by the user
-	private int tempBudget, nonCompulsoryCost, compulsoryCost, compulsorySatisfaction, nonCompulsorySatisfaction;
+	private int tempBudget, nonCompulsoryCost, compulsoryCost, compulsorySatisfaction, nonCompulsorySatisfaction, budget;
 	private int totalCombination; 
 
 
@@ -38,13 +38,13 @@ public class ControllerBudget {
 	/**
 	 * Description: Create a constructor that take in the input and process them into item list.
 	 * @param input
-	 * @param budget
+	 * @param inputBudget
 	 * @param typeChoice
 	 * @param satisfactionChoice
 	 * @param inputEventitem
 	 * @throws Exception
 	 */
-	public ControllerBudget(String input, int budget, int typeChoice, int satisfactionChoice, Eventitem inputEventitem) throws Exception {
+	public ControllerBudget(String input, int inputBudget, int typeChoice, int satisfactionChoice, Eventitem inputEventitem) throws Exception {
 
 		itemList = new Vector<Item>();
 		currentEvent = inputEventitem;
@@ -55,7 +55,7 @@ public class ControllerBudget {
 		double cost;
 		int satisfaction;
 		String type;
-		this.budget = ((double)budget)/100;
+		this.budget = inputBudget;
 		while(sc.hasNextLine()) {
 			line = sc.nextLine();
 			if(line.length() > 0) {
@@ -101,7 +101,7 @@ public class ControllerBudget {
 	 * @param satisfactionChoice
 	 */
 	public void differentiateCompulsory(Vector<Integer> com, int satisfactionChoice) {
-		tempBudget = (int) (budget*100);
+		tempBudget = budget;
 		computeList = (Vector<Item>) itemList.clone();
 		compulsoryList = new Vector<Item>();
 		if(com.size() > 0) {
@@ -518,7 +518,7 @@ public class ControllerBudget {
 
 	public void saveOptimizeOption(int select) {
 		Vector<Item> databaseList = new Vector<Item>();//store the list to be send to database
-
+		
 		if(typeOfResult == 1) { //take all item. Budget is enough to buy everything.
 			for(int i=0; i<itemList.size(); i++) {
 				databaseList.add(itemList.get(i));

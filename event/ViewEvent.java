@@ -53,7 +53,6 @@ public class ViewEvent extends Composite {
 	private static Label lblDynamicDescription, lblDynamicStartDate, lblDynamicStartTime, lblDynamicEndDate, lblDynamicEndTime, lblDynamicname;
 	private static ScrolledComposite scrollCompositeMain;
 	private static Composite compMain;
-	private static int budgetTableSelectedIndex;
 	private static ControllerBudget bc;
 	protected LoginEmailDialog loginDialog; 
 
@@ -903,7 +902,8 @@ public class ViewEvent extends Composite {
 
 		bc = new ControllerBudget();
 		bc.deleteBudgetItem(currentEvent.getID(), itemList.get(itemToDelete-1).getID());
-		itemList.remove(budgetTableSelectedIndex);
+		
+		itemList.remove(itemToDelete-1);
 		currentEvent.setItemList(itemList);
 
 		refreshBudgetTable(itemList);
