@@ -429,8 +429,8 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Sets the page of composite c2 to ViewEvent
 	 */
 	public static void ReturnView() {
-		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-		layout.topControl = newview;
+		view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+		layout.topControl = view;
 		c2.layout(true);
 		
 	}
@@ -577,9 +577,10 @@ public class ViewMain extends ApplicationWindow {
 				}
 			
 				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
-				view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-		        layout.topControl = view;
-				c2.layout(true);
+				ReturnView();
+			//	view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+		    //   layout.topControl = view;
+			//	c2.layout(true);
 		     }
 			});
 			tc1 = new TableColumn(EventListTable, SWT.LEFT);
