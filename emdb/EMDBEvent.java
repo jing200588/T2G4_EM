@@ -315,12 +315,14 @@ public class EMDBEvent extends EMDBBase{
 		
 		this.connect();
 		
+		int id = this.runQueryKey(sql);
+		/*
 		Vector<Object[]> result = this.runQueryResults(sql);
 		int id = 0;
-		
+
 		if (result.size() > 0){
 			id = Integer.parseInt(result.get(0)[0].toString());
-		}
+		}*/
 		
 		this.disconnect();
 		

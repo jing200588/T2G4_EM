@@ -246,7 +246,38 @@ public class EMDBBase{
 	}
 	
 
-
+	/**
+	 * Generic Query with Key. 
+	 * Accepts a string, connect to DB, execute, and disconnect.
+	 * @param sql
+	 * @return
+	 */
+	protected int runQueryKey(String aSql){
+		
+		if (this.dbDebug){
+			this.dMsg("RUNNING QUERY (NORMAL)");
+			try {
+				if(this.dbCon.isReadOnly()){
+					this.dMsg("Database LOCKED");
+				}
+			} catch (SQLException e) {}
+		}
+		
+		try {	
+			
+			PreparedStatement query = this.dbCon.prepareStatement(aSql, Statement.RETURN_GENERATED_KEYS);
+			query.execute();
+			ResultSet rs = query.getGeneratedKeys();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}else{
+				return 0;
+			}
+			
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
 	
 	
 	/**
@@ -268,6 +299,8 @@ public class EMDBBase{
 		}
 		
 		try {	
+			//Statement query = this.dbCon.createStatement();
+			//ResultSet rs = query.executeQuery(aSql);
 			
 			PreparedStatement query = this.dbCon.prepareStatement(aSql, Statement.RETURN_GENERATED_KEYS);
 			query.execute();
@@ -327,11 +360,6 @@ public class EMDBBase{
 		
 		if (this.dbDebug){
 			this.dMsg("COMMIT ALL QUERIES");
-			try {
-				if(this.dbCon.isReadOnly()){
-					this.dMsg("Database LOCKED");
-				}
-			} catch (SQLException e) {}
 		}
 		
 		
