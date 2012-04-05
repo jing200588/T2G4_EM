@@ -284,7 +284,6 @@ public class ViewEmailAds extends Composite {
 		lblSubject.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblMessage.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblError.setBackground(SWTResourceManager.getColor(240,240,240));
-		
 	}
 	
 	

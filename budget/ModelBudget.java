@@ -1,6 +1,5 @@
 package budget;
 
-import java.util.Iterator;
 import java.util.Vector;
 import emdb.*;
 

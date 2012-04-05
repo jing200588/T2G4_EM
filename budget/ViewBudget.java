@@ -348,8 +348,6 @@ public class ViewBudget extends Composite {
 				txtDirectory.setText(fsd.open());
 
 				ImportCSV(txtDirectory.getText());
-
-
 			}
 		});
 
@@ -593,17 +591,30 @@ public class ViewBudget extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				int option = dropdownSelection.getSelectionIndex();
 				budgetPersonalAssistant.saveOptimizeOption(option);	
+				
+				try {
+					TwoChoiceDialog exportFile = new TwoChoiceDialog(new Shell(), "Export Optimize Budget List", 
+							"Do you wish to export the choosen combination list?",
+							"Yes", "No");
+					String choice = (String) exportFile.open();
+					if(choice.equals("Yes") == false) {
+						ViewMain.ReturnView();
+					}
+					else {
+						FileDialog fsd = new FileDialog(new Shell());
+						String[] extension = {"*.csv"};
+						fsd.setFilterExtensions(extension);
 
-				FileDialog fsd = new FileDialog(new Shell());
-				String[] extension = {"*.csv"};
-				fsd.setFilterExtensions(extension);
-
-				String input = fsd.open();
-				if (input != null) {
-					if (!input.toLowerCase().endsWith(".csv"))
-						input+= ".csv";
-					ExportCSV(input);}
-				ViewMain.ReturnView();
+						String input = fsd.open();
+						if (input != null) {
+							if (!input.toLowerCase().endsWith(".csv"))
+								input+= ".csv";
+							ExportCSV(input);}
+						ViewMain.ReturnView();
+					}
+				} catch (NullPointerException ex) {
+					//User click on the "X" instead of clicking on "Yes" or "No" button.
+				}
 			}
 		});
 		btnFinish.setBounds(530, 234, 140, 25);
@@ -620,29 +631,39 @@ public class ViewBudget extends Composite {
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");
 		
-		/**Set background color of everthing to grey.**/
-		compMain.setBackground(SWTResourceManager.getColor(240,240,240));
+		/**Set background color of everything to grey.**/
 		ViewBudgetForm.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
 		ViewBudgetForm.getBody().setBackground(SWTResourceManager.getColor(240,240,240));
+		compMain.setBackground(SWTResourceManager.getColor(240,240,240));
+		compButtonComposite.setBackground(SWTResourceManager.getColor(240,240,240));
 		compStep1.setBackground(SWTResourceManager.getColor(240,240,240));
 		compStep2.setBackground(SWTResourceManager.getColor(240,240,240));
 		compStep3.setBackground(SWTResourceManager.getColor(240,240,240));
 		compTypeOption.setBackground(SWTResourceManager.getColor(240,240,240));
 		compSatisfactionOption.setBackground(SWTResourceManager.getColor(240,240,240));
 		compBigContent.setBackground(SWTResourceManager.getColor(240,240,240));
+		compButtonComposite.setBackground(SWTResourceManager.getColor(240,240,240));
+		
 		lblEventBudget.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblListOfItems.setBackground(SWTResourceManager.getColor(240,240,240));
-		compButtonComposite.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblSelectTypeOption.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblSelectSatisfactionOption.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblInputList.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblListOfAll.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblSelectAnCombination.setBackground(SWTResourceManager.getColor(240,240,240));
+		lblNoteAllChanges.setBackground(SWTResourceManager.getColor(240,240,240));	
+		
 		btnWithoutType.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnWithType.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnWithoutSatisfaction.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnWithSatisfaction.setBackground(SWTResourceManager.getColor(240,240,240));
-		lblNoteAllChanges.setBackground(SWTResourceManager.getColor(240,240,240));
-		lblListOfAll.setBackground(SWTResourceManager.getColor(240,240,240));
-		lblSelectAnCombination.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnStepInputDetails.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnResetInputList.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnConfirm.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnNext.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnStepSelectCompulsoy.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnImport.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnStepConfirmResult.setBackground(SWTResourceManager.getColor(240,240,240));
 	}
 
 	/**

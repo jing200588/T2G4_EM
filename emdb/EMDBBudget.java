@@ -128,8 +128,8 @@ public class EMDBBudget extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
 		
 		
@@ -155,8 +155,8 @@ public class EMDBBudget extends EMDBBase{
 						.validate().toString();
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
 		
 		
@@ -166,7 +166,32 @@ public class EMDBBudget extends EMDBBase{
 	}
 	
 	
-	
+	/**
+	 * DROP a specific database table
+	 * @param aType
+	 */
+	public void cleanup(String aType){
+		String sql = "";
+		
+		if (aType.compareTo("budget") == 0){
+			sql =	DropQuery.dropTable(this.budgetTable)
+							.validate().toString();
+			
+		}else if (aType.compareTo("optimized") == 0){
+			sql =	DropQuery.dropTable(this.optBudgetTable)
+						.validate().toString();
+		}
+		
+		if (this.dbDebug){
+			this.dMsg(sql);
+		}
+		
+		if (!sql.isEmpty()){
+			this.queue(sql);
+			this.commit();
+		}
+
+	}	
 	
 	/**
 	 * "TRUNCATE" the database tables
@@ -179,15 +204,43 @@ public class EMDBBudget extends EMDBBase{
 		
 		
 		if (this.dbDebug){
-			this.dMsg(""+ sql);
-			this.dMsg(""+ sql2);
+			this.dMsg(sql);
+			this.dMsg(sql2);
 		}
 		
-		this.connect();
-		this.runQuery(sql);
-		this.runQuery(sql2);
-		this.disconnect();
+		this.queue(sql);
+		this.queue(sql2);
+		this.commit();
 	}
+	
+	
+	/**
+	 * "TRUNCATE" a specific database table
+	 * @param aType
+	 */
+	public void truncate(String aType){
+		String sql = "";
+		
+		if (aType.compareTo("budget") == 0){
+			sql =	new DeleteQuery(this.budgetTable)
+							.validate().toString();
+			
+		}else if (aType.compareTo("optimized") == 0){
+			sql =	new DeleteQuery(this.optBudgetTable)
+						.validate().toString();
+		}
+		
+		if (this.dbDebug){
+			this.dMsg(sql);
+		}
+		
+		if (!sql.isEmpty()){
+			this.queue(sql);
+			this.commit();
+		}
+
+	}	
+	
 	
 	
 	
