@@ -1,4 +1,4 @@
-package program;
+package dialog;
 
 import java.util.Vector;
 
@@ -14,10 +14,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import dialog.TwoChoiceDialog;
-import dialog.ErrorMessageDialog;
+import program.FilterComposite;
+
 
 import venue.BookedVenueInfo;
+import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.layout.GridData;
 
 public class InputFilterDialog extends Dialog {
 	
@@ -36,7 +39,7 @@ public class InputFilterDialog extends Dialog {
 	 */
 	public InputFilterDialog(Shell parent, int style, Vector<BookedVenueInfo> listBookedVenue)
 	{
-		super(parent, style);
+		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		setText("Filter functionality");
 		m_listBookedVenue = listBookedVenue;
 	}
@@ -75,23 +78,26 @@ public class InputFilterDialog extends Dialog {
 	 */
 	private void createContents(final Shell shell) 
 	{
-		shell.setLayout(new GridLayout(2, true));
+	//	shell.setLayout(new GridLayout(2, true));
 		shell.setSize(500, 400);
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite composite = new Composite(shell, SWT.NONE);
 		composite.setSize(500, 400);
+		composite.setLayout(new GridLayout(2, false));
 		
 		
 		filterCompo = new FilterComposite(composite, SWT.BORDER, m_listBookedVenue);
-		filterCompo.setBounds(10, 10, 325, 211);
+		filterCompo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		toolkit.adapt(filterCompo);
 		toolkit.paintBordersFor(filterCompo);
 		
 		// Create the OK button and add a handler
 		Button ok = new Button(composite, SWT.PUSH);
+		GridData gd_ok = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+		gd_ok.widthHint = 80;
+		ok.setLayoutData(gd_ok);
 		ok.setText("OK");
-		ok.setBounds(79, 227, 75, 25);
 		ok.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				try
@@ -127,8 +133,10 @@ public class InputFilterDialog extends Dialog {
 		
 		// Create the cancel button and add a handler
 		Button cancel = new Button(composite, SWT.PUSH);
+		GridData gd_cancel = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+		gd_cancel.widthHint = 80;
+		cancel.setLayoutData(gd_cancel);
 		cancel.setText("Cancel");
-		cancel.setBounds(217, 227, 75, 25);
 		cancel.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				output = null;
@@ -140,5 +148,10 @@ public class InputFilterDialog extends Dialog {
 		// user can type input and press Enter
 		// to dismiss
 		shell.setDefaultButton(ok);
+
+		ok.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		cancel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		filterCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+
 	}
 }

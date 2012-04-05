@@ -71,7 +71,7 @@ public class ViewEventFlow extends Composite {
 	private Text textFilePath;
 	private Text importTextFilePath;
 	private Button btnFilter;
-	private Text textSave;
+	private Label textSave;
 	private boolean isEntireListShowed;		// True if the table displays the whole list. False otherwise.
 	
 	/**
@@ -98,8 +98,7 @@ public class ViewEventFlow extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 				
 		Form VenueViewForm = toolkit.createForm(this);
-		VenueViewForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		VenueViewForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		VenueViewForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		VenueViewForm.setBounds(0, 0, 700, 400);
 		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		toolkit.paintBordersFor(VenueViewForm);
@@ -250,12 +249,12 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		
-		Button btnReturnToEvent = new Button(mainComposite, SWT.NONE);
-		FormData fd_btnReturnToEvent = new FormData();
-		fd_btnReturnToEvent.width = 100;
+		Button btnBack = new Button(mainComposite, SWT.NONE);
+		FormData fd_btnBack = new FormData();
+		fd_btnBack.width = 100;
 	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
-		btnReturnToEvent.setLayoutData(fd_btnReturnToEvent);
-		btnReturnToEvent.addSelectionListener(new SelectionAdapter() {
+		btnBack.setLayoutData(fd_btnBack);
+		btnBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// Update the event flow in the database as well as in the event itself
@@ -266,14 +265,14 @@ public class ViewEventFlow extends Composite {
 				ViewMain.ReturnView();
 			}
 		});
-		toolkit.adapt(btnReturnToEvent, true, true);
-		btnReturnToEvent.setText("Return");
+		toolkit.adapt(btnBack, true, true);
+		btnBack.setText("Back");
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
-		fd_btnReturnToEvent.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
-		fd_btnReturnToEvent.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
+		fd_btnBack.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
+		fd_btnBack.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
 		FormData fd_btnAdd = new FormData();
-		fd_btnAdd.right = new FormAttachment(100, -23);
+		fd_btnAdd.right = new FormAttachment(95);
 		fd_btnAdd.left = new FormAttachment(tableComposite, 10);
 		fd_btnAdd.width = 100;
 		fd_btnAdd.top = new FormAttachment(0, 10);
@@ -305,12 +304,97 @@ public class ViewEventFlow extends Composite {
 		
 		Composite composite = new Composite(mainComposite, SWT.NONE);
 		FormData fd_composite = new FormData();
+		fd_composite.top = new FormAttachment(tableComposite);
+		fd_composite.bottom = new FormAttachment(100);
 		fd_composite.left = new FormAttachment(tableComposite, 0, SWT.LEFT);
 		fd_composite.right = new FormAttachment(80, 10);
 		composite.setLayoutData(fd_composite);
 		toolkit.adapt(composite);
 		toolkit.paintBordersFor(composite);
 		composite.setLayout(new GridLayout(4, false));
+		
+		textSave = new Label(composite, SWT.NONE);
+		textSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 4, 1));
+		textSave.setText("The list is not saved.");
+		
+		Label lblInput = new Label(composite, SWT.NONE);
+		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblInput.setText("Input file:");
+		toolkit.adapt(lblInput, true, true);
+		
+		importTextFilePath = new Text(composite, SWT.BORDER);
+		importTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		toolkit.adapt(importTextFilePath, true, true);
+		
+		Button button = new Button(composite, SWT.NONE);
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fileDialog = new FileDialog(new Shell());
+				String[] extension = {"*.csv"};
+				fileDialog.setFilterExtensions(extension);
+				
+				String filePath = fileDialog.open();
+				if(filePath != null)
+					importTextFilePath.setText(filePath);
+			}
+		});
+		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_button.widthHint = 60;
+		button.setLayoutData(gd_button);
+		button.setText("Browse");
+		toolkit.adapt(button, true, true);
+		
+		Button btnImport = new Button(composite, SWT.NONE);
+		btnImport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try
+				{
+					boolean overwrite = false;
+					
+					if(listEventFlow.isEmpty() == false)
+					{
+						TwoChoiceDialog message = new TwoChoiceDialog(new Shell(), "Message",
+								"Do you want to append the existing list or overwrite it?", 
+								"Append", "Overwrite");
+						String decision = (String) message.open();
+						if(decision.equals("Append") == true)
+							overwrite = false;
+						else
+							overwrite = true;
+					}
+					
+					Vector<EventFlowEntry> newList = importCSVFile(importTextFilePath.getText());
+					
+					if(overwrite == true)
+					{
+						listEventFlow = newList;
+						eventObj.setEventFlow(newList);
+					}
+					else
+					{
+						listEventFlow.addAll(newList);
+					}
+					
+					Collections.sort(listEventFlow);
+					
+					tableViewEventFlow.setInput(listEventFlow);
+					tableViewEventFlow.refresh();
+				}
+				catch(Exception exception)
+				{
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), 
+							exception.getMessage());
+					errorBoard.open();
+				}
+			}
+		});
+		GridData gd_btnImport = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnImport.widthHint = 60;
+		btnImport.setLayoutData(gd_btnImport);
+		btnImport.setText("Import");
+		toolkit.adapt(btnImport, true, true);	
 		
 		Label lblNewLabel = new Label(composite, SWT.NONE);
 		toolkit.adapt(lblNewLabel, true, true);
@@ -388,19 +472,12 @@ public class ViewEventFlow extends Composite {
 		
 		// Set input for table viewer at the beginning
 		tableViewEventFlow.setInput(listEventFlow);
-		toolkit.paintBordersFor(tableEventFlow);
+		toolkit.paintBordersFor(tableEventFlow);	
 		
-		mainComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnReturnToEvent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnAdd.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnNewButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnExport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		Button btnSave = new Button(mainComposite, SWT.NONE);
+		fd_btnBack.top = new FormAttachment(btnSave, 10);
 		
-		Button btnNewButton = new Button(mainComposite, SWT.NONE);
-		fd_btnReturnToEvent.top = new FormAttachment(btnNewButton, 14);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
+		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// Update in the database
@@ -409,118 +486,19 @@ public class ViewEventFlow extends Composite {
 				showSaveStatus();
 			}
 		});
-		btnNewButton.setSelection(true);
-		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.bottom = new FormAttachment(100, -246);
-		fd_btnNewButton.right = new FormAttachment(100, -23);
-		fd_btnNewButton.left = new FormAttachment(tableComposite, 10);
-		fd_btnNewButton.width = 100;
-		btnNewButton.setLayoutData(fd_btnNewButton);
-		toolkit.adapt(btnNewButton, true, true);
-		btnNewButton.setText("Save");
-				
-/*		tableViewEventFlow = new TableViewer(mainComposite, SWT.BORDER | SWT.FULL_SELECTION);
-		tableEventFlow = tableViewEventFlow.getTable();
-		FormData fd_tableEventFlow = new FormData();
-		fd_tableEventFlow.bottom = new FormAttachment(80);
-		fd_tableEventFlow.right = new FormAttachment(80);
-		fd_tableEventFlow.top = new FormAttachment(0, 10);
-		fd_tableEventFlow.left = new FormAttachment(5);
-		tableEventFlow.setLayoutData(fd_tableEventFlow);*/
-	
-		Composite composite_1 = new Composite(mainComposite, SWT.NONE);
-		fd_composite.bottom = new FormAttachment(composite_1, -6);
-		composite_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		composite_1.setLayout(new GridLayout(4, false));
-		FormData fd_composite_1 = new FormData();
-		fd_composite_1.bottom = new FormAttachment(100);
-		fd_composite_1.left = new FormAttachment(tableComposite, 0, SWT.LEFT);
-		fd_composite_1.right = new FormAttachment(100, -120);
-		composite_1.setLayoutData(fd_composite_1);
-		toolkit.adapt(composite_1);
-		toolkit.paintBordersFor(composite_1);
+		btnSave.setSelection(true);
+		FormData fd_btnSave = new FormData();
+		fd_btnSave.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
+		fd_btnSave.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
+		fd_btnSave.width = 100;
+		btnSave.setLayoutData(fd_btnSave);
+		toolkit.adapt(btnSave, true, true);
+		btnSave.setText("Save");
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
 		
-		Label lblInput = new Label(composite_1, SWT.NONE);
-		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblInput.setText("Input file:");
-		lblInput.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		toolkit.adapt(lblInput, true, true);
-		
-		importTextFilePath = new Text(composite_1, SWT.BORDER);
-		importTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		toolkit.adapt(importTextFilePath, true, true);
-		
-		Button button = new Button(composite_1, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog fileDialog = new FileDialog(new Shell());
-				String[] extension = {"*.csv"};
-				fileDialog.setFilterExtensions(extension);
-				
-				String filePath = fileDialog.open();
-				if(filePath != null)
-					importTextFilePath.setText(filePath);
-			}
-		});
-		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_button.widthHint = 60;
-		button.setLayoutData(gd_button);
-		button.setText("Browse");
-		button.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		toolkit.adapt(button, true, true);
-		
-		Button btnImport = new Button(composite_1, SWT.NONE);
-		btnImport.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try
-				{
-					boolean overwrite = false;
-					
-					if(listEventFlow.isEmpty() == false)
-					{
-						TwoChoiceDialog message = new TwoChoiceDialog(new Shell(), "Message",
-								"Do you want to append the existing list or overwrite it?", 
-								"Append", "Overwrite");
-						String decision = (String) message.open();
-						if(decision.equals("Append") == true)
-							overwrite = false;
-						else
-							overwrite = true;
-					}
-					
-					Vector<EventFlowEntry> newList = importCSVFile(importTextFilePath.getText());
-					
-					if(overwrite == true)
-					{
-						listEventFlow = newList;
-						eventObj.setEventFlow(newList);
-					}
-					else
-					{
-						listEventFlow.addAll(newList);
-					}
-					
-					Collections.sort(listEventFlow);
-					
-					tableViewEventFlow.setInput(listEventFlow);
-					tableViewEventFlow.refresh();
-				}
-				catch(Exception exception)
-				{
-					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), 
-							exception.getMessage());
-					errorBoard.open();
-				}
-			}
-		});
-		GridData gd_btnImport = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnImport.widthHint = 60;
-		btnImport.setLayoutData(gd_btnImport);
-		btnImport.setText("Import");
-		btnImport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		toolkit.adapt(btnImport, true, true);	
 		
 		btnFilter = new Button(mainComposite, SWT.NONE);
 		btnFilter.addSelectionListener(new SelectionAdapter() {
@@ -615,26 +593,30 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		FormData fd_btnFilter = new FormData();
-		fd_btnFilter.right = new FormAttachment(100, -23);
-		fd_btnFilter.left = new FormAttachment(tableComposite, 10);
-		fd_btnFilter.bottom = new FormAttachment(btnNewButton, -14);
+		fd_btnFilter.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
+		fd_btnSave.top = new FormAttachment(btnFilter, 10);
+		fd_btnFilter.width = 100;
+		fd_btnFilter.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
+		fd_btnFilter.top = new FormAttachment(btnAdd, 10);
 		btnFilter.setLayoutData(fd_btnFilter);
 		toolkit.adapt(btnFilter, true, true);
 		btnFilter.setText("Filter");
-		
-		textSave = new Text(mainComposite, SWT.READ_ONLY | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
-		textSave.setText("The list is not saved.");
-		FormData fd_textSave = new FormData();
-		fd_textSave.top = new FormAttachment(btnReturnToEvent, 26);
-		fd_textSave.left = new FormAttachment(tableComposite, 10);
-		fd_textSave.right = new FormAttachment(100);
-		fd_textSave.bottom = new FormAttachment(100, -124);
-		textSave.setLayoutData(fd_textSave);
-		toolkit.adapt(textSave, true, true);
+
+		VenueViewForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		VenueViewForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblInput.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		button.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnImport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		mainComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnBack.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnAdd.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnNewButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnExport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnFilter.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 			
-
-
-	
 	}
 	
 	/**
@@ -814,7 +796,7 @@ public class ViewEventFlow extends Composite {
 		
 		return -1;
 	}
-	
+	/*
 	public static void main(String[] args)
 	{
 		Display display = new Display();
@@ -836,4 +818,5 @@ public class ViewEventFlow extends Composite {
 		if (!display.readAndDispatch()) display.sleep(); 
 		} 
 	}
+	*/
 }

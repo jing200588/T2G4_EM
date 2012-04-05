@@ -16,6 +16,10 @@ import venue.HelperFunctions;
 import venue.InputDateTimeComposite;
 import venue.BookedVenueInfo;
 import venue.TimeSlot;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class FilterComposite extends Composite {
 
@@ -51,37 +55,43 @@ public class FilterComposite extends Composite {
 			m_venueName[index] = m_listBookedVenue.get(index).getName();
 		}
 		m_venueName[m_venueName.length - 1] = InputEventFlowEntry.OTHERVENUE;
+		setLayout(new GridLayout(2, false));
+		
+		btnDuration = new Button(this, SWT.CHECK);
+		toolkit.adapt(btnDuration, true, true);
+		btnDuration.setText("Duration:");
+		new Label(this, SWT.NONE);
 		
 		inputDateTimeCompo = new InputDateTimeComposite(this, SWT.NONE);
-		inputDateTimeCompo.setBounds(0, 32, 313, 95);
+		inputDateTimeCompo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
 		toolkit.adapt(inputDateTimeCompo);
 		toolkit.paintBordersFor(inputDateTimeCompo);
 		inputDateTimeCompo.setEnabled(true);
 		
-		textActivity = new Text(this, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		textActivity.setBounds(111, 134, 202, 21);
+		btnActivity = new Button(this, SWT.CHECK);
+		toolkit.adapt(btnActivity, true, true);
+		btnActivity.setText("Activity name:");
+		
+		textActivity = new Text(this, SWT.BORDER | SWT.MULTI);
+		textActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(textActivity, true, true);
 		
+		btnVenue = new Button(this, SWT.CHECK);
+		toolkit.adapt(btnVenue, true, true);
+		btnVenue.setText("Venue:");
+		
 		comboVenue = new Combo(this, SWT.READ_ONLY);
-		comboVenue.setBounds(111, 173, 101, 23);
+		comboVenue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboVenue.setItems(m_venueName);
 		toolkit.adapt(comboVenue);
 		toolkit.paintBordersFor(comboVenue);
 		
-		btnVenue = new Button(this, SWT.CHECK);
-		btnVenue.setBounds(10, 175, 57, 16);
-		toolkit.adapt(btnVenue, true, true);
-		btnVenue.setText("Venue:");
-		
-		btnActivity = new Button(this, SWT.CHECK);
-		btnActivity.setBounds(10, 137, 93, 16);
-		toolkit.adapt(btnActivity, true, true);
-		btnActivity.setText("Activity name:");
-		
-		btnDuration = new Button(this, SWT.CHECK);
-		btnDuration.setBounds(10, 19, 93, 16);
-		toolkit.adapt(btnDuration, true, true);
-		btnDuration.setText("Duration:");
+
+		setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		inputDateTimeCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnActivity.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnVenue.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	}
 	
 	/**

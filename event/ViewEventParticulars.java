@@ -27,8 +27,8 @@ public class ViewEventParticulars extends Composite {
 	protected DateTime StartTime;
 	protected DateTime EndTime;
 	protected Text txtDescription;
-	protected Button btnConfirm;
 	protected Button btnBack;
+	protected Button btnConfirm;
 	protected Label lblStartDate;
 	protected Label lblEndDate;
 	protected Label lblNewLabel;
@@ -37,6 +37,7 @@ public class ViewEventParticulars extends Composite {
 	
 	
 	protected ErrorMessageDialog errordiag;
+
 	
 	/**
 	 * Description: Create the composite.
@@ -157,6 +158,10 @@ public class ViewEventParticulars extends Composite {
 		btnBack.setLayoutData(fd_btnBack);
 		btnBack.setText("Back");
 		formToolkit.adapt(btnBack, true, true);
+		
+
+		btnConfirm.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnBack.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	}
 
 	protected void checkSubclass() {

@@ -95,6 +95,7 @@ public class ViewMain extends ApplicationWindow {
 	public ViewMain() {
 
 		super(null);
+		setShellStyle(SWT.CLOSE | SWT.MIN);
 		
 		eventlist = new Vector<Eventitem>();
 		createActions();
@@ -429,8 +430,9 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Sets the page of composite c2 to ViewEvent
 	 */
 	public static void ReturnView() {
-		ViewEvent newview = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-		layout.topControl = newview;
+		view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+		//ViewEvent.RefreshParticipant();
+		layout.topControl = view;
 		c2.layout(true);
 		
 	}
@@ -577,6 +579,7 @@ public class ViewMain extends ApplicationWindow {
 				}
 			
 				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
+			//	ReturnView();
 				view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
 		        layout.topControl = view;
 				c2.layout(true);
@@ -584,21 +587,13 @@ public class ViewMain extends ApplicationWindow {
 			});
 			tc1 = new TableColumn(EventListTable, SWT.LEFT);
 			tc2 = new TableColumn(EventListTable,SWT.CENTER);
-	//		tc3 = new TableColumn(table,SWT.CENTER);
 			
 		    tc1.setText("Event Title");
 		    tc2.setText("Start Date");
-	//	    tc3.setText("Undone");
-		    // 	    tc1.setWidth(206);
-		    // 	    tc2.setWidth(40);
-		    // 	    tc3.setWidth(40);
-		     //	    tc1.pack();
-		     //	    tc2.pack();
-		     //	    tc3.pack();
-		     	    
+
 		     	    tc1.setResizable(false);
 		     	    tc2.setResizable(false);
-	//	     	    tc3.setResizable(false);
+
 		     	    
 			tc1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
@@ -690,21 +685,16 @@ public class ViewMain extends ApplicationWindow {
 			});
 			etc1 = new TableColumn(ExpiredTable, SWT.LEFT);
 			etc2 = new TableColumn(ExpiredTable,SWT.CENTER);
-	//		etc3 = new TableColumn(table_1,SWT.CENTER);
 			
 		    etc1.setText("Event Title");
 		    etc2.setText("End Date");
-	//	    etc3.setText("Undone");
-		    // 	    tc1.setWidth(206);
-		    // 	    tc2.setWidth(40);
-		    // 	    tc3.setWidth(40);
+
 		    	    etc1.pack();
 		     	    etc2.pack();
-	//	     	    etc3.pack();
+
 		     	    
 		     	    etc1.setResizable(false);
 		     	    etc2.setResizable(false);
-	//	     	    etc3.setResizable(false);
 		     	    
 			etc1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
@@ -968,11 +958,13 @@ public class ViewMain extends ApplicationWindow {
 	 * @param newShell
 	 */
 	protected void configureShell(Shell newShell) {
-		newShell.setImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\workspace\\E-MAN\\Images\\thumbnail.jpg"));
+		newShell.setImage(SWTResourceManager.getImage(ViewMain.class, "/Images/thumbnail.jpg"));
 		newShell.setMinimumSize(new Point(1200, 526));
 		super.configureShell(newShell);
 		newShell.setText("E-Man");
 		newShell.setSize(getInitialSize());
+		newShell.setFullScreen(false);
+
 
 	}
 

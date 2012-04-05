@@ -44,10 +44,9 @@ public class LoginEmailDialog extends Dialog {
 	/**
 	 * Create the dialog.
 	 * @param parent
-	 * @param style
 	 */
-	public LoginEmailDialog(Shell parent, int style, Eventitem item) {
-		super(parent, style);
+	public LoginEmailDialog(Shell parent, Eventitem item) {
+		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		setText("SWT Dialog");
 		currentEvent = item;
 	}

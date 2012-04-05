@@ -16,6 +16,9 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 
 public class InputEventFlowEntry extends Composite {
@@ -58,76 +61,74 @@ public class InputEventFlowEntry extends Composite {
 			m_venueName[index] = m_listBookedVenue.get(index).getName();
 		}
 		m_venueName[m_venueName.length - 1] = OTHERVENUE;
+		setLayout(new GridLayout(3, false));
 		
 		Label lblActivityName = new Label(this, SWT.NONE);
-		lblActivityName.setBounds(10, 10, 83, 15);
 		toolkit.adapt(lblActivityName, true, true);
 		lblActivityName.setText("Activity Name:");
 		
 		textActivity = new Text(this, SWT.BORDER);
-		textActivity.setBounds(99, 7, 76, 21);
+		textActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		toolkit.adapt(textActivity, true, true);
 		
 		Label lblStartDateTime = new Label(this, SWT.NONE);
-		lblStartDateTime.setBounds(10, 43, 89, 15);
 		toolkit.adapt(lblStartDateTime, true, true);
 		lblStartDateTime.setText("Start Date Time:");
 		
 		dateFrom = new DateTime(this, SWT.DROP_DOWN);
-		dateFrom.setBounds(99, 36, 80, 24);
 		toolkit.adapt(dateFrom);
 		toolkit.paintBordersFor(dateFrom);
 		
 		timeFrom = new DateTime(this, SWT.DROP_DOWN | SWT.TIME | SWT.SHORT);
-		timeFrom.setBounds(185, 36, 80, 24);
+		timeFrom.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		toolkit.adapt(timeFrom);
 		toolkit.paintBordersFor(timeFrom);
 		
 		Label lblEndDateTime = new Label(this, SWT.NONE);
 		lblEndDateTime.setText("End Date Time:");
-		lblEndDateTime.setBounds(10, 71, 89, 15);
 		toolkit.adapt(lblEndDateTime, true, true);
 		
 		dateTo = new DateTime(this, SWT.DROP_DOWN);
-		dateTo.setBounds(99, 64, 80, 24);
 		toolkit.adapt(dateTo);
 		toolkit.paintBordersFor(dateTo);
 		
 		timeTo = new DateTime(this, SWT.DROP_DOWN | SWT.TIME | SWT.SHORT);
-		timeTo.setBounds(185, 64, 80, 24);
+		timeTo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		toolkit.adapt(timeTo);
 		toolkit.paintBordersFor(timeTo);
 		
+		Label lblVenue = new Label(this, SWT.NONE);
+		toolkit.adapt(lblVenue, true, true);
+		lblVenue.setText("Venue:");
+		
 		comboVenue = new Combo(this, SWT.READ_ONLY);
+		comboVenue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		comboVenue.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				isVenueChosen = true;
 			}
 		});
-		comboVenue.setBounds(99, 93, 91, 23);
 		comboVenue.setItems(m_venueName);
 		toolkit.adapt(comboVenue);
 		toolkit.paintBordersFor(comboVenue);
 		
-		Label lblVenue = new Label(this, SWT.NONE);
-		lblVenue.setBounds(10, 96, 55, 15);
-		toolkit.adapt(lblVenue, true, true);
-		lblVenue.setText("Venue:");
-		
 		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setBounds(10, 129, 89, 15);
 		toolkit.adapt(lblNewLabel, true, true);
 		lblNewLabel.setText("Other notes:\r\n(Optional)");
 		
 		textNote = new Text(this, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		textNote.setBounds(99, 129, 209, 66);
+		textNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		toolkit.adapt(textNote, true, true);
+
 		
-		Label lblNewLabel_1 = new Label(this, SWT.NONE);
-		lblNewLabel_1.setBounds(10, 146, 55, 15);
-		toolkit.adapt(lblNewLabel_1, true, true);
-		lblNewLabel_1.setText("(Optional)");
+		setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblActivityName.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblStartDateTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblEndDateTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblVenue.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+
 
 	}
 	

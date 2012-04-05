@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 
 public class InputDateTimeComposite extends Composite {
@@ -129,6 +130,15 @@ public class InputDateTimeComposite extends Composite {
 		label.setLayoutData(fd_label);
 		label.setText("Preferred Time Slot:");
 		toolkit.adapt(label, true, true);
+		
+
+		setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		label_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		label_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		label_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	}
 	
 	/**

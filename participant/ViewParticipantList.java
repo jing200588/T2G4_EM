@@ -242,11 +242,10 @@ public class ViewParticipantList extends Composite {
 								"Importing a new file will replace the current table. Do you want to continue?");
 						if ((Integer) dialog.open() == 1) {
 							//Clears the tables b4 import.
+							ImportCSV(txtimportfile.getText());
 							table.setRedraw(false);
 							table.removeAll();
 							table.setRedraw(true);
-							tempEntries.clear();
-							ImportCSV(txtimportfile.getText());
 						}
 					}
 					
@@ -260,9 +259,11 @@ public class ViewParticipantList extends Composite {
 					new ErrorMessageDialog(new Shell(), "The file specified cannot be found.").open();
 					exception.printStackTrace();
 					
+				} catch (ArrayIndexOutOfBoundsException exception) {
+					new ErrorMessageDialog(new Shell(), "Invalid .csv file. Make sure the file follows the correct format.").open();
 				} catch (Exception exception) {
-					ErrorMessageDialog errordiag = new ErrorMessageDialog(new Shell(), exception.getMessage());
-					errordiag.open();
+					new ErrorMessageDialog(new Shell(), exception.getMessage()).open();
+					exception.printStackTrace();
 				}
 				
 				
@@ -324,13 +325,13 @@ public class ViewParticipantList extends Composite {
 		
 		//Side Composite
 		Composite compositeside = new Composite(composite, SWT.NONE);
-		fd_TableViewerComp.top = new FormAttachment(compositeside, 0, SWT.TOP);
+		fd_TableViewerComp.top = new FormAttachment(0);
 		compositeside.setLayout(new GridLayout(1, false));
 		FormData fd_compositeside = new FormData();
 		fd_compositeside.left = new FormAttachment(TableViewerComp, 6);
 		fd_compositeside.right = new FormAttachment(100, 47);
-		fd_compositeside.bottom = new FormAttachment(75);
-		fd_compositeside.top = new FormAttachment(1, 0);
+		fd_compositeside.bottom = new FormAttachment(75, -4);
+		fd_compositeside.top = new FormAttachment(0, -5);
 		compositeside.setLayoutData(fd_compositeside);
 		
 		//Add New button
@@ -426,7 +427,7 @@ public void ExportCSV (String filepath) {
 		writer.close();
 		new ErrorMessageDialog(new Shell(), "The file was exported successfully!", "Success!").open();
 		         		
-	} catch (IOException e) {
+	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		System.out.println("Error exporting");
 		new ErrorMessageDialog(new Shell(), "There was an error exporting the file.").open();
@@ -441,6 +442,9 @@ public void ImportCSV (String filepath) throws Exception {
 		List<String[]> entries = reader.readAll();
 		entries.remove(0);	//remove the header row
 		
+		if (entries.get(0).length < 6)
+			throw new ArrayIndexOutOfBoundsException();
+		tempEntries.clear();
 		for (int i=0; i<entries.size(); i++) {
 			tempEntries.add(new Participant(entries.get(i)[0], entries.get(i)[1], entries.get(i)[2], entries.get(i)[3], entries.get(i)[4], entries.get(i)[5]));
 		}		
