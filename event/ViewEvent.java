@@ -83,6 +83,7 @@ public class ViewEvent extends Composite {
 		compMain.setLayout(new FormLayout());
 		budgetFlag = false;
 		venueFlag = false;
+		participantFlag = false;
 		currentEvent = curevent;
 
 		//View Event title label
@@ -413,7 +414,7 @@ public class ViewEvent extends Composite {
 		Button btnAdvertEmail = new Button(compAdvertise, SWT.NONE);
 		btnAdvertEmail.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				loginDialog = new LoginEmailDialog(new Shell(), SWT.NONE, currentEvent);
+				loginDialog = new LoginEmailDialog(new Shell(), currentEvent);
 				loginDialog.open();
 
 			}
@@ -601,8 +602,8 @@ public class ViewEvent extends Composite {
 	public static void RefreshParticipant() {
 		if (participantFlag)
 			tableParticipant.dispose();
-		//tableParticipant = ParticipantTable();
-	    tableParticipant =  ParticipantJfaceTable();
+		tableParticipant = ParticipantTable();
+	    //tableParticipant =  ParticipantJfaceTable();
 	}
 
 	/**********************************************************************************************
@@ -675,7 +676,7 @@ public class ViewEvent extends Composite {
 		});
 
 		mouseOverPackage(tableParticipant, data);
-
+		setTableRowDisplayed(tableParticipant, data, 10);
 		participantFlag = true;
 		return tableParticipant;
 	}
@@ -797,7 +798,7 @@ public class ViewEvent extends Composite {
 		final TableColumn col6 = tableVenue.getColumn(6);
 		tableVenue.getColumn(0).setAlignment(16384);
 
-		tableVenue.removeAll();
+//		tableVenue.removeAll();
 		for (int loopIndex = 0; loopIndex < venueList.size(); loopIndex++) {
 			TableItem item = new TableItem(tableVenue, SWT.NULL);
 			item.setText(0, venueList.get(loopIndex).getName());

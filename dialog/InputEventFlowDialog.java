@@ -10,6 +10,7 @@ import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * This class allows users to enter inputs and view information regarding the EventFlowEntry object.
@@ -29,6 +30,7 @@ public class InputEventFlowDialog extends Dialog {
 	 * @param parent - Shell
 	 * @param initialObj - EventFlowEntry
 	 * @param listBookedVenue - listBookedVenue
+	 * @wbp.parser.constructor
 	 */
 	public InputEventFlowDialog(Shell parent, EventFlowEntry initialObj, Vector<BookedVenueInfo> listBookedVenue) 
 	{
@@ -96,19 +98,22 @@ public class InputEventFlowDialog extends Dialog {
 	 */
 	private void createContents(final Shell shell) 
 	{
-		shell.setLayout(new GridLayout(2, true));
 		shell.setSize(500, 400);
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite composite = new Composite(shell, SWT.NONE);
 		composite.setSize(500, 400);
+		composite.setLayout(new GridLayout(2, false));
 		
 		
 		inputEventFlowBox = new InputEventFlowEntry(composite, SWT.BORDER, m_listBookedVenue);
-		inputEventFlowBox.setBounds(10, 10, 308, 202);
+		GridData gd_inputEventFlowBox = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
+		gd_inputEventFlowBox.heightHint = 219;
+		inputEventFlowBox.setLayoutData(gd_inputEventFlowBox);
 		toolkit.adapt(inputEventFlowBox);
 		toolkit.paintBordersFor(inputEventFlowBox);
-		
+
+
 		try
 		{
 			if(initialInput != null)
@@ -121,8 +126,10 @@ public class InputEventFlowDialog extends Dialog {
 		
 		// Create the OK button and add a handler
 		Button ok = new Button(composite, SWT.PUSH);
+		GridData gd_ok = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+		gd_ok.widthHint = 80;
+		ok.setLayoutData(gd_ok);
 		ok.setText("OK");
-		ok.setBounds(79, 227, 75, 25);
 		ok.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				try
@@ -141,8 +148,10 @@ public class InputEventFlowDialog extends Dialog {
 		
 		// Create the cancel button and add a handler
 		Button cancel = new Button(composite, SWT.PUSH);
+		GridData gd_cancel = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+		gd_cancel.widthHint = 80;
+		cancel.setLayoutData(gd_cancel);
 		cancel.setText("Cancel");
-		cancel.setBounds(217, 227, 75, 25);
 		cancel.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				modifiedInput = null;
@@ -154,5 +163,7 @@ public class InputEventFlowDialog extends Dialog {
 		// user can type input and press Enter
 		// to dismiss
 		shell.setDefaultButton(ok);
+		
+		inputEventFlowBox.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	}
 }

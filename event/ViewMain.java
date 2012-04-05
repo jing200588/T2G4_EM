@@ -430,6 +430,7 @@ public class ViewMain extends ApplicationWindow {
 	 */
 	public static void ReturnView() {
 		view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+		//ViewEvent.RefreshParticipant();
 		layout.topControl = view;
 		c2.layout(true);
 		
@@ -577,10 +578,10 @@ public class ViewMain extends ApplicationWindow {
 				}
 			
 				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
-				ReturnView();
-			//	view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-		    //   layout.topControl = view;
-			//	c2.layout(true);
+			//	ReturnView();
+				view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+		        layout.topControl = view;
+				c2.layout(true);
 		     }
 			});
 			tc1 = new TableColumn(EventListTable, SWT.LEFT);

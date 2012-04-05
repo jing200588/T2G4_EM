@@ -231,9 +231,6 @@ public class ViewBookingSystem extends Composite {
 		
 		Label lblSearchVenueBy = new Label(SearchNameCompo, SWT.NONE);
 		FormData fd_lblSearchVenueBy = new FormData();
-		fd_lblSearchVenueBy.bottom = new FormAttachment(0, 31);
-		fd_lblSearchVenueBy.right = new FormAttachment(0, 180);
-		fd_lblSearchVenueBy.top = new FormAttachment(0, 10);
 		fd_lblSearchVenueBy.left = new FormAttachment(0, 5);
 		lblSearchVenueBy.setLayoutData(fd_lblSearchVenueBy);
 		lblSearchVenueBy.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
@@ -248,7 +245,7 @@ public class ViewBookingSystem extends Composite {
 		composite_1.setLayoutData(fd_composite_1);
 		toolkit.adapt(composite_1);
 		toolkit.paintBordersFor(composite_1);
-		composite_1.setLayout(new GridLayout(3, false));
+		composite_1.setLayout(new GridLayout(4, false));
 
 		Label lblEnterTheName = new Label(composite_1, SWT.NONE);
 		toolkit.adapt(lblEnterTheName, true, true);
@@ -379,7 +376,7 @@ public class ViewBookingSystem extends Composite {
 												toolkit.adapt(CostChoiceButton, true, true);
 												CostChoiceButton.setText("Cost");
 										
-												CriteriaConfirmButton = new Button(composite, SWT.NONE);
+												CriteriaConfirmButton = new Button(composite, SWT.NONE);		
 												GridData gd_CriteriaConfirmButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 												gd_CriteriaConfirmButton.widthHint = 80;
 												CriteriaConfirmButton.setLayoutData(gd_CriteriaConfirmButton);
@@ -466,7 +463,6 @@ public class ViewBookingSystem extends Composite {
 		fd_compoCriteriaFilled.right = new FormAttachment(90);
 		fd_compoCriteriaFilled.left = new FormAttachment(10);
 		compoCriteriaFilled.setLayoutData(fd_compoCriteriaFilled);
-		compoCriteriaFilled.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Public\\Pictures\\Sample Pictures\\Hydrangeas.jpg"));
 		toolkit.adapt(compoCriteriaFilled);
 		toolkit.paintBordersFor(compoCriteriaFilled);
 		compoCriteriaFilled.setLayout(stackLayoutCriteria);
@@ -996,6 +992,65 @@ public class ViewBookingSystem extends Composite {
 						});
 						toolkit.adapt(FindCriteriaButton, true, true);
 						FindCriteriaButton.setText("Find All Suitable Venues");
+						
+	Button btnBack = new Button(composite_1, SWT.NONE);
+	btnBack.addSelectionListener(new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			ViewMain.ReturnView();
+		}
+	});
+	GridData gd_btnBack = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+	gd_btnBack.widthHint = 80;
+	btnBack.setLayoutData(gd_btnBack);
+	toolkit.adapt(btnBack, true, true);
+	btnBack.setText("Back");
+	
+	btnBack.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	FunctionOptionCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	mainComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	FunctionContentPage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	VenueViewForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
+	VenueViewForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	SearchNameButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	SearchCriteriaButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	labelEventTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	SearchNameCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblSearchVenueBy.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	composite_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblEnterTheName.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	ButtonSearchName.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	SearchCriteriaCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblPleaseChooseYour.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	CapacityChoiceButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	TimeChoiceButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	CostChoiceButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	CriteriaConfirmButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	CapacityCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblEstimatedCapacity.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	composite_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblCapacityFrom.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	BookVenueButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	composite_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblSearchResult.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	ViewCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblVenueDetails.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	dt_SearchResult.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	ButtonConfirmBookTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblSearchVenuesWith.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	ButtonComp.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	btnBackCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	btnNextCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	FindCriteriaButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	CostCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	composite_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	lblCostFrom.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	label_5.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	ResultPageCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	dt_SearchCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	
 	}	
 	
 	/**
@@ -1252,6 +1307,4 @@ public class ViewBookingSystem extends Composite {
 			hasTimeSlotChecked = true;
 		}
 	}
-	
-	
 }

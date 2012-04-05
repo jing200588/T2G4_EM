@@ -242,11 +242,10 @@ public class ViewParticipantList extends Composite {
 								"Importing a new file will replace the current table. Do you want to continue?");
 						if ((Integer) dialog.open() == 1) {
 							//Clears the tables b4 import.
+							ImportCSV(txtimportfile.getText());
 							table.setRedraw(false);
 							table.removeAll();
 							table.setRedraw(true);
-							tempEntries.clear();
-							ImportCSV(txtimportfile.getText());
 						}
 					}
 					
@@ -260,9 +259,11 @@ public class ViewParticipantList extends Composite {
 					new ErrorMessageDialog(new Shell(), "The file specified cannot be found.").open();
 					exception.printStackTrace();
 					
+				} catch (ArrayIndexOutOfBoundsException exception) {
+					new ErrorMessageDialog(new Shell(), "Invalid .csv file. Make sure the file follows the correct format.").open();
 				} catch (Exception exception) {
-					ErrorMessageDialog errordiag = new ErrorMessageDialog(new Shell(), exception.getMessage());
-					errordiag.open();
+					new ErrorMessageDialog(new Shell(), exception.getMessage()).open();
+					exception.printStackTrace();
 				}
 				
 				
@@ -441,7 +442,10 @@ public void ImportCSV (String filepath) throws Exception {
 		List<String[]> entries = reader.readAll();
 		entries.remove(0);	//remove the header row
 		
+		if (entries.get(0).length < 6)
+			throw new ArrayIndexOutOfBoundsException();
 		for (int i=0; i<entries.size(); i++) {
+			tempEntries.clear();
 			tempEntries.add(new Participant(entries.get(i)[0], entries.get(i)[1], entries.get(i)[2], entries.get(i)[3], entries.get(i)[4], entries.get(i)[5]));
 		}		
 	} catch (FileNotFoundException e) {
