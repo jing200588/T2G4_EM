@@ -6,12 +6,16 @@ import event.*;
  * @author Nguyen Truong Duy (Team 31 - CS2103)
  *
  */
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 
 public class ControllerBookingSystem {
 	
 	public static enum SearchCriteria{COST, CAPACITY, TIME, COST_TIME,
 						CAPACITY_TIME, COST_CAPACITY, ALL_THREE}
+	public static enum SortCriteria{VENUEID, NAME, ADDRESS, CAPACITY, COST}
+	
 	public static final double THRESHOLD = Double.MIN_VALUE;
 	
 	private static ModelBookingSystem mbs = new ModelBookingSystem();
@@ -108,6 +112,10 @@ public class ControllerBookingSystem {
 	{
 		Vector<Venue> returnList = new Vector<Venue>();
 		
+		if(listAllVenue.isEmpty() == true)
+			System.out.println("Search in database");
+		else
+			System.out.println("Cache");
 		
 		switch(type)
 		{
@@ -191,7 +199,8 @@ public class ControllerBookingSystem {
 			{
 				// The worst case: We have to take all the venues from the
 				// database and then short-list them by timeslot.
-				listAllVenue = mbs.get_all_venue();
+				if(listAllVenue.isEmpty() == true)
+					listAllVenue = mbs.get_all_venue();
 				returnList = shortListByTimeSlot(listAllVenue, preferredTime);
 				
 			}
@@ -383,5 +392,42 @@ public class ControllerBookingSystem {
 				returnList.add(listVenue.get(index));
 		
 		return returnList;
+	}
+	
+	/**
+	 * Sort a vector of Venue by the specified criteria.
+	 * 
+	 * @param inputVenueList - Vector<Venue>
+	 * @param type - SortCriteria
+	 */
+	public static void sortVenueList(Vector<Venue> inputVenueList, SortCriteria type)
+	{
+		if(inputVenueList == null)
+			return;
+		
+		Comparator<Venue> compare = null;			// Dummy value
+		switch(type)
+		{
+			case VENUEID:
+				compare = new VenueIDComparator();
+				break;
+			case NAME:
+				compare = new NameComparator();
+				break;
+			case ADDRESS:
+				compare = new AddressComparator();
+				break;
+			case CAPACITY:
+				compare = new CapacityComparator();
+				break;
+			case COST:
+				compare = new CostComparator();
+		}
+		
+		if(compare != null)
+		{
+			Collections.sort(inputVenueList, compare);
+		}
+				
 	}
 }

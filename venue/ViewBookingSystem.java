@@ -78,7 +78,6 @@ public class ViewBookingSystem extends Composite {
 	private InputDateTimeComposite dt_SearchCriteria;
 	private InputDateTimeComposite dt_SearchResult;
 	private Composite CapacityCompo;
-	private Button ButtonConfirmBookTime;
 	private boolean hasTimeSlotChecked;
 	private Button SearchNameButton;
 	private Button SearchCriteriaButton;
@@ -566,7 +565,6 @@ public class ViewBookingSystem extends Composite {
 		fd_BookVenueButton.bottom = new FormAttachment(100);
 		fd_BookVenueButton.right = new FormAttachment(100, -5);
 		BookVenueButton.setLayoutData(fd_BookVenueButton);
-		BookVenueButton.setEnabled(false);
 		BookVenueButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -576,7 +574,10 @@ public class ViewBookingSystem extends Composite {
 					// book a past time slot.
 					if(chosenVenueID < 0)
 						throw new Exception("You have not chosen a venue yet!");
-
+					
+					// Read time slot
+					timeSlotChoiceInput = dt_SearchResult.readInputFields();
+					
 					MyDateTime currentTime = MyDateTime.getCurrentDateTime();
 					if(timeSlotChoiceInput.happenBefore(currentTime) == true)
 						throw new Exception("You cannot book a venue with the starting date and time in the past!");
@@ -591,9 +592,6 @@ public class ViewBookingSystem extends Composite {
 						String choice = (String) warningBoard.open();
 						if(choice.equals("Yes") == false)
 						{
-							BookVenueButton.setEnabled(false);
-							ButtonConfirmBookTime.setText("Confirm");
-							dt_SearchResult.setEnabled(true);
 							return;
 						}
 					}
@@ -617,9 +615,6 @@ public class ViewBookingSystem extends Composite {
 				{
 					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errorBoard.open();
-					BookVenueButton.setEnabled(false);
-					ButtonConfirmBookTime.setText("Confirm");
-					dt_SearchResult.setEnabled(true);
 				}
 			}
 		});
@@ -670,10 +665,6 @@ public class ViewBookingSystem extends Composite {
 
 					String detail = bookingSystem.getVenueDetail(chosenVenueID);
 					VenueDetailTextbox.setText(detail);
-
-					if(ButtonConfirmBookTime.getText().equals("Edit") == true)
-						BookVenueButton.setEnabled(true);
-
 				}
 				catch(Exception exception)
 				{
@@ -689,6 +680,13 @@ public class ViewBookingSystem extends Composite {
 
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnVenueid = tableViewerColumn_3.getColumn();
+		tblclmnVenueid.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ControllerBookingSystem.sortVenueList(searchResultList, ControllerBookingSystem.SortCriteria.VENUEID);
+				tableViewer.refresh();
+			}
+		});
 		tcl_tableComposite.setColumnData(tblclmnVenueid, new ColumnWeightData(20));
 		//tblclmnVenueid.setWidth(57);
 		tblclmnVenueid.setText("Venue ID");
@@ -703,6 +701,13 @@ public class ViewBookingSystem extends Composite {
 		
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnVenuename = tableViewerColumn_2.getColumn();
+		tblclmnVenuename.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ControllerBookingSystem.sortVenueList(searchResultList, ControllerBookingSystem.SortCriteria.NAME);
+				tableViewer.refresh();
+			}
+		});
 		tcl_tableComposite.setColumnData(tblclmnVenuename, new ColumnWeightData(30));
 		//tblclmnVenuename.setWidth(192);
 		tblclmnVenuename.setText("Venue Name");
@@ -716,6 +721,13 @@ public class ViewBookingSystem extends Composite {
 
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnCapacity = tableViewerColumn_1.getColumn();
+		tblclmnCapacity.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ControllerBookingSystem.sortVenueList(searchResultList, ControllerBookingSystem.SortCriteria.CAPACITY);
+				tableViewer.refresh();
+			}
+		});
 		tcl_tableComposite.setColumnData(tblclmnCapacity, new ColumnWeightData(20));
 		//tblclmnCapacity.setWidth(69);
 		tblclmnCapacity.setText("Capacity");
@@ -730,6 +742,13 @@ public class ViewBookingSystem extends Composite {
 		
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnCost = tableViewerColumn.getColumn();
+		tblclmnCost.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ControllerBookingSystem.sortVenueList(searchResultList, ControllerBookingSystem.SortCriteria.COST);
+				tableViewer.refresh();
+			}
+		});
 		tcl_tableComposite.setColumnData(tblclmnCost, new ColumnWeightData(15));
 		//tblclmnCost.setWidth(70);
 		tblclmnCost.setText("Cost");
@@ -777,50 +796,6 @@ public class ViewBookingSystem extends Composite {
 		dt_SearchResult.setLayoutData(fd_dt_SearchResult);
 		toolkit.adapt(dt_SearchResult);
 		toolkit.paintBordersFor(dt_SearchResult);
-
-		ButtonConfirmBookTime = new Button(ResultPageCompo, SWT.NONE);
-		FormData fd_ButtonConfirmBookTime = new FormData();
-		fd_ButtonConfirmBookTime.top = new FormAttachment(BookVenueButton, 0, SWT.TOP);
-		fd_ButtonConfirmBookTime.right = new FormAttachment(BookVenueButton, -6);
-		fd_ButtonConfirmBookTime.left = new FormAttachment(0, 450);
-		ButtonConfirmBookTime.setLayoutData(fd_ButtonConfirmBookTime);
-		ButtonConfirmBookTime.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try
-				{
-					if(ButtonConfirmBookTime.getText().equals("Confirm") == true)
-					{
-						// Since users have just entered / modified the time slot.
-						hasTimeSlotChecked = false;
-
-						// Read users' inputs
-						timeSlotChoiceInput = dt_SearchResult.readInputFields();
-
-						// If the input is correct, then we reach this point.
-						// GUI Settings
-						BookVenueButton.setEnabled(true);
-						dt_SearchResult.setEnabled(false);
-						ButtonConfirmBookTime.setText("Edit");
-					}
-					else
-					{
-						// The command type is "Edit"
-						dt_SearchResult.setEnabled(true);
-						ButtonConfirmBookTime.setText("Confirm");
-						BookVenueButton.setText("Book Venue");
-					}
-				}
-				catch(Exception exception)
-				{
-					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(),
-							exception.getMessage());
-					errorBoard.open();
-				}
-			}
-		});
-		toolkit.adapt(ButtonConfirmBookTime, true, true);
-		ButtonConfirmBookTime.setText("Confirm");
 
 		TimeSlotCompo = new Composite(compoCriteriaFilled, SWT.NONE);
 //		TimeSlotCompo.setLayoutDeferred(true);
@@ -1038,7 +1013,6 @@ public class ViewBookingSystem extends Composite {
 	ViewCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblVenueDetails.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	dt_SearchResult.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	ButtonConfirmBookTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblSearchVenuesWith.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	ButtonComp.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	btnBackCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
@@ -1290,20 +1264,16 @@ public class ViewBookingSystem extends Composite {
 	{
 		tableViewer.refresh();
 		VenueDetailTextbox.setText("");
-		BookVenueButton.setEnabled(false);
-
+		dt_SearchResult.setEnabled(true);
+		
 		if(chooseTimeSlotYet == false)
 		{
-			dt_SearchResult.setEnabled(true);
 			dt_SearchResult.reset();
-			ButtonConfirmBookTime.setText("Confirm");
 		}
 		else
 		{
 			// Time slot has been chosen
 			dt_SearchResult.displayInputTimeSlot(timeSlotChoiceInput);
-			dt_SearchResult.setEnabled(false);
-			ButtonConfirmBookTime.setText("Edit");
 			hasTimeSlotChecked = true;
 		}
 	}

@@ -186,7 +186,7 @@ public class EventFlowEntry implements Comparable<EventFlowEntry> {
 	 * 		- If this.activityName '<' comparedObj.activityname, then this '<' comparedObj
 	 * 		- If this.activityName '=' comparedObj.activityname, then this '=' comparedObj
 	 */
-//	@Override
+	@Override
 	public int compareTo(EventFlowEntry comparedObj) {
 		// TODO Auto-generated method stub
 		if(m_duration.compareTo(comparedObj.getDuration()) > 0)
@@ -195,10 +195,10 @@ public class EventFlowEntry implements Comparable<EventFlowEntry> {
 		if(m_duration.compareTo(comparedObj.getDuration()) < 0)
 			return -1;
 		
-		if(m_activityName.compareTo(comparedObj.getActivityName()) > 0)
+		if(m_activityName.compareToIgnoreCase(comparedObj.getActivityName()) > 0)
 			return 1;
 		
-		if(m_activityName.compareTo(comparedObj.getActivityName()) < 0)
+		if(m_activityName.compareToIgnoreCase(comparedObj.getActivityName()) < 0)
 			return -1;
 		
 		return 0;

@@ -3,7 +3,6 @@
  */
 package venue;
 
-import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -68,14 +67,4 @@ public class HelperFunctions {
 		
 		return new String(arr);
 	} 
-	
-	public static void main(String[] args)
-	{
-		Scanner scan = new Scanner(System.in);
-		
-		String string = scan.nextLine();
-		System.out.println(string);
-		System.out.println(removeAllWhiteSpace(string));
-		System.out.println(removeRedundantWhiteSpace(string));
-	}
 }
