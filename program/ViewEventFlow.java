@@ -249,12 +249,12 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		
-		Button btnReturnToEvent = new Button(mainComposite, SWT.NONE);
-		FormData fd_btnReturnToEvent = new FormData();
-		fd_btnReturnToEvent.width = 100;
+		Button btnBack = new Button(mainComposite, SWT.NONE);
+		FormData fd_btnBack = new FormData();
+		fd_btnBack.width = 100;
 	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
-		btnReturnToEvent.setLayoutData(fd_btnReturnToEvent);
-		btnReturnToEvent.addSelectionListener(new SelectionAdapter() {
+		btnBack.setLayoutData(fd_btnBack);
+		btnBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// Update the event flow in the database as well as in the event itself
@@ -265,12 +265,12 @@ public class ViewEventFlow extends Composite {
 				ViewMain.ReturnView();
 			}
 		});
-		toolkit.adapt(btnReturnToEvent, true, true);
-		btnReturnToEvent.setText("Return");
+		toolkit.adapt(btnBack, true, true);
+		btnBack.setText("Back");
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
-		fd_btnReturnToEvent.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
-		fd_btnReturnToEvent.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
+		fd_btnBack.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
+		fd_btnBack.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
 		FormData fd_btnAdd = new FormData();
 		fd_btnAdd.right = new FormAttachment(95);
 		fd_btnAdd.left = new FormAttachment(tableComposite, 10);
@@ -475,7 +475,7 @@ public class ViewEventFlow extends Composite {
 		toolkit.paintBordersFor(tableEventFlow);	
 		
 		Button btnSave = new Button(mainComposite, SWT.NONE);
-		fd_btnReturnToEvent.top = new FormAttachment(btnSave, 10);
+		fd_btnBack.top = new FormAttachment(btnSave, 10);
 		
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -608,7 +608,7 @@ public class ViewEventFlow extends Composite {
 		button.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnImport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		mainComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnReturnToEvent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnBack.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnAdd.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnNewButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));

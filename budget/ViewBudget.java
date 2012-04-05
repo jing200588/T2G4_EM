@@ -581,7 +581,7 @@ public class ViewBudget extends Composite {
 		txtResult.setBounds(10, 32, 664, 182);
 		formToolkit.adapt(txtResult, true, true);
 
-		dropdownSelection = new Combo(compStep3, SWT.NONE);
+		dropdownSelection = new Combo(compStep3, SWT.READ_ONLY);
 		dropdownSelection.setBounds(377, 236, 126, 23);
 		formToolkit.adapt(dropdownSelection);
 		formToolkit.paintBordersFor(dropdownSelection);
@@ -632,6 +632,7 @@ public class ViewBudget extends Composite {
 		lblListOfAll.setText("List of all possible combination:");
 		
 		/**Set background color of everything to grey.**/
+		ViewBudgetForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		ViewBudgetForm.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
 		ViewBudgetForm.getBody().setBackground(SWTResourceManager.getColor(240,240,240));
 		compMain.setBackground(SWTResourceManager.getColor(240,240,240));
@@ -664,6 +665,7 @@ public class ViewBudget extends Composite {
 		btnStepSelectCompulsoy.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnImport.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnStepConfirmResult.setBackground(SWTResourceManager.getColor(240,240,240));
+		btnFinish.setBackground(SWTResourceManager.getColor(240,240,240));
 	}
 
 	/**

@@ -970,7 +970,7 @@ public class ViewMain extends ApplicationWindow {
 	 * @param newShell
 	 */
 	protected void configureShell(Shell newShell) {
-		newShell.setImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\workspace\\E-MAN\\Images\\thumbnail.jpg"));
+		newShell.setImage(SWTResourceManager.getImage(ViewMain.class, "/Images/thumbnail.jpg"));
 		newShell.setMinimumSize(new Point(1200, 526));
 		super.configureShell(newShell);
 		newShell.setText("E-Man");

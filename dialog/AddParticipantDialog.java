@@ -81,7 +81,7 @@ public class AddParticipantDialog extends Dialog {
 		Label lblName = new Label(composite, SWT.NONE);
 		lblName.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
 		lblName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblName.setText("Name:");
+		lblName.setText("Name*:");
 		
 		txtName = new Text(composite, SWT.BORDER);
 		txtName.setMessage("eg. John Goh");
@@ -111,7 +111,7 @@ public class AddParticipantDialog extends Dialog {
 		Label lblContact = new Label(composite, SWT.NONE);
 		lblContact.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
 		lblContact.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblContact.setText("Contact:");
+		lblContact.setText("Contact*:");
 		
 		txtContact = new Text(composite, SWT.BORDER);
 		txtContact.setMessage("House or Handphone number");
@@ -126,7 +126,7 @@ public class AddParticipantDialog extends Dialog {
 		Label lblEmailAddress = new Label(composite, SWT.NONE);
 		lblEmailAddress.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
 		lblEmailAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEmailAddress.setText("Email Address:");
+		lblEmailAddress.setText("Email Address*:");
 		
 		txtEmailAddress = new Text(composite, SWT.BORDER);
 		txtEmailAddress.setMessage("eg. johnjohn89@gmail.com");
@@ -163,14 +163,25 @@ public class AddParticipantDialog extends Dialog {
 		gd_txtRemarks.heightHint = 63;
 		gd_txtRemarks.widthHint = 188;
 		txtRemarks.setLayoutData(gd_txtRemarks);
+		new Label(composite, SWT.NONE);
+		
+		Label lblRequiredFields = new Label(composite, SWT.NONE);
+		lblRequiredFields.setText("(* required fields)");
 		
 		btnCreate = new Button(shlAddParticipant, SWT.NONE);
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				try {
+					if (txtName.getText().isEmpty() || txtContact.getText().isEmpty() || txtEmailAddress.getText().isEmpty())
+						throw new Exception("Please fill in all required fields.");
 				ViewParticipantList.addParticipant(new Participant(txtName.getText(), txtMatricNo.getText(), txtContact.getText(), txtEmailAddress.getText(),
 						txtHomeAddress.getText(), txtRemarks.getText()));
-				shlAddParticipant.close();				
+				shlAddParticipant.close();
+				} catch (Exception exception) {
+					new ErrorMessageDialog(new Shell(), exception.getMessage()).open();
+				}
+				
 			}
 		});
 		FormData fd_btnCreate = new FormData();
