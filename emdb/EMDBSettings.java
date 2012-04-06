@@ -1,7 +1,7 @@
 package emdb;
 
 /**
- * 
+ * Constants and Settings for EMDB Classes
  * @author JunZhi
  *
  */

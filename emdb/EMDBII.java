@@ -4,6 +4,12 @@ package emdb;
 import java.io.File;
 import java.util.Vector;
 
+
+/**
+ * Database Wrapper and Gateway
+ * @author JunZhi
+ *
+ */
 public class EMDBII{
 	
 	private String				dbName = "";

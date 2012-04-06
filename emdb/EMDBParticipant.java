@@ -15,6 +15,11 @@ import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
+/**
+ * Database Extended Class - Participant
+ * @author JunZhi
+ *
+ */
 public class EMDBParticipant extends EMDBBase{
 	
 	private DbTable 	masterTable = this.schema.addTable(EMDBSettings.TABLE_MASTER);
