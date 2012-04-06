@@ -161,7 +161,6 @@ public class EMDBIITest {
 		
 		EMDBSettings.dMsg("<EMDB TEST> DELETE / DROP TABLES");
 		
-		
 		this.db.eventDB().drop();
 		assertFalse(this.db.eventDB().verify());
 
