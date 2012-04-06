@@ -96,7 +96,7 @@ public class ViewBudget extends Composite {
 	private Label lblNoteAllChanges;
 
 	/**
-	 * Create the composite.
+	 * Description: Create the composite.
 	 * @param parent
 	 * @param style
 	 */
@@ -122,24 +122,24 @@ public class ViewBudget extends Composite {
 		ViewBudgetForm.setText("Budget Optimization");
 		ViewBudgetForm.getBody().setLayout(new FormLayout());
 
+
 		/**********************************************************************************
 		 * Overview Budget optimization composite 
 		 **********************************************************************************/
 		Composite compMain = new Composite(ViewBudgetForm.getBody(), SWT.NONE);
 		FormData formDataMain = new FormData();
 		formDataMain.top = new FormAttachment(50, -160);
-		formDataMain.bottom = new FormAttachment (50, 180);
+		formDataMain.bottom = new FormAttachment (50, 173);
 		formDataMain.left = new FormAttachment(50, -350);
 		formDataMain.right = new FormAttachment(50, 350);
 		compMain.setLayoutData(formDataMain);
 		formToolkit.adapt(compMain);
 		formToolkit.paintBordersFor(compMain);
-
-		/**********************************************************************************
+/**********************************************************************************
 		 * Composite that will display the content 
 		 **********************************************************************************/
 		compBigContent = new Composite(compMain, SWT.NONE);
-		compBigContent.setBounds(10, 76, 680, 264);
+		compBigContent.setBounds(10, 76, 680, 284);
 		formToolkit.adapt(compBigContent);
 		formToolkit.paintBordersFor(compBigContent);
 		compBigContent.setLayout(stackLayout);
@@ -632,7 +632,6 @@ public class ViewBudget extends Composite {
 		lblListOfAll.setText("List of all possible combination:");
 
 		/**Set background color of everything to grey.**/
-		ViewBudgetForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		ViewBudgetForm.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
 		ViewBudgetForm.getBody().setBackground(SWTResourceManager.getColor(240,240,240));
 		compMain.setBackground(SWTResourceManager.getColor(240,240,240));
@@ -666,6 +665,7 @@ public class ViewBudget extends Composite {
 		btnImport.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnStepConfirmResult.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnFinish.setBackground(SWTResourceManager.getColor(240,240,240));
+		
 	}
 
 	/**
@@ -799,7 +799,7 @@ public class ViewBudget extends Composite {
 	}
 
 	/**
-	 * Description: CSV Exporting
+	 * Description: CSV exporting
 	 * @param filepath
 	 */
 	public void ExportCSV (String filepath) {

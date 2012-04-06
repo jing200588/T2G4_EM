@@ -123,6 +123,12 @@ public class SerialToGsm {
 		}
 	}
 
+	/**
+	 * Description: Use to send out SMS.
+	 * @param numToSend
+	 * @param whatToSend
+	 * @return
+	 */
 	public String sendSms (String numToSend, String whatToSend) {
 		ComputeSmsData sms = new ComputeSmsData();
 		sms.setAsciiTxt(whatToSend);
@@ -141,6 +147,10 @@ public class SerialToGsm {
 		}
 	}
 
+	/**
+	 * Description: Return if the port currently use is available.
+	 * @return
+	 */
 	public boolean getSuccessfulPort() {
 		return successfulPort;
 	}

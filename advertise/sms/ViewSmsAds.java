@@ -54,9 +54,10 @@ public class ViewSmsAds extends Composite {
 	private Button btnSend;
 
 	/**
-	 * Create the composite.
+	 * Description Create the composite.
 	 * @param parent
 	 * @param style
+	 * @param input_ei
 	 */
 	public ViewSmsAds(Composite parent, int style, Eventitem input_ei) {
 		super(parent, style);
@@ -240,6 +241,11 @@ public class ViewSmsAds extends Composite {
 		btnNotifyParticipants.setBackground(SWTResourceManager.getColor(240,240,240));
 
 	}
+	
+	/**
+	 * Description: Import csv file.
+	 * @param filepath
+	 */
 
 	public void ImportCSV (String filepath) {
 		ErrorMessageDialog errordiag;
