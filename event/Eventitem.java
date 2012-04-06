@@ -9,10 +9,10 @@ import program.*;
 
 public class Eventitem {
 	private int eventId;
-	private String eventName = "";
-	private String eventDescription	= "";
+	private String eventName;
+	private String eventDescription;
 	private Vector<Item> eventItemList = new Vector<Item>();
-	private double eventBudget	= 0.0;
+	private double eventBudget;
 	private Vector<BookedVenueInfo> eventBviList;
 	private MyDateTime eventStartDateTime;
 	private MyDateTime eventEndDateTime;
@@ -161,7 +161,10 @@ public class Eventitem {
 
 	public Vector<EventFlowEntry> getEventFlow()
 	{
-		return eventFlow;
+		Vector<EventFlowEntry> returnList = new Vector<EventFlowEntry>();
+		for(int index = 0; index < eventFlow.size(); index++)
+			returnList.add(new EventFlowEntry(eventFlow.get(index)));
+		return returnList;
 	}
 
 	public void setItemList(Vector<Item> inputItemList) {
