@@ -1,5 +1,9 @@
 package venue;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * An object of type BookedVenueInfo contains all information of a venue (like name, address, etc.)
  * 		and a list of time slots that a particular event books for this venue.
@@ -8,6 +12,8 @@ package venue;
  *
  */
 public class BookedVenueInfo {
+	
+	public static enum BVI_SORT_CRITERIA {NAME, CAPACITY, COST, STARTDATETIME, ENDDATETIME}
 	
 	/***********************************************************************************************
 	 * Class member variables
@@ -205,5 +211,46 @@ public class BookedVenueInfo {
 	public String getEndTimeString()
 	{
 		return m_bookedTimeSlot.getEndDateTime().getTimeRepresentation();
+	}
+	
+	/**
+	 * Returns the booked time slot.
+	 * @return bookedTimeSlot - TimeSlot
+	 */
+	public TimeSlot getBookedTimeSlot()
+	{
+		return m_bookedTimeSlot;
+	}
+	
+	/**
+	 * Sorts an input list of BookedvenueInfo objects according to the specified type.
+	 * @param inputList
+	 * @param type
+	 */
+	public static void sortByCriteria(List<BookedVenueInfo> inputList, BVI_SORT_CRITERIA type)
+	{
+		if(inputList == null)
+			return;
+		
+		Comparator<BookedVenueInfo> comparator = null;		// Dummy value
+		switch(type)
+		{
+			case NAME:
+				comparator = new BVINameComparator();
+				break;
+			case CAPACITY:
+				comparator = new BVICapacityComparator();
+				break;
+			case COST:
+				comparator = new BVICostComparator();
+				break;
+			case STARTDATETIME:
+				comparator = new BVIStartDateTimeComparator();
+				break;
+			case ENDDATETIME:
+				comparator = new BVIEndDateTimeComparator();
+		}
+		
+		Collections.sort(inputList, comparator);
 	}
 }
