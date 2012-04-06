@@ -44,6 +44,7 @@ public class ViewParticipantList extends Composite {
 	private Text txtExportFile;
 	private Button btnDelete;
 	private int index = 0;
+	private static ModelParticipantList modelPL = new ModelParticipantList();
 	private static List<Participant> tempEntries;
 
 	private static final String[] HEADERS = {"Name", "Matric No.", "Contact", "Email Address", "Home Address", "Remarks"};
@@ -497,11 +498,6 @@ public void ExportCSV (String filepath) {
 		e.printStackTrace();
 	}
 }
-
-/**
- * Description: Method to export participant list into CSV file
- * @param filepath - the location to store the exported file
- */
 
 /**
  * Description: Method to import participant list from a CSV file 
