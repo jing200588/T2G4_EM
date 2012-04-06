@@ -73,7 +73,7 @@ public class ViewBookingSystem extends Composite {
 	private Text venueDetailText;
 	private Composite viewCompo;
 	private int chosenVenueID;
-	private Eventitem event;
+	private EventItem event;
 	private ControllerBookingSystem bookingSystem;
 	private InputDateTimeComposite dtSearchCriteria;
 	private InputDateTimeComposite dtSearchResult;
@@ -95,7 +95,7 @@ public class ViewBookingSystem extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewBookingSystem(Composite parent, int style, Eventitem eventObj) {
+	public ViewBookingSystem(Composite parent, int style, EventItem eventObj) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {

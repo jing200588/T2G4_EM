@@ -17,7 +17,7 @@ import venue.TimeSlot;
 import venue.Venue;
 import emdb.EMDBII;
 import emdb.EMDBSettings;
-import event.Eventitem;
+import event.EventItem;
 
 
 public class EMDBIITest {
@@ -25,8 +25,8 @@ public class EMDBIITest {
 	
 	private EMDBII 		db 				= new EMDBII("unit.sqlite", true); 			
 	
-	private Eventitem			event;
-	private Vector<Eventitem>	eventList		=	new Vector<Eventitem>();
+	private EventItem			event;
+	private Vector<EventItem>	eventList		=	new Vector<EventItem>();
 	private Vector<Venue>		venueList		=	new Vector<Venue>();
 	private Vector<Item> 		itemList		=	new Vector<Item>();
 	
@@ -37,14 +37,14 @@ public class EMDBIITest {
 	public EMDBIITest(){		
 
 		//Add 5 items to the list
-		this.event = new Eventitem("The NUS Event", "01/12/2014", "12/12/2014", "01:00", "13:00");
+		this.event = new EventItem("The NUS Event", "01/12/2014", "12/12/2014", "01:00", "13:00");
 		this.event.setDescription("Just another event");
 		
-		this.eventList.add(new Eventitem("My Event", "19/12/2014", "20/12/2014", "14:00", "18:00"));
-		this.eventList.add(new Eventitem("This Event", "19/10/2014", "20/10/2014", "14:00", "18:00"));
-		this.eventList.add(new Eventitem("That Event", "20/10/2014", "20/11/2014", "11:56", "14:23"));
-		this.eventList.add(new Eventitem("Your Event", "19/01/2014", "20/05/2014", "17:34", "23:56"));
-		this.eventList.add(new Eventitem("The NUSSU Stuff", "06/10/2013", "12/12/2014", "01:00", "13:00"));
+		this.eventList.add(new EventItem("My Event", "19/12/2014", "20/12/2014", "14:00", "18:00"));
+		this.eventList.add(new EventItem("This Event", "19/10/2014", "20/10/2014", "14:00", "18:00"));
+		this.eventList.add(new EventItem("That Event", "20/10/2014", "20/11/2014", "11:56", "14:23"));
+		this.eventList.add(new EventItem("Your Event", "19/01/2014", "20/05/2014", "17:34", "23:56"));
+		this.eventList.add(new EventItem("The NUSSU Stuff", "06/10/2013", "12/12/2014", "01:00", "13:00"));
 		
 
 		//Add 5 Venues	
@@ -165,7 +165,7 @@ public class EMDBIITest {
 		
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SAVE AND RETRIEVE EVENT");
 		
-		Eventitem itemResult	=	null;
+		EventItem itemResult	=	null;
 		
 		int eventID = db.eventDB().addEvent(
 				this.event.getName(), 
@@ -314,7 +314,7 @@ public class EMDBIITest {
 	public void updateEvent(){
 		
 		
-		Eventitem eEvent = this.eventList.get(3);
+		EventItem eEvent = this.eventList.get(3);
 		
 		int id = db.eventDB().addEvent(eEvent);
 
@@ -324,7 +324,7 @@ public class EMDBIITest {
 		
 		db.eventDB().updateEvent(eEvent);
 		
-		Eventitem nEvent = db.eventDB().getEvent(id);
+		EventItem nEvent = db.eventDB().getEvent(id);
 		
 		assertEquals(
 				eEvent.getName(), 

@@ -8,21 +8,21 @@ import java.util.*;
 
 
 public class ModelEvent {
-	private static Vector<Eventitem> list;
-	private static Vector<Eventitem> expired;
+	private static Vector<EventItem> list;
+	private static Vector<EventItem> expired;
 	private static EMDBII db;
 
 	public ModelEvent() {
-		list = new Vector<Eventitem>();
-		expired = new Vector<Eventitem>();
+		list = new Vector<EventItem>();
+		expired = new Vector<EventItem>();
 		
 		db = new EMDBII();
 		
 	};
 	
 	public ModelEvent(String test) {
-		list = new Vector<Eventitem>();
-		expired = new Vector<Eventitem>();
+		list = new Vector<EventItem>();
+		expired = new Vector<EventItem>();
 		
 		db = new EMDBII(test);
 		db.systemCheck();
@@ -34,7 +34,7 @@ public class ModelEvent {
 	 * Description: Passes event into database and local list.
 	 * @param eitem Event Item
 	 */
-	public static void CreateEvent(Eventitem eitem) {
+	public static void CreateEvent(EventItem eitem) {
 		
 		
 		int id = db.eventDB().addEvent(
@@ -59,7 +59,7 @@ public class ModelEvent {
 	 * Description: Returns the local list of event items
 	 * @return
 	 */
-	public static Vector<Eventitem> PullList() {
+	public static Vector<EventItem> PullList() {
 		
 		list = db.eventDB().getEventList();
 		int size = list.size();
@@ -80,7 +80,7 @@ public class ModelEvent {
 	 * Description: Returns the local expired list of event items
 	 * @return
 	 */
-	public static Vector<Eventitem> PullExpiredList() {
+	public static Vector<EventItem> PullExpiredList() {
 
 		expired = db.eventDB().getArchiveEventList();
 		int size = expired.size();
@@ -102,7 +102,7 @@ public class ModelEvent {
 	 * Description: Deletes the event from the database and local list
 	 * @param eitem Event Item
 	 */
-	public static void DeleteEvent(Eventitem eitem) {
+	public static void DeleteEvent(EventItem eitem) {
 
 		db.eventDB().deleteEvent(eitem.getID());
 		db.venueDB().deleteBookingAll(eitem.getID());
@@ -119,7 +119,7 @@ public class ModelEvent {
 	 * Description: Deletes the expired event from the database and expired list
 	 * @param eitem Event Item
 	 */
-	public static void DeleteExpiredEvent(Eventitem eitem) {
+	public static void DeleteExpiredEvent(EventItem eitem) {
 
 		//TODO Remove the expired item from archive DB
 		db.eventDB().deleteArchiveEvent(eitem.getID());
@@ -139,7 +139,7 @@ public class ModelEvent {
 	 */
 	public static void DeleteAllExpiredEvents() {
 
-		Vector<Eventitem> dblist = PullExpiredList();
+		Vector<EventItem> dblist = PullExpiredList();
 		db.eventDB().truncate("archive");
 		for (int i=0; i<dblist.size(); i++){
 			int pid = dblist.get(i).getID();
@@ -159,7 +159,7 @@ public class ModelEvent {
 	 * @param eitem Event Item
 	 * @param index 
 	 */
-	public static void 	UpdateParticulars(Eventitem eitem) {
+	public static void 	UpdateParticulars(EventItem eitem) {
 
 
 		
@@ -177,7 +177,7 @@ public class ModelEvent {
 		
 	}
 	
-	public static void UpdateExpiredList(List<Eventitem> newlyexpired) {
+	public static void UpdateExpiredList(List<EventItem> newlyexpired) {
 		System.out.println("RAN!!");
 		System.out.println("size of new" + newlyexpired.size());
 		db.eventDB().addArchiveEventList(newlyexpired);

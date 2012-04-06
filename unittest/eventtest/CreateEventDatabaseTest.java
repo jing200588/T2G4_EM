@@ -13,15 +13,15 @@ import event.*;
 
 public class CreateEventDatabaseTest {
 	
-	private Eventitem currentEvent;
-	private Eventitem[] currentEvents;
+	private EventItem currentEvent;
+	private EventItem[] currentEvents;
 	private ModelEvent model;
 	private static final int TOTAL = 5;
 	
 	public CreateEventDatabaseTest() {
 		
 		
-		currentEvents = new Eventitem[TOTAL];
+		currentEvents = new EventItem[TOTAL];
 		
 		for (int i=0; i<TOTAL; i++) {
 		String	inputName = "School Orientation Camp " + i ;
@@ -37,7 +37,7 @@ public class CreateEventDatabaseTest {
 		int inputStartMonth = 8;
 		int inputEndMonth = 8;
 			
-			currentEvents[i] =  new Eventitem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
+			currentEvents[i] =  new EventItem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
 					inputStartHour, inputStartMinute, inputEndHour, inputEndMinute, inputDescription);
 		}
 		
@@ -51,10 +51,10 @@ public class CreateEventDatabaseTest {
 	@Test
 	public void StoreNewEventDatabaseTest() {
 		currentEvent = CreateCurrentEvent();
-		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());
+		Vector<EventItem> expectedEventList =  new Vector<EventItem>(ModelEvent.PullList());
 		
 		ModelEvent.CreateEvent(currentEvent);
-		Vector<Eventitem> actualEventList = ModelEvent.PullList();
+		Vector<EventItem> actualEventList = ModelEvent.PullList();
 		
 		expectedEventList.add(currentEvent);
 		
@@ -79,10 +79,10 @@ public class CreateEventDatabaseTest {
 	public void EditEventDatabaseTest() {
 		currentEvent = CreateCurrentEvent();
 		ModelEvent.CreateEvent(currentEvent);
-		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());
+		Vector<EventItem> expectedEventList =  new Vector<EventItem>(ModelEvent.PullList());
 
 		
-		Eventitem tempEvent = expectedEventList.get(expectedEventList.size()-1);
+		EventItem tempEvent = expectedEventList.get(expectedEventList.size()-1);
 		tempEvent.setName("Test Edit Name");
 		tempEvent.setStartDate(2012, 5, 1);
 		tempEvent.setEndDate(2012, 5, 20);
@@ -91,7 +91,7 @@ public class CreateEventDatabaseTest {
 		tempEvent.setDescription("This is a edit description test!");
 
 		ModelEvent.UpdateParticulars(tempEvent);
-		Vector<Eventitem> actualEventList = ModelEvent.PullList();
+		Vector<EventItem> actualEventList = ModelEvent.PullList();
 		
 		assertEquals(expectedEventList.size(), actualEventList.size());
 		
@@ -115,11 +115,11 @@ public class CreateEventDatabaseTest {
 	public void DeleteEventDatabaseTest() {
 		currentEvent = CreateCurrentEvent();
 		ModelEvent.CreateEvent(currentEvent);	//adds current event into database
-		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());	//retreives the list of events from database
+		Vector<EventItem> expectedEventList =  new Vector<EventItem>(ModelEvent.PullList());	//retreives the list of events from database
 		currentEvent.setID(expectedEventList.get(expectedEventList.size()-1).getID());	//store the ID into current event
 		
 		ModelEvent.DeleteEvent(currentEvent);	//deletes event from database
-		Vector<Eventitem> actualEventList = ModelEvent.PullList();	//retreives the list of events from database
+		Vector<EventItem> actualEventList = ModelEvent.PullList();	//retreives the list of events from database
 		
 		expectedEventList.remove(expectedEventList.size()-1);	//remove event from local list
 		
@@ -151,21 +151,21 @@ public class CreateEventDatabaseTest {
 		currentEvent.setEndDate(2011, 12, 15);
 		currentEvent.setIsExpired(true);
 		
-		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());	//retreives the list of events from database
-		Vector<Eventitem> expectedExpiredEventList =  new Vector<Eventitem>(ModelEvent.PullExpiredList());	//retreives the list of expired events from database
+		Vector<EventItem> expectedEventList =  new Vector<EventItem>(ModelEvent.PullList());	//retreives the list of events from database
+		Vector<EventItem> expectedExpiredEventList =  new Vector<EventItem>(ModelEvent.PullExpiredList());	//retreives the list of expired events from database
 		ModelEvent.CreateEvent(currentEvent);	//adds current event into database
-		Vector<Eventitem> eventList = new Vector<Eventitem>(ModelEvent.PullList());
+		Vector<EventItem> eventList = new Vector<EventItem>(ModelEvent.PullList());
 		currentEvent = eventList.get(eventList.size()-1);
 		
 		//creates an expired sublist to pass into UpdateExpiredList function
-		List<Eventitem> expiredSubList = new Vector<Eventitem>();
+		List<EventItem> expiredSubList = new Vector<EventItem>();
 		expiredSubList.add(currentEvent);
 		
 		expectedExpiredEventList.add(currentEvent);		//adds the current event into the expected expired list
 		ModelEvent.UpdateExpiredList(expiredSubList);	//prompts the database to remove expired event from database event list to database expired event list
 		
-		Vector<Eventitem> actualEventList = ModelEvent.PullList();	//retreives the list of events from database
-		Vector<Eventitem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
+		Vector<EventItem> actualEventList = ModelEvent.PullList();	//retreives the list of events from database
+		Vector<EventItem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
 		
 		
 		assertEquals(expectedEventList.size(), actualEventList.size());
@@ -203,8 +203,8 @@ public class CreateEventDatabaseTest {
 		
 		Random random = new Random();
 		int randNo = random.nextInt(TOTAL);
-		Vector<Eventitem> expectedExpiredEventList =  new Vector<Eventitem>(ModelEvent.PullExpiredList());	//retreives the list of expired events from database
-		List<Eventitem> expiredSubList = new Vector<Eventitem>();	//creates an expired sublist to pass into UpdateExpiredList function
+		Vector<EventItem> expectedExpiredEventList =  new Vector<EventItem>(ModelEvent.PullExpiredList());	//retreives the list of expired events from database
+		List<EventItem> expiredSubList = new Vector<EventItem>();	//creates an expired sublist to pass into UpdateExpiredList function
 		
 		for (int i=0; i<TOTAL; i++) {
 			//Setting the date values to the past
@@ -216,7 +216,7 @@ public class CreateEventDatabaseTest {
 			ModelEvent.CreateEvent(currentEvents[i]);	//adds events into database
 		}
 		
-		Vector<Eventitem> eventList = new Vector<Eventitem>(ModelEvent.PullList());
+		Vector<EventItem> eventList = new Vector<EventItem>(ModelEvent.PullList());
 		expiredSubList = eventList.subList(eventList.size() - TOTAL, eventList.size());
 		
 		for (int i=0; i<TOTAL; i++) {
@@ -228,7 +228,7 @@ public class CreateEventDatabaseTest {
 		
 		expectedExpiredEventList.remove(currentEvents[randNo]);	//removes the randomly chosen event from the expected list
 		ModelEvent.DeleteExpiredEvent(currentEvents[randNo]);	//removes the randomly chosen event from the database expired list
-		Vector<Eventitem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
+		Vector<EventItem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
 
 		assertEquals(expectedExpiredEventList.size(), actualExpiredEventList.size());
 		
@@ -263,13 +263,13 @@ public class CreateEventDatabaseTest {
 		}
 		
 		//Sets up the scenerio where all the created expired events are now in the expired list of the database
-		Vector<Eventitem> eventList = new Vector<Eventitem>(ModelEvent.PullList());		//pull event list from database
-		List<Eventitem> expiredSubList = eventList.subList(eventList.size() - TOTAL, eventList.size());	//obtain sublist to pass into UpdateExpiredList
+		Vector<EventItem> eventList = new Vector<EventItem>(ModelEvent.PullList());		//pull event list from database
+		List<EventItem> expiredSubList = eventList.subList(eventList.size() - TOTAL, eventList.size());	//obtain sublist to pass into UpdateExpiredList
 		ModelEvent.UpdateExpiredList(expiredSubList);	//prompts the database to remove expired event from database event list to database expired event list
 		
 		
 		ModelEvent.DeleteAllExpiredEvents();	//prompts the database to delete the entire list of expired events
-		Vector<Eventitem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
+		Vector<EventItem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
 
 		assertEquals(0, actualExpiredEventList.size());
 		
@@ -284,7 +284,7 @@ public class CreateEventDatabaseTest {
 		ModelEvent.DestroyDB();
 	}	
 	
-	public Eventitem CreateCurrentEvent() {
+	public EventItem CreateCurrentEvent() {
 		String inputName = "School Orientation Camp";
 		String inputDescription = "This is a orientation event for NUS students for the 2012/2013 intake.";
 		int inputStartYear = 2012;
@@ -298,7 +298,7 @@ public class CreateEventDatabaseTest {
 		int inputEndHour = 23;
 		int inputEndMinute = 0;
 		
-		Eventitem event = new Eventitem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
+		EventItem event = new EventItem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
 				inputStartHour, inputStartMinute, inputEndHour, inputEndMinute, inputDescription);
 		
 		return event;

@@ -57,7 +57,7 @@ public class ViewBudget extends Composite {
 	/*My declaration start here.*/
 	private final StackLayout stackLayout = new StackLayout();
 	private ControllerBudget budgetPersonalAssistant;
-	private Eventitem currentEvent;
+	private EventItem currentEvent;
 	private Vector<Item> itemList;
 	private Vector<Integer> selectedCompulsoryIndexList = new Vector<Integer>();;
 	private int budget;
@@ -100,7 +100,7 @@ public class ViewBudget extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewBudget(Composite parent, int style, Eventitem inputEventitem) {
+	public ViewBudget(Composite parent, int style, EventItem inputEventitem) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {

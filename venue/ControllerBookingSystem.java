@@ -47,7 +47,7 @@ public class ControllerBookingSystem {
 	 * @return false if there is an error during the booking process.
 	 * 
 	 */
-	public boolean bookVenue(Eventitem event, int bookedVenueID, TimeSlot wantedTimeSlot)
+	public boolean bookVenue(EventItem event, int bookedVenueID, TimeSlot wantedTimeSlot)
 	{		
 		mbs.addBookingToDb(event.getID(), bookedVenueID, wantedTimeSlot);
 		

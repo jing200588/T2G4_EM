@@ -17,7 +17,7 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEditEventParticulars(Composite parent, int style, final Eventitem curevent) {
+	public ViewEditEventParticulars(Composite parent, int style, final EventItem curevent) {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		

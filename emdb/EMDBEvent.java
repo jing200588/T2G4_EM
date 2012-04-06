@@ -331,7 +331,7 @@ public class EMDBEvent extends EMDBBase{
 	 * @param aItem
 	 * @return
 	 */
-	public int addEvent(Eventitem aItem){
+	public int addEvent(EventItem aItem){
 		return this.addEvent(
 						aItem.getName(), 
 						aItem.getDescription(),  
@@ -359,7 +359,7 @@ public class EMDBEvent extends EMDBBase{
 	 * @param aEventID
 	 * @return
 	 */
-	public Eventitem getEvent(int aEventID){
+	public EventItem getEvent(int aEventID){
 		
 		
 		String sql = new SelectQuery()
@@ -368,7 +368,7 @@ public class EMDBEvent extends EMDBBase{
 							.addCondition(BinaryCondition.equalTo(this.eventsID, aEventID))
 							.validate().toString();
 		
-		Eventitem item = null;
+		EventItem item = null;
 		
 
 		if (this.dbDebug){
@@ -385,7 +385,7 @@ public class EMDBEvent extends EMDBBase{
 		for (int i=0; i< size; i++){
 			Object[] row = result.get(i);
 			
-			item = new Eventitem(
+			item = new EventItem(
 					row[1].toString(), //name
 					row[4].toString(), //startdate
 					row[5].toString(), //enddate
@@ -416,7 +416,7 @@ public class EMDBEvent extends EMDBBase{
 	 * Wrapper for getting list of events
 	 * @return
 	 */
-	public Vector<Eventitem> getEventList(){
+	public Vector<EventItem> getEventList(){
 		if (this.dbDebug){
 			this.dMsg("GET AN EVENT LIST");
 		}	
@@ -433,9 +433,9 @@ public class EMDBEvent extends EMDBBase{
 	 * Gets a list of all events in the Database.
 	 * @return
 	 */
-	private Vector<Eventitem> getEventListAll(){
+	private Vector<EventItem> getEventListAll(){
 
-		Vector<Eventitem> list = new Vector<Eventitem>();
+		Vector<EventItem> list = new Vector<EventItem>();
 		
 		String sql 	= new SelectQuery()
 						.addAllColumns()
@@ -457,7 +457,7 @@ public class EMDBEvent extends EMDBBase{
 		for (int i=0; i< size; i++){
 			Object[] row = result.get(i);
 			
-			Eventitem item = new Eventitem(
+			EventItem item = new EventItem(
 						row[1].toString(), //name
 						row[4].toString(), //startdate
 						row[5].toString(), //enddate
@@ -559,7 +559,7 @@ public class EMDBEvent extends EMDBBase{
 	 * @param aItem
 	 * @return
 	 */
-	public int updateEvent(Eventitem aItem){
+	public int updateEvent(EventItem aItem){
 		return this.updateEvent(
 							aItem.getID(), 
 							aItem.getName(), 
@@ -684,7 +684,7 @@ public class EMDBEvent extends EMDBBase{
 	 * @param aItem
 	 * @return
 	 */
-	private String generateArchiveQuery(Eventitem aItem){
+	private String generateArchiveQuery(EventItem aItem){
 		String sql	=	new InsertQuery(this.archiveTable)
 								.addColumn(this.archiveEventID, aItem.getID())
 					      		.addColumn(this.archiveName, aItem.getName().replaceAll("[\']", ""))
@@ -715,7 +715,7 @@ public class EMDBEvent extends EMDBBase{
 			this.dMsg("STARTING PROCESS TO ARCHIVE EVENT #"+aEventID);
 		}
 		
-		Eventitem item = this.getEvent(aEventID);
+		EventItem item = this.getEvent(aEventID);
 
 		this.deleteEvent(aEventID);
 		String sql = this.generateArchiveQuery(item);
@@ -743,7 +743,7 @@ public class EMDBEvent extends EMDBBase{
 	 * @param aNewlyExpired
 	 * @return
 	 */
-	public int addArchiveEventList(List<Eventitem> aNewlyExpired){
+	public int addArchiveEventList(List<EventItem> aNewlyExpired){
 		
 		int size = aNewlyExpired.size();
 		
@@ -754,7 +754,7 @@ public class EMDBEvent extends EMDBBase{
 		
 		if (!aNewlyExpired.isEmpty()){
 			for (int i=0; i<size; i++){
-				Eventitem current = aNewlyExpired.get(i);
+				EventItem current = aNewlyExpired.get(i);
 				this.deleteEvent(current.getID());
 				
 				String sql = this.generateArchiveQuery(current);
@@ -785,7 +785,7 @@ public class EMDBEvent extends EMDBBase{
 	 * Wrapper for getting list of events
 	 * @return
 	 */
-	public Vector<Eventitem> getArchiveEventList(){
+	public Vector<EventItem> getArchiveEventList(){
 			
 		if (this.dbDebug){
 			this.dMsg("GET AN ARCHIVE EVENT LIST");
@@ -795,9 +795,9 @@ public class EMDBEvent extends EMDBBase{
 
 	}
 	
-	private Vector<Eventitem> getArchiveEventListAll(){
+	private Vector<EventItem> getArchiveEventListAll(){
 		
-		Vector<Eventitem> list = new Vector<Eventitem>();
+		Vector<EventItem> list = new Vector<EventItem>();
 		
 		String sql 	= new SelectQuery()
 						.addAllColumns()
@@ -820,7 +820,7 @@ public class EMDBEvent extends EMDBBase{
 			for (int i=0; i< size; i++){
 				Object[] row = result.get(i);
 				
-				Eventitem item = new Eventitem(
+				EventItem item = new EventItem(
 							row[2].toString(), //name
 							row[5].toString(), //startdate
 							row[6].toString(), //enddate

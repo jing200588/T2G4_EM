@@ -38,14 +38,14 @@ public class LoginEmailDialog extends Dialog {
 	private String password;
 	private String domain;
 	private boolean loginSuccessful;
-	private Eventitem currentEvent;
+	private EventItem currentEvent;
 	protected ErrorMessageDialog errordiag;
 
 	/**
 	 * Create the dialog.
 	 * @param parent
 	 */
-	public LoginEmailDialog(Shell parent, Eventitem item) {
+	public LoginEmailDialog(Shell parent, EventItem item) {
 		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		setText("SWT Dialog");
 		currentEvent = item;
@@ -181,12 +181,9 @@ public class LoginEmailDialog extends Dialog {
 					String user = "dummy";
 					*/
 					if(loginSuccessful == true) {
-						shellMain.close();
-<<<<<<< HEAD
-						ViewMain.EmailAds(username, domain, password);//need to store the sesson somewhere anot? If yes I am not sure how you do it actually. 
-=======
-						ViewMain.EmailAds(currentEvent, username, domain, password); 
->>>>>>> 6200ffcb3693cf410bdcdfe2e2fb9b80d095e9ec
+						shellMain.close(); 
+						ViewMain.EmailAds(username, domain, password); 
+
 					}
 					else {
 						throw new Exception("Incorrect Username/Password.");

@@ -13,7 +13,7 @@ public class BudgetDatabaseTest {
 	private Vector<Item> itemList;
 	private Vector<Integer> compulsoryList;
 	private String input;
-	private Eventitem currentEvent;
+	private EventItem currentEvent;
 	private ControllerBudget cb;
 
 	public BudgetDatabaseTest() throws Exception {
@@ -28,7 +28,7 @@ public class BudgetDatabaseTest {
 				"World_of_Warcraft 49.99 4 Software\n" +
 				"Software_Engineering_For_Dummies 419.4 7 Book\n";
 
-		currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 	}
 

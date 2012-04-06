@@ -54,7 +54,7 @@ import com.ibm.icu.text.Collator;
 public class ViewEvent extends Composite {
 	private static Table tableBudget, tableVenue, tableEventFlow, tableParticipant, tableTemp;
 	private static boolean budgetFlag, venueFlag, eventFlowFlag, participantFlag;
-	private static Eventitem currentEvent;
+	private static EventItem currentEvent;
 	private static Composite compBudget, compVenue, compEventFlow, compParticipant;
 	private static Label lblDynamicDescription, lblDynamicStartDate, lblDynamicStartTime, lblDynamicEndDate, lblDynamicEndTime, lblDynamicname;
 	private static ScrolledComposite scrollCompositeMain;
@@ -71,7 +71,7 @@ public class ViewEvent extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEvent(Composite parent, int style, Eventitem curevent) {
+	public ViewEvent(Composite parent, int style, EventItem curevent) {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 

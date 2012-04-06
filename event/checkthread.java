@@ -3,7 +3,7 @@ package event;
 import org.eclipse.swt.widgets.Display;
 
 
-public class checkthread extends Thread {
+public class CheckThread extends Thread {
 	
 	public void run() {
 		while (true) {

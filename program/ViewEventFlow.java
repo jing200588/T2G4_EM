@@ -64,7 +64,7 @@ public class ViewEventFlow extends Composite {
 	private Table tableEventFlow;
 	private TableViewer tableViewEventFlow;
 	
-	private Eventitem eventObj;
+	private EventItem eventObj;
 	private Vector<EventFlowEntry> listEventFlow;
 	private Vector<EventFlowEntry> filterList;
 	private Vector<Integer> filterIndices;
@@ -79,7 +79,7 @@ public class ViewEventFlow extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEventFlow(Composite parent, int style, Eventitem event) {
+	public ViewEventFlow(Composite parent, int style, EventItem event) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {

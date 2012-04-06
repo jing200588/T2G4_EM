@@ -51,7 +51,7 @@ public class ViewCreateEvent extends ViewEventParticulars {
 					if(startDT.compareTo(MyDateTime.getCurrentDateTime()) < 0)
 						throw new Exception("Start date time of an event must not be in the past");
 					
-					Eventitem newevent = new Eventitem(eventname, StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(),
+					EventItem newevent = new EventItem(eventname, StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(),
 							EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes(), txtDescription.getText());
 					ModelEvent.CreateEvent(newevent);
 					ViewMain.UpdateTable();

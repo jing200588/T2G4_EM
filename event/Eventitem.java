@@ -7,7 +7,7 @@ import participant.*;
 import program.*;
 
 
-public class Eventitem {
+public class EventItem {
 	private int eventId;
 	private String eventName = "";
 	private String eventDescription = "";
@@ -34,7 +34,7 @@ public class Eventitem {
 	 * @param inputEndHour End Hour
 	 * @param inputEndMin End Minute
 	 */
-	public Eventitem (String inputName, int inputStartYear, int inputStartMonth, int inputStartDay, int inputEndYear, int inputEndMonth, int inputEndDay, int inputStartHour, int inputStartMin, int inputEndHour, int inputEndMin, String inputDescription) {
+	public EventItem (String inputName, int inputStartYear, int inputStartMonth, int inputStartDay, int inputEndYear, int inputEndMonth, int inputEndDay, int inputStartHour, int inputStartMin, int inputEndHour, int inputEndMin, String inputDescription) {
 		eventName = inputName;
 		eventStartDateTime = new MyDateTime (inputStartYear, inputStartMonth, inputStartDay, inputStartHour, inputStartMin);
 		eventEndDateTime = new MyDateTime(inputEndYear, inputEndMonth, inputEndDay, inputEndHour, inputEndMin);
@@ -57,7 +57,7 @@ public class Eventitem {
 	 * @param budget
 	 * @param BVI_list List of booked venue information
 	 */
-	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget, Vector<BookedVenueInfo> BVI_list){
+	public EventItem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget, Vector<BookedVenueInfo> BVI_list){
 		eventName = name;
 		eventStartDateTime = new MyDateTime(startdate, starttime);
 		eventEndDateTime = new MyDateTime(enddate, endtime);
@@ -74,7 +74,7 @@ public class Eventitem {
 	 * @param starttime
 	 * @param endtime
 	 */
-	public Eventitem (String name, String startdate, String enddate, String starttime, String endtime) {
+	public EventItem (String name, String startdate, String enddate, String starttime, String endtime) {
 		eventName = name;
 		eventStartDateTime = new MyDateTime(startdate, starttime);
 		eventEndDateTime = new MyDateTime(enddate, endtime);

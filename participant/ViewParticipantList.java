@@ -37,7 +37,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
 
 public class ViewParticipantList extends Composite {
-	private Eventitem currentEvent;
+	private EventItem currentEvent;
 	private Table tableParticipant;
 	private TableViewer tableParticipantViewer;
 	private Text txtImportFile;
@@ -54,7 +54,7 @@ public class ViewParticipantList extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewParticipantList(Composite parent, int style, Eventitem curevent) {
+	public ViewParticipantList(Composite parent, int style, EventItem curevent) {
 		super(parent, style);
 		setLayout(new FormLayout());
 		currentEvent = curevent;

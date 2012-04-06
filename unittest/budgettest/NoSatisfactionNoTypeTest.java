@@ -45,7 +45,7 @@ public class NoSatisfactionNoTypeTest {
 
 	@Test
 	public void noBudgetNoCompulsoryItem() throws Exception {
-		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		EventItem currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
 		ControllerBudget cb = new ControllerBudget(input, 0, 0, 0, currentEvent); //Budget = $0
@@ -68,7 +68,7 @@ public class NoSatisfactionNoTypeTest {
 
 	@Test
 	public void exceededBudgetNoCompulsoryItem() throws Exception {
-		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		EventItem currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
 		ControllerBudget cb = new ControllerBudget(input, 477137, 0, 0, currentEvent); //Budget = $4771.37 
@@ -92,7 +92,7 @@ public class NoSatisfactionNoTypeTest {
 
 	@Test
 	public void exceededBudgetSomeCompulsoryItem() throws Exception {
-		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		EventItem currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 		
 		ControllerBudget cb = new ControllerBudget(input, 477137, 0, 0, currentEvent); //Budget = $4771.37 
@@ -119,7 +119,7 @@ public class NoSatisfactionNoTypeTest {
 
 	@Test
 	public void exceededBudgetAllCompulsoryItem() throws Exception {
-		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		EventItem currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 		
 		ControllerBudget cb = new ControllerBudget(input, 477137, 0, 0, currentEvent); //Budget = $4771.37 
@@ -149,7 +149,7 @@ public class NoSatisfactionNoTypeTest {
 
 	@Test
 	public void lowestBudgetNoCompulsoryItem() throws Exception {
-		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		EventItem currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
 		ControllerBudget cb = new ControllerBudget(input, 4998, 0, 0, currentEvent); //Budget = $49.98; cheapest item = $49.99 
@@ -174,7 +174,7 @@ public class NoSatisfactionNoTypeTest {
 
 	@Test
 	public void BudgetEnoughForCompulsoryItem() throws Exception {
-		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		EventItem currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
 		ControllerBudget cb = new ControllerBudget(input, 115618, 0, 0, currentEvent); //Budget = $1156.18; Compulsory item cost = $1156.18 
@@ -203,7 +203,7 @@ public class NoSatisfactionNoTypeTest {
 
 	@Test
 	public void BudgetEnoughForSomeItemWithoutCompulsoryItem() throws Exception {
-		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		EventItem currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
 		ControllerBudget cb = new ControllerBudget(input, 50000, 0, 0, currentEvent); //Budget = $500.00
@@ -225,7 +225,7 @@ public class NoSatisfactionNoTypeTest {
 
 	@Test
 	public void BudgetEnoughForSomeItemWithCompulsoryItem() throws Exception {
-		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
+		EventItem currentEvent = new EventItem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
 
 		ControllerBudget cb = new ControllerBudget(input, 50000, 0, 0, currentEvent); //Budget = $500.00

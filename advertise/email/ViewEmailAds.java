@@ -29,7 +29,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 
 public class ViewEmailAds extends Composite {
-	private Eventitem currentEvent;
+	private EventItem currentEvent;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
 	private Text txtToInputBox;
 	private Text txtSubjectInputBox;
@@ -47,7 +47,7 @@ public class ViewEmailAds extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ViewEmailAds(Composite parent, int style, Eventitem input_ei, final String aUser, final String aDomain, final String aPass) {
+	public ViewEmailAds(Composite parent, int style, EventItem input_ei, final String aUser, final String aDomain, final String aPass) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {

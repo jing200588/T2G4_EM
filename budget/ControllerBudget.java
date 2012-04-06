@@ -19,7 +19,7 @@ public class ControllerBudget {
 	private int number; //store the number of item to undergo permutation algorithm
 	private double recursiveFunctionBudget; 
 	private Solution soln;
-	private Eventitem currentEvent;
+	private EventItem currentEvent;
 	private int typeOfResult; //this will be use to determine how the database list will be manipulated.
 	private boolean hasEmptySet = false;
 	private Vector<Item> computeList; //store the item(s) to undergo permutation algorithm
@@ -45,7 +45,7 @@ public class ControllerBudget {
 	 * @param inputEventitem
 	 * @throws Exception
 	 */
-	public ControllerBudget(String input, int inputBudget, int typeChoice, int satisfactionChoice, Eventitem inputEventitem) throws Exception {
+	public ControllerBudget(String input, int inputBudget, int typeChoice, int satisfactionChoice, EventItem inputEventitem) throws Exception {
 
 		itemList = new Vector<Item>();
 		currentEvent = inputEventitem;

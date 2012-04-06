@@ -69,7 +69,7 @@ public class ViewMain extends ApplicationWindow {
 	private Action serverControl;
 	private static Composite mainComposite, leftComp, rightComp;
 	private static Table eventListTable, expiredTable;
-	private static Vector<Eventitem> eventList, expiredEventlist;
+	private static Vector<EventItem> eventList, expiredEventlist;
 	private static TableColumn eventTC1, eventTC2;
     private static TableColumn expiredEventTC1, expiredEventTC2;
 	private static StackLayout layout = new StackLayout();
@@ -90,7 +90,7 @@ public class ViewMain extends ApplicationWindow {
 		super(null);
 		setShellStyle(SWT.CLOSE | SWT.MIN);
 		
-		eventList = new Vector<Eventitem>();
+		eventList = new Vector<EventItem>();
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();

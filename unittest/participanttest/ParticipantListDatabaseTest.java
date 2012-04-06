@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import org.junit.Test;
 
-import event.Eventitem;
+import event.EventItem;
 import event.ModelEvent;
 
 import participant.ModelParticipantList;
@@ -17,7 +17,7 @@ import participant.Participant;
 public class ParticipantListDatabaseTest {
 	
 	List<Participant> participantList;
-	Eventitem currentEvent;
+	EventItem currentEvent;
 	ModelEvent model;
 	ModelParticipantList modelPL;
 	
@@ -40,7 +40,7 @@ public class ParticipantListDatabaseTest {
 		ModelEvent.CreateEvent(currentEvent);
 		
 		List<Participant> expectedParticipantList = CreateParticipantList(100);
-		Vector<Eventitem> eventList = ModelEvent.PullList();
+		Vector<EventItem> eventList = ModelEvent.PullList();
 		currentEvent = eventList.get(eventList.size() - 1);	//this is done to obtain the id for the event which was assigned by the database
 		
 		//set new participantList for currentEvent
@@ -116,7 +116,7 @@ public class ParticipantListDatabaseTest {
 	}
 	
 	
-	public Eventitem CreateCurrentEvent() {
+	public EventItem CreateCurrentEvent() {
 		String inputName = "School Orientation Camp";
 		String inputDescription = "This is a orientation event for NUS students for the 2012/2013 intake.";
 		int inputStartYear = 2012;
@@ -130,7 +130,7 @@ public class ParticipantListDatabaseTest {
 		int inputEndHour = 23;
 		int inputEndMinute = 0;
 		
-		Eventitem event = new Eventitem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
+		EventItem event = new EventItem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
 				inputStartHour, inputStartMinute, inputEndHour, inputEndMinute, inputDescription);
 		
 		return event;

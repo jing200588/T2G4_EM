@@ -3,7 +3,7 @@ package emserver;
 import java.util.Vector;
 
 import emdb.EMDBII;
-import event.Eventitem;
+import event.EventItem;
 
 public class BeanMain {
 
@@ -13,7 +13,7 @@ public class BeanMain {
 		
 		EMDBII db = new EMDBII();
 		
-		Vector<Eventitem> list = db.eventDB().getEventList();
+		Vector<EventItem> list = db.eventDB().getEventList();
 		int size = list.size();
 		
 		
@@ -31,7 +31,7 @@ public class BeanMain {
 		}
 		
 		for (int i=0; i<size; i++){
-			Eventitem ei = list.get(i);
+			EventItem ei = list.get(i);
 			result += "<li>";
 				result += "<span class=\"title\">"+ei.getName() +"</span>";
 				result += "<ul>";
@@ -71,7 +71,7 @@ public class BeanMain {
 		
 		EMDBII db = new EMDBII();
 		
-		Vector<Eventitem> list = db.eventDB().getArchiveEventList();
+		Vector<EventItem> list = db.eventDB().getArchiveEventList();
 		int size = list.size();
 		
 		
@@ -89,7 +89,7 @@ public class BeanMain {
 		}
 		
 		for (int i=0; i<size; i++){
-			Eventitem ei = list.get(i);
+			EventItem ei = list.get(i);
 			result += "<li>";
 				result += ei.getName();
 				result += "<ul>";

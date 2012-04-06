@@ -44,7 +44,7 @@ import au.com.bytecode.opencsv.CSVReader;
 public class ViewSmsAds extends Composite {
 	protected ErrorMessageDialog errordiag;
 
-	private Eventitem currentEvent;
+	private EventItem currentEvent;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
 	private Text txtToInputBox;
 	private Composite compSmsMain;
@@ -59,7 +59,7 @@ public class ViewSmsAds extends Composite {
 	 * @param style
 	 * @param input_ei
 	 */
-	public ViewSmsAds(Composite parent, int style, Eventitem input_ei) {
+	public ViewSmsAds(Composite parent, int style, EventItem input_ei) {
 		super(parent, style);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
