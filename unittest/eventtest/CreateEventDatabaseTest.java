@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
+import org.junit.After;
 import org.junit.Test;
 
 import event.*;
@@ -16,42 +17,32 @@ public class CreateEventDatabaseTest {
 	private Eventitem[] currentEvents;
 	private ModelEvent model;
 	private static final int TOTAL = 5;
-
+	
 	public CreateEventDatabaseTest() {
-		String inputName = "School Orientation Camp";
-		String inputDescription = "This is a orientation event for NUS students for the 2012/2013 intake.";
-		int inputStartYear = 2012;
-		int inputEndYear = 2012;
-		int inputStartMonth = 8;
-		int inputEndMonth = 8;
-		int inputStartDay = 1;
-		int inputEndDay = 7;
-		int inputStartHour = 10;
-		int inputStartMinute = 0;
-		int inputEndHour = 23;
-		int inputEndMinute = 0;
 		
-		currentEvent = new Eventitem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
-				inputStartHour, inputStartMinute, inputEndHour, inputEndMinute, inputDescription);
 		
 		currentEvents = new Eventitem[TOTAL];
 		
 		for (int i=0; i<TOTAL; i++) {
-			inputName = "School Orientation Camp " + i ;
-			inputDescription = "This is a orientation event for NUS students for the 2012/2013 intake. Test " + i;
-			inputStartDay = 1 + i;
-			inputEndDay = 7 + i;
-			inputStartHour = 10;
-			inputStartMinute = 0 + i;
-			inputEndHour = 23;
-			inputEndMinute = 0 + i;
+		String	inputName = "School Orientation Camp " + i ;
+		String	inputDescription = "This is a orientation event for NUS students for the 2012/2013 intake. Test " + i;
+		int	inputStartDay = 1 + i;
+		int	inputEndDay = 7 + i;
+		int	inputStartHour = 10;
+		int	inputStartMinute = 0 + i;
+		int	inputEndHour = 23;
+		int	inputEndMinute = 0 + i;
+		int inputStartYear = 2012;
+		int inputEndYear = 2012;
+		int inputStartMonth = 8;
+		int inputEndMonth = 8;
 			
 			currentEvents[i] =  new Eventitem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
 					inputStartHour, inputStartMinute, inputEndHour, inputEndMinute, inputDescription);
 		}
 		
-		//model = new ModelEvent();
-		model = new ModelEvent("unit.sqlite");
+		model = new ModelEvent();
+		//model = new ModelEvent("unit.sqlite");
 		}
 	
 	/**
@@ -59,7 +50,7 @@ public class CreateEventDatabaseTest {
 	 */
 	@Test
 	public void StoreNewEventDatabaseTest() {
-	
+		currentEvent = CreateCurrentEvent();
 		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());
 		
 		ModelEvent.CreateEvent(currentEvent);
@@ -86,7 +77,7 @@ public class CreateEventDatabaseTest {
 	 */
 	@Test
 	public void EditEventDatabaseTest() {
-		
+		currentEvent = CreateCurrentEvent();
 		ModelEvent.CreateEvent(currentEvent);
 		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());
 
@@ -122,6 +113,7 @@ public class CreateEventDatabaseTest {
 	 */
 	@Test
 	public void DeleteEventDatabaseTest() {
+		currentEvent = CreateCurrentEvent();
 		ModelEvent.CreateEvent(currentEvent);	//adds current event into database
 		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());	//retreives the list of events from database
 		currentEvent.setID(expectedEventList.get(expectedEventList.size()-1).getID());	//store the ID into current event
@@ -153,6 +145,7 @@ public class CreateEventDatabaseTest {
 	@Test
 	public void StoreNewExpiredEventDatabaseTest() {
 		
+		currentEvent = CreateCurrentEvent();
 		//Setting the date values to the past
 		currentEvent.setStartDate(2011, 12, 12);
 		currentEvent.setEndDate(2011, 12, 15);
@@ -282,7 +275,34 @@ public class CreateEventDatabaseTest {
 		
 	}	
 
-
+	/**
+	 * Description: This function will test the deletion of all the expired events in the expired list on the database. 
+	 */
+	@After
+	public void ZDestroyDatabase() {
+	
+		ModelEvent.DestroyDB();
+	}	
+	
+	public Eventitem CreateCurrentEvent() {
+		String inputName = "School Orientation Camp";
+		String inputDescription = "This is a orientation event for NUS students for the 2012/2013 intake.";
+		int inputStartYear = 2012;
+		int inputEndYear = 2012;
+		int inputStartMonth = 8;
+		int inputEndMonth = 8;
+		int inputStartDay = 1;
+		int inputEndDay = 7;
+		int inputStartHour = 10;
+		int inputStartMinute = 0;
+		int inputEndHour = 23;
+		int inputEndMinute = 0;
+		
+		Eventitem event = new Eventitem(inputName, inputStartYear, inputStartMonth, inputStartDay, inputEndYear, inputEndMonth, inputEndDay, 
+				inputStartHour, inputStartMinute, inputEndHour, inputEndMinute, inputDescription);
+		
+		return event;
+	}
 
 
 

@@ -2,7 +2,6 @@ package participant;
 
 import event.*;
 import dialog.*;
-import emdb.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,10 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
-/*
-import galang.research.jface.RowContentProvider;
-import galang.research.jface.RowLabelProvider;
-*/
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -21,8 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Table;
@@ -32,44 +25,39 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.ui.part.ViewPart;
-
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
-import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
-import au.com.bytecode.opencsv.bean.CsvToBean;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
 
 public class ViewParticipantList extends Composite {
-	public static String[] HEADERS = {"Name", "Matric No.", "Contact", "Email Address", "Home Address", "Remarks"};
-	private Eventitem cevent;
-	private Table table;
-	private Text txtimportfile;
-	private TableViewer tableViewer;
-	private Text txtexportfile;
+	private Eventitem currentEvent;
+	private Table tableParticipant;
+	private TableViewer tableParticipantViewer;
+	private Text txtImportFile;
+	private Text txtExportFile;
 	private Button btnDelete;
 	private int index = 0;
 	private static List<Participant> tempEntries;
-	private TableViewerColumn[] tvc= new TableViewerColumn[6];
+
+	private static final String[] HEADERS = {"Name", "Matric No.", "Contact", "Email Address", "Home Address", "Remarks"};
+	private static final int TOTAL = 6;
 	
 	/**
-	 * Create the composite.
+	 * Description: Create the composite.
 	 * @param parent
 	 * @param style
 	 */
 	public ViewParticipantList(Composite parent, int style, Eventitem curevent) {
 		super(parent, style);
 		setLayout(new FormLayout());
-		cevent = curevent;
+		currentEvent = curevent;
 		tempEntries = new Vector<Participant>();
 		
 		//Event Particulars label
@@ -98,16 +86,17 @@ public class ViewParticipantList extends Composite {
 		TableViewerComp.setLayout(tcl_TableViewerComp);
 		TableViewerComp.setLayoutData(new FormData());
 
-		tableViewer = new TableViewer(TableViewerComp, SWT.BORDER | SWT.FULL_SELECTION);
-		table = tableViewer.getTable();
+		tableParticipantViewer = new TableViewer(TableViewerComp, SWT.BORDER | SWT.FULL_SELECTION);
+		tableParticipant = tableParticipantViewer.getTable();
+		TableViewerColumn[] tvc= new TableViewerColumn[TOTAL];
 		
 		//clone the list
-		for (int i=0; i<cevent.getParticipantList().size(); i++)
-			tempEntries.add(cevent.getParticipantList().get(i));
+		for (int i=0; i<currentEvent.getParticipantList().size(); i++)
+			tempEntries.add(currentEvent.getParticipantList().get(i));
 		
 		//setting the column headers
 		for (int i=0; i<tvc.length; i++) {
-			tvc[i] = new TableViewerColumn (tableViewer, SWT.NONE);
+			tvc[i] = new TableViewerColumn (tableParticipantViewer, SWT.NONE);
 			tvc[i].getColumn().setText(HEADERS[i]);
 		}
 		
@@ -119,7 +108,7 @@ public class ViewParticipantList extends Composite {
 		tcl_TableViewerComp.setColumnData(tvc[4].getColumn(), new ColumnWeightData(30));
 		tcl_TableViewerComp.setColumnData(tvc[5].getColumn(), new ColumnWeightData(10));
 		
-		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+		tableParticipantViewer.setContentProvider(ArrayContentProvider.getInstance());
 		for (int i=0; i<HEADERS.length; i++) {
 			tvc[i].setLabelProvider(new ColumnLabelProvider() {
 				public String getText(Object element)
@@ -153,20 +142,20 @@ public class ViewParticipantList extends Composite {
 			});
 			}
 
-			tableViewer.setInput(tempEntries);
+			tableParticipantViewer.setInput(tempEntries);
 			tvc[1].getColumn().pack();
 			tvc[2].getColumn().pack();
 			
 			CellEditor[] editors = new CellEditor[HEADERS.length];
 			//set headers for the table. set cell editors for each column.
 			for (int i=0; i<HEADERS.length; i++) 	
-				editors[i] = new TextCellEditor(table);
+				editors[i] = new TextCellEditor(tableParticipant);
 	
-			tableViewer.setColumnProperties(HEADERS);
-			tableViewer.setCellModifier(new ParticipantListCellModifier(tableViewer));
-			tableViewer.setCellEditors(editors);
+			tableParticipantViewer.setColumnProperties(HEADERS);
+			tableParticipantViewer.setCellModifier(new ParticipantListCellModifier(tableParticipantViewer));
+			tableParticipantViewer.setCellEditors(editors);
 		
-		table.addSelectionListener(new SelectionAdapter() {
+		tableParticipant.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				btnDelete.setEnabled(true);
@@ -178,7 +167,7 @@ public class ViewParticipantList extends Composite {
 		fd_TableViewerComp.bottom = new FormAttachment(75, -8);
 		fd_TableViewerComp.right = new FormAttachment(85);
 		TableViewerComp.setLayoutData(fd_TableViewerComp);
-		table.setHeaderVisible(true);
+		tableParticipant.setHeaderVisible(true);
 		
 		//Bottom composite
 		Composite compositebottom = new Composite(composite, SWT.NONE);
@@ -194,9 +183,9 @@ public class ViewParticipantList extends Composite {
 		lblInputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblInputFile.setText("Input File:");
 		
-		txtimportfile = new Text(compositebottom, SWT.BORDER);
-		txtimportfile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtimportfile.setText("/temp/myfile.csv");
+		txtImportFile = new Text(compositebottom, SWT.BORDER);
+		txtImportFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtImportFile.setText("/temp/myfile.csv");
 
 		/************************************************************
 		 * 
@@ -216,7 +205,7 @@ public class ViewParticipantList extends Composite {
 				
 				String input = fsd.open();
 				if (input != null)
-					txtimportfile.setText(input);
+					txtImportFile.setText(input);
 			}
 		});
 		btnInputBrowse.setText("Browse");
@@ -234,25 +223,25 @@ public class ViewParticipantList extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
-					if (!txtimportfile.getText().endsWith(".csv"))
+					if (!txtImportFile.getText().endsWith(".csv"))
 						throw new Exception("Import file must be in .csv format");
 					
-					if (table.getItemCount() != 0) {
+					if (tableParticipant.getItemCount() != 0) {
 						DeleteConfirmDialog dialog = new DeleteConfirmDialog(new Shell(), "confirm",
 								"Importing a new file will replace the current table. Do you want to continue?");
 						if ((Integer) dialog.open() == 1) {
 							//Clears the tables b4 import.
-							ImportCSV(txtimportfile.getText());
-							table.setRedraw(false);
-							table.removeAll();
-							table.setRedraw(true);
+							ImportCSV(txtImportFile.getText());
+							tableParticipant.setRedraw(false);
+							tableParticipant.removeAll();
+							tableParticipant.setRedraw(true);
 						}
 					}
 					
 					else {
-						ImportCSV(txtimportfile.getText());
+						ImportCSV(txtImportFile.getText());
 					}
-					tableViewer.refresh();
+					tableParticipantViewer.refresh();
 
 				} catch (FileNotFoundException exception) {
 					System.out.println("File not found.");
@@ -275,9 +264,9 @@ public class ViewParticipantList extends Composite {
 		lblOutputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblOutputFile.setText("Output File:");
 		
-		txtexportfile = new Text(compositebottom, SWT.BORDER);
-		txtexportfile.setMessage("/temp/myfile.csv");
-		txtexportfile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtExportFile = new Text(compositebottom, SWT.BORDER);
+		txtExportFile.setMessage("/temp/myfile.csv");
+		txtExportFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		/************************************************************
 		 * 
@@ -299,7 +288,7 @@ public class ViewParticipantList extends Composite {
 				if (input != null) {
 					if (!input.toLowerCase().endsWith(".csv"))
 						input+= ".csv";
-					txtexportfile.setText(input);
+					txtExportFile.setText(input);
 				}
 			}
 			
@@ -318,7 +307,7 @@ public class ViewParticipantList extends Composite {
 		btnExportFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ExportCSV(txtexportfile.getText());
+				ExportCSV(txtExportFile.getText());
 			}
 		});
 		btnExportFile.setText("Export File");
@@ -345,7 +334,7 @@ public class ViewParticipantList extends Composite {
 				
 				AddParticipantDialog Participant = new AddParticipantDialog(new Shell());
 				Participant.open();
-				tableViewer.refresh();
+				tableParticipantViewer.refresh();
 			
 			}
 		});
@@ -358,8 +347,8 @@ public class ViewParticipantList extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//Delete row
-				int currentindex = table.getSelectionIndex();
-				table.remove(currentindex);	
+				int currentindex = tableParticipant.getSelectionIndex();
+				tableParticipant.remove(currentindex);	
 				tempEntries.remove(currentindex);	
 			}
 		});
@@ -371,7 +360,7 @@ public class ViewParticipantList extends Composite {
 		btnGoBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ModelParticipantList.PullParticipantList(cevent);
+				ModelParticipantList.PullParticipantList(currentEvent);
 				ViewMain.ReturnView();
 			}
 		});
@@ -399,8 +388,8 @@ public class ViewParticipantList extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//save list into DB and event item
-				cevent.setParticipantList(tempEntries);
-				ModelParticipantList.UpdateDB(cevent);
+				currentEvent.setParticipantList(tempEntries);
+				ModelParticipantList.UpdateDB(currentEvent);
 			}
 		});
 		btnSaveList.setText("Save List");
@@ -411,24 +400,23 @@ public class ViewParticipantList extends Composite {
 public void ExportCSV (String filepath) {
 	try {
 		CSVWriter writer = new CSVWriter(new FileWriter(filepath));
-		String[] headers = new String[table.getColumnCount()];
-		for (int i=0; i<table.getColumnCount(); i++) {
-			headers[i] = table.getColumns()[i].getText();
+		String[] headers = new String[tableParticipant.getColumnCount()];
+		for (int i=0; i<tableParticipant.getColumnCount(); i++) {
+			headers[i] = tableParticipant.getColumns()[i].getText();
 		}
 		
 		writer.writeNext(headers);
 		
-		for (int i=0; i<table.getItemCount(); i++) {
-			String[] entries = new String[table.getColumnCount()];
-			for (int j=0; j<table.getColumnCount(); j++) 
-				entries[j] = table.getItem(i).getText(j);
+		for (int i=0; i<tableParticipant.getItemCount(); i++) {
+			String[] entries = new String[tableParticipant.getColumnCount()];
+			for (int j=0; j<tableParticipant.getColumnCount(); j++) 
+				entries[j] = tableParticipant.getItem(i).getText(j);
 			writer.writeNext(entries);
 		}
 		writer.close();
 		new ErrorMessageDialog(new Shell(), "The file was exported successfully!", "Success!").open();
 		         		
 	} catch (Exception e) {
-		// TODO Auto-generated catch block
 		System.out.println("Error exporting");
 		new ErrorMessageDialog(new Shell(), "There was an error exporting the file.").open();
 		e.printStackTrace();
@@ -449,15 +437,18 @@ public void ImportCSV (String filepath) throws Exception {
 			tempEntries.add(new Participant(entries.get(i)[0], entries.get(i)[1], entries.get(i)[2], entries.get(i)[3], entries.get(i)[4], entries.get(i)[5]));
 		}		
 	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
 		throw e;
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
+
 		System.out.println(e);
 		e.printStackTrace();
 	}
 
 }
+	/**
+	 * Description: Adds a new participant object into the local list of participants.
+	 * @param newparticipant
+	 */
 	public static void addParticipant(Participant newparticipant) {
 		tempEntries.add(newparticipant);
 	}

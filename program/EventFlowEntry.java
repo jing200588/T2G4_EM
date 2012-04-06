@@ -218,33 +218,4 @@ public class EventFlowEntry implements Comparable<EventFlowEntry> {
 		
 		return 0;
 	}
-	
-	/* For testing purpose */
-	public static void main(String[] args)
-	{
-		EventFlowEntry obj = new EventFlowEntry(new TimeSlot(new MyDateTime(2012, 3, 16, 7, 21),
-														 	 new MyDateTime(2012, 3, 16, 10, 35)),
-												"Fundraising", "SoC", 15, "THis is for testing!");
-		EventFlowEntry obj2 = new EventFlowEntry(new TimeSlot(new MyDateTime(2012, 6, 25, 17, 39),
-															 new MyDateTime(2012, 6, 25, 19, 35)),
-												"Farewell Party", "NUS", 21, "THis is for fun!");
-		System.out.print(obj.getStringRepresentation());
-		String input = obj.getStringRepresentation() + obj2.getStringRepresentation();
-		Vector<EventFlowEntry> myList = EventFlowEntry.constructEventFlowEntryList(input);
-		for(int index = 0; index < myList.size(); index++)
-			System.out.print(myList.get(index).getStringRepresentation());
-		
-		System.out.println("Test getStringRepresentation from a Vector");
-		String newString = getStringRepresentation(myList);
-		System.out.print(newString);
-		
-		myList = new Vector<EventFlowEntry>();
-		newString = EventFlowEntry.getStringRepresentation(myList);
-		if(newString.equals(""))
-			System.out.println("Empty string");
-		else
-			System.out.println(newString);
-	}
-
-
 }

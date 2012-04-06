@@ -15,7 +15,7 @@ public class Venue {
 	/***********************************************************************
 	 * Class member variables
 	 ***********************************************************************/
-	
+
 	private String m_name;
 	private String m_address;
 	private String m_description;
@@ -23,19 +23,19 @@ public class Venue {
 	private int m_cost;
 	private int m_venueID;					// Its value will be assigned by database
 	private Vector<TimeSlot> m_bookedTimeSlots; 	
-	
+
 	/************************************************************************
 	 * Constructor
 	 ************************************************************************/
-	
+
 	/**
 	 * Default Constructor:
 	 */
 	public Venue(){
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Constructor: Creates a Venue object with parameters name, address, description, maximum capacity
 	 * and cost.
@@ -47,7 +47,7 @@ public class Venue {
 	 * @param cost - int
 	 */
 	public Venue(String name, String address, String description,
-					int maxCapacity, int cost)
+			int maxCapacity, int cost)
 	{
 		m_name = name;
 		m_address = address;
@@ -56,11 +56,11 @@ public class Venue {
 		m_cost = cost;
 		m_bookedTimeSlots = new Vector<TimeSlot>();
 	}
-	
+
 	/************************************************************************
 	 * Methods that support extracting information
 	 ***********************************************************************/
-	
+
 	/**
 	 * 
 	 * @return m_name - String
@@ -69,7 +69,7 @@ public class Venue {
 	{
 		return m_name;
 	}
-	
+
 	/**
 	 * 
 	 * @return m_address - String
@@ -78,7 +78,7 @@ public class Venue {
 	{
 		return m_address;
 	}
-	
+
 	/**
 	 * 
 	 * @return m_description - String
@@ -87,7 +87,7 @@ public class Venue {
 	{
 		return m_description;
 	}
-	
+
 	/**
 	 * 
 	 * @return m_maxCapacity - int
@@ -96,7 +96,7 @@ public class Venue {
 	{
 		return m_maxCapacity;
 	}
-	
+
 	/**
 	 * Returns the cost of a venue (in cents).
 	 * 
@@ -106,7 +106,7 @@ public class Venue {
 	{
 		return m_cost;
 	}
-	
+
 	/**
 	 * 
 	 * @return m_venueID - int
@@ -115,20 +115,20 @@ public class Venue {
 	{
 		return m_venueID;
 	}
-	
+
 	/**
 	 * Returns a list of pieces of venue information. All pieces are of type String.	
 	 */
 	public String getAllVenueInformation()
 	{
 		StringBuffer strBuff = new StringBuffer();
-		
+
 		strBuff.append("Name: ").append(m_name).append("\n");
 		strBuff.append("Address: ").append(m_address).append("\n");
 		strBuff.append("Description: ").append(m_description).append("\n");
 		strBuff.append("Maximum Capacity: ").append(m_maxCapacity).append("\n");
 		strBuff.append("Price: ").append(m_cost / 100.0).append("\n\n");
-		
+
 		if(m_bookedTimeSlots.isEmpty() == true)
 			strBuff.append("This venue has no history of booked time slots.\n");
 		else
@@ -145,14 +145,14 @@ public class Venue {
 				strBuff.append("\n\n");
 			}
 		}
-		
+
 		return strBuff.toString();
- 	}
-	
+	}
+
 	/*************************************************************************
 	 * Methods that support updating information
 	 *************************************************************************/
-	
+
 	/**
 	 * 
 	 * @param newName - String
@@ -161,7 +161,7 @@ public class Venue {
 	{
 		m_name = newName;
 	}
-	
+
 	/**
 	 * 
 	 * @param newAddress - String
@@ -170,7 +170,7 @@ public class Venue {
 	{
 		m_address = newAddress;
 	}
-	
+
 	/**
 	 * 
 	 * @param newDescription - String
@@ -179,7 +179,7 @@ public class Venue {
 	{
 		m_description = newDescription;
 	}
-	
+
 	/**
 	 * 
 	 * @param newMaxCapacity - int
@@ -188,7 +188,7 @@ public class Venue {
 	{
 		m_maxCapacity = newMaxCapacity;
 	}
-	
+
 	/**
 	 * 
 	 * @param newCost - int
@@ -197,7 +197,7 @@ public class Venue {
 	{
 		m_cost = newCost;
 	}
-	
+
 	/**
 	 * 
 	 * @param id - int
@@ -206,7 +206,7 @@ public class Venue {
 	{
 		m_venueID = id;
 	}
-	
+
 	/**
 	 * Adds a TimeSlot object into a list of booked time slots. 
 	 * It is assumed the new object has no clash with other data in the list of booked time slots.
@@ -218,7 +218,7 @@ public class Venue {
 	{
 		m_bookedTimeSlots.add(wantedTimeSlot);
 	}
-	
+
 	/**
 	 * 
 	 * @param wantedTimeSlots - Vector<TimeSlot>
@@ -226,9 +226,9 @@ public class Venue {
 	public void bookTimeSlotBlock(Vector<TimeSlot>  wantedTimeSlots){
 		m_bookedTimeSlots = wantedTimeSlots;	
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Removes a TimeSlot object from a list of booked time slots.
 	 * Time complexity: O(N) (Currently, the list of booked time slots is unsorted)
@@ -239,7 +239,7 @@ public class Venue {
 	{
 		m_bookedTimeSlots.remove(deletedTimeSlot);
 	}
-	
+
 	/**
 	 * Checks if this venue is available at the input time slot. 
 	 * The method goes through the whole list of booked time slots and checks if there is any clash with 
@@ -254,18 +254,12 @@ public class Venue {
 	{
 		for(int i = 0; i < m_bookedTimeSlots.size(); i++)
 		{
-			/* For debugging 
-			System.out.println("Time Slot " + i);
-			System.out.println(m_bookedTimeSlots.get(i).getStartDateTime());
-			System.out.println(m_bookedTimeSlots.get(i).getEndDateTime());
-			*/
 			if(m_bookedTimeSlots.get(i).isOverlapping(wantedTimeSlot) == true)
 			{
-				// For debugging: System.out.println("Clash!");
 				return false;
 			}
 		}
 		return true;
 	}
-	 
+
 }
