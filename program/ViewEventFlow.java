@@ -89,6 +89,7 @@ public class ViewEventFlow extends Composite {
 		
 		// Initialize some variables 
 		eventObj = event;
+		// Note that listEventFlow and eventObj.eventFlow are different lists
 		listEventFlow = eventObj.getEventFlow();
 		isEntireListShowed = true;
 		
@@ -257,9 +258,17 @@ public class ViewEventFlow extends Composite {
 		btnBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				// Ask user whether you want to save data or not
+				TwoChoiceDialog saveDialog = new TwoChoiceDialog(new Shell(), "Message", 
+						"Do you want to save your table of event flow entries?", "Yes", "No");
+				String choice = (String) saveDialog.open();
+				
 				// Update the event flow in the database as well as in the event itself
-				ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
-				eventObj.setEventFlow(listEventFlow);
+				if(choice.equals("Yes") == true)
+				{
+					ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
+					eventObj.setEventFlow(listEventFlow);
+				}
 				
 				// Return to the main GUI
 				ViewMain.ReturnView();
@@ -482,6 +491,7 @@ public class ViewEventFlow extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				// Update in the database
 				ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
+				eventObj.setEventFlow(listEventFlow);
 				
 				showSaveStatus();
 			}

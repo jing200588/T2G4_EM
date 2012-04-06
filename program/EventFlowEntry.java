@@ -8,6 +8,7 @@ import java.util.Vector;
 /**
  * The instance of this class represents an activity in an event. It consists of start and end date time (time slot),
  * 		name of the activity, the venue, and user's notes. 
+ * This object is mutable.
  */
 
 /**
@@ -43,6 +44,20 @@ public class EventFlowEntry implements Comparable<EventFlowEntry> {
 		m_userNote = note;
 	}
 
+	/**
+	 * Copy Constructor:
+	 * 
+	 * @param anotherObj - EventFlowEntry
+	 */
+	public EventFlowEntry(EventFlowEntry anotherObj)
+	{
+		m_duration = anotherObj.getDuration();
+		m_activityName = anotherObj.getActivityName();
+		m_venueName = anotherObj.getVenueName();
+		m_venueID = anotherObj.getVenueID();
+		m_userNote = anotherObj.getUserNote();
+	}
+	
 	/****************************************************************************************************
 	 * Group of methods that retrives information.
 	 ***************************************************************************************************/
