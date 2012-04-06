@@ -14,7 +14,16 @@ public class ModelBookingSystem {
 
 	}
 	
+	// Constructor for testing
+	public ModelBookingSystem(String dbName) {
+		db = new EMDBII(dbName);
+	}
 	
+	// Delete database (for testing)
+	public void deleteDatabase()
+	{
+		db.destroy(true);
+	}
 	
 	/**
 	 * Description: Gets a list of available venues within the cost range. (includes booked timeslots)
