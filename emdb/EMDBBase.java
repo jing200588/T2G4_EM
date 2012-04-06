@@ -144,6 +144,7 @@ public class EMDBBase{
 	 */
 	public void disconnect(){
 		try {
+			this.dbQuery.close();
 			this.dbCon.close();
 			
 		} catch (SQLException e) {}
