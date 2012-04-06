@@ -23,6 +23,11 @@ public class ModelBudget {
 	public ModelBudget() {
 		db = new EMDBII();
 	}
+	
+	public ModelBudget(String tempDatabase) {
+		db = new EMDBII(tempDatabase);
+		//db.init();
+	}
 
 	/**
 	 * Description: Saving non-optimized list to database.

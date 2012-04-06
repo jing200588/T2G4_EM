@@ -564,6 +564,49 @@ public class ControllerBudget {
 
 		currentEvent.setItemList(bm.getOptimizeItemList(currentEvent.getID()));
 	}
+	
+	/**
+	 * Description: Send the confirm combination list to temp database.
+	 * @param select
+	 */
+
+	public void saveOptimizeOptionTest(int select) {
+		Vector<Item> databaseList = new Vector<Item>();//store the list to be send to database
+
+		if(typeOfResult == 1) { //take all item. Budget is enough to buy everything.
+			for(int i=0; i<itemList.size(); i++) {
+				databaseList.add(itemList.get(i));
+			}
+		}
+		else if (typeOfResult == 2) {//Budget is only enough to buy compulsory item. Take compulsory list*
+			for(int i=0; i<compulsoryList.size(); i++) {
+				databaseList.add(compulsoryList.get(i));
+			}
+		}
+		else if (typeOfResult == 3) { //There is solution set
+
+			//If there is compulsory list we will add them first.
+			for(int i=0; i<compulsoryList.size(); i++) {
+				databaseList.add(compulsoryList.get(i));
+			}
+
+			if(hasEmptySet == true)
+				select++;
+
+			BitSet bitmask = soln.getSolnSet().get(select);
+			for(int i=0; i<number; i++) {
+				if(bitmask.get(i)) {
+					databaseList.add(computeList.get(i));
+				}
+			}
+		}
+		
+		
+		ModelBudget mb = new ModelBudget("unit.sqlite");
+		mb.saveOptimizedList(currentEvent.getID(), databaseList);
+
+		currentEvent.setItemList(mb.getOptimizeItemList(currentEvent.getID()));
+	}
 
 	/**
 	 * Description: Remove a single item that was deleted by the user from database.
