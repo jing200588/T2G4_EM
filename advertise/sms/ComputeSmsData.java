@@ -120,12 +120,12 @@ public class ComputeSmsData {
 
 	}
 
-
-	// ******************************
-	// set text message (from extern)
-	// ******************************
-	public void setAsciiTxt(String s) {
-		txtToSmsPdu(s);
+	/**
+	 * Desription: Set text message (from extern)
+	 * @param s
+	 */
+	public void setAsciiTxt(String msg) {
+		txtToSmsPdu(msg);
 	}
 
 
@@ -178,20 +178,20 @@ public class ComputeSmsData {
 		return numLen;
 	}
 
-	// **********************************
-	// set telephone number (from extern)
-	// **********************************
 	// WARNING: telephone number must be in international format
 	// with or without leading '+'
-	public void setTelNum(String s) {
-		telNum    = encodeTelNum(s);
-		telNumLen = encodeTelNumLen(s);
+	/**
+	 * Description: Set telephone number (from extern)
+	 * @param hpNum
+	 */
+	public void setTelNum(String hpNum) {
+		telNum    = encodeTelNum(hpNum);
+		telNumLen = encodeTelNumLen(hpNum);
 	}
-	/*
-    public void setSMSCTelNum(String s) {
-        telNumSMSC = encodeTelNum(s);
-        telNumSMSCLen = encodeTelNumLen(s);
-    }
+
+	/**
+	 * Description: Intialize all the required field for sending sms and return the result.
+	 * @return
 	 */
 	public String getCompletePduData () {
 		String pduData = new String();
@@ -271,6 +271,12 @@ public class ComputeSmsData {
 	 */
 
 	/*
+
+    public void setSMSCTelNum(String s) {
+        telNumSMSC = encodeTelNum(s);
+        telNumSMSCLen = encodeTelNumLen(s);
+    }
+
     public String getSMSCPduData () {
         String pduData = new String();
         pduData = telNumSMSCLen;           // tel # length

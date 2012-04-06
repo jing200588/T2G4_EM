@@ -182,7 +182,11 @@ public class LoginEmailDialog extends Dialog {
 					*/
 					if(loginSuccessful == true) {
 						shellMain.close();
+<<<<<<< HEAD
 						ViewMain.EmailAds(username, domain, password);//need to store the sesson somewhere anot? If yes I am not sure how you do it actually. 
+=======
+						ViewMain.EmailAds(currentEvent, username, domain, password); 
+>>>>>>> 6200ffcb3693cf410bdcdfe2e2fb9b80d095e9ec
 					}
 					else {
 						throw new Exception("Incorrect Username/Password.");

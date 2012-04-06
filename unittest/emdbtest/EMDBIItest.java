@@ -5,12 +5,15 @@ import static org.junit.Assert.*;
 import java.util.Vector;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import program.EventFlowEntry;
 
 import budget.Item;
+import venue.TimeSlot;
 import venue.Venue;
 import emdb.EMDBII;
 import emdb.EMDBSettings;
@@ -20,7 +23,7 @@ import event.Eventitem;
 public class EMDBIITest {
 	
 	
-	private EMDBII 				db	= new EMDBII("unit.sqlite", true); 				
+	private static EMDBII 		db 				= new EMDBII("unit.sqlite", true); 			
 	
 	private Eventitem			event;
 	private Vector<Eventitem>	eventList		=	new Vector<Eventitem>();
@@ -87,39 +90,49 @@ public class EMDBIITest {
 	
 	
 	
-	@Before
-	public void aSetVerifyDatabase() throws Exception{
+	@BeforeClass
+	public static void oneTimeSetUp(){
 	
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SET AND VERIFY DB");
 		
-		this.db.eventDB().setup();
-		assertTrue(this.db.eventDB().verify());
+		db.eventDB().setup();
+		assertTrue(db.eventDB().verify());
 		
-		this.db.venueDB().setup();
-		assertTrue(this.db.venueDB().verify());
+		db.venueDB().setup();
+		assertTrue(db.venueDB().verify());
 		
-		this.db.budgetDB().setup();
-		assertTrue(this.db.budgetDB().verify());
+		db.budgetDB().setup();
+		assertTrue(db.budgetDB().verify());
 		
-		this.db.participantDB().setup();
-		assertTrue(this.db.participantDB().verify());
+		db.participantDB().setup();
+		assertTrue(db.participantDB().verify());
 		
 	}
 	
 	
+
 	
-	@After
-	public void aDeleteDB(){
+	
+	@AfterClass
+	public static void oneTimeTearDown(){
 		
 		EMDBSettings.dMsg("\n<EMDB TEST> DESTROY DATABASE FILE\n");
 		
-		assertTrue(this.db.destroy(false));
+		assertTrue(db.destroy(false));
 	} 
 	
 	
 	
 	
+	@After
+	public void tearDown(){
+		db.eventDB().truncate();
+		db.venueDB().truncate();
+		db.budgetDB().truncate();
+		db.participantDB().truncate();
+	}
 	
+
 	
 	
 	
@@ -141,13 +154,13 @@ public class EMDBIITest {
 	
 	
 	@Test
-	public void bAddAndRetrieveEvent() throws Exception {
+	public void addAndRetrieveEvent() throws Exception {
 		
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SAVE AND RETRIEVE EVENT");
 		
 		Eventitem itemResult	=	null;
 		
-		int eventID = this.db.eventDB().addEvent(
+		int eventID = db.eventDB().addEvent(
 				this.event.getName(), 
 				this.event.getDescription(), 
 				this.event.getBudget(), 
@@ -160,7 +173,7 @@ public class EMDBIITest {
 		
 		assertTrue(	(eventID > 0) );
 		
-		itemResult = this.db.eventDB().getEvent(eventID);
+		itemResult = db.eventDB().getEvent(eventID);
 		
 		assertEquals(
 				this.event.getName(), 
@@ -206,17 +219,17 @@ public class EMDBIITest {
 	
 	
 	@Test
-	public void bAddVenue(){
+	public void addVenue(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> ADD VENUE FROM LOCAL LIST OF SIZE " + venueList.size());
 
-		int oldDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		int oldDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
 		EMDBSettings.dMsg("<EMDB TEST> OLD DB VENUE SIZE " + oldDbVenueSize);
 		
 		for (int i=0; i<5; i++){
-			this.db.venueDB().addVenue(this.venueList.get(i));
+			db.venueDB().addVenue(this.venueList.get(i));
 		}
 		
-		int newDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		int newDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
 		EMDBSettings.dMsg("<EMDB TEST> NEW DB VENUE SIZE " + newDbVenueSize);
 		
 		
@@ -225,11 +238,44 @@ public class EMDBIITest {
 	}
 	
 	
+	@Test
+	public void addBooking(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> ADD BOOKING");
+		
+		int id = db.venueDB().addBooking(1, 1, "10/05/2012/15/00", "11/05/2012/16/00");
+		TimeSlot temp = db.venueDB().getBooking(id);
+
+		assertEquals("10/05/2012/15/00", temp.getStartDateTime().getDateTimeRepresentation());
+		assertEquals("11/05/2012/16/00", temp.getEndDateTime().getDateTimeRepresentation());
+	}
 	
 	
-	
-	
-	
+	@Test
+	public void addBudget(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> ADD BUDGET");
+
+		db.budgetDB().addBudget(9, "Test", 3000, 21, "Noth", 2);
+		db.budgetDB().addBudget(8, "Test1", 3000, 21, "Noth", 2);
+		db.budgetDB().addBudgetOptimized(6, "Test", 3000, 21, "Noth", 2);
+		
+		Vector<Item> list = new Vector<Item>();
+		list.add(new Item("Item1", 10.0, 1, "smth"));
+		list.add(new Item("Item2", 10.0, 1, "smth"));
+		list.add(new Item("Item3", 10.0, 1, "smth"));
+		list.add(new Item("Item4", 10.0, 1, "smth"));
+		
+		
+		//db.budgetDB().addBudgetList(list, 9);
+		//db.budgetDB().addBudgetListOptimized(list, 7);
+		
+		//assertEquals(5,db.budgetDB().getBudgetList(9).size());
+		assertEquals(1,db.budgetDB().getBudgetList(8).size());
+		//assertEquals(4,db.budgetDB().getBudgetListOptimized(7).size());
+		assertEquals(1,db.budgetDB().getBudgetListOptimized(6).size());
+		
+		
+
+	}
 	
 	
 	
@@ -263,21 +309,21 @@ public class EMDBIITest {
 
 	
 	@Test
-	public void cUpdateEvent(){
+	public void updateEvent(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> UPDATE EVENT");
 		
 		
 		Eventitem eEvent = this.eventList.get(3);
 		
-		int id = this.db.eventDB().addEvent(eEvent);
+		int id = db.eventDB().addEvent(eEvent);
 
 		eEvent.setID(id);
 		eEvent.setName("Getting a new name");
 		
 		
-		this.db.eventDB().updateEvent(eEvent);
+		db.eventDB().updateEvent(eEvent);
 		
-		Eventitem nEvent = this.db.eventDB().getEvent(id);
+		Eventitem nEvent = db.eventDB().getEvent(id);
 		
 		assertEquals(
 				eEvent.getName(), 
@@ -324,6 +370,19 @@ public class EMDBIITest {
 	
 	
 	
+	public void addAndRetrievePartipicant(){
+		
+	}
+	
+	
+	
+	
+	
+	
+	public void addAndRetrieveBudget(){
+		
+	}
+	
 	
 	
 	
@@ -348,52 +407,63 @@ public class EMDBIITest {
 	
 
 	@Test
-	public void dDeleteVenue(){
+	public void deleteVenue(){
 
 		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE VENUE");
 		
-		int id = this.db.venueDB().addVenue(this.venueList.get(0));
+		int id = db.venueDB().addVenue(this.venueList.get(0));
 	
-		int oldDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		int oldDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
 		EMDBSettings.dMsg("<EMDB TEST> OLD DB VENUE SIZE " + oldDbVenueSize);
 		
-		this.db.venueDB().deleteVenue(id);
+		db.venueDB().deleteVenue(id);
 		
-		int newDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		int newDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
 		EMDBSettings.dMsg("<EMDB TEST> NEW DB VENUE SIZE " + newDbVenueSize);
 		
 		assertEquals( 1, Math.abs(newDbVenueSize-oldDbVenueSize) );
 		
 		
-		Venue test = this.db.venueDB().getVenue(id);
+		Venue test = db.venueDB().getVenue(id);
 		assertTrue( test.getName() == null || test.getName().isEmpty() );
-		
-		
+
 	}
 	
 	
 	
 	@Test
-	public void dDeleteEventNone(){
+	public void deleteEventNone(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE NON-EXISTANT EVENT");
 		
-		assertEquals(0, this.db.eventDB().deleteEvent(0));
+		assertEquals(0, db.eventDB().deleteEvent(0));
 	}
 	
 	
 	@Test
-	public void dDeleteVenueNone(){
+	public void deleteVenueNone(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE NON-EXISTANT VENUE");
 		
-		assertEquals(0,this.db.venueDB().deleteVenue(0));
+		assertEquals(0,db.venueDB().deleteVenue(0));
 	}
 	
 	
 	
+	@Test
+	public void deleteBookingNone(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE NON-EXISTANT BOOKING");
+		
+		assertEquals(0,db.venueDB().deleteBooking(0));
+		assertEquals(0,db.venueDB().deleteBookingAll(0));
+	}
 	
 	
-	
-	
+	@Test
+	public void deleteBudgetNone(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE NON-EXISTANT BUDGETS");
+			
+		assertEquals(0,db.budgetDB().deleteBudget(0));	
+		assertEquals(0,db.budgetDB().deleteBudgetList(0));
+	}
 	
 	
 	
@@ -411,26 +481,25 @@ public class EMDBIITest {
 	 * *******************************
 	 */
 	
-	
+	/*
 	@Test
-	public void yDeleteTables(){
+	public void deleteTables(){
 		EMDBSettings.dMsg("<EMDB TEST> DELETE / DROP TABLES");
 		
-		this.db.eventDB().drop();
-		assertFalse(this.db.eventDB().verify());
+		db.eventDB().drop();
+		assertFalse(db.eventDB().verify());
 
-		this.db.venueDB().drop();
-		assertFalse(this.db.venueDB().verify());
+		db.venueDB().drop();
+		assertFalse(db.venueDB().verify());
 		
-		this.db.budgetDB().drop();
-		assertFalse(this.db.budgetDB().verify());
+		db.budgetDB().drop();
+		assertFalse(db.budgetDB().verify());
 		
-		this.db.participantDB().drop();
-		assertFalse(this.db.participantDB().verify());
+		db.participantDB().drop();
+		assertFalse(db.participantDB().verify());
 		
 	}
-	
-	
+	*/
 
 	
 

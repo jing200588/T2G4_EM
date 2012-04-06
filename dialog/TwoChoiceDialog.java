@@ -27,6 +27,7 @@ public class TwoChoiceDialog extends Dialog {
 	private FormData fd_btnOne;
 	private FormData fd_btnTwo;
 	private Label messageBox;
+	private Label warningSign;
 	
 	/**
 	 * Description: Create the dialog.
@@ -79,6 +80,13 @@ public class TwoChoiceDialog extends Dialog {
 		messageBox.setLayoutData(fd_Prompt);
 		messageBox.setText(m_message);		
 		
+		//warning sign label
+		warningSign = new Label(composite, SWT.NONE);
+		warningSign.setImage(Display.getDefault().getSystemImage(SWT.ICON_WARNING));
+		FormData fd_warningsign = new FormData();
+		fd_warningsign.top = new FormAttachment(25, 0);
+		fd_warningsign.right = new FormAttachment(messageBox, -6);
+		warningSign.setLayoutData(fd_warningsign);
 		/************************************************************
 		 * FIRST BUTTON arrangement
 		 ***********************************************************/
@@ -114,6 +122,8 @@ public class TwoChoiceDialog extends Dialog {
 		fd_btnTwo.top = new FormAttachment(messageBox, 50);
 		btnTwo.setLayoutData(fd_btnTwo);
 		btnTwo.setText(m_btnTwoText);
+		btnTwo.pack();
+		btnOne.pack();
 
 	}
 }

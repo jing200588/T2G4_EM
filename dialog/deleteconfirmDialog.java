@@ -11,6 +11,8 @@ import org.eclipse.swt.events.SelectionEvent;
 
 public class DeleteConfirmDialog extends ErrorMessageDialog {
 	public final static String STATE_TYPE = "delconfirm";
+	private String m_btnOneText;
+	private String m_btnTwoText;
 	
 	String state;
 	/**
@@ -18,12 +20,21 @@ public class DeleteConfirmDialog extends ErrorMessageDialog {
 	 * @param parent
 	 * @param style
 	 */
-	public DeleteConfirmDialog(Shell parent, String type, String Ename) {
-		super(parent, Ename);
+	public DeleteConfirmDialog(Shell parent, String type, String message) {
+		super(parent, message);
 		setText("Confirmation");
 		state = type;
 	}
 
+	public DeleteConfirmDialog(Shell parent, String header, String message, String btnOneText, String btnTwoText) {
+		super(parent, message);
+		setText(header);
+//		m_message = message;
+		m_btnOneText = btnOneText;
+		m_btnTwoText = btnTwoText;
+	}
+
+	
 	/**
 	 * Description: Create contents of the dialog.
 	 */
@@ -31,7 +42,7 @@ public class DeleteConfirmDialog extends ErrorMessageDialog {
 		super.createContents();
 		
 		if (state.compareToIgnoreCase(STATE_TYPE) == 0)
-			Prompt.setText("Are you sure you want to permanently delete " + string + "?" );
+			lblPrompt.setText("Are you sure you want to permanently delete " + string + "?" );
 			
 		
 		/************************************************************
@@ -39,14 +50,14 @@ public class DeleteConfirmDialog extends ErrorMessageDialog {
 		 ***********************************************************/
 		fd_btnOne.left = new FormAttachment(70, -50);
 		fd_btnOne.right = new FormAttachment(70, 0);
-		fd_btnOne.top = new FormAttachment(Prompt, 50);
+		fd_btnOne.top = new FormAttachment(lblPrompt, 50);
 		btnOne.setLayoutData(fd_btnOne);
 		btnOne.setText("No");
 		
 		/************************************************************
 		 * 'YES' BUTTON EVENT LISTENER
 		 ***********************************************************/
-		Button btnYes = new Button(composite, SWT.NONE);
+		Button btnYes = new Button(mainComp, SWT.NONE);
 		btnYes.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -57,7 +68,7 @@ public class DeleteConfirmDialog extends ErrorMessageDialog {
 		
 		FormData fd_btnYes = new FormData();
 		fd_btnYes.right = new FormAttachment(30, 50);
-		fd_btnYes.top = new FormAttachment(Prompt, 50);
+		fd_btnYes.top = new FormAttachment(lblPrompt, 50);
 		fd_btnYes.left = new FormAttachment(30, 0);
 		btnYes.setLayoutData(fd_btnYes);
 		btnYes.setText("Yes");

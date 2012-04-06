@@ -24,6 +24,9 @@ public class ModelBudget {
 		db = new EMDBII();
 	}
 	
+	/**
+	 * Description: Initialize database use in unit testing database.
+	 */
 	public ModelBudget(String tempDatabase) {
 		db = new EMDBII(tempDatabase, true);
 		db.systemCheck();

@@ -627,35 +627,69 @@ public class ControllerBudget {
 	}
 
 	/* The codes below are all use for Junit Test purpose*/
+	
+	/**
+	 * Description: Return the solution size.
+	 * @return
+	 */
 	public int getSolutionSize() {
 		return soln.getSolnSetSize();
 	}
 
+	/**
+	 * Description: Return the solution satisfaction.
+	 * @return
+	 */
 	public int getSolutionSatisfaction() {
 		return soln.getSatisfactionvalue();
 	}
 
+	/**
+	 * Description: Return the solution cost.
+	 * @return
+	 */
 	public double getSolutionCost(int inputNum) {
 		DecimalFormat myFormatter = new DecimalFormat("##.##");
 		return (Double.parseDouble(myFormatter.format(soln.getSolnCostSet().get(inputNum))));
 	}
 
+	/**
+	 * Description: Return the total satisfaction.
+	 * @return
+	 */
 	public int getAllItemSatisfaction() {
 		return compulsorySatisfaction + nonCompulsorySatisfaction;
 	}
 
+	/**
+	 * Description: Return the total cost.
+	 * @return
+	 */
 	public int getAllItemCost() {
 		return compulsoryCost + nonCompulsoryCost ;
 	}
 
+	/**
+	 * Description: Return the compulsory satisfaction.
+	 * @return
+	 */
 	public int getCompulsoryItemSatisfaction() {
 		return compulsorySatisfaction;
 	}
 
+	/**
+	 * Description: Return the compulsory cost..
+	 * @return
+	 */
 	public int getCompulsoryItemCost() {
 		return compulsoryCost;
 	}
 	
+	/**
+	 * Description: Retrieve the optimize item list from testing database.
+	 * @param eventId
+	 * @return
+	 */
 	public Vector<Item> getOptimizeItemListTest(int eventId) {
 		return mb.getOptimizeItemList(eventId);
 	}

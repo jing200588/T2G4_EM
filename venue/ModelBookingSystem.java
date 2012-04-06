@@ -31,7 +31,7 @@ public class ModelBookingSystem {
 	 * @param lower
 	 * @return
 	 */
-	public Vector<Venue> get_venue_by_cost(int upper, int lower){
+	public Vector<Venue> getVenueByCost(int upper, int lower){
 
 		Vector<Venue> venues = db.venueDB().getVenueList("cost", upper, lower);
 		int count = venues.size();
@@ -52,7 +52,7 @@ public class ModelBookingSystem {
 	 * @param lower
 	 * @return
 	 */
-	public Vector<Venue> get_venue_by_capacity(int upper, int lower){
+	public Vector<Venue> getVenueByCapacity(int upper, int lower){
 		
 		Vector<Venue> venues = db.venueDB().getVenueList("capacity", upper, lower);
 		int count = venues.size();
@@ -70,7 +70,7 @@ public class ModelBookingSystem {
 	 * Description: Gets a list of venues without limitations. (includes booked timeslots)
 	 * @return
 	 */
-	public Vector<Venue> get_all_venue(){
+	public Vector<Venue> getAllVenue(){
 		
 
 		Vector<Venue> venues = db.venueDB().getVenueList("all", 0, 0);
@@ -90,7 +90,7 @@ public class ModelBookingSystem {
 	 * @param venueID
 	 * @param wantedTimeSlot
 	 */
-	public void add_booking_to_db(int eventID, int venueID, TimeSlot wantedTimeSlot){
+	public void addBookingToDb(int eventID, int venueID, TimeSlot wantedTimeSlot){
 		
 		db.venueDB().addBooking(
 				eventID, 
@@ -108,7 +108,7 @@ public class ModelBookingSystem {
 	 * @param name
 	 * @return
 	 */
-	public Vector<Venue> find_venue_by_name(String name){
+	public Vector<Venue> findVenueByName(String name){
 		Vector<Venue> venues;
 		
 

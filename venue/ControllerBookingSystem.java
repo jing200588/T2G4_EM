@@ -49,7 +49,7 @@ public class ControllerBookingSystem {
 	 */
 	public boolean bookVenue(Eventitem event, int bookedVenueID, TimeSlot wantedTimeSlot)
 	{		
-		mbs.add_booking_to_db(event.getID(), bookedVenueID, wantedTimeSlot);
+		mbs.addBookingToDb(event.getID(), bookedVenueID, wantedTimeSlot);
 		
 		int index = findIndex(currentSearchResult, bookedVenueID);
 		
@@ -78,7 +78,7 @@ public class ControllerBookingSystem {
 	public Vector<Venue> findVenueByName(String venueName)
 	{	
 		if(listAllVenue.isEmpty() == true)
-			currentSearchResult = mbs.find_venue_by_name(venueName);
+			currentSearchResult = mbs.findVenueByName(venueName);
 		else
 			currentSearchResult = shortListByName(listAllVenue, venueName);
 		
@@ -115,7 +115,7 @@ public class ControllerBookingSystem {
 			{
 				Vector<Venue> firstRoundCapacity = new Vector<Venue>();
 				if(listAllVenue.isEmpty() == true)
-					firstRoundCapacity = mbs.get_venue_by_capacity(capacityRange[1], capacityRange[0]); 
+					firstRoundCapacity = mbs.getVenueByCapacity(capacityRange[1], capacityRange[0]); 
 				else
 					firstRoundCapacity = shortListByCapacity(listAllVenue, capacityRange[0], capacityRange[1]);
 				
@@ -157,7 +157,7 @@ public class ControllerBookingSystem {
 				// For debugging: System.out.println(costRange[1] + " " + costRange[0]);
 				Vector<Venue> firstRoundCost = new Vector<Venue>();
 				if(listAllVenue.isEmpty() == true)
-					firstRoundCost = mbs.get_venue_by_cost(costRange[1], costRange[0]);
+					firstRoundCost = mbs.getVenueByCost(costRange[1], costRange[0]);
 				else
 					firstRoundCost = shortListByCost(listAllVenue, costRange[0], costRange[1]);	
 				
@@ -179,7 +179,7 @@ public class ControllerBookingSystem {
 				// The worst case: We have to take all the venues from the
 				// database and then short-list them by timeslot.
 				if(listAllVenue.isEmpty() == true)
-					listAllVenue = mbs.get_all_venue();
+					listAllVenue = mbs.getAllVenue();
 				returnList = shortListByTimeSlot(listAllVenue, preferredTime);
 				
 			}

@@ -20,11 +20,11 @@ public class ErrorMessageDialog extends Dialog {
 	protected Object result;
 	protected Shell shell;
 	protected String string;
-	protected Label Prompt;
-	protected Composite composite;
+	protected Label lblPrompt;
+	protected Composite mainComp;
 	protected Button btnOne;
 	protected FormData fd_btnOne;
-	protected Label warningsign;
+	protected Label warningSign;
 	/**
 	 * Create the dialog.
 	 * @param parent
@@ -69,22 +69,22 @@ public class ErrorMessageDialog extends Dialog {
 		shell.setText(getText());
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		composite = new Composite(shell, SWT.NONE);
-		composite.setLayout(new FormLayout());
+		mainComp = new Composite(shell, SWT.NONE);
+		mainComp.setLayout(new FormLayout());
 		
 		//Prompt label
-		Prompt = new Label(composite, SWT.WRAP | SWT.CENTER);
+		lblPrompt = new Label(mainComp, SWT.WRAP | SWT.CENTER);
 		FormData fd_Prompt = new FormData();
 		fd_Prompt.top = new FormAttachment(30, 0);
 		fd_Prompt.left = new FormAttachment(20, 0);
 		fd_Prompt.right = new FormAttachment(90, 0);
-		Prompt.setLayoutData(fd_Prompt);
-		Prompt.setText(string);
+		lblPrompt.setLayoutData(fd_Prompt);
+		lblPrompt.setText(string);
 		
 		/************************************************************
 		 * 'OK' BUTTON EVENT LISTENER
 		 ***********************************************************/
-		btnOne = new Button(composite, SWT.NONE);
+		btnOne = new Button(mainComp, SWT.NONE);
 		btnOne.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -92,19 +92,19 @@ public class ErrorMessageDialog extends Dialog {
 			}
 		});
 		fd_btnOne = new FormData();
-		fd_btnOne.top = new FormAttachment(Prompt, 55);
+		fd_btnOne.top = new FormAttachment(lblPrompt, 55);
 		fd_btnOne.left = new FormAttachment(41, 0);
 		fd_btnOne.right = new FormAttachment(59, 0);
 		btnOne.setLayoutData(fd_btnOne);
 		btnOne.setText("OK");
 		
 		//warning sign label
-		warningsign = new Label(composite, SWT.NONE);
-		warningsign.setImage(Display.getDefault().getSystemImage(SWT.ICON_WARNING));
+		warningSign = new Label(mainComp, SWT.NONE);
+		warningSign.setImage(Display.getDefault().getSystemImage(SWT.ICON_WARNING));
 		FormData fd_warningsign = new FormData();
 		fd_warningsign.top = new FormAttachment(25, 0);
-		fd_warningsign.right = new FormAttachment(Prompt, -6);
-		warningsign.setLayoutData(fd_warningsign);
+		fd_warningsign.right = new FormAttachment(lblPrompt, -6);
+		warningSign.setLayoutData(fd_warningsign);
 		
 
 	}

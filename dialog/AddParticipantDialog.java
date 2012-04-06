@@ -168,6 +168,9 @@ public class AddParticipantDialog extends Dialog {
 		Label lblRequiredFields = new Label(composite, SWT.NONE);
 		lblRequiredFields.setText("(* required fields)");
 		
+		/************************************************************
+		 * CREATE BUTTON EVENT LISTENER
+		 ***********************************************************/
 		btnCreate = new Button(shlAddParticipant, SWT.NONE);
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -191,6 +194,9 @@ public class AddParticipantDialog extends Dialog {
 		btnCreate.setLayoutData(fd_btnCreate);
 		btnCreate.setText("Create");
 		
+		/************************************************************
+		 * CANCEL BUTTON LISTENER
+		 ***********************************************************/
 		btnCancel = new Button(shlAddParticipant, SWT.NONE);
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override

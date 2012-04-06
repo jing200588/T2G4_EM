@@ -13,6 +13,11 @@ import org.eclipse.swt.widgets.Composite;
  */
 
 public class ViewFaceBookAds extends Composite {
+	
+	/**
+	 * Description: Create the composite browser.
+	 * @param parent
+	 */
 
 	public ViewFaceBookAds(Composite parent) {
 		super(parent, SWT.NONE);
