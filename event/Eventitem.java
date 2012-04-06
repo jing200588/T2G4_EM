@@ -9,10 +9,10 @@ import program.*;
 
 public class Eventitem {
 	private int eventId;
-	private String eventName;
-	private String eventDescription;
+	private String eventName = "";
+	private String eventDescription = "";
 	private Vector<Item> eventItemList = new Vector<Item>();
-	private double eventBudget;
+	private double eventBudget = 0.0;
 	private Vector<BookedVenueInfo> eventBviList;
 	private MyDateTime eventStartDateTime;
 	private MyDateTime eventEndDateTime;

@@ -257,9 +257,11 @@ public class EMDBIITest {
 		EMDBSettings.dMsg("\n\n<EMDB TEST> UPDATE EVENT");
 		
 		
-		int id = this.db.eventDB().addEvent(this.eventList.get(1));
+		Eventitem eEvent = this.eventList.get(3);
 		
-		Eventitem eEvent = this.eventList.get(1);
+		int id = this.db.eventDB().addEvent(eEvent);
+		
+		
 		eEvent.setID(id);
 		eEvent.setName("Getting a new name");
 		
@@ -451,13 +453,13 @@ public class EMDBIITest {
 	 * 
 	 * *******************************
 	 */
-	
+	/*
 	
 	@Test
 	public void zDeleteDB(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> DESTROY DATABASE FILE");
 		assertTrue(this.db.destroy(false));
 	} 
-	
+	*/
 	
 }

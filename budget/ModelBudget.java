@@ -25,8 +25,8 @@ public class ModelBudget {
 	}
 	
 	public ModelBudget(String tempDatabase) {
-		db = new EMDBII(tempDatabase);
-		//db.init();
+		db = new EMDBII(tempDatabase, true);
+		db.systemCheck();
 	}
 
 	/**
