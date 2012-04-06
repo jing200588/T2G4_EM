@@ -180,7 +180,7 @@ public class EMDBIITools {
 		dMsgN("1 : Re-Initialize Database");
 		dMsgN("2 : Populate Venues");
 		dMsgN("3 : Clear / Truncate Tables");
-		dMsgN("4 : Run Test Suite");
+		//dMsgN("4 : Run Test Suite");
 		dMsgN("9 : Exit");
 	
 		dMsgN("");

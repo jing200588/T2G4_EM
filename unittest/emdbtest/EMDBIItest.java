@@ -19,17 +19,12 @@ public class EMDBIITest {
 	
 	private EMDBII 				db	= new EMDBII("unit.sqlite", true);; 				
 	
-	private int 				eventID			= 	0;
-	private int[]				eventIDSet		=	new int[5];
-	
 	private Eventitem			event;
 	private Vector<Eventitem>	eventList		=	new Vector<Eventitem>();
 	private Vector<Venue>		venueList		=	new Vector<Venue>();
 	private Vector<Item> 		itemList		=	new Vector<Item>();
 	
-	private Vector<Eventitem>	eventListVar	=	new Vector<Eventitem>();
-	private Vector<Venue>		venueListVar	=	new Vector<Venue>();
-	private Vector<Item> 		itemListVar		=	new Vector<Item>();
+
 	
 	
 	
@@ -44,11 +39,6 @@ public class EMDBIITest {
 		this.eventList.add(new Eventitem("That Event", "20/10/2014", "20/11/2014", "11:56", "14:23"));
 		this.eventList.add(new Eventitem("Your Event", "19/01/2014", "20/05/2014", "17:34", "23:56"));
 		this.eventList.add(new Eventitem("The NUSSU Stuff", "06/10/2013", "12/12/2014", "01:00", "13:00"));
-		
-		for (int i=0; i<5; i++)
-			this.eventIDSet[i] = this.db.eventDB().addEvent(this.eventList.get(i));
-		
-		
 		
 
 		//Add 5 Venues	
@@ -66,6 +56,7 @@ public class EMDBIITest {
 		this.itemList.add(new Item("Food", 1000.00, 400));
 		this.itemList.add(new Item("Lodging", 23.00, 100));
 		
+		
 	}
 
 	
@@ -73,7 +64,7 @@ public class EMDBIITest {
 	@Test
 	public void setVerifyDatabase() throws Exception{
 	
-		EMDBSettings.dMsg("<EMDB TEST> SET AND VERIFY DB");
+		EMDBSettings.dMsg("\n\n<EMDB TEST> SET AND VERIFY DB");
 		
 		this.db.eventDB().setup();
 		assertTrue(this.db.eventDB().verify());
@@ -93,14 +84,14 @@ public class EMDBIITest {
 
 	
 	@Test
-	public void saveAndRetrieveEvent() throws Exception {
+	public void addAndRetrieveEvent() throws Exception {
 		
-		EMDBSettings.dMsg("<EMDB TEST> SAVE AND RETRIEVE EVENT");
+		EMDBSettings.dMsg("\n\n<EMDB TEST> SAVE AND RETRIEVE EVENT");
 		
 		
 		Eventitem itemResult	=	null;
 		
-		this.eventID = this.db.eventDB().addEvent(
+		int eventID = this.db.eventDB().addEvent(
 				this.event.getName(), 
 				this.event.getDescription(), 
 				this.event.getBudget(), 
@@ -111,9 +102,9 @@ public class EMDBIITest {
 				EventFlowEntry.getStringRepresentation(this.event.getEventFlow())
 				);
 		
-		assertTrue(	(this.eventID > 0) );
+		assertTrue(	(eventID > 0) );
 		
-		itemResult = this.db.eventDB().getEvent(this.eventID);
+		itemResult = this.db.eventDB().getEvent(eventID);
 		
 		assertEquals(
 				this.event.getName(), 
@@ -152,8 +143,123 @@ public class EMDBIITest {
 				EventFlowEntry.getStringRepresentation(itemResult.getEventFlow())
 				);
 		
+		
 	}
 
+	
+	
+	
+	@Test
+	public void addVenue(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> ADD VENUE FROM LOCAL LIST OF SIZE " + venueList.size());
+
+		int oldDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		EMDBSettings.dMsg("<EMDB TEST> OLD DB VENUE SIZE " + oldDbVenueSize);
+		
+		for (int i=0; i<5; i++){
+			this.db.venueDB().addVenue(this.venueList.get(i));
+		}
+		
+		int newDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		EMDBSettings.dMsg("<EMDB TEST> NEW DB VENUE SIZE " + newDbVenueSize);
+		
+		
+		assertEquals( venueList.size(), (newDbVenueSize-oldDbVenueSize) );
+		
+	}
+	
+	
+	@Test
+	public void deleteVenue(){
+
+		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE VENUE");
+		
+		int id = this.db.venueDB().addVenue(this.venueList.get(0));
+	
+		int oldDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		EMDBSettings.dMsg("<EMDB TEST> OLD DB VENUE SIZE " + oldDbVenueSize);
+		
+		this.db.venueDB().deleteVenue(id);
+		
+		int newDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		EMDBSettings.dMsg("<EMDB TEST> NEW DB VENUE SIZE " + newDbVenueSize);
+		
+		assertEquals( 1, Math.abs(newDbVenueSize-oldDbVenueSize) );
+		
+		
+		Venue test = this.db.venueDB().getVenue(id);
+		assertTrue( test.getName() == null || test.getName().isEmpty() );
+		
+		
+	}
+	
+	
+	@Test
+	public void deleteVenueNone(){
+		assertEquals(0,this.db.venueDB().deleteVenue(0));
+	}
+	
+	
+	
+	
+	@Test
+	public void updateEvent(){
+		
+		int id = this.db.eventDB().addEvent(this.eventList.get(1));
+		
+		Eventitem eEvent = this.eventList.get(1);
+		eEvent.setID(id);
+		eEvent.setName("Getting a new name");
+		
+		
+		this.db.eventDB().updateEvent(eEvent);
+		
+		Eventitem nEvent = this.db.eventDB().getEvent(id);
+		
+		assertEquals(
+				eEvent.getName(), 
+				nEvent.getName()
+				);
+		
+		
+		assertEquals(
+				eEvent.getDescription(), 
+				nEvent.getDescription()
+				);
+		
+		assertTrue(	(eEvent.getBudget() == nEvent.getBudget()) );
+		
+		assertEquals(
+				eEvent.getStartDateTime().getDateRepresentation(), 
+				nEvent.getStartDateTime().getDateRepresentation()
+				);
+		
+		assertEquals(
+				eEvent.getEndDateTime().getDateRepresentation(), 
+				nEvent.getEndDateTime().getDateRepresentation()
+				);
+		
+		assertEquals(
+				eEvent.getStartDateTime().getTimeRepresentation(), 
+				nEvent.getStartDateTime().getTimeRepresentation()
+				);
+		
+		assertEquals(
+				eEvent.getEndDateTime().getTimeRepresentation(), 
+				nEvent.getEndDateTime().getTimeRepresentation()
+				);
+		
+		assertEquals(
+				EventFlowEntry.getStringRepresentation(eEvent.getEventFlow()),
+				EventFlowEntry.getStringRepresentation(nEvent.getEventFlow())
+				);
+		
+	}
+	
+	
+	
+	
+	
 	
 
 	/*

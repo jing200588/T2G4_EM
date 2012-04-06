@@ -319,6 +319,27 @@ public class EMDBVenue extends EMDBBase{
 	
 	
 	
+	
+	/**
+	 * Add a Venue.
+	 * @param aItem
+	 * @return
+	 */
+	public int addVenue(Venue aItem){
+		return this.addVenue(
+						aItem.getName(), 
+						aItem.getAddress(), 
+						aItem.getDescription(), 
+						aItem.getMaxCapacity(), 
+						aItem.getCost()
+					);
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * Booking of a Venue.
 	 * @param aEventID

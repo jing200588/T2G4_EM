@@ -8,7 +8,7 @@ public class EMSService {
 	private Server server;
 	
 	public EMSService() {
-		this(8080);
+		this(3662);
 	}
 	public EMSService(Integer aPort) {
 		server = new Server(aPort);
