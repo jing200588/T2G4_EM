@@ -64,23 +64,22 @@ import org.eclipse.swt.widgets.TabItem;
 
 
 public class ViewMain extends ApplicationWindow {
+	private ModelEvent mm = new ModelEvent();
 	private Action exitAction;
 	private Action serverControl;
-	private Composite mainComposite;
-	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-	private Composite c1;
-	private static Table EventListTable;
-	private static Composite c2;
-	private static Vector<Eventitem> eventlist;
+	private static Composite mainComposite, leftComp, rightComp;
+	private static Table eventListTable, expiredTable;
+	private static Vector<Eventitem> eventList, expiredEventlist;
+	private static TableColumn eventTC1, eventTC2;
+    private static TableColumn expiredEventTC1, expiredEventTC2;
 	private static StackLayout layout = new StackLayout();
-	private ModelEvent mm = new ModelEvent();
-    private static ViewEvent view;
-    private static ViewHomepage hp;
+    private static ViewEvent viewPage;
+    private static ViewHomepage homePage;
     private static EMDBII db;
-    private static TableColumn tc1, tc2;
-    private static TableColumn etc1, etc2;
-    private static Table ExpiredTable;
-    private static Vector<Eventitem> expiredlist;
+    
+ 
+
+	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
     private final EMSService server;
     
 	/**
@@ -91,7 +90,7 @@ public class ViewMain extends ApplicationWindow {
 		super(null);
 		setShellStyle(SWT.CLOSE | SWT.MIN);
 		
-		eventlist = new Vector<Eventitem>();
+		eventList = new Vector<Eventitem>();
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
@@ -121,10 +120,10 @@ public class ViewMain extends ApplicationWindow {
 	 * DELETE ITEM
 	 ***********************************************************/
 	/**
-	 * Description: Deletes the selected item from the table and set the current page to Homepage by calling Homepage()
+	 * Description: Deletes the selected item from the database and set the current page to homePage
 	 */
 	public static void DeleteItem() {
-		EventListTable.remove(EventListTable.getSelectionIndices());
+		eventListTable.remove(eventListTable.getSelectionIndices());
 		Homepage();
 	}
 	
@@ -132,10 +131,10 @@ public class ViewMain extends ApplicationWindow {
 	 * DELETE EXPIRED ITEM
 	 ***********************************************************/
 	/**
-	 * Description: 
+	 * Description: Deletes the selected expired item from the database and set the current page to homePage
 	 */
 	public static void DeleteExpiredItem() {
-		ExpiredTable.remove(ExpiredTable.getSelectionIndices());
+		expiredTable.remove(expiredTable.getSelectionIndices());
 		Homepage();
 	}
 	
@@ -143,113 +142,89 @@ public class ViewMain extends ApplicationWindow {
 	 * DELETE ALL EXPIRED ITEM
 	 ***********************************************************/
 	/**
-	 * Description:
+	 * Description: Deletes all expired event items from the database and set the current page to homePage
 	 */
 	public static void DeleteAllExpiredItems() {
-		ExpiredTable.removeAll();
+		expiredTable.removeAll();
 		Homepage();
 	}
 	
 	/************************************************************
-	 * Method to update the table in c1
+	 * UPDATE TABLE
 	 ***********************************************************/
 	/**
-	 * Description: Pulls the list from ModelEvent and updates the event table in composite c1
+	 * Description: Pulls the list from ModelEvent and updates the eventListTable in leftComp
 	 */
 	public static void UpdateTable () {
-		eventlist = ModelEvent.PullList();
+		eventList = ModelEvent.PullList();
 
 		TableItem item;
 		int i;
-		if (EventListTable.getItemCount() == 0)	//adds whole vector if table empty 
+		if (eventListTable.getItemCount() == 0)	//adds whole vector if table empty 
 			i=0;
 		
-		else if (EventListTable.getItemCount() == eventlist.size()) {						//updates vector list (done when returning view)
-			item = EventListTable.getItem(EventListTable.getSelectionIndex());						//Gets current selected row in table
-			item.setText(0, eventlist.get(EventListTable.getSelectionIndex()).getName());	//Replace the String with new updated string 
-			layout.topControl = view;
-			c2.layout(true);
+		else if (eventListTable.getItemCount() == eventList.size()) {						//updates vector list (done when returning view)
+			item = eventListTable.getItem(eventListTable.getSelectionIndex());						//Gets current selected row in table
+			item.setText(0, eventList.get(eventListTable.getSelectionIndex()).getName());	//Replace the String with new updated string 
+			layout.topControl = viewPage;
+			rightComp.layout(true);
 			return;
 		}
 		else
-			i = eventlist.size()-1;		//add the last item into table
+			i = eventList.size()-1;		//add the last item into table
 		
-		for (; i<eventlist.size(); i++) {			
-			item = new TableItem(EventListTable,SWT.NONE);
-			item.setText(eventlist.get(i).getName());
-			item.setText(1,eventlist.get(i).getStartDateTime().getDateRepresentation());
+		for (; i<eventList.size(); i++) {			
+			item = new TableItem(eventListTable,SWT.NONE);
+			item.setText(eventList.get(i).getName());
+			item.setText(1,eventList.get(i).getStartDateTime().getDateRepresentation());
 		}
 	}
 	
 	/************************************************************
-	 * Method to update the expired table in c1
+	 * UPDATE EXPIRED TABLE
 	 ***********************************************************/
 	/**
-	 * Description: Pulls the expired list from ModelEvent and updates the expired event table in composite c1
+	 * Description: Pulls the expired list from ModelEvent and updates the expiredEventTable in leftComp
 	 */
 	public static void UpdateExpiredTable() {
-		expiredlist = ModelEvent.PullExpiredList();
+		expiredEventlist = ModelEvent.PullExpiredList();
 
 		TableItem item;
 		int i;
-		if (ExpiredTable.getItemCount() == 0)	//adds whole vector if table empty 
+		if (expiredTable.getItemCount() == 0)	//adds whole vector if table empty 
 			i=0;
 
 		else
-			i = ExpiredTable.getItemCount() + 1;		//add the last item into table
+			i = expiredTable.getItemCount() + 1;		//add the last item into table
 		
-		for (; i<expiredlist.size(); i++) {			
-			item = new TableItem(ExpiredTable,SWT.NONE);
-			item.setText(expiredlist.get(i).getName());
-			item.setText(1,expiredlist.get(i).getEndDateTime().getDateRepresentation());
+		for (; i<expiredEventlist.size(); i++) {			
+			item = new TableItem(expiredTable,SWT.NONE);
+			item.setText(expiredEventlist.get(i).getName());
+			item.setText(1,expiredEventlist.get(i).getEndDateTime().getDateRepresentation());
 		}
 	}
 	
 	/************************************************************
-	 * Method to shift expired events between tables in c1
+	 * SHIFT EXPIRED
 	 ***********************************************************/
 	/**
-	 * Description:
+	 * Description: Checks the eventList for expired events and updates the eventList, expiredEventlists and database. 
+	 * It will then update the eventListTable and expiredListTable by calling their respective update functions.
 	 */
 	public static void ShiftExpired() {
-		expiredlist = ModelEvent.PullExpiredList();
-		int prevExpIndex = expiredlist.size();
+		expiredEventlist = ModelEvent.PullExpiredList();
+		int prevExpIndex = expiredEventlist.size();
 		
-		//shifts expired events into expired list & remove from event list table
-/*		for (int i=0; i<eventlist.size(); i++) {
-			if (eventlist.get(i).isExpired()) {
-//				System.out.println("expired " + i);
-//				TableItem tb = new TableItem(table, 0);
-//				System.out.println("table count: " + tb);
-				table.remove(i);
-				expiredlist.add(eventlist.get(i));
-				System.out.println(eventlist.get(i).getName());
-				System.out.println("Expired - " + expiredlist.size());
-			}
-		}
-		*/
-		
-		for (int i=0; i<eventlist.size(); i++) {
-			if (eventlist.get(i).isExpired()) {
-				expiredlist.add(eventlist.get(i));
-				System.out.println(eventlist.get(i).getName());
-				System.out.println("Expired - " + expiredlist.size());
+		for (int i=0; i<eventList.size(); i++) {
+			if (eventList.get(i).isExpired()) {
+				expiredEventlist.add(eventList.get(i));
 			}
 		}
 		
-		ModelEvent.UpdateExpiredList(expiredlist.subList(prevExpIndex, expiredlist.size()));
-		//Remove the expired events from event list
-		/*
-		for (int i=0; i<eventlist.size(); i++) {
-			if (eventlist.get(i).isExpired()) {
-				eventlist.remove(i);
-				i--;
-			}
-		}*/
-		System.out.println("Expired - " + expiredlist.size());
-		System.out.println("OK List - " + eventlist.size());
-		EventListTable.removeAll();
-		ExpiredTable.removeAll();
+		ModelEvent.UpdateExpiredList(expiredEventlist.subList(prevExpIndex, expiredEventlist.size()));
+
+		eventListTable.removeAll();
+		expiredTable.removeAll();
 		UpdateTable();
 		UpdateExpiredTable();
 		System.out.println("RAN");
@@ -257,194 +232,148 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
-	 * SETPAGE
-	 ***********************************************************/
-	/**
-	 * Description: Initialize pages based on which id it is passed in.
-	 */
-	public static void setPage (int idNo) {
-		Composite newComposite;
-		
-		switch (idNo) {
-		case 0:
-			newComposite = new ViewHomepage(c2, SWT.NONE);
-			layout.topControl = newComposite;
-			break;
-		case 1:
-			newComposite = new ViewEventParticulars(c2, SWT.NONE);
-			layout.topControl = newComposite;
-			break;
-		case 2:
-			newComposite = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-			layout.topControl = newComposite;
-			break;
-		case 3:
-			newComposite = new ViewBudget(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-			layout.topControl = newComposite;
-			break;
-		case 4:
-			newComposite = new ViewEventFlow(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-			layout.topControl = newComposite;
-			break;
-		case 5:
-			
-		default:
-			break;
-		}
-		c2.layout();
-		
-	}
-	public static Composite getC2 () {
-		return c2;
-	}
-	public static void setPage (Composite newComposite) {
-		layout.topControl = newComposite;
-		c2.layout();
-	}
-	
-	/************************************************************
 	 * HOMEPAGE
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewHomepage and set the page of composite c2 to ViewHomepage
+	 * Description: Initialize ViewHomepage and set the page of rightComp to ViewHomepage
 	 */
 	public static void Homepage () {		
-		hp = new ViewHomepage(c2, SWT.NONE);
-		layout.topControl = hp;
-		c2.layout(true);
+		homePage = new ViewHomepage(rightComp, SWT.NONE);
+		layout.topControl = homePage;
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * CALCULATE BUDGET
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewBudget and set the page of composite c2 to ViewBudget
+	 * Description: Initialize ViewBudget and set the page of rightComp to ViewBudget
 	 */
 	public static void CalcBudget () {		
-		ViewBudget bv = new ViewBudget(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+		ViewBudget bv = new ViewBudget(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
 		layout.topControl = bv;
-		c2.layout(true);
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * BOOK VENUE
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewBookingSystem and set the page of composite c2 to ViewBookingSystem
+	 * Description: Initialize ViewBookingSystem and set the page of rightComp to ViewBookingSystem
 	 */
 	public static void BookVenue() {
-		ViewBookingSystem bookgui = new ViewBookingSystem(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+		ViewBookingSystem bookgui = new ViewBookingSystem(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
 		layout.topControl = bookgui;
-		c2.layout(true);
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * EVENT PARTICULARS
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewEventParticulars and set the page of composite c2 to ViewEventParticulars
-	 * @param curevent The event item of the particulars that is to be edited
+	 * Description: Initialize ViewEventParticulars and set the page of rightComp to ViewEventParticulars
 	 */
-	public static void EventParticulars(Eventitem curevent) {
-		ViewEditEventParticulars ep = new ViewEditEventParticulars(c2, SWT.NONE, curevent);
+	public static void EventParticulars() {
+		ViewEditEventParticulars ep = new ViewEditEventParticulars(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
 		layout.topControl = ep;
-		c2.layout(true);
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * Program Flow
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewEventFlow and set the page of composite c2 to ViewEventFlow
+	 * Description: Initialize ViewEventFlow and set the page of rightComp to ViewEventFlow
 	 */
 	public static void EventFlow () {		
-		ViewEventFlow ef = new ViewEventFlow(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
+		ViewEventFlow ef = new ViewEventFlow(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
 		layout.topControl = ef;
-		c2.layout(true);
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * PARTICIPANT LIST
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewParticipantList and set the page of composite c2 to ViewParticipantList
-	 * @param curevent The event item of the particulars that is to be edited
+	 * Description: Initialize ViewParticipantList and set the page of rightComp to ViewParticipantList
 	 */
-	public static void ParticipantList(Eventitem curevent) {
-		ViewParticipantList pl = new ViewParticipantList(c2, SWT.NONE, curevent);
+	public static void ParticipantList() {
+		ViewParticipantList pl = new ViewParticipantList(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
 		layout.topControl = pl;
-		c2.layout(true);
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * EMAIL ADS
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewEmailAds and set the page of composite c2 to ViewEmailAds
-	 * @param curevent The event item of the particulars that is to be edited
-	 * @param aPass 
-	 * @param aName 
+	 * Description: Initialize ViewEmailAds and set the page of rightComp to ViewEmailAds
+	 * @param aName Username
+	 * @param aDomain NUSSTU or NUSSTF 
+	 * @param aPass Password
 	 */
-	public static void EmailAds(Eventitem curevent, String aName, String aDomain, String aPass) {
-		ViewEmailAds ea = new ViewEmailAds(c2, SWT.NONE, curevent, aName, aDomain, aPass);
+	public static void EmailAds(String aName, String aDomain, String aPass) {
+		ViewEmailAds ea = new ViewEmailAds(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()), aName, aDomain, aPass);
 		layout.topControl = ea;
-		c2.layout(true);
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * FACEBOOK ADS
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewFaceBookAds and set the page of composite c2 to ViewFaceBookAds
-	 * @param curevent The event item of the particulars that is to be edited
+	 * Description: Initialize ViewFaceBookAds and set the page of rightComp to ViewFaceBookAds
 	 */
 	public static void FaceBookAds() {
-		ViewFaceBookAds fba = new ViewFaceBookAds(c2);
+		ViewFaceBookAds fba = new ViewFaceBookAds(rightComp);
 		layout.topControl = fba;
-		c2.layout(true);
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * SMS ADS
 	 ***********************************************************/
 	/**
-	 * Description: Initialize ViewSmsAds and set the page of composite c2 to ViewSmsAds
-	 * @param curevent The event item of the particulars that is to be edited
+	 * Description: Initialize ViewSmsAds and set the page of rightComp to ViewSmsAds
 	 */
-	public static void SMSAds(Eventitem curevent) {
-		ViewSmsAds smsa = new ViewSmsAds(c2, SWT.NONE, curevent);
+	public static void SMSAds() {
+		ViewSmsAds smsa = new ViewSmsAds(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
 		layout.topControl = smsa;
-		c2.layout(true);
+		rightComp.layout(true);
 	}
 	
 	/************************************************************
 	 * RETURN VIEW
 	 ***********************************************************/
 	/**
-	 * Description: Sets the page of composite c2 to ViewEvent
+	 * Description: Sets the page of rightComp to ViewEvent
 	 */
 	public static void ReturnView() {
-		view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-		//ViewEvent.RefreshParticipant();
-		layout.topControl = view;
-		c2.layout(true);
+		viewPage = new ViewEvent(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
+		layout.topControl = viewPage;
+		rightComp.layout(true);
 		
 	}
 	
+	/************************************************************
+	 * RETURN VIEW
+	 ***********************************************************/
+	/**
+	 * Description: Checks the individual events in the eventList if it is past the current time (expired). If it is, i will call
+	 * the ShiftExpired() function.
+	 */
 	public static void CheckExpiry() {
 
     	MyDateTime currentDT = MyDateTime.getCurrentDateTime();
     	boolean flag = false;
-    	for (int i=0; i<eventlist.size(); i++) {
-    		if (eventlist.get(i).getEndDateTime().compareTo(currentDT) <= 0) {
-    			eventlist.get(i).setIsExpired(true);
+    	for (int i=0; i<eventList.size(); i++) {
+    		if (eventList.get(i).getEndDateTime().compareTo(currentDT) <= 0) {
+    			eventList.get(i).setIsExpired(true);
     			flag = true;
-    			System.out.println("FLAGGED");
     		}
     	}
     	if (flag)
     		ShiftExpired();
-    	System.out.println("Checking !!");
 	}
 	
 	/**
@@ -455,11 +384,8 @@ public class ViewMain extends ApplicationWindow {
 		setStatus("Welcome!");
 		ScrolledComposite container = new ScrolledComposite(parent, SWT.V_SCROLL);
 		
-		container.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		container.setExpandHorizontal(true);
 		container.setExpandVertical(true);
-		container.setMinHeight(415);
-		container.setMinWidth(1000);
 		container.setEnabled(true);
 		container.setLayout(null);
 		{
@@ -468,8 +394,8 @@ public class ViewMain extends ApplicationWindow {
 			mainComposite.setSize(container.getSize());
 			mainComposite.setLayout(new GridLayout(3, false));
 			
-			c1 = new Composite(mainComposite, SWT.NONE);
-			c1.setLayout(new GridLayout(1, false));
+			leftComp = new Composite(mainComposite, SWT.NONE);
+			leftComp.setLayout(new GridLayout(1, false));
 			GridData gd_c1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 			gd_c1.heightHint = 415;
 			gd_c1.widthHint = 300;
@@ -478,15 +404,15 @@ public class ViewMain extends ApplicationWindow {
 			gd_c1.verticalAlignment = SWT.FILL;
 			gd_c1.horizontalAlignment = SWT.FILL;
 			
-			c1.setLayoutData(gd_c1);
-			formToolkit.adapt(c1);
-			formToolkit.paintBordersFor(c1);
-			c1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+			leftComp.setLayoutData(gd_c1);
+			formToolkit.adapt(leftComp);
+			formToolkit.paintBordersFor(leftComp);
+			leftComp.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 			
 			/************************************************************
 			 * CREATE EVENT BUTTON EVENT LISTENER
 			 ***********************************************************/
-			Button btnCreateEvent = formToolkit.createButton(c1, "Create Event", SWT.NONE);
+			Button btnCreateEvent = formToolkit.createButton(leftComp, "Create Event", SWT.NONE);
 			btnCreateEvent.setForeground(SWTResourceManager.getColor(0, 0, 0));
 			btnCreateEvent.setCursor(SWTResourceManager.getCursor(SWT.CURSOR_HAND));
 			btnCreateEvent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
@@ -495,15 +421,15 @@ public class ViewMain extends ApplicationWindow {
 				public void widgetSelected(SelectionEvent e) {
 					
 					//dispose of all children that currently is in c2
-					if (c2 != null && !c2.isDisposed()) {
-					Object[] children = c2.getChildren();
+					if (rightComp != null && !rightComp.isDisposed()) {
+					Object[] children = rightComp.getChildren();
 					for (int i=0; i<children.length; i++)
 						((Composite)children[i]).dispose();
 					}
 					
-					ViewCreateEvent CreatePage = new ViewCreateEvent(c2, SWT.NONE);
+					ViewCreateEvent CreatePage = new ViewCreateEvent(rightComp, SWT.NONE);
 					layout.topControl = CreatePage;
-					c2.layout(true);	//refreshes c2
+					rightComp.layout(true);	//refreshes c2
 					
 				}
 			});
@@ -511,34 +437,30 @@ public class ViewMain extends ApplicationWindow {
 			gd_btnCreateEvent.widthHint = 294;
 			btnCreateEvent.setLayoutData(gd_btnCreateEvent);
 			
-			/************************************************************
-			 * TABLE ITEM SELECTION EVENT LISTENER
-			 ***********************************************************/
-			
 			//Column Resize with table fix
-			 c1.addControlListener(new ControlAdapter() {
+			 leftComp.addControlListener(new ControlAdapter() {
 				    public void controlResized(ControlEvent e) {
-				      Rectangle area = c1.getClientArea();
-				      Point preferredSize = EventListTable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				      int width = area.width - 2*EventListTable.getBorderWidth();
+				      Rectangle area = leftComp.getClientArea();
+				      Point preferredSize = eventListTable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				      int width = area.width - 2*eventListTable.getBorderWidth();
 				      
-				      if (preferredSize.y > area.height + EventListTable.getHeaderHeight()) {
+				      if (preferredSize.y > area.height + eventListTable.getHeaderHeight()) {
 				        // Subtract the scrollbar width from the total column width
 				        // if a vertical scrollbar will be required
-				        Point vBarSize = EventListTable.getVerticalBar().getSize();
+				        Point vBarSize = eventListTable.getVerticalBar().getSize();
 				        width -= vBarSize.x;
 				      }
-				      tc1.setWidth(width/3*2);
-				      tc2.setWidth((width - tc1.getWidth()) -24);        
-				      etc1.setWidth(width/3*2);
-				      etc2.setWidth((width - etc1.getWidth()) -24);  
+				      eventTC1.setWidth(width/3*2);
+				      eventTC2.setWidth((width - eventTC1.getWidth()) -24);        
+				      expiredEventTC1.setWidth(width/3*2);
+				      expiredEventTC2.setWidth((width - expiredEventTC1.getWidth()) -24);  
 
 				    }
 				    
 			 });
 			
 			
-			TabFolder tabFolder = new TabFolder(c1, SWT.NONE);
+			TabFolder tabFolder = new TabFolder(leftComp, SWT.NONE);
 			GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
 			gd_tabFolder.widthHint = 284;
 			tabFolder.setLayoutData(gd_tabFolder);
@@ -548,50 +470,53 @@ public class ViewMain extends ApplicationWindow {
 			TabItem tbtmUpcomingEvents = new TabItem(tabFolder, SWT.NONE);
 			tbtmUpcomingEvents.setText("       Upcoming Events       ");
 			
-			//Event List Table
-			EventListTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
-			tbtmUpcomingEvents.setControl(EventListTable);
-			EventListTable.addMouseTrackListener(new MouseTrackAdapter() {
+
+			//Event List Table tooltip
+			eventListTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			tbtmUpcomingEvents.setControl(eventListTable);
+			eventListTable.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override
 				public void mouseHover(MouseEvent e) {
-					 TableItem item = EventListTable.getItem(new Point(e.x, e.y));
+					 TableItem item = eventListTable.getItem(new Point(e.x, e.y));
 					 if (item != null)
-						 EventListTable.setToolTipText(item.getText(0));
+						 eventListTable.setToolTipText(item.getText(0));
 				}
 			});
-			EventListTable.setToolTipText("");
-			EventListTable.setTouchEnabled(true);
-			EventListTable.addListener(SWT.Selection, new Listener() {
+			eventListTable.setToolTipText("");
+			eventListTable.setTouchEnabled(true);
+			
+			/************************************************************
+			 * EVENT LIST TABLE ITEM SELECTION EVENT LISTENER
+			 ***********************************************************/
+			eventListTable.addListener(SWT.Selection, new Listener() {
 		     public void handleEvent(Event event) {
 
-		      //dispose of all children that currently is in c2
-				if (c2 != null && !c2.isDisposed()) {
-				Object[] children = c2.getChildren();
+		      //dispose of all children that currently is in rightComp
+				if (rightComp != null && !rightComp.isDisposed()) {
+				Object[] children = rightComp.getChildren();
 				for (int i=0; i<children.length; i++)
 					((Composite)children[i]).dispose();
 				}
 			
-				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
-			//	ReturnView();
-				view = new ViewEvent(c2, SWT.NONE, eventlist.get(EventListTable.getSelectionIndex()));
-		        layout.topControl = view;
-				c2.layout(true);
+				viewPage = new ViewEvent(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
+		        layout.topControl = viewPage;
+				rightComp.layout(true);
 		     }
 			});
-			tc1 = new TableColumn(EventListTable, SWT.LEFT);
-			tc2 = new TableColumn(EventListTable,SWT.CENTER);
+			eventTC1 = new TableColumn(eventListTable, SWT.LEFT);
+			eventTC2 = new TableColumn(eventListTable,SWT.CENTER);
 			
-		    tc1.setText("Event Title");
-		    tc2.setText("Start Date");
+		    eventTC1.setText("Event Title");
+		    eventTC2.setText("Start Date");
 
-		     	    tc1.setResizable(false);
-		     	    tc2.setResizable(false);
+		     	    eventTC1.setResizable(false);
+		     	    eventTC2.setResizable(false);
 
-		     	    
-			tc1.addListener(SWT.Selection, new Listener() {
+		    //Sorting Algorithm for Event List Table 	    
+			eventTC1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
 					//sort name
-					TableItem[] items = EventListTable.getItems();
+					TableItem[] items = eventListTable.getItems();
 					Collator collator = Collator.getInstance(Locale.getDefault());
 					for (int i = 1; i<items.length; i++) {
 						String value1 = items[i].getText(0);
@@ -600,9 +525,9 @@ public class ViewMain extends ApplicationWindow {
 							if(collator.compare(value1, value2) < 0) {
 								String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2)};
 								items[i].dispose();
-								TableItem item = new TableItem(EventListTable, SWT.NONE, j);	//j could be the final index
+								TableItem item = new TableItem(eventListTable, SWT.NONE, j);	//j could be the final index
 								item.setText(values);
-								items = EventListTable.getItems();
+								items = eventListTable.getItems();
 								break;
 							}
 						}
@@ -610,29 +535,29 @@ public class ViewMain extends ApplicationWindow {
 				}
 			});
 			
-			EventListTable.getHorizontalBar().setVisible(true);
-			EventListTable.getHorizontalBar().setEnabled(false);
-			formToolkit.adapt(EventListTable);
-			formToolkit.paintBordersFor(EventListTable);
-			EventListTable.setHeaderVisible(true);
-			EventListTable.setLinesVisible(false);
+			eventListTable.getHorizontalBar().setVisible(true);
+			eventListTable.getHorizontalBar().setEnabled(false);
+			formToolkit.adapt(eventListTable);
+			formToolkit.paintBordersFor(eventListTable);
+			eventListTable.setHeaderVisible(true);
+			eventListTable.setLinesVisible(false);
 			UpdateTable();
-			Menu menu = new Menu(EventListTable);
-			EventListTable.setMenu(menu);
+			Menu eventListTableMenu = new Menu(eventListTable);
+			eventListTable.setMenu(eventListTableMenu);
 			
 			/************************************************************
-			 * DELETE EVENT
+			 * DELETE EVENT LISTENER (EVENT LIST TABLE)
 			 ***********************************************************/
 			
-			MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
+			MenuItem mntmDeleteEvent = new MenuItem(eventListTableMenu, SWT.PUSH);
 			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					try {
-						TableItem tb = EventListTable.getItem(EventListTable.getSelectionIndex());
+						TableItem tb = eventListTable.getItem(eventListTable.getSelectionIndex());
 						DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 						if ((Integer) confirm.open() == 1) {
-							ModelEvent.DeleteEvent(eventlist.get(EventListTable.getSelectionIndex()));	//Finds the selected event and deletes it from vector
+							ModelEvent.DeleteEvent(eventList.get(eventListTable.getSelectionIndex()));	//Finds the selected event and deletes it from vector
 							DeleteItem();
 						}
 					} catch (Exception ex) {
@@ -647,52 +572,54 @@ public class ViewMain extends ApplicationWindow {
 			TabItem tbtmPastEvents = new TabItem(tabFolder, SWT.NONE);
 			tbtmPastEvents.setText("          Past Events          ");
 			
-			//Past Event List Table
-			ExpiredTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
-			tbtmPastEvents.setControl(ExpiredTable);			
-			ExpiredTable.addMouseTrackListener(new MouseTrackAdapter() {
+			//Expired event list table tooltip
+			expiredTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			tbtmPastEvents.setControl(expiredTable);			
+			expiredTable.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override
 				public void mouseHover(MouseEvent e) {
-					 TableItem item = ExpiredTable.getItem(new Point(e.x, e.y));
+					 TableItem item = expiredTable.getItem(new Point(e.x, e.y));
 					 if (item != null)
-						 ExpiredTable.setToolTipText(item.getText(0));
+						 expiredTable.setToolTipText(item.getText(0));
 				}
 			});
-			ExpiredTable.setToolTipText("");
-			ExpiredTable.setTouchEnabled(true);
-			ExpiredTable.addListener(SWT.Selection, new Listener() {
+			expiredTable.setToolTipText("");
+			expiredTable.setTouchEnabled(true);
+			
+			/************************************************************
+			 * EXPIRED EVENT LIST TABLE ITEM SELECTION EVENT LISTENER
+			 ***********************************************************/
+			expiredTable.addListener(SWT.Selection, new Listener() {
 		     public void handleEvent(Event event) {
 
 		      //dispose of all children that currently is in c2
-				if (c2 != null && !c2.isDisposed()) {
-				Object[] children = c2.getChildren();
+				if (rightComp != null && !rightComp.isDisposed()) {
+				Object[] children = rightComp.getChildren();
 				for (int i=0; i<children.length; i++)
 					((Composite)children[i]).dispose();
 				}
 			
-				//tc1.setToolTipText(eventlist.get(table.getSelectionIndex()).getName());
-				view = new ViewEvent(c2, SWT.NONE, expiredlist.get(ExpiredTable.getSelectionIndex()));
-		        layout.topControl = view;
-				c2.layout(true);
+				viewPage = new ViewEvent(rightComp, SWT.NONE, expiredEventlist.get(expiredTable.getSelectionIndex()));
+		        layout.topControl = viewPage;
+				rightComp.layout(true);
 		     }
 			});
-			etc1 = new TableColumn(ExpiredTable, SWT.LEFT);
-			etc2 = new TableColumn(ExpiredTable,SWT.CENTER);
-			
-		    etc1.setText("Event Title");
-		    etc2.setText("End Date");
+			expiredEventTC1 = new TableColumn(expiredTable, SWT.LEFT);
+			expiredEventTC2 = new TableColumn(expiredTable,SWT.CENTER);
+		    expiredEventTC1.setText("Event Title");
+		    expiredEventTC2.setText("End Date");
 
-		    	    etc1.pack();
-		     	    etc2.pack();
-
-		     	    
-		     	    etc1.setResizable(false);
-		     	    etc2.setResizable(false);
-		     	    
-			etc1.addListener(SWT.Selection, new Listener() {
+    	    expiredEventTC1.pack();
+     	    expiredEventTC2.pack();
+   	    
+     	    expiredEventTC1.setResizable(false);
+     	    expiredEventTC2.setResizable(false);
+     	    
+		    //Sorting algo for expired event list table
+			expiredEventTC1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
 					//sort name
-					TableItem[] items = ExpiredTable.getItems();
+					TableItem[] items = expiredTable.getItems();
 					Collator collator = Collator.getInstance(Locale.getDefault());
 					for (int i = 1; i<items.length; i++) {
 						String value1 = items[i].getText(0);
@@ -701,9 +628,9 @@ public class ViewMain extends ApplicationWindow {
 							if(collator.compare(value1, value2) < 0) {
 								String[] values = {items[i].getText(0), items[i].getText(1), items[i].getText(2)};
 								items[i].dispose();
-								TableItem item = new TableItem(ExpiredTable, SWT.NONE, j);	//j could be the final index
+								TableItem item = new TableItem(expiredTable, SWT.NONE, j);	//j could be the final index
 								item.setText(values);
-								items = ExpiredTable.getItems();
+								items = expiredTable.getItems();
 								break;
 							}
 						}
@@ -711,30 +638,31 @@ public class ViewMain extends ApplicationWindow {
 				}
 			});
 			
-			ExpiredTable.getHorizontalBar().setVisible(true);
-			ExpiredTable.getHorizontalBar().setEnabled(false);
-			formToolkit.adapt(ExpiredTable);
-			formToolkit.paintBordersFor(ExpiredTable);
-			ExpiredTable.setHeaderVisible(true);
-			ExpiredTable.setLinesVisible(false);
+			expiredTable.getHorizontalBar().setVisible(true);
+			expiredTable.getHorizontalBar().setEnabled(false);
+			formToolkit.adapt(expiredTable);
+			formToolkit.paintBordersFor(expiredTable);
+			expiredTable.setHeaderVisible(true);
+			expiredTable.setLinesVisible(false);
+			
 			UpdateExpiredTable();
 			CheckExpiry();
-			Menu menu2 = new Menu(ExpiredTable);
-			ExpiredTable.setMenu(menu2);
+			Menu expiredEventListTableMenu = new Menu(expiredTable);
+			expiredTable.setMenu(expiredEventListTableMenu);
 			
 			/************************************************************
-			 * DELETE PAST EVENT
+			 * DELETE EVENT LISTENER (EXPIRED EVENT LIST TABLE)
 			 ***********************************************************/
 			
-			MenuItem mntmDeletePastEvent = new MenuItem(menu2, SWT.PUSH);
+			MenuItem mntmDeletePastEvent = new MenuItem(expiredEventListTableMenu, SWT.PUSH);
 			mntmDeletePastEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					try {
-					TableItem tb = ExpiredTable.getItem(ExpiredTable.getSelectionIndex());
+					TableItem tb = expiredTable.getItem(expiredTable.getSelectionIndex());
 					DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 					if ((Integer) confirm.open() == 1) {
-						ModelEvent.DeleteExpiredEvent(expiredlist.get(ExpiredTable.getSelectionIndex()));
+						ModelEvent.DeleteExpiredEvent(expiredEventlist.get(expiredTable.getSelectionIndex()));
 						DeleteExpiredItem();
 					}
 					} catch (Exception ex) {
@@ -745,7 +673,10 @@ public class ViewMain extends ApplicationWindow {
 			});
 			mntmDeletePastEvent.setText("Delete Event");
 			
-			MenuItem mntmDeleteAllPastEvent = new MenuItem(menu2, SWT.PUSH);
+			/************************************************************
+			 * DELETE ALL EVENT LISTENER (EXPIRED EVENT LIST TABLE)
+			 ***********************************************************/
+			MenuItem mntmDeleteAllPastEvent = new MenuItem(expiredEventListTableMenu, SWT.PUSH);
 			mntmDeleteAllPastEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -763,7 +694,8 @@ public class ViewMain extends ApplicationWindow {
 			});
 			mntmDeleteAllPastEvent.setText("Delete All Past Events");
 			
-			DateTime Calender = new DateTime(c1, SWT.CALENDAR | SWT.LONG);
+			//Calendar Widget
+			DateTime Calender = new DateTime(leftComp, SWT.CALENDAR | SWT.LONG);
 			Calender.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 			formToolkit.adapt(Calender);
 			formToolkit.paintBordersFor(Calender);
@@ -778,8 +710,8 @@ public class ViewMain extends ApplicationWindow {
 			
 			formToolkit.adapt(Vseparator, true, true);
 			{
-				c2 = new Composite(mainComposite, SWT.NONE);
-				c2.setLayout(layout);
+				rightComp = new Composite(mainComposite, SWT.NONE);
+				rightComp.setLayout(layout);
 				GridData gd_c2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_c2.heightHint = 415;
 				gd_c2.widthHint = 700;
@@ -787,59 +719,16 @@ public class ViewMain extends ApplicationWindow {
 				gd_c2.verticalAlignment = SWT.FILL;
 				gd_c2.grabExcessHorizontalSpace = true;
 				gd_c2.horizontalAlignment = SWT.FILL;
-				c2.setLayoutData(gd_c2);
-				formToolkit.adapt(c2);
-				formToolkit.paintBordersFor(c2);
-				hp = new ViewHomepage(c2, SWT.NONE);
-				layout.topControl = hp;
+				rightComp.setLayoutData(gd_c2);
+				formToolkit.adapt(rightComp);
+				formToolkit.paintBordersFor(rightComp);
+				homePage = new ViewHomepage(rightComp, SWT.NONE);
+				layout.topControl = homePage;
 			
 			}
 	
 		}
 		
-	
-//		int delay = 5000;   // delay for 5 sec.
-//		int period = 1000;  // repeat every sec.
-//		Timer timer = new Timer();
-		
-//		checkthread chkthread = new checkthread();
-//		chkthread.start();
-		
-//		timer.scheduleAtFixedRate(new TimerTask() {
-//		        public void run() {
-/*		        	MyDateTime currentDT = MyDateTime.getCurrentDateTime();
-		        	boolean flag = false;
-		        	for (int i=0; i<eventlist.size(); i++) {
-		        		if (eventlist.get(i).getEndDateTime().compareTo(currentDT) <= 0) {
-		        			eventlist.get(i).setIsExpired(true);
-		        			flag = true;
-		        		}
-		        	}
-		        	if (flag)
-		        		ShiftExpired();
-		        	System.out.println("Checking !!");
-		        }
-		    }, delay, period);
-	*/	
-		/****************************************************************
-		 * 
-		 * THREAD
-		 * 
-		 ****************************************************************/
-	/*	new Thread(new Runnable() {
-		      public void run() {
-		         while (true) {
-		            try { Thread.sleep(1000); } catch (Exception e) {Thread.yield();}
-		            Display.getDefault().asyncExec(new Runnable() {
-		               public void run() {
-		                  CheckExpiry();
-		                  
-		               }
-		            });
-		         }
-		      }
-		   }).start();
-	*/
 		container.setContent(mainComposite);
 		container.setMinSize(mainComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		return container;
@@ -850,7 +739,7 @@ public class ViewMain extends ApplicationWindow {
 	 */
 	private void createActions() {
 		
-		//exit action
+		//exitAction
 		{
 			exitAction = new Action("Exit") {					public void run() {
 						System.exit(0);
@@ -866,13 +755,13 @@ public class ViewMain extends ApplicationWindow {
 		
 		}
 		
-		
+		//serverControl
 		{
 			serverControl = new Action("Start/Stop Server") {
 					public void run() {
-						ViewServer vs = new ViewServer(c2, SWT.NONE, server);
+						ViewServer vs = new ViewServer(rightComp, SWT.NONE, server);
 						layout.topControl = vs;
-						c2.layout(true);
+						rightComp.layout(true);
 					}
 			};
 			serverControl.setAccelerator(SWT.ALT | SWT.F10);

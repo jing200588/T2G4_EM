@@ -123,7 +123,7 @@ public class ViewEvent extends Composite {
 
 		btnEventParticulars.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ViewMain.EventParticulars(currentEvent);
+				ViewMain.EventParticulars();
 			}
 		});
 		GridData gdEventParticulars = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
@@ -367,7 +367,7 @@ public class ViewEvent extends Composite {
 		Button btnParticipantList = new Button(compParticipant, SWT.NONE);
 		btnParticipantList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ViewMain.ParticipantList(currentEvent);
+				ViewMain.ParticipantList();
 			}
 		});
 		GridData gdParticipantList = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -438,7 +438,7 @@ public class ViewEvent extends Composite {
 		Button btnAdvertSMS = new Button(compAdvertise, SWT.NONE);
 		btnAdvertSMS.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ViewMain.SMSAds(currentEvent);
+				ViewMain.SMSAds();
 			}
 		});
 		GridData gdAdvertSMS = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);

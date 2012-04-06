@@ -123,7 +123,7 @@ public class ViewBookingSystem extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		Form VenueViewForm = toolkit.createForm(this);
-		VenueViewForm.getBody().setBackgroundMode(SWT.INHERIT_DEFAULT);
+//		VenueViewForm.getBody().setBackgroundMode(SWT.INHERIT_DEFAULT);
 		VenueViewForm.setBounds(0, 0, 700, 400);
 		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		toolkit.paintBordersFor(VenueViewForm);
@@ -207,7 +207,7 @@ public class ViewBookingSystem extends Composite {
 		fd_functionContentCompo.bottom = new FormAttachment(90);
 		fd_functionContentCompo.left = new FormAttachment(10);
 		functionContentCompo.setLayoutData(fd_functionContentCompo);
-		functionContentCompo.setBackgroundMode(SWT.INHERIT_DEFAULT);
+	//	functionContentCompo.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		toolkit.adapt(functionContentCompo);
 		toolkit.paintBordersFor(functionContentCompo);
 		functionContentCompo.setLayout(sl_functionContentCompo);
@@ -785,7 +785,7 @@ public class ViewBookingSystem extends Composite {
 		fd_TimeSlotCompo.left = new FormAttachment(0, 190);
 		timeSlotCompo.setLayoutData(fd_TimeSlotCompo);
 		timeSlotCompo.setBackgroundImage(searchCriteriaCompo.getBackgroundImage());
-		timeSlotCompo.setBackgroundMode(SWT.INHERIT_FORCE);
+//		timeSlotCompo.setBackgroundMode(SWT.INHERIT_FORCE);
 		toolkit.adapt(timeSlotCompo);
 		toolkit.paintBordersFor(timeSlotCompo);
 		timeSlotCompo.setLayout(new FormLayout());
@@ -797,7 +797,7 @@ public class ViewBookingSystem extends Composite {
 		fd_dtSearchCriteria.top = new FormAttachment(0);
 		fd_dtSearchCriteria.left = new FormAttachment(0);
 		dtSearchCriteria.setLayoutData(fd_dtSearchCriteria);
-		dtSearchCriteria.setBackgroundMode(SWT.INHERIT_FORCE);
+//		dtSearchCriteria.setBackgroundMode(SWT.INHERIT_FORCE);
 		toolkit.adapt(dtSearchCriteria);
 		toolkit.paintBordersFor(dtSearchCriteria);
 		
@@ -1007,6 +1007,17 @@ public class ViewBookingSystem extends Composite {
 	resultPageCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	dtSearchCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	
+	Composite composite = new Composite(mainCompo, SWT.NONE);
+	//composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	FormData fd_composite = new FormData();
+	fd_composite.top = new FormAttachment(0);
+	fd_composite.left = new FormAttachment(0);
+	fd_composite.bottom = new FormAttachment(100);
+	fd_composite.right = new FormAttachment(100);
+	composite.setLayoutData(fd_composite);
+	toolkit.adapt(composite);
+	toolkit.paintBordersFor(composite);
+	composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	}	
 	
 	/**

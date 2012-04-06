@@ -185,6 +185,6 @@ public class ModelEvent {
 	}
 	
 	public static void DestroyDB() {
-		db.destroy();
+		db.destroy(true);
 	}
 }

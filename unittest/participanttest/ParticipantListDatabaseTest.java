@@ -18,10 +18,13 @@ public class ParticipantListDatabaseTest {
 	
 	List<Participant> participantList;
 	Eventitem currentEvent;
+	ModelEvent model;
+	ModelParticipantList modelPL;
 	
 	public ParticipantListDatabaseTest() {
-		
-		ModelParticipantList.startTestDatabase("unit.sqlite");
+		model = new ModelEvent();
+		modelPL = new ModelParticipantList();
+		//ModelParticipantList.startTestDatabase("unit.sqlite");
 		currentEvent = CreateCurrentEvent();
 	}
 	
