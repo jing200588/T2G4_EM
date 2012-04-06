@@ -47,6 +47,7 @@ public class ViewParticipantList extends Composite {
 	private static List<Participant> tempEntries;
 
 	private static final String[] HEADERS = {"Name", "Matric No.", "Contact", "Email Address", "Home Address", "Remarks"};
+	
 	private static final int TOTAL = 6;
 	
 	/**
@@ -143,6 +144,64 @@ public class ViewParticipantList extends Composite {
 			});
 			}
 
+		//////////////////////////////////////////////////////////////////////////////
+		// Add listeners for table columns
+		/////////////////////////////////////////////////////////////////////////////
+		
+		// Column 0: Name
+		tvc[0].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.NAME);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 1: Matric
+		tvc[1].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.MATRIC);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 2: Contact
+		tvc[2].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.CONTACT);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 3: Email
+		tvc[3].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.EMAIL);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 4: Address
+		tvc[4].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.ADDRESS);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 5: Remark
+		tvc[5].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.REMARK);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
 			tableParticipantViewer.setInput(tempEntries);
 			tvc[1].getColumn().pack();
 			tvc[2].getColumn().pack();
