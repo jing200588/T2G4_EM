@@ -19,6 +19,9 @@ public class EMDBIITest {
 	
 	private EMDBII 				db	= new EMDBII("unit.sqlite", true);; 				
 	
+	private int 				eventID			= 	0;
+	
+	private Eventitem			event;
 	private Vector<Eventitem>	eventList		=	new Vector<Eventitem>();
 	private Vector<Venue>		venueList		=	new Vector<Venue>();
 	private Vector<Item> 		itemList		=	new Vector<Item>();
@@ -32,13 +35,16 @@ public class EMDBIITest {
 	public EMDBIITest(){		
 
 		//Add 5 items to the list
-		this.eventList.add(new Eventitem("The NUS Event", "01/12/2014", "12/12/2014", "01:00", "13:00"));
-		this.eventList.get(0).setDescription("Just another event");
+		this.event = new Eventitem("The NUS Event", "01/12/2014", "12/12/2014", "01:00", "13:00");
+		this.event.setDescription("Just another event");
 		
 		this.eventList.add(new Eventitem("My Event", "19/12/2014", "20/12/2014", "14:00", "18:00"));
+	
 		this.eventList.add(new Eventitem("This Event", "19/10/2014", "20/10/2014", "14:00", "18:00"));
+		
 		this.eventList.add(new Eventitem("That Event", "20/10/2014", "20/11/2014", "11:56", "14:23"));
 		this.eventList.add(new Eventitem("Your Event", "19/01/2014", "20/05/2014", "17:34", "23:56"));
+		this.eventList.add(new Eventitem("The NUSSU Stuff", "06/10/2013", "12/12/2014", "01:00", "13:00"));
 		
 
 		//Add 5 Venues	
@@ -88,75 +94,81 @@ public class EMDBIITest {
 		EMDBSettings.dMsg("<EMDB TEST> SAVE AND RETRIEVE EVENT");
 		
 		
-		Eventitem itemOriginal 	= 	this.eventList.get(0);
 		Eventitem itemResult	=	null;
 		
-		int id = this.db.eventDB().addEvent(
-				itemOriginal.getName(), 
-				itemOriginal.getDescription(), 
-				itemOriginal.getBudget(), 
-				itemOriginal.getStartDateTime().getDateRepresentation(), 
-				itemOriginal.getEndDateTime().getDateRepresentation(),
-				itemOriginal.getStartDateTime().getTimeRepresentation(), 
-				itemOriginal.getEndDateTime().getTimeRepresentation(), 
-				EventFlowEntry.getStringRepresentation(itemOriginal.getEventFlow())
+		this.eventID = this.db.eventDB().addEvent(
+				this.event.getName(), 
+				this.event.getDescription(), 
+				this.event.getBudget(), 
+				this.event.getStartDateTime().getDateRepresentation(), 
+				this.event.getEndDateTime().getDateRepresentation(),
+				this.event.getStartDateTime().getTimeRepresentation(), 
+				this.event.getEndDateTime().getTimeRepresentation(), 
+				EventFlowEntry.getStringRepresentation(this.event.getEventFlow())
 				);
 		
-		assertTrue(	(id > 0) );
+		assertTrue(	(this.eventID > 0) );
 		
-		itemResult = this.db.eventDB().getEvent(id);
+		itemResult = this.db.eventDB().getEvent(this.eventID);
 		
 		assertEquals(
-				itemOriginal.getName(), 
+				this.event.getName(), 
 				itemResult.getName()
 				);
 		
 		assertEquals(
-				itemOriginal.getDescription(), 
+				this.event.getDescription(), 
 				itemResult.getDescription()
 				);
 		
-		assertTrue(	(itemOriginal.getBudget() == itemResult.getBudget()) );
+		assertTrue(	(this.event.getBudget() == itemResult.getBudget()) );
 		
 		assertEquals(
-				itemOriginal.getStartDateTime().getDateRepresentation(), 
+				this.event.getStartDateTime().getDateRepresentation(), 
 				itemResult.getStartDateTime().getDateRepresentation()
 				);
 		
 		assertEquals(
-				itemOriginal.getEndDateTime().getDateRepresentation(), 
+				this.event.getEndDateTime().getDateRepresentation(), 
 				itemResult.getEndDateTime().getDateRepresentation()
 				);
 		
 		assertEquals(
-				itemOriginal.getStartDateTime().getTimeRepresentation(), 
+				this.event.getStartDateTime().getTimeRepresentation(), 
 				itemResult.getStartDateTime().getTimeRepresentation()
 				);
 		
 		assertEquals(
-				itemOriginal.getEndDateTime().getTimeRepresentation(), 
+				this.event.getEndDateTime().getTimeRepresentation(), 
 				itemResult.getEndDateTime().getTimeRepresentation()
 				);
 		
 		assertEquals(
-				EventFlowEntry.getStringRepresentation(itemOriginal.getEventFlow()),
+				EventFlowEntry.getStringRepresentation(this.event.getEventFlow()),
 				EventFlowEntry.getStringRepresentation(itemResult.getEventFlow())
 				);
 		
 	}
 	
-	
-	
-
-	
 	@Test
-	public void clearTables() throws Exception {
+	public void saveBulkEvents(){
 		
-		EMDBSettings.dMsg("<EMDB TEST> CLEAR / TRUNCATE TABLES");
 		
-	
+		int sizeBefore = this.db.eventDB().getEventList().size();
+		EMDBSettings.dMsg(""+this.db.eventDB().getEventList().size());
+		
+		this.db.eventDB().addEventList(this.eventList);
+		
+		int sizeAfter = this.db.eventDB().getEventList().size();
+		EMDBSettings.dMsg(""+this.db.eventDB().getEventList().size());
+		
+		assertEquals((sizeAfter-sizeBefore), 5);
+		
 		
 	}
+
+	
+
 
 	
 	@Test
@@ -165,17 +177,17 @@ public class EMDBIITest {
 		EMDBSettings.dMsg("<EMDB TEST> DELETE / DROP TABLES");
 		
 		
-		db.eventDB().drop();
-		assertFalse(db.eventDB().verify());
+		this.db.eventDB().drop();
+		assertFalse(this.db.eventDB().verify());
 
-		db.venueDB().drop();
-		assertFalse(db.venueDB().verify());
+		this.db.venueDB().drop();
+		assertFalse(this.db.venueDB().verify());
 		
-		db.budgetDB().drop();
-		assertFalse(db.budgetDB().verify());
+		this.db.budgetDB().drop();
+		assertFalse(this.db.budgetDB().verify());
 		
-		db.participantDB().drop();
-		assertFalse(db.participantDB().verify());
+		this.db.participantDB().drop();
+		assertFalse(this.db.participantDB().verify());
 	}
 	
 	
