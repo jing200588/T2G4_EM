@@ -125,7 +125,7 @@ public class ViewBookingSystem extends Composite {
 		Form VenueViewForm = toolkit.createForm(this);
 //		VenueViewForm.getBody().setBackgroundMode(SWT.INHERIT_DEFAULT);
 		VenueViewForm.setBounds(0, 0, 700, 400);
-		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
 		toolkit.paintBordersFor(VenueViewForm);
 		VenueViewForm.setText("Book Venue");
 		VenueViewForm.getBody().setLayout(new FormLayout());

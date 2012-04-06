@@ -101,7 +101,7 @@ public class ViewEventFlow extends Composite {
 		Form VenueViewForm = toolkit.createForm(this);
 		VenueViewForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		VenueViewForm.setBounds(0, 0, 700, 400);
-		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
 		toolkit.paintBordersFor(VenueViewForm);
 		VenueViewForm.setText("Event Flow");
 
@@ -127,6 +127,7 @@ public class ViewEventFlow extends Composite {
 		
 		tableViewEventFlow = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableEventFlow = tableViewEventFlow.getTable();
+		tableEventFlow.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		tableEventFlow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -251,6 +252,7 @@ public class ViewEventFlow extends Composite {
 		});
 		
 		Button btnBack = new Button(mainComposite, SWT.NONE);
+		btnBack.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		FormData fd_btnBack = new FormData();
 		fd_btnBack.width = 100;
 	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
@@ -278,6 +280,7 @@ public class ViewEventFlow extends Composite {
 		btnBack.setText("Back");
 		
 		Button btnAdd = new Button(mainComposite, SWT.NONE);
+		btnAdd.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		fd_btnBack.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
 		fd_btnBack.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
 		FormData fd_btnAdd = new FormData();
@@ -327,6 +330,7 @@ public class ViewEventFlow extends Composite {
 		textSave.setText("The list is not saved.");
 		
 		Label lblInput = new Label(composite, SWT.NONE);
+		lblInput.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblInput.setText("Input file:");
 		toolkit.adapt(lblInput, true, true);
@@ -336,6 +340,7 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(importTextFilePath, true, true);
 		
 		Button button = new Button(composite, SWT.NONE);
+		button.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -355,6 +360,7 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(button, true, true);
 		
 		Button btnImport = new Button(composite, SWT.NONE);
+		btnImport.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -406,6 +412,7 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(btnImport, true, true);	
 		
 		Label lblNewLabel = new Label(composite, SWT.NONE);
+		lblNewLabel.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		toolkit.adapt(lblNewLabel, true, true);
 		lblNewLabel.setText("Output file:");
 		
@@ -414,6 +421,7 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(textFilePath, true, true);
 
 		Button btnNewButton_1 = new Button(composite, SWT.NONE);
+		btnNewButton_1.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnNewButton_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnNewButton_1.widthHint = 60;
 		btnNewButton_1.setLayoutData(gd_btnNewButton_1);
@@ -437,6 +445,7 @@ public class ViewEventFlow extends Composite {
 		btnNewButton_1.setText("Browse");
 		
 		Button btnExport = new Button(composite, SWT.NONE);
+		btnExport.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnExport = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnExport.widthHint = 60;
 		btnExport.setLayoutData(gd_btnExport);
@@ -484,6 +493,7 @@ public class ViewEventFlow extends Composite {
 		toolkit.paintBordersFor(tableEventFlow);	
 		
 		Button btnSave = new Button(mainComposite, SWT.NONE);
+		btnSave.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		fd_btnBack.top = new FormAttachment(btnSave, 10);
 		
 		btnSave.addSelectionListener(new SelectionAdapter() {
@@ -511,6 +521,7 @@ public class ViewEventFlow extends Composite {
 		
 		
 		btnFilter = new Button(mainComposite, SWT.NONE);
+		btnFilter.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnFilter.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

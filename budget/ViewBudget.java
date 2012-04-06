@@ -115,9 +115,10 @@ public class ViewBudget extends Composite {
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		Form ViewBudgetForm = formToolkit.createForm(this);
+		ViewBudgetForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 
 		ViewBudgetForm.setBounds(0, 0, 700, 400);
-		ViewBudgetForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		ViewBudgetForm.getHead().setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
 		formToolkit.paintBordersFor(ViewBudgetForm);
 		ViewBudgetForm.setText("Budget Optimization");
 		ViewBudgetForm.getBody().setLayout(new FormLayout());

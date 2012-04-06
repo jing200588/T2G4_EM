@@ -62,7 +62,7 @@ public class ViewParticipantList extends Composite {
 		
 		//Event Particulars label
 		Label lblEventParticulars = new Label(this, SWT.NONE);
-		lblEventParticulars.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		lblEventParticulars.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
 		FormData fd_lblEventParticulars = new FormData();
 		fd_lblEventParticulars.top = new FormAttachment(0, 10);
 		fd_lblEventParticulars.left = new FormAttachment(0, 10);
@@ -100,7 +100,7 @@ public class ViewParticipantList extends Composite {
 			tvc[i].getColumn().setText(HEADERS[i]);
 		}
 		
-
+		//set column weight data
 		tcl_TableViewerComp.setColumnData(tvc[0].getColumn(), new ColumnWeightData(20));
 		tcl_TableViewerComp.setColumnData(tvc[1].getColumn(), new ColumnWeightData(20));
 		tcl_TableViewerComp.setColumnData(tvc[2].getColumn(), new ColumnWeightData(20));
@@ -108,7 +108,7 @@ public class ViewParticipantList extends Composite {
 		tcl_TableViewerComp.setColumnData(tvc[4].getColumn(), new ColumnWeightData(30));
 		tcl_TableViewerComp.setColumnData(tvc[5].getColumn(), new ColumnWeightData(10));
 		
-	
+		//populating table
 		tableParticipantViewer.setContentProvider(ArrayContentProvider.getInstance());
 		for (int i=0; i<HEADERS.length; i++) {
 			tvc[i].setLabelProvider(new ColumnLabelProvider() {
@@ -156,6 +156,7 @@ public class ViewParticipantList extends Composite {
 			tableParticipantViewer.setCellModifier(new ParticipantListCellModifier(tableParticipantViewer));
 			tableParticipantViewer.setCellEditors(editors);
 		
+		//tableParticipant selection listener
 		tableParticipant.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -181,6 +182,7 @@ public class ViewParticipantList extends Composite {
 		compositebottom.setLayout(new GridLayout(4, false));
 		
 		Label lblInputFile = new Label(compositebottom, SWT.NONE);
+		lblInputFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblInputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblInputFile.setText("Input File:");
 		
@@ -194,8 +196,9 @@ public class ViewParticipantList extends Composite {
 		 * 
 		 ***********************************************************/
 		Button btnInputBrowse = new Button(compositebottom, SWT.NONE);
+		btnInputBrowse.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnInputBrowse = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnInputBrowse.widthHint = 70;
+		gd_btnInputBrowse.widthHint = 80;
 		btnInputBrowse.setLayoutData(gd_btnInputBrowse);
 		btnInputBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -217,8 +220,9 @@ public class ViewParticipantList extends Composite {
 		 * 
 		 ***********************************************************/
 		Button btnImportFile = new Button(compositebottom, SWT.NONE);
+		btnImportFile.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnImportFile = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_btnImportFile.widthHint = 70;
+		gd_btnImportFile.widthHint = 80;
 		btnImportFile.setLayoutData(gd_btnImportFile);
 		btnImportFile.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -262,6 +266,7 @@ public class ViewParticipantList extends Composite {
 		btnImportFile.setText("Import File");
 		
 		Label lblOutputFile = new Label(compositebottom, SWT.NONE);
+		lblOutputFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblOutputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblOutputFile.setText("Output File:");
 		
@@ -275,8 +280,9 @@ public class ViewParticipantList extends Composite {
 		 * 
 		 ***********************************************************/
 		Button btnOutputBrowse = new Button(compositebottom, SWT.NONE);
+		btnOutputBrowse.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnOutputBrowse = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnOutputBrowse.widthHint = 70;
+		gd_btnOutputBrowse.widthHint = 80;
 		btnOutputBrowse.setLayoutData(gd_btnOutputBrowse);
 		btnOutputBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -302,8 +308,9 @@ public class ViewParticipantList extends Composite {
 		 * 
 		 ***********************************************************/
 		Button btnExportFile = new Button(compositebottom, SWT.NONE);
+		btnExportFile.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnExportFile = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_btnExportFile.widthHint = 70;
+		gd_btnExportFile.widthHint = 80;
 		btnExportFile.setLayoutData(gd_btnExportFile);
 		btnExportFile.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -326,6 +333,7 @@ public class ViewParticipantList extends Composite {
 		
 		//Add New button
 		Button btnAddNew = new Button(compositeside, SWT.NONE);
+		btnAddNew.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnAddNew = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_btnAddNew.widthHint = 100;
 		btnAddNew.setLayoutData(gd_btnAddNew);
@@ -341,6 +349,7 @@ public class ViewParticipantList extends Composite {
 		});
 		btnAddNew.setText("Add Participant");
 		btnDelete = new Button(compositeside, SWT.NONE);
+		btnDelete.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnDelete = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_btnDelete.widthHint = 100;
 		btnDelete.setLayoutData(gd_btnDelete);
@@ -358,6 +367,7 @@ public class ViewParticipantList extends Composite {
 		
 		//Go Back button
 		Button btnGoBack = new Button(compositeside, SWT.NONE);
+		btnGoBack.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnGoBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -381,6 +391,7 @@ public class ViewParticipantList extends Composite {
 		 ***********************************************************/
 		
 		Button btnSaveList = new Button(compositeside, SWT.NONE);
+		btnSaveList.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnSaveList = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_btnSaveList.heightHint = 45;
 		gd_btnSaveList.widthHint = 100;
@@ -398,6 +409,10 @@ public class ViewParticipantList extends Composite {
 		
 	}
 	
+/**
+ * Description: Method to export participant list into CSV file
+ * @param filepath - the location to store the exported file
+ */
 public void ExportCSV (String filepath) {
 	try {
 		CSVWriter writer = new CSVWriter(new FileWriter(filepath));
@@ -424,6 +439,16 @@ public void ExportCSV (String filepath) {
 	}
 }
 
+/**
+ * Description: Method to export participant list into CSV file
+ * @param filepath - the location to store the exported file
+ */
+
+/**
+ * Description: Method to import participant list from a CSV file 
+ * @param filepath - the location of the CSV file to be imported
+ * @throws Exception
+ */
 public void ImportCSV (String filepath) throws Exception {
 	try {
 		CSVReader reader = new CSVReader(new FileReader(filepath));
@@ -441,17 +466,16 @@ public void ImportCSV (String filepath) throws Exception {
 		throw e;
 	} catch (IOException e) {
 
-		System.out.println(e);
-		e.printStackTrace();
+		throw e;
 	}
 
 }
 	/**
 	 * Description: Adds a new participant object into the local list of participants.
-	 * @param newparticipant
+	 * @param newParticipant - new participant to be added
 	 */
-	public static void addParticipant(Participant newparticipant) {
-		tempEntries.add(newparticipant);
+	public static void addParticipant(Participant newParticipant) {
+		tempEntries.add(newParticipant);
 	}
 	
 	@Override

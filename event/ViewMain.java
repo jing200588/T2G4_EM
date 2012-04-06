@@ -416,7 +416,7 @@ public class ViewMain extends ApplicationWindow {
 			btnCreateEvent.setForeground(SWTResourceManager.getColor(0, 0, 0));
 			btnCreateEvent.setCursor(SWTResourceManager.getCursor(SWT.CURSOR_HAND));
 			btnCreateEvent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-			btnCreateEvent.setFont(SWTResourceManager.getFont("Chaparral Pro", 16, SWT.NORMAL));
+			btnCreateEvent.setFont(SWTResourceManager.getFont("Maiandra GD", 16, SWT.NORMAL));
 			btnCreateEvent.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					
@@ -461,6 +461,7 @@ public class ViewMain extends ApplicationWindow {
 			
 			
 			TabFolder tabFolder = new TabFolder(leftComp, SWT.NONE);
+			tabFolder.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 			GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
 			gd_tabFolder.widthHint = 284;
 			tabFolder.setLayoutData(gd_tabFolder);
@@ -468,11 +469,12 @@ public class ViewMain extends ApplicationWindow {
 			formToolkit.paintBordersFor(tabFolder);
 			
 			TabItem tbtmUpcomingEvents = new TabItem(tabFolder, SWT.NONE);
-			tbtmUpcomingEvents.setText("       Upcoming Events       ");
+			tbtmUpcomingEvents.setText("    Upcoming Events     ");
 			
 
 			//Event List Table tooltip
 			eventListTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			eventListTable.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 			tbtmUpcomingEvents.setControl(eventListTable);
 			eventListTable.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override
@@ -570,10 +572,11 @@ public class ViewMain extends ApplicationWindow {
 			mntmDeleteEvent.setText("Delete Event");
 
 			TabItem tbtmPastEvents = new TabItem(tabFolder, SWT.NONE);
-			tbtmPastEvents.setText("          Past Events          ");
+			tbtmPastEvents.setText("        Past Events        ");
 			
 			//Expired event list table tooltip
 			expiredTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			expiredTable.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 			tbtmPastEvents.setControl(expiredTable);			
 			expiredTable.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override

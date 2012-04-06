@@ -91,7 +91,7 @@ public class ViewEvent extends Composite {
 		//View Event title label
 		Label lblViewEvent = new Label(compMain, SWT.NONE);
 		lblViewEvent.setText("View Event:");
-		lblViewEvent.setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		lblViewEvent.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
 		FormData fdViewTitle = new FormData();
 		fdViewTitle.top = new FormAttachment(0, 10);
 		fdViewTitle.left = new FormAttachment(0, 10);
@@ -111,7 +111,7 @@ public class ViewEvent extends Composite {
 		compEventParticulars.setLayout(new GridLayout(4, false));
 
 		Label lblEventParticulars = new Label(compEventParticulars, SWT.NONE);
-		lblEventParticulars.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblEventParticulars.setFont(SWTResourceManager.getFont("Maiandra GD", 18, SWT.BOLD));
 		lblEventParticulars.setText("Event Particulars");
 		new Label(compEventParticulars, SWT.NONE);
 
@@ -122,6 +122,7 @@ public class ViewEvent extends Composite {
 		 *********************************************************************************************/
 		new Label(compEventParticulars, SWT.NONE);
 		Button btnEventParticulars = new Button(compEventParticulars, SWT.NONE);
+		btnEventParticulars.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 
 		btnEventParticulars.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -139,61 +140,61 @@ public class ViewEvent extends Composite {
 
 		Label lblEname = new Label(compEventParticulars, SWT.NONE);
 		lblEname.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEname.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblEname.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
 		lblEname.setText("Event Name:");
 
 		lblDynamicname = new Label(compEventParticulars, SWT.WRAP);
 		lblDynamicname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
-		lblDynamicname.setFont(SWTResourceManager.getFont("Century Gothic", 12, SWT.NORMAL));
+		lblDynamicname.setFont(SWTResourceManager.getFont("Malgun Gothic", 13, SWT.NORMAL));
 		lblDynamicname.setText(currentEvent.getName());
 
 		Label lblStartDate = new Label(compEventParticulars, SWT.NONE);
 		lblStartDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblStartDate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblStartDate.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
 		lblStartDate.setText("Start Date:");
 
 		lblDynamicStartDate = new Label(compEventParticulars, SWT.NONE);
 		lblDynamicStartDate.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		lblDynamicStartDate.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		lblDynamicStartDate.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.NORMAL));
 		lblDynamicStartDate.setText(currentEvent.getStartDateTime().getDateRepresentation());
 
 		Label lblStartTime = new Label(compEventParticulars, SWT.NONE);
 		lblStartTime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		lblStartTime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblStartTime.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
 		lblStartTime.setText("Start Time:");
 
 		lblDynamicStartTime = new Label(compEventParticulars, SWT.NONE);
 		lblDynamicStartTime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblDynamicStartTime.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		lblDynamicStartTime.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.NORMAL));
 		lblDynamicStartTime.setText(currentEvent.getStartDateTime().getTimeRepresentation()+"HRS");
 
 		Label lblEndDate = new Label(compEventParticulars, SWT.NONE);
 		lblEndDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEndDate.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblEndDate.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
 		lblEndDate.setText("End Date:");
 
 		lblDynamicEndDate = new Label(compEventParticulars, SWT.NONE);
 		lblDynamicEndDate.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		lblDynamicEndDate.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		lblDynamicEndDate.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.NORMAL));
 		lblDynamicEndDate.setText(currentEvent.getEndDateTime().getDateRepresentation());
 
 		Label lblEndTime = new Label(compEventParticulars, SWT.NONE);
-		lblEndTime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblEndTime.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
 		lblEndTime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		lblEndTime.setText("End Time:");
 
 		lblDynamicEndTime = new Label(compEventParticulars, SWT.NONE);
 		lblDynamicEndTime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblDynamicEndTime.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		lblDynamicEndTime.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.NORMAL));
 		lblDynamicEndTime.setText(currentEvent.getEndDateTime().getTimeRepresentation()+"HRS");
 
 		Label lblEdescription = new Label(compEventParticulars, SWT.NONE);
 		lblEdescription.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEdescription.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblEdescription.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
 		lblEdescription.setText("Description:");
 
 		lblDynamicDescription = new Label(compEventParticulars, SWT.WRAP | SWT.SHADOW_NONE);
-		lblDynamicDescription.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		lblDynamicDescription.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.NORMAL));
 		GridData gdDynamicDescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		gdDynamicDescription.widthHint = 90;
 		lblDynamicDescription.setLayoutData(gdDynamicDescription);
@@ -219,7 +220,7 @@ public class ViewEvent extends Composite {
 
 		Label lblBookVenue = new Label(compVenue, SWT.NONE);
 		lblBookVenue.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblBookVenue.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblBookVenue.setFont(SWTResourceManager.getFont("Maiandra GD", 18, SWT.BOLD));
 		lblBookVenue.setText("Book Venue");
 
 		Label lblDummyVenue = new Label(compVenue, SWT.NONE);
@@ -233,6 +234,7 @@ public class ViewEvent extends Composite {
 		 * 
 		 *********************************************************************************************/
 		Button btnBookVenue = new Button(compVenue, SWT.NONE);
+		btnBookVenue.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnBookVenue.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.BookVenue();
@@ -264,7 +266,7 @@ public class ViewEvent extends Composite {
 
 		Label lblOptimizeBudget = new Label(compBudget, SWT.NONE);
 		lblOptimizeBudget.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblOptimizeBudget.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblOptimizeBudget.setFont(SWTResourceManager.getFont("Maiandra GD", 18, SWT.BOLD));
 		lblOptimizeBudget.setText("Optimal Purchase");
 
 		Label lblDummyBudget = new Label(compBudget, SWT.NONE);
@@ -278,6 +280,7 @@ public class ViewEvent extends Composite {
 		 * 
 		 *********************************************************************************************/
 		Button btnOptimizeBudget = new Button(compBudget, SWT.NONE);
+		btnOptimizeBudget.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnOptimizeBudget.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.CalcBudget();
@@ -309,7 +312,7 @@ public class ViewEvent extends Composite {
 
 		Label lblEventFlow = new Label(compEventFlow, SWT.NONE);
 		lblEventFlow.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblEventFlow.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblEventFlow.setFont(SWTResourceManager.getFont("Maiandra GD", 18, SWT.BOLD));
 		lblEventFlow.setText("Event Program Flow");
 
 		Label lblEventDummy = new Label(compEventFlow, SWT.NONE);
@@ -324,6 +327,7 @@ public class ViewEvent extends Composite {
 		 * 
 		 *********************************************************************************************/
 		Button btnEventFlow = new Button(compEventFlow, SWT.NONE);
+		btnEventFlow.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnEventFlow.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -355,7 +359,7 @@ public class ViewEvent extends Composite {
 
 		Label lblParticipantList = new Label(compParticipant, SWT.NONE);
 		lblParticipantList.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblParticipantList.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblParticipantList.setFont(SWTResourceManager.getFont("Maiandra GD", 18, SWT.BOLD));
 		lblParticipantList.setText("Participant List");
 
 		Label lblDummyParticipant = new Label(compParticipant, SWT.NONE);
@@ -367,6 +371,7 @@ public class ViewEvent extends Composite {
 		 * 
 		 *********************************************************************************************/
 		Button btnParticipantList = new Button(compParticipant, SWT.NONE);
+		btnParticipantList.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnParticipantList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.ParticipantList();
@@ -399,7 +404,7 @@ public class ViewEvent extends Composite {
 
 		Label lblAdvertisement = new Label(compAdvertise, SWT.NONE);
 		lblAdvertisement.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblAdvertisement.setFont(SWTResourceManager.getFont("Kristen ITC", 16, SWT.BOLD));
+		lblAdvertisement.setFont(SWTResourceManager.getFont("Maiandra GD", 18, SWT.BOLD));
 		lblAdvertisement.setText("Advertising");
 
 		Label lblDummyAdvertise = new Label(compAdvertise, SWT.NONE);
@@ -460,7 +465,7 @@ public class ViewEvent extends Composite {
 		 * 
 		 *********************************************************************************************/
 		Button btnDeleteEvent = new Button(compMain, SWT.NONE);
-		btnDeleteEvent.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
+		btnDeleteEvent.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnDeleteEvent.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", currentEvent.getName());
@@ -479,6 +484,7 @@ public class ViewEvent extends Composite {
 		btnDeleteEvent.setText("Delete");
 
 		Button btnExport = new Button(compMain, SWT.NONE);
+		btnExport.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnExport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 
@@ -717,6 +723,8 @@ public class ViewEvent extends Composite {
 		tableParticipant = tableViewerParticipant.getTable();
 		tableParticipant.setHeaderVisible(true);
 		tableParticipant.getVerticalBar().setEnabled(true);
+		tableParticipant.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		
 		//setting the column headers
 		for (int i=0; i<tvc.length; i++) {
 			tvc[i] = new TableViewerColumn (tableViewerParticipant, SWT.NONE);
@@ -936,6 +944,7 @@ public class ViewEvent extends Composite {
 		tableEventFlow = tableViewerEventFlow.getTable();
 		tableEventFlow.setHeaderVisible(true);
 		tableEventFlow.getVerticalBar().setEnabled(true);
+		tableEventFlow.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		//setting the column headers
 		for (int i=0; i<tvc.length; i++) {
 			tvc[i] = new TableViewerColumn (tableViewerEventFlow, SWT.NONE);
@@ -1031,6 +1040,7 @@ public class ViewEvent extends Composite {
 		tableVenue = tableViewerVenue.getTable();
 		tableVenue.setHeaderVisible(true);
 		tableVenue.getVerticalBar().setEnabled(true);
+		tableVenue.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		//setting the column headers
 		for (int i=0; i<tvc.length; i++) {
 			tvc[i] = new TableViewerColumn (tableViewerVenue, SWT.NONE);
@@ -1235,7 +1245,8 @@ public class ViewEvent extends Composite {
 		TableViewer tableViewerBudget = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableBudget = tableViewerBudget.getTable();
 		tableBudget.setHeaderVisible(true);
-
+		tableBudget.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		
 		//setting the column headers
 		for (int i=0; i<tvc.length; i++) {
 			tvc[i] = new TableViewerColumn (tableViewerBudget, SWT.NONE);

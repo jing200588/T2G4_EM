@@ -74,7 +74,7 @@ public class ViewEventParticulars extends Composite {
 		lblNewLabel = formToolkit.createLabel(composite, "Event Title:", SWT.NONE);
 		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
+		lblNewLabel.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.BOLD));
 		
 		//Event name textbox
 		txtEventTitle = formToolkit.createText(composite, "New Text", SWT.NONE);
@@ -88,7 +88,7 @@ public class ViewEventParticulars extends Composite {
 		lblStartDate = formToolkit.createLabel(composite, "Start Date and Time:", SWT.NONE);
 		lblStartDate.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblStartDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblStartDate.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
+		lblStartDate.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.BOLD));
 		StartDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
 		formToolkit.adapt(StartDate);
 		formToolkit.paintBordersFor(StartDate);
@@ -104,7 +104,7 @@ public class ViewEventParticulars extends Composite {
 		lblEndDate = formToolkit.createLabel(composite, "End Date and Time:", SWT.NONE);
 		lblEndDate.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblEndDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEndDate.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
+		lblEndDate.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.BOLD));
 		EndDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
 		formToolkit.adapt(EndDate);
 		formToolkit.paintBordersFor(EndDate);
@@ -118,7 +118,7 @@ public class ViewEventParticulars extends Composite {
 		//Description label
 		lblDescription = new Label(composite, SWT.NONE);
 		lblDescription.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblDescription.setFont(SWTResourceManager.getFont("Hobo Std", 12, SWT.NORMAL));
+		lblDescription.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.BOLD));
 		lblDescription.setText("Description:");
 		
 		//Description textbox
@@ -136,7 +136,7 @@ public class ViewEventParticulars extends Composite {
 		 *********************************************************************************************/
 		btnConfirm = new Button(EventParticularsForm.getBody(), SWT.NONE);
 
-		btnConfirm.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
+		btnConfirm.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		FormData fd_btnConfirm = new FormData();
 		fd_btnConfirm.top = new FormAttachment(composite, 16);
 		fd_btnConfirm.right = new FormAttachment(50, 70);
@@ -150,6 +150,7 @@ public class ViewEventParticulars extends Composite {
 		 *
 		 ***********************************************************/
 		btnBack = new Button(EventParticularsForm.getBody(), SWT.NONE);
+		btnBack.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		
 		FormData fd_btnBack = new FormData();
 		fd_btnBack.top = new FormAttachment(composite, 16);
