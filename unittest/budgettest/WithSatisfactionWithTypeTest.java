@@ -52,13 +52,8 @@ public class WithSatisfactionWithTypeTest {
 		cb.differentiateCompulsory(compulsoryList, 1); // compulsory list is empty
 
 		cb.findOptimalShopList(1, 1);
-		
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 0) 
-			compareResult = false;
 
-		assertEquals(true, compareResult); //can't buy anything, budget is $0
-
+		assertEquals(0, cb.noOfCombination()); //can't buy anything, budget is $0
 	}
 
 	/**
@@ -80,16 +75,10 @@ public class WithSatisfactionWithTypeTest {
 		cb.differentiateCompulsory(compulsoryList, 1); // compulsory list is empty
 
 		cb.findOptimalShopList(1, 1);
-		
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemSatisfaction() != 75)
-			compareResult = false;
-		if(cb.getAllItemCost() != 477137)
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+
+		assertEquals(1, cb.noOfCombination());
+		assertEquals(75, cb.getAllItemSatisfaction());
+		assertEquals(477137, cb.getAllItemCost());
 	}
 
 	/**
@@ -105,9 +94,9 @@ public class WithSatisfactionWithTypeTest {
 	public void exceededBudgetSomeCompulsoryItem() throws Exception {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
-		
+
 		ControllerBudget cb = new ControllerBudget(input, 477137, 1, 1, currentEvent); //Budget = $4771.37 
-		
+
 		compulsoryList.add(3); // flag Nikon_Cam as compulsory, cost is $634.5
 		compulsoryList.add(8); // flag Windows_7_Basic as compulsory, cost is $200
 
@@ -115,15 +104,9 @@ public class WithSatisfactionWithTypeTest {
 
 		cb.findOptimalShopList(1, 1);
 
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemSatisfaction() != 75)
-			compareResult = false;
-		if(cb.getAllItemCost() != 477137)
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+		assertEquals(1, cb.noOfCombination());
+		assertEquals(75, cb.getAllItemSatisfaction());
+		assertEquals(477137, cb.getAllItemCost());
 	}
 
 	/**
@@ -139,9 +122,9 @@ public class WithSatisfactionWithTypeTest {
 	public void exceededBudgetAllCompulsoryItem() throws Exception {
 		Eventitem currentEvent = new Eventitem("BudgetTestEvent", 2012, 4, 2, 2012, 4, 28, 8, 30, 20, 30, "Test Case Event");
 		compulsoryList = new Vector<Integer>();
-		
+
 		ControllerBudget cb = new ControllerBudget(input, 477137, 1, 1, currentEvent); //Budget = $4771.37 
-		
+
 		//Add everything to compulsory list.
 		for(int i=1; i<=10; i++)
 			compulsoryList.add(i);
@@ -149,16 +132,10 @@ public class WithSatisfactionWithTypeTest {
 		cb.differentiateCompulsory(compulsoryList, 1); // all item is compulsory
 
 		cb.findOptimalShopList(1, 1);
-		
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemSatisfaction() != 75)
-			compareResult = false;
-		if(cb.getAllItemCost() != 477137)
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+
+		assertEquals(1, cb.noOfCombination());
+		assertEquals(75, cb.getAllItemSatisfaction());
+		assertEquals(477137, cb.getAllItemCost());
 	}
 
 	/**
@@ -182,12 +159,8 @@ public class WithSatisfactionWithTypeTest {
 		cb.differentiateCompulsory(compulsoryList, 1); 
 
 		cb.findOptimalShopList(1, 1);
-		
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 0) 
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+
+		assertEquals(0, cb.noOfCombination());
 	}
 
 	/**
@@ -211,24 +184,18 @@ public class WithSatisfactionWithTypeTest {
 		compulsoryList.add(3); // flag Nikon_Cam as compulsory, cost is $634.5 for 9 satisfaction
 		compulsoryList.add(5); //flag OCZ_120GB_SSD as compulsory, cost is $320.88 for 8 satisfaction
 		compulsoryList.add(8); // flag Windows_7_Basic as compulsory, cost is $200 for 8 satisfaction
-		
+
 		//Total cost will be = $1156.18
-		
+
 		cb.differentiateCompulsory(compulsoryList, 1); // all item is compulsory
 
 		cb.findOptimalShopList(1, 1);
 
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getCompulsoryItemSatisfaction() != 25)
-			compareResult = false;
-		if(cb.getCompulsoryItemCost() != 115538)
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+		assertEquals(1, cb.noOfCombination());
+		assertEquals(25, cb.getCompulsoryItemSatisfaction());
+		assertEquals(115538, cb.getCompulsoryItemCost());
 	}
-	
+
 	/**
 	 * This test case will cover the situation where the budget is only enough to buy some item.
 	 * 
@@ -243,24 +210,17 @@ public class WithSatisfactionWithTypeTest {
 		compulsoryList = new Vector<Integer>();
 
 		ControllerBudget cb = new ControllerBudget(input, 220000, 1, 1, currentEvent); //Budget = $2200.00
-		
+
 		cb.differentiateCompulsory(compulsoryList, 1); // all item is compulsory
 
 		cb.findOptimalShopList(1, 1);
-		
-		boolean compareResult = true;
-		if(cb.getSolutionSize() != 2) 
-			compareResult = false;
-		if(cb.getSolutionSatisfaction() != 42)
-			compareResult = false;
-		if(cb.getSolutionCost(0) != 2089.47)
-			compareResult = false;
-		if(cb.getSolutionCost(1) != 2099.2)
-			compareResult =false;
 
-		assertEquals(true, compareResult);
+		assertEquals(2, cb.getSolutionSize());
+		assertEquals(42, cb.getSolutionSatisfaction());
+		assertTrue(2089.47 == cb.getSolutionCost(0));
+		assertTrue(2099.2 == cb.getSolutionCost(1));
 	}
-	
+
 	/**
 	 * This test case will cover the situation where the budget is only enough to buy some item, inclusive of compulsory items.
 	 * 
@@ -275,28 +235,21 @@ public class WithSatisfactionWithTypeTest {
 		compulsoryList = new Vector<Integer>();
 
 		ControllerBudget cb = new ControllerBudget(input, 220000, 1, 1, currentEvent); //Budget = $2200.00
-		
+
 		compulsoryList.add(2); // flag Acer_Netbook as compulsory, cost is $1300.8
 		compulsoryList.add(3); // flag Nikon_Cam as compulsory, cost is $634.5
-		
 
-		
+
+
 		cb.differentiateCompulsory(compulsoryList, 1); // all item is compulsory
 
 		cb.findOptimalShopList(1, 1);
-		
+
 		/*This portion of the test data do not consist of any compulsory item*/
-		boolean compareResult = true;
-		if(cb.getSolutionSize() != 2) 
-			compareResult = false;
-		if(cb.getSolutionSatisfaction() != 11)
-			compareResult = false;
-		if(cb.getSolutionCost(0) != 245.3)
-			compareResult = false;
-		if(cb.getSolutionCost(1) != 114.69)
-			compareResult =false;
-		
-		assertEquals(true, compareResult);
+		assertEquals(2, cb.getSolutionSize());
+		assertEquals(11, cb.getSolutionSatisfaction());
+		assertTrue(245.3 == cb.getSolutionCost(0));
+		assertTrue(114.69 == cb.getSolutionCost(1));
 	}
 
 }
