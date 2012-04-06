@@ -703,7 +703,7 @@ public class ViewEventFlow extends Composite {
 			{
 				// Read the start date time
 				String [] startDateTimeArr = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[0]).split(delimiter);
+						HelperFunctions.replaceNewLine(allRows.get(index)[0])).split(delimiter);
 				if(startDateTimeArr.length != 5)
 					throw new Exception("The starting date time of entry at row " + (index + 1) +
 							"is not in the correct format. It should be '<day>/<month>/<year> <hour>:<minute>'");
@@ -719,7 +719,7 @@ public class ViewEventFlow extends Composite {
 				
 				// Read the end date time
 				String [] endDateTimeArr = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[1]).split(delimiter);
+						HelperFunctions.replaceNewLine(allRows.get(index)[1])).split(delimiter);
 				if(endDateTimeArr.length != 5)
 					throw new Exception("The endinging date time of entry at row " + (index + 1) +
 							"is not in the correct format. It should be '<day>/<month>/<year> <hour>:<minute>'");
@@ -735,20 +735,21 @@ public class ViewEventFlow extends Composite {
 				
 				// Read the activity name
 				String activityName = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[2]);
+						HelperFunctions.replaceNewLine(allRows.get(index)[2]));
 				
 				// Read the user's note
 				String note = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[4]);
+						HelperFunctions.replaceNewLine(allRows.get(index)[4]));
 				
 				// Read the venue
 				String venueName = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[3]);
+						HelperFunctions.replaceNewLine(allRows.get(index)[3]));
 				int venueIndex = getVenueID(eventObj.getBviList(), venueName);
 				int venueID = 0;		// Dummny value
 				if(venueIndex < 0)
 				{
-					note = "Note on venue: " + venueName + "\n" + note; 
+					if(venueName.equalsIgnoreCase(InputEventFlowEntry.OTHERVENUE) == false)
+						note = "Note on venue: " + venueName + ". " + note; 
 					venueName = InputEventFlowEntry.OTHERVENUE;
 					venueID = -1;
 				}

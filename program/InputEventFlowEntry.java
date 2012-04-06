@@ -144,7 +144,8 @@ public class InputEventFlowEntry extends Composite {
 		if(isVenueChosen == false)
 			throw new Exception("You have not chosen venue of the activity!");
 		
-		String activityName = HelperFunctions.removeRedundantWhiteSpace(textActivity.getText());
+		String activityName = HelperFunctions.removeRedundantWhiteSpace(
+				HelperFunctions.replaceNewLine(textActivity.getText()));
 		textActivity.setText(activityName);	
 		if(activityName == null || activityName.equals(""))
 			throw new Exception("You have not enter the name of the activity!");
@@ -166,7 +167,8 @@ public class InputEventFlowEntry extends Composite {
 		
 		// Return the EventFlowEntry object
 		return new EventFlowEntry(new TimeSlot(dateTimeFrom, dateTimeTo), activityName, chosenVenue,
-				chosenVenueID, HelperFunctions.removeRedundantWhiteSpace(textNote.getText()));
+				chosenVenueID, HelperFunctions.removeRedundantWhiteSpace(
+						HelperFunctions.replaceNewLine(textNote.getText())));
 	}
 	
 	/**
