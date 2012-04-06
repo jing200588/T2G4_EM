@@ -577,7 +577,7 @@ public class ViewBookingSystem extends Composite {
 								"Warning: Your preferred time slot is not within the event's time slot. Do you still want to book it?",
 								"Yes", "No");
 						String choice = (String) warningBoard.open();
-						if(choice.equals("Yes") == false)
+						if(choice == null || choice.equals("Yes") == false)
 						{
 							return;
 						}

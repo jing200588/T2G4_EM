@@ -265,6 +265,9 @@ public class ViewEventFlow extends Composite {
 						"Do you want to save your table of event flow entries?", "Yes", "No");
 				String choice = (String) saveDialog.open();
 				
+				if(choice == null)
+					return;
+				
 				// Update the event flow in the database as well as in the event itself
 				if(choice.equals("Yes") == true)
 				{
@@ -366,6 +369,9 @@ public class ViewEventFlow extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				try
 				{
+					if(importTextFilePath.getText().equals("") == true)
+						throw new Exception("You have not specified the path of the imported file");
+					
 					boolean overwrite = false;
 					
 					if(listEventFlow.isEmpty() == false)
@@ -374,6 +380,10 @@ public class ViewEventFlow extends Composite {
 								"Do you want to append the existing list or overwrite it?", 
 								"Append", "Overwrite");
 						String decision = (String) message.open();
+						
+						if(decision == null)
+							return;
+						
 						if(decision.equals("Append") == true)
 							overwrite = false;
 						else
@@ -454,21 +464,39 @@ public class ViewEventFlow extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				try 
 				{
+					if(textFilePath.getText().equals("") == true)
+						throw new Exception("You have not specified the path of the exported file");
+					
+					Vector<EventFlowEntry> exportList = listEventFlow;
+					if(isEntireListShowed == false)
+					{
+						TwoChoiceDialog message = new TwoChoiceDialog(new Shell(), "Message", 
+								"Do you want to export the filtered list or the entire list?",
+								"Filtered List", "Entire List");
+						String choice = (String) message.open();
+						
+						if(choice == null)
+							return;
+						
+						if(choice.equals("Filtered List") == true)
+							exportList = filterList;
+					}
+					
 					CSVWriter writer = new CSVWriter(new FileWriter(textFilePath.getText()));
 					
 					writer.writeNext(COLUMN_PROPS);
 					
 					String[] line = new String[COLUMN_PROPS.length];
 					
-					for (int index = 0; index < listEventFlow.size(); index++) 
+					for (int index = 0; index < exportList.size(); index++) 
 					{
-						line[0] = listEventFlow.get(index).getDuration().getStartDateTime().getDateRepresentation()
-								+ " " + listEventFlow.get(index).getDuration().getStartDateTime().getTimeRepresentation();
-						line[1] = listEventFlow.get(index).getDuration().getEndDateTime().getDateRepresentation()
-								+ " " + listEventFlow.get(index).getDuration().getEndDateTime().getTimeRepresentation();
-						line[2] = listEventFlow.get(index).getActivityName();
-						line[3] = listEventFlow.get(index).getVenueName();
-						line[4] = listEventFlow.get(index).getUserNote();
+						line[0] = exportList.get(index).getDuration().getStartDateTime().getDateRepresentation()
+								+ " " + exportList.get(index).getDuration().getStartDateTime().getTimeRepresentation();
+						line[1] = exportList.get(index).getDuration().getEndDateTime().getDateRepresentation()
+								+ " " + exportList.get(index).getDuration().getEndDateTime().getTimeRepresentation();
+						line[2] = exportList.get(index).getActivityName();
+						line[3] = exportList.get(index).getVenueName();
+						line[4] = exportList.get(index).getUserNote();
 						
 						writer.writeNext(line);
 					}
@@ -476,11 +504,14 @@ public class ViewEventFlow extends Composite {
 					writer.close();
 					new ErrorMessageDialog(new Shell(), "The file was exported successfully!").open();  		
 				} 
-				catch (Exception excetion) 
+				catch (Exception exception) 
 				{
+					ErrorMessageDialog errorBoard = null;
 					// TODO Auto-generated catch block
-					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), 
-							"There was an error exporting the file.");
+					if(exception.getMessage().equals("") == true)
+						errorBoard = new ErrorMessageDialog(new Shell(), "There was an error exporting the file.");
+					else
+						errorBoard = new ErrorMessageDialog(new Shell(), exception.getMessage());
 					errorBoard.open();
 				}
 			}
