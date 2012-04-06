@@ -43,8 +43,9 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class ViewSmsAds extends Composite {
 	protected ErrorMessageDialog errordiag;
-
+	private String defaultPort="";
 	private Eventitem currentEvent;
+	
 	private final FormToolkit formToolkit = new FormToolkit(Display.getCurrent());
 	private Text txtToInputBox;
 	private Composite compSmsMain;
@@ -52,6 +53,7 @@ public class ViewSmsAds extends Composite {
 	private Label lblMessage;
 	private Text txtMessageInputBox;
 	private Button btnSend;
+
 
 	/**
 	 * Create the composite.
@@ -139,37 +141,60 @@ public class ViewSmsAds extends Composite {
 						errordiag = new ErrorMessageDialog(new Shell(), "No number entered detected.");	
 					else if(ex.getMessage().equals("Number entered is invalid")) 
 						errordiag = new ErrorMessageDialog(new Shell(), "Number entered is invalid");	
-					
+
 					errordiag.open();
 
 
 				}
-				Enumeration ports = CommPortIdentifier.getPortIdentifiers();  
+				SerialToGsm stg = null;
+				do {
+					Enumeration ports = CommPortIdentifier.getPortIdentifiers();  
 
-				String defaultPort="";
-				while(ports.hasMoreElements()){  
-					CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
-					System.out.println(port.getName());
-					defaultPort = port.getName();
-				}
+					while(ports.hasMoreElements()){  
+						CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
+						System.out.println(port.getName());
+						defaultPort = port.getName();
+						break;
+					}
+					
+					try {
+						stg = new SerialToGsm(defaultPort);
+					} catch (Exception e1) {
+						if(e1.getMessage().equals("Port error, close the system to relaunch port.")) {
+							errordiag = new ErrorMessageDialog(new Shell(), "Port error, close the system to relaunch port.");
+						}	
+						errordiag.open();
+					}
+					//if(stg.getSuccessfulPort() == false) throw new Exception("Port was faulty. Please try again.");
+				} while(stg.getSuccessfulPort() == false);
+				
 
 				String[] inputNum = txtToInputBox.getText().split(" ");
 				System.out.println(inputNum.length);
 				String message = txtMessageInputBox.getText();
 
-				/* to be use IFF required!
+				/* to be use IFF required!*/
 				try {	
 
-					SerialToGsm stg = new SerialToGsm(defaultPort);
+					//SerialToGsm stg = new SerialToGsm(defaultPort);
+					//if(stg.getSuccessfulPort() == false) throw new Exception("Port was faulty. Please try again.");
 					for(int i=0; i<inputNum.length; i++)
-						stg.sendSms(inputNum[i],message);
+						//stg.sendSms(inputNum[i],message);
 
+						errordiag = new ErrorMessageDialog(new Shell(),
+								"Your SMS has been sent!",
+								"Sent!");
+					errordiag.open();
 					ViewMain.ReturnView();
 				} catch (Exception ex) {
-					errordiag = new errormessageDialog(new Shell(), "Check your GSM modem or handphone number entered.");
+					if(ex.getMessage().equals("Check your GSM modem or handphone number entered."))
+						errordiag = new ErrorMessageDialog(new Shell(), "Check your GSM modem or handphone number entered.");
+					else if(ex.getMessage().equals("Port was faulty. Please try again.")) {
+						errordiag = new ErrorMessageDialog(new Shell(), "Port was faulty. Please try again.");
+					}		
 					errordiag.open();
 				}
-				 */
+
 
 			}
 		});

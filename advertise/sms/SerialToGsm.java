@@ -45,8 +45,10 @@ public class SerialToGsm {
 	String lastIndexRead;
 	String senderNum;
 	String smsMsg;
+	boolean successfulPort;
 
-	SerialToGsm(String porta) {
+	SerialToGsm(String porta) throws Exception {
+		successfulPort = false;
 		try {
 			CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(porta);
 			SerialPort sp = (SerialPort)portId.open("Sms_GSM", 0);
@@ -65,8 +67,7 @@ public class SerialToGsm {
 
 		}
 		catch (Exception e) {
-			System.out.println("Exception: " + e);
-			System.exit(1);
+			throw new Exception("Port error, close the system to relaunch port.");
 		}
 	}
 
@@ -94,6 +95,7 @@ public class SerialToGsm {
 				}                                         
 
 				if (strIn.indexOf("OK\r\n") != -1){
+					successfulPort = true;
 					break;
 				}                                         
 
@@ -214,5 +216,9 @@ public class SerialToGsm {
 			return sendAndRecv("AT+CMGD=" + lastIndexRead, 30);
 		}
 		return ("ERROR");
+	}
+	
+	public boolean getSuccessfulPort() {
+		return successfulPort;
 	}
 }

@@ -289,11 +289,11 @@ public class ViewBudget extends Composite {
 					if(txtBudget.getText().length() == 0) throw new IOException("Please enter a budget.");
 
 					budget = (int) (Double.parseDouble(txtBudget.getText()) * 100);
-					
+
 					if(budget < 0) throw new IOException ("Budget cannot be less than 0.");
-					
+
 					if(budget == 2147483647) throw new IOException ("Budget is out of range the system can take.");
-					
+
 					if(btnWithoutType.getSelection() == true)
 						typeChoice = 0;
 					else if(btnWithType.getSelection() == true)
@@ -591,7 +591,7 @@ public class ViewBudget extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				int option = dropdownSelection.getSelectionIndex();
 				budgetPersonalAssistant.saveOptimizeOption(option);	
-				
+
 				try {
 					TwoChoiceDialog exportFile = new TwoChoiceDialog(new Shell(), "Export Optimize Budget List", 
 							"Do you wish to export the choosen combination list?",
@@ -630,7 +630,7 @@ public class ViewBudget extends Composite {
 		lblListOfAll.setBounds(10, 10, 249, 15);
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");
-		
+
 		/**Set background color of everything to grey.**/
 		ViewBudgetForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		ViewBudgetForm.getHead().setBackground(SWTResourceManager.getColor(240,240,240));
@@ -644,7 +644,7 @@ public class ViewBudget extends Composite {
 		compSatisfactionOption.setBackground(SWTResourceManager.getColor(240,240,240));
 		compBigContent.setBackground(SWTResourceManager.getColor(240,240,240));
 		compButtonComposite.setBackground(SWTResourceManager.getColor(240,240,240));
-		
+
 		lblEventBudget.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblListOfItems.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblSelectTypeOption.setBackground(SWTResourceManager.getColor(240,240,240));
@@ -653,7 +653,7 @@ public class ViewBudget extends Composite {
 		lblListOfAll.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblSelectAnCombination.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblNoteAllChanges.setBackground(SWTResourceManager.getColor(240,240,240));	
-		
+
 		btnWithoutType.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnWithType.setBackground(SWTResourceManager.getColor(240,240,240));
 		btnWithoutSatisfaction.setBackground(SWTResourceManager.getColor(240,240,240));
@@ -782,7 +782,7 @@ public class ViewBudget extends Composite {
 			//populating entries.
 			for (int i=0; i<myEntries.size(); i++) {
 				for(int j=0; j<myEntries.get(i).length; j++) {
-					importedText += myEntries.get(i)[j];
+					importedText+= myEntries.get(i)[j] + " ";
 				}
 				importedText +="\n";
 			}		

@@ -210,7 +210,7 @@ public class BudgetDatabaseTest {
 	public Vector<Item> runPackage2(int selectionIndex) {
 		cb.findOptimalShopList(1, 1);
 
-		cb.saveOptimizeOption(selectionIndex);
+		cb.saveOptimizeOptionTest(selectionIndex);
 
 		return cb.getOptimizeItemList(currentEvent.getID());
 	}
