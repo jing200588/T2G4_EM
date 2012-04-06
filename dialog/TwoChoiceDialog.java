@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 
 
 public class TwoChoiceDialog extends Dialog {
@@ -99,9 +100,10 @@ public class TwoChoiceDialog extends Dialog {
 			}
 		});
 		fd_btnOne = new FormData();
-		fd_btnOne.right = new FormAttachment(30, 50);
+		fd_btnOne.width = 100;
+
 		fd_btnOne.top = new FormAttachment(messageBox, 50);
-		fd_btnOne.left = new FormAttachment(30, 0);
+		fd_btnOne.left = new FormAttachment(20, 0);
 		btnOne.setLayoutData(fd_btnOne);
 		btnOne.setText(m_btnOneText);
 		
@@ -117,13 +119,11 @@ public class TwoChoiceDialog extends Dialog {
 			}
 		});
 		fd_btnTwo = new FormData();
-		fd_btnTwo.left = new FormAttachment(70, -50);
-		fd_btnTwo.right = new FormAttachment(70, 0);
+		fd_btnTwo.width = 100;
+		fd_btnTwo.right = new FormAttachment(80, 0);
 		fd_btnTwo.top = new FormAttachment(messageBox, 50);
 		btnTwo.setLayoutData(fd_btnTwo);
 		btnTwo.setText(m_btnTwoText);
-		btnTwo.pack();
-		btnOne.pack();
 
 	}
 }

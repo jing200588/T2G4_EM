@@ -29,6 +29,7 @@ public class ErrorMessageDialog extends Dialog {
 	 * Create the dialog.
 	 * @param parent
 	 * @param style
+	 * @wbp.parser.constructor
 	 */
 	public ErrorMessageDialog(Shell parent, String msg) {
 		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);

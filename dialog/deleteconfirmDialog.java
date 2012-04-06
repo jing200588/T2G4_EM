@@ -11,8 +11,6 @@ import org.eclipse.swt.events.SelectionEvent;
 
 public class DeleteConfirmDialog extends ErrorMessageDialog {
 	public final static String STATE_TYPE = "delconfirm";
-	private String m_btnOneText;
-	private String m_btnTwoText;
 	
 	String state;
 	/**
@@ -25,15 +23,6 @@ public class DeleteConfirmDialog extends ErrorMessageDialog {
 		setText("Confirmation");
 		state = type;
 	}
-
-	public DeleteConfirmDialog(Shell parent, String header, String message, String btnOneText, String btnTwoText) {
-		super(parent, message);
-		setText(header);
-//		m_message = message;
-		m_btnOneText = btnOneText;
-		m_btnTwoText = btnTwoText;
-	}
-
 	
 	/**
 	 * Description: Create contents of the dialog.

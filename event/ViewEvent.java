@@ -60,7 +60,9 @@ public class ViewEvent extends Composite {
 	private static ScrolledComposite scrollCompositeMain;
 	private static Composite compMain;
 	private static ControllerBudget bc;
-	private static int index =0;
+	private static int indexParticipant =0;
+	private static int indexVenue =0;
+	private static int indexEventFlow =0;
 	private static int count=0;
 	private static int budgetItemCounter;
 	protected LoginEmailDialog loginDialog; 
@@ -591,13 +593,15 @@ public class ViewEvent extends Composite {
 	public static void RefreshVenue() {
 		if (venueFlag)
 			tableVenue.dispose();
-		tableVenue = VenueTable();
+		//tableVenue = VenueTable();
+		tableVenue = VenueJfaceTable();
 	}
 
 	public static void RefreshFlow() {
 		if (eventFlowFlag)
 			tableEventFlow.dispose();
-		tableEventFlow = FlowTable();
+		//tableEventFlow = FlowTable();
+		tableEventFlow = FlowJfaceTable();
 	}
 
 	public static void RefreshParticipant() {
@@ -733,27 +737,27 @@ public class ViewEvent extends Composite {
 			tvc[i].setLabelProvider(new ColumnLabelProvider() {
 				public String getText(Object element)
 				{
-					if (index == columnName.length)
-						index = 0;						
+					if (indexParticipant == columnName.length)
+						indexParticipant = 0;						
 					Participant parti = (Participant) element;
-					switch (index)	{
+					switch (indexParticipant)	{
 					case 0:
-						index++;
+						indexParticipant++;
 						return parti.getName();
 					case 1:
-						index++;
+						indexParticipant++;
 						return parti.getMatric();
 					case 2:
-						index++;
+						indexParticipant++;
 						return parti.getContact();
 					case 3:
-						index++;
+						indexParticipant++;
 						return parti.getEmail();
 					case 4:
-						index++;
+						indexParticipant++;
 						return parti.getAddress();
 					case 5:
-						index++;
+						indexParticipant++;
 						return parti.getRemark();
 					default:
 						return null;
@@ -899,7 +903,203 @@ public class ViewEvent extends Composite {
 		eventFlowFlag = true;
 		return tableEventFlow;
 	}
+	
+	/**********************************************************************************************
+	 * 
+	 * EVENT FLOW TABLE 
+	 * 
+	 *********************************************************************************************/
+	/**
+	 * Description:  
+	 * @return  
+	 */
+	public static Table FlowJfaceTable() {
+		Vector<EventFlowEntry> flowList = currentEvent.getEventFlow();
 
+		//Checks if there is any entry before creating the table
+		if (flowList.isEmpty()) {
+			eventFlowFlag = false;	
+			return null;
+		}
+	
+
+		final String columnName[] = {"Start Date Time", "End Date Time", "Activity", "Venue", "Remark"};
+		TableViewerColumn[] tvc = new TableViewerColumn[columnName.length];
+
+		Composite tableComposite = new Composite(compEventFlow, SWT.NONE);
+		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+		tableComposite.setLayoutData(data);
+		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
+		tableComposite.setLayout(tcl_tableComposite);
+
+		TableViewer tableViewerEventFlow = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		tableEventFlow = tableViewerEventFlow.getTable();
+		tableEventFlow.setHeaderVisible(true);
+		tableEventFlow.getVerticalBar().setEnabled(true);
+		//setting the column headers
+		for (int i=0; i<tvc.length; i++) {
+			tvc[i] = new TableViewerColumn (tableViewerEventFlow, SWT.NONE);
+			tvc[i].getColumn().setText(columnName[i]);
+		}
+
+		//Setting column width.
+		tcl_tableComposite.setColumnData(tvc[0].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[1].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[2].getColumn(), new ColumnWeightData(20));
+		tcl_tableComposite.setColumnData(tvc[3].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[4].getColumn(), new ColumnWeightData(20));
+	
+		tvc[0].getColumn().setAlignment(SWT.CENTER);
+		tvc[1].getColumn().setAlignment(SWT.CENTER);
+		tvc[2].getColumn().setAlignment(SWT.CENTER);
+		tvc[3].getColumn().setAlignment(SWT.CENTER);
+		tvc[4].getColumn().setAlignment(SWT.CENTER);
+		
+		//Populating the table.
+		tableViewerEventFlow.setContentProvider(ArrayContentProvider.getInstance());
+		for (int i=0; i<columnName.length; i++) {
+			tvc[i].setLabelProvider(new ColumnLabelProvider() {
+				public String getText(Object element)
+				{
+					if (indexEventFlow == columnName.length)
+						indexEventFlow = 0;						
+					EventFlowEntry EFE = (EventFlowEntry) element;
+					switch (indexEventFlow)	{
+					case 0:
+						indexEventFlow++;
+						return EFE.getDuration().getStartDateTime().getDateRepresentation() + " " +
+									EFE.getDuration().getStartDateTime().getTimeRepresentation();
+					case 1:
+						indexEventFlow++;
+						return EFE.getDuration().getEndDateTime().getDateRepresentation() + " " +
+								EFE.getDuration().getEndDateTime().getTimeRepresentation();
+					case 2:
+						indexEventFlow++;
+						return EFE.getActivityName();
+					case 3:
+						indexEventFlow++;
+						return EFE.getVenueName();
+					case 4:
+						indexEventFlow++;
+						return EFE.getUserNote();
+					default:
+						return null;
+					}
+				}
+			});
+		}
+		tableViewerEventFlow.setInput(flowList);
+
+		mouseOverPackage(tableEventFlow, data);
+		//Dictates when vertical scrollbar appears
+		setTableRowDisplayed(tableEventFlow, data, 15);
+
+
+		eventFlowFlag = true;
+		return tableEventFlow;
+	}
+	
+	/**********************************************************************************************
+	 * 
+	 * BOOK VENUE TABLE 
+	 * 
+	 *********************************************************************************************/
+	/**
+	 * Description:  
+	 * @return  
+	 */
+	public static Table VenueJfaceTable() {
+		Vector<BookedVenueInfo> venueList = currentEvent.getBviList();
+
+		//Checks if there is any entry before creating the table
+		if (venueList.isEmpty()) {
+			venueFlag = false;	
+			return null;
+		}
+	
+
+		final String columnName[] = {"Venue Name", "Capacity", "Cost", "Start Date", "Start Time","End Date","End Time"};
+		TableViewerColumn[] tvc = new TableViewerColumn[columnName.length];
+
+		Composite tableComposite = new Composite(compVenue, SWT.NONE);
+		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+		tableComposite.setLayoutData(data);
+		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
+		tableComposite.setLayout(tcl_tableComposite);
+
+		TableViewer tableViewerVenue = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		tableVenue = tableViewerVenue.getTable();
+		tableVenue.setHeaderVisible(true);
+		tableVenue.getVerticalBar().setEnabled(true);
+		//setting the column headers
+		for (int i=0; i<tvc.length; i++) {
+			tvc[i] = new TableViewerColumn (tableViewerVenue, SWT.NONE);
+			tvc[i].getColumn().setText(columnName[i]);
+		}
+
+		//Setting column width.
+		tcl_tableComposite.setColumnData(tvc[0].getColumn(), new ColumnWeightData(20));
+		tcl_tableComposite.setColumnData(tvc[1].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[2].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[3].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[4].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[5].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[6].getColumn(), new ColumnWeightData(10));
+
+		tvc[1].getColumn().setAlignment(SWT.CENTER);
+		tvc[2].getColumn().setAlignment(SWT.CENTER);
+		tvc[3].getColumn().setAlignment(SWT.CENTER);
+		tvc[4].getColumn().setAlignment(SWT.CENTER);
+		tvc[5].getColumn().setAlignment(SWT.CENTER);
+		tvc[6].getColumn().setAlignment(SWT.CENTER);
+		
+		//Populating the table.
+		tableViewerVenue.setContentProvider(ArrayContentProvider.getInstance());
+		for (int i=0; i<columnName.length; i++) {
+			tvc[i].setLabelProvider(new ColumnLabelProvider() {
+				public String getText(Object element)
+				{
+					if (indexVenue == columnName.length)
+						indexVenue = 0;						
+					BookedVenueInfo BVI = (BookedVenueInfo) element;
+					switch (indexVenue)	{
+					case 0:
+						indexVenue++;
+						return BVI.getName();
+					case 1:
+						indexVenue++;
+						return BVI.getMaxCapacityString();
+					case 2:
+						indexVenue++;
+						return "$" + BVI.getCostInDollarString();
+					case 3:
+						indexVenue++;
+						return BVI.getStartDateString();
+					case 4:
+						indexVenue++;
+						return BVI.getStartTimeString();
+					case 5:
+						indexVenue++;
+						return BVI.getEndDateString();
+					case 6:
+						indexVenue++;
+						return BVI.getEndTimeString();
+					default:
+						return null;
+					}
+				}
+			});
+		}
+		tableViewerVenue.setInput(venueList);
+
+		mouseOverPackage(tableVenue, data);
+		//Dictates when vertical scrollbar appears
+		setTableRowDisplayed(tableVenue, data, 15);
+
+
+		venueFlag = true;
+		return tableVenue;
+	}
 	/**
 	 * Description: Creates a sortable table that is populated with items of the event's optimized item list
 	 * @return A table is returned if there are entries in the list, else null is returned
