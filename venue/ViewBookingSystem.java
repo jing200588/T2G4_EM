@@ -75,8 +75,8 @@ public class ViewBookingSystem extends Composite {
 	private int chosenVenueID;
 	private Eventitem event;
 	private ControllerBookingSystem bookingSystem;
-	private InputDateTimeComposite dt_SearchCriteria;
-	private InputDateTimeComposite dt_SearchResult;
+	private InputDateTimeComposite dtSearchCriteria;
+	private InputDateTimeComposite dtSearchResult;
 	private Composite CapacityCompo;
 	private boolean hasTimeSlotChecked;
 	private Button SearchNameButton;
@@ -87,16 +87,8 @@ public class ViewBookingSystem extends Composite {
 	private int currentCompo;					// 0 for time slot, 1 for capacity, 2 for cost
 	private Composite CostCompo;
 	private Composite TimeSlotCompo;
-	private Composite composite;
 	private Button btnNextCriteria;
 	private Button btnBackCriteria;
-	private Composite composite_1;
-	private Composite composite_2;
-	private Label lblCapacityFrom;
-	private Composite composite_3;
-	private Label lblCostFrom;
-	private Composite ButtonComp;
-	private Composite composite_4;
 	
 	/**
 	 * Create the composite.
@@ -193,7 +185,7 @@ public class ViewBookingSystem extends Composite {
 				FunctionContentPage.layout();
 				
 				stackLayoutCriteria.topControl = TimeSlotCompo;
-				dt_SearchCriteria.setEnabled(false);
+				dtSearchCriteria.setEnabled(false);
 				compoCriteriaFilled.layout();
 			}
 		});
@@ -236,25 +228,25 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(lblSearchVenueBy, true, true);
 		lblSearchVenueBy.setText("Search venue by name: ");
 		
-		composite_1 = new Composite(SearchNameCompo, SWT.NONE);
-		FormData fd_composite_1 = new FormData();
-		fd_composite_1.right = new FormAttachment(100);
-		fd_composite_1.top = new FormAttachment(0, 95);
-		fd_composite_1.left = new FormAttachment(0);
-		composite_1.setLayoutData(fd_composite_1);
-		toolkit.adapt(composite_1);
-		toolkit.paintBordersFor(composite_1);
-		composite_1.setLayout(new GridLayout(4, false));
+		Composite compoName = new Composite(SearchNameCompo, SWT.NONE);
+		FormData fd_compoName = new FormData();
+		fd_compoName.right = new FormAttachment(100);
+		fd_compoName.top = new FormAttachment(0, 95);
+		fd_compoName.left = new FormAttachment(0);
+		compoName.setLayoutData(fd_compoName);
+		toolkit.adapt(compoName);
+		toolkit.paintBordersFor(compoName);
+		compoName.setLayout(new GridLayout(4, false));
 
-		Label lblEnterTheName = new Label(composite_1, SWT.NONE);
+		Label lblEnterTheName = new Label(compoName, SWT.NONE);
 		toolkit.adapt(lblEnterTheName, true, true);
 		lblEnterTheName.setText("Enter the name of the venue:");
 
-		NameToSearch = new Text(composite_1, SWT.BORDER);
+		NameToSearch = new Text(compoName, SWT.BORDER);
 		NameToSearch.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(NameToSearch, true, true);
 
-		Button ButtonSearchName = new Button(composite_1, SWT.NONE);
+		Button ButtonSearchName = new Button(compoName, SWT.NONE);
 		ButtonSearchName.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -305,20 +297,20 @@ public class ViewBookingSystem extends Composite {
 		toolkit.paintBordersFor(SearchCriteriaCompo);
 		SearchCriteriaCompo.setLayout(new FormLayout());
 		
-		composite = new Composite(SearchCriteriaCompo, SWT.NONE);
-		composite.setLayout(new GridLayout(4, false));
-		FormData fd_composite = new FormData();
-		composite.setLayoutData(fd_composite);
-		toolkit.adapt(composite);
-		toolkit.paintBordersFor(composite);
+		Composite compoCriteria = new Composite(SearchCriteriaCompo, SWT.NONE);
+		compoCriteria.setLayout(new GridLayout(4, false));
+		FormData fd_compoCriteria = new FormData();
+		compoCriteria.setLayoutData(fd_compoCriteria);
+		toolkit.adapt(compoCriteria);
+		toolkit.paintBordersFor(compoCriteria);
 		
-				Label lblPleaseChooseYour = new Label(composite, SWT.NONE);
+				Label lblPleaseChooseYour = new Label(compoCriteria, SWT.NONE);
 				lblPleaseChooseYour.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
 				toolkit.adapt(lblPleaseChooseYour, true, true);
 				lblPleaseChooseYour.setText("Please choose your preferred criteria:");
-						new Label(composite, SWT.NONE);
+						new Label(compoCriteria, SWT.NONE);
 				
-						CapacityChoiceButton = new Button(composite, SWT.CHECK);
+						CapacityChoiceButton = new Button(compoCriteria, SWT.CHECK);
 						CapacityChoiceButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 						CapacityChoiceButton.addSelectionListener(new SelectionAdapter() {
 							@Override
@@ -337,7 +329,7 @@ public class ViewBookingSystem extends Composite {
 						toolkit.adapt(CapacityChoiceButton, true, true);
 						CapacityChoiceButton.setText("Capacity");
 								
-										TimeChoiceButton = new Button(composite, SWT.CHECK);
+										TimeChoiceButton = new Button(compoCriteria, SWT.CHECK);
 										TimeChoiceButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 										TimeChoiceButton.addSelectionListener(new SelectionAdapter() {
 											@Override
@@ -356,7 +348,7 @@ public class ViewBookingSystem extends Composite {
 										toolkit.adapt(TimeChoiceButton, true, true);
 										TimeChoiceButton.setText("Time");
 										
-												CostChoiceButton = new Button(composite, SWT.CHECK);
+												CostChoiceButton = new Button(compoCriteria, SWT.CHECK);
 												CostChoiceButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 												CostChoiceButton.addSelectionListener(new SelectionAdapter() {
 													@Override
@@ -375,7 +367,7 @@ public class ViewBookingSystem extends Composite {
 												toolkit.adapt(CostChoiceButton, true, true);
 												CostChoiceButton.setText("Cost");
 										
-												CriteriaConfirmButton = new Button(composite, SWT.NONE);		
+												CriteriaConfirmButton = new Button(compoCriteria, SWT.NONE);		
 												GridData gd_CriteriaConfirmButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 												gd_CriteriaConfirmButton.widthHint = 80;
 												CriteriaConfirmButton.setLayoutData(gd_CriteriaConfirmButton);
@@ -398,7 +390,7 @@ public class ViewBookingSystem extends Composite {
 															if(flagTimeSlotChoice == true)
 															{
 																stackLayoutCriteria.topControl = TimeSlotCompo;
-																dt_SearchCriteria.setEnabled(true);
+																dtSearchCriteria.setEnabled(true);
 																compoCriteriaFilled.layout();
 																currentCompo = 0;
 															}
@@ -440,7 +432,7 @@ public class ViewBookingSystem extends Composite {
 															
 															// Change the layout
 															stackLayoutCriteria.topControl = TimeSlotCompo;
-															dt_SearchCriteria.setEnabled(false);
+															dtSearchCriteria.setEnabled(false);
 															compoCriteriaFilled.layout();
 															
 															// Reset the button next and back.
@@ -456,9 +448,9 @@ public class ViewBookingSystem extends Composite {
 												CriteriaConfirmButton.setText("Confirm");
 
 		compoCriteriaFilled = new Composite(SearchCriteriaCompo, SWT.NONE);
-		fd_composite.left = new FormAttachment(10,0);
+		fd_compoCriteria.left = new FormAttachment(10,0);
 		FormData fd_compoCriteriaFilled = new FormData();
-		fd_compoCriteriaFilled.top = new FormAttachment(composite, 30);
+		fd_compoCriteriaFilled.top = new FormAttachment(compoCriteria, 30);
 		fd_compoCriteriaFilled.right = new FormAttachment(90);
 		fd_compoCriteriaFilled.left = new FormAttachment(10);
 		compoCriteriaFilled.setLayoutData(fd_compoCriteriaFilled);
@@ -482,31 +474,31 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(lblEstimatedCapacity, true, true);
 		lblEstimatedCapacity.setText("Estimated capacity:");
 		
-		composite_2 = new Composite(CapacityCompo, SWT.NONE);
-		composite_2.setLayout(new GridLayout(4, false));
-		FormData fd_composite_2 = new FormData();
-		fd_composite_2.right = new FormAttachment(100);
-		fd_composite_2.top = new FormAttachment(50);
-		fd_composite_2.left = new FormAttachment(10);
-		composite_2.setLayoutData(fd_composite_2);
-		toolkit.adapt(composite_2);
-		toolkit.paintBordersFor(composite_2);
+		Composite compoInputCapacity = new Composite(CapacityCompo, SWT.NONE);
+		compoInputCapacity.setLayout(new GridLayout(4, false));
+		FormData fd_compoInputCapacity = new FormData();
+		fd_compoInputCapacity.right = new FormAttachment(100);
+		fd_compoInputCapacity.top = new FormAttachment(50);
+		fd_compoInputCapacity.left = new FormAttachment(10);
+		compoInputCapacity.setLayoutData(fd_compoInputCapacity);
+		toolkit.adapt(compoInputCapacity);
+		toolkit.paintBordersFor(compoInputCapacity);
 		
-		lblCapacityFrom = new Label(composite_2, SWT.NONE);
+		Label lblCapacityFrom = new Label(compoInputCapacity, SWT.NONE);
 		lblCapacityFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(lblCapacityFrom, true, true);
 		lblCapacityFrom.setText("Capacity from:");
 
-		LowerBoundCapacity = new Text(composite_2, SWT.BORDER);
+		LowerBoundCapacity = new Text(compoInputCapacity, SWT.BORDER);
 		LowerBoundCapacity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(LowerBoundCapacity, true, true);
 		
-				Label lblNewLabel = new Label(composite_2, SWT.NONE);
+				Label lblNewLabel = new Label(compoInputCapacity, SWT.NONE);
 				lblNewLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 				toolkit.adapt(lblNewLabel, true, true);
 				lblNewLabel.setText("to");
 
-		UpperBoundCapacity = new Text(composite_2, SWT.BORDER);
+		UpperBoundCapacity = new Text(compoInputCapacity, SWT.BORDER);
 		UpperBoundCapacity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(UpperBoundCapacity, true, true);
 
@@ -525,34 +517,34 @@ public class ViewBookingSystem extends Composite {
 		lblPreferredCost.setText("Preferred cost:");
 		toolkit.adapt(lblPreferredCost, true, true);
 		
-		composite_3 = new Composite(CostCompo, SWT.NONE);
-		composite_3.setLayout(new GridLayout(4, false));
-		FormData fd_composite_3 = new FormData();
-		fd_composite_3.right = new FormAttachment(100);
-		fd_composite_3.top = new FormAttachment(50);
-		fd_composite_3.left = new FormAttachment(10);
-		composite_3.setLayoutData(fd_composite_3);
-		toolkit.adapt(composite_3);
-		toolkit.paintBordersFor(composite_3);
+		Composite compoInputCost = new Composite(CostCompo, SWT.NONE);
+		compoInputCost.setLayout(new GridLayout(4, false));
+		FormData fd_compoInputCost = new FormData();
+		fd_compoInputCost.right = new FormAttachment(100);
+		fd_compoInputCost.top = new FormAttachment(50);
+		fd_compoInputCost.left = new FormAttachment(10);
+		compoInputCost.setLayoutData(fd_compoInputCost);
+		toolkit.adapt(compoInputCost);
+		toolkit.paintBordersFor(compoInputCost);
 						
-						lblCostFrom = new Label(composite_3,SWT.NONE);
+						Label lblCostFrom = new Label(compoInputCost,SWT.NONE);
 						lblCostFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 						toolkit.adapt(lblCostFrom, true, true);
 						lblCostFrom.setText("Cost from:");
 				
-						LowerBoundCost = new Text(composite_3, SWT.BORDER);
+						LowerBoundCost = new Text(compoInputCost, SWT.BORDER);
 						LowerBoundCost.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 						toolkit.adapt(LowerBoundCost, true, true);
 								
-										Label label_5 = new Label(composite_3, SWT.NONE);
+										Label label_5 = new Label(compoInputCost, SWT.NONE);
 										label_5.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 										label_5.setText("to");
 										toolkit.adapt(label_5, true, true);
 												
-														UpperBoundCost = new Text(composite_3, SWT.BORDER);
+														UpperBoundCost = new Text(compoInputCost, SWT.BORDER);
 														UpperBoundCost.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 														toolkit.adapt(UpperBoundCost, true, true);
-		fd_composite.right = new FormAttachment(90, 0);
+		fd_compoCriteria.right = new FormAttachment(90, 0);
 
 		ResultPageCompo = new Composite(FunctionContentPage, SWT.NONE);
 		ResultPageCompo.setBounds(0, 70, 330, 238);
@@ -576,7 +568,7 @@ public class ViewBookingSystem extends Composite {
 						throw new Exception("You have not chosen a venue yet!");
 					
 					// Read time slot
-					timeSlotChoiceInput = dt_SearchResult.readInputFields();
+					timeSlotChoiceInput = dtSearchResult.readInputFields();
 					
 					MyDateTime currentTime = MyDateTime.getCurrentDateTime();
 					if(timeSlotChoiceInput.happenBefore(currentTime) == true)
@@ -621,17 +613,17 @@ public class ViewBookingSystem extends Composite {
 		toolkit.adapt(BookVenueButton, true, true);
 		BookVenueButton.setText("Book Venue");
 		
-		composite_4 = new Composite(ResultPageCompo, SWT.NONE);
-		FormData fd_composite_4 = new FormData();
-		fd_composite_4.bottom = new FormAttachment(70);
-		fd_composite_4.top = new FormAttachment(0);
-		fd_composite_4.left = new FormAttachment(0);
-		composite_4.setLayoutData(fd_composite_4);
-		toolkit.adapt(composite_4);
-		toolkit.paintBordersFor(composite_4);
-		composite_4.setLayout(new GridLayout(1, false));
+		Composite compoSearchResultTable = new Composite(ResultPageCompo, SWT.NONE);
+		FormData fd_compoSearchResultTable = new FormData();
+		fd_compoSearchResultTable.bottom = new FormAttachment(70);
+		fd_compoSearchResultTable.top = new FormAttachment(0);
+		fd_compoSearchResultTable.left = new FormAttachment(0);
+		compoSearchResultTable.setLayoutData(fd_compoSearchResultTable);
+		toolkit.adapt(compoSearchResultTable);
+		toolkit.paintBordersFor(compoSearchResultTable);
+		compoSearchResultTable.setLayout(new GridLayout(1, false));
 
-		Label lblSearchResult = new Label(composite_4, SWT.NONE);
+		Label lblSearchResult = new Label(compoSearchResultTable, SWT.NONE);
 		lblSearchResult.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblSearchResult.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
 		toolkit.adapt(lblSearchResult, true, true);
@@ -642,7 +634,7 @@ public class ViewBookingSystem extends Composite {
 		 * Table selection listener
 		 * 
 		 ***************************************************************************************/
-		Composite tableComposite = new Composite(composite_4, SWT.NONE);
+		Composite tableComposite = new Composite(compoSearchResultTable, SWT.NONE);
 		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
 		tableComposite.setLayout(tcl_tableComposite);
 		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -765,7 +757,7 @@ public class ViewBookingSystem extends Composite {
 		FormData fd_ViewCompo = new FormData();
 		//	fd_ViewCompo.left = new FormAttachment(composite_4);
 		fd_ViewCompo.bottom = new FormAttachment(BookVenueButton);
-		fd_composite_4.right = new FormAttachment(ViewCompo);
+		fd_compoSearchResultTable.right = new FormAttachment(ViewCompo);
 		fd_ViewCompo.left = new FormAttachment(65);
 		fd_ViewCompo.right = new FormAttachment(100);
 		fd_ViewCompo.top = new FormAttachment(0);
@@ -787,18 +779,17 @@ public class ViewBookingSystem extends Composite {
 		VenueDetailTextbox.setEditable(false);
 		toolkit.adapt(VenueDetailTextbox, true, true);
 
-		dt_SearchResult = new InputDateTimeComposite(ResultPageCompo, SWT.NONE);
-		FormData fd_dt_SearchResult = new FormData();
-		fd_dt_SearchResult.top = new FormAttachment(composite_4, 5);
-		fd_dt_SearchResult.right = new FormAttachment(composite_4, 0, SWT.RIGHT);
-		fd_dt_SearchResult.bottom = new FormAttachment(100);
-		fd_dt_SearchResult.left = new FormAttachment(0);
-		dt_SearchResult.setLayoutData(fd_dt_SearchResult);
-		toolkit.adapt(dt_SearchResult);
-		toolkit.paintBordersFor(dt_SearchResult);
+		dtSearchResult = new InputDateTimeComposite(ResultPageCompo, SWT.NONE);
+		FormData fd_dtSearchResult = new FormData();
+		fd_dtSearchResult.top = new FormAttachment(compoSearchResultTable, 5);
+		fd_dtSearchResult.right = new FormAttachment(compoSearchResultTable, 0, SWT.RIGHT);
+		fd_dtSearchResult.bottom = new FormAttachment(100);
+		fd_dtSearchResult.left = new FormAttachment(0);
+		dtSearchResult.setLayoutData(fd_dtSearchResult);
+		toolkit.adapt(dtSearchResult);
+		toolkit.paintBordersFor(dtSearchResult);
 
 		TimeSlotCompo = new Composite(compoCriteriaFilled, SWT.NONE);
-//		TimeSlotCompo.setLayoutDeferred(true);
 		FormData fd_TimeSlotCompo = new FormData();
 		fd_TimeSlotCompo.left = new FormAttachment(0, 190);
 		TimeSlotCompo.setLayoutData(fd_TimeSlotCompo);
@@ -808,19 +799,19 @@ public class ViewBookingSystem extends Composite {
 		toolkit.paintBordersFor(TimeSlotCompo);
 		TimeSlotCompo.setLayout(new FormLayout());
 
-		dt_SearchCriteria = new InputDateTimeComposite(TimeSlotCompo, SWT.NONE);
-		FormData fd_dt_SearchCriteria = new FormData();
-		fd_dt_SearchCriteria.bottom = new FormAttachment(100);
-		fd_dt_SearchCriteria.right = new FormAttachment(100);
-		fd_dt_SearchCriteria.top = new FormAttachment(0);
-		fd_dt_SearchCriteria.left = new FormAttachment(0);
-		dt_SearchCriteria.setLayoutData(fd_dt_SearchCriteria);
-		dt_SearchCriteria.setBackgroundMode(SWT.INHERIT_FORCE);
-		toolkit.adapt(dt_SearchCriteria);
-		toolkit.paintBordersFor(dt_SearchCriteria);
+		dtSearchCriteria = new InputDateTimeComposite(TimeSlotCompo, SWT.NONE);
+		FormData fd_dtSearchCriteria = new FormData();
+		fd_dtSearchCriteria.bottom = new FormAttachment(100);
+		fd_dtSearchCriteria.right = new FormAttachment(100);
+		fd_dtSearchCriteria.top = new FormAttachment(0);
+		fd_dtSearchCriteria.left = new FormAttachment(0);
+		dtSearchCriteria.setLayoutData(fd_dtSearchCriteria);
+		dtSearchCriteria.setBackgroundMode(SWT.INHERIT_FORCE);
+		toolkit.adapt(dtSearchCriteria);
+		toolkit.paintBordersFor(dtSearchCriteria);
 		
 				Label lblSearchVenuesWith = new Label(SearchCriteriaCompo, SWT.NONE);
-				fd_composite.top = new FormAttachment(lblSearchVenuesWith, 11);
+				fd_compoCriteria.top = new FormAttachment(lblSearchVenuesWith, 11);
 				FormData fd_lblSearchVenuesWith = new FormData();
 				fd_lblSearchVenuesWith.left = new FormAttachment(0, 5);
 				lblSearchVenuesWith.setLayoutData(fd_lblSearchVenuesWith);
@@ -828,7 +819,7 @@ public class ViewBookingSystem extends Composite {
 				toolkit.adapt(lblSearchVenuesWith, true, true);
 				lblSearchVenuesWith.setText("Search venues with specified criteria:");
 				
-				ButtonComp = new Composite(SearchCriteriaCompo, SWT.NONE);
+				Composite ButtonComp = new Composite(SearchCriteriaCompo, SWT.NONE);
 				ButtonComp.setLayout(new GridLayout(3, false));
 				FormData fd_ButtonComp = new FormData();
 				fd_ButtonComp.top = new FormAttachment(compoCriteriaFilled, 20);
@@ -868,7 +859,7 @@ public class ViewBookingSystem extends Composite {
 										});
 										btnBackCriteria.setEnabled(false);
 										toolkit.adapt(btnBackCriteria, true, true);
-										btnBackCriteria.setText("Back");
+										btnBackCriteria.setText("Previous");
 						
 								btnNextCriteria = new Button(ButtonComp, SWT.NONE);
 								GridData gd_btnNextCriteria = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
@@ -968,7 +959,7 @@ public class ViewBookingSystem extends Composite {
 						toolkit.adapt(FindCriteriaButton, true, true);
 						FindCriteriaButton.setText("Find All Suitable Venues");
 						
-	Button btnBack = new Button(composite_1, SWT.NONE);
+	Button btnBack = new Button(compoName, SWT.NONE);
 	btnBack.addSelectionListener(new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -992,11 +983,11 @@ public class ViewBookingSystem extends Composite {
 	labelEventTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	SearchNameCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblSearchVenueBy.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	composite_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	compoName.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblEnterTheName.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	ButtonSearchName.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	SearchCriteriaCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	compoCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblPleaseChooseYour.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	CapacityChoiceButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	TimeChoiceButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
@@ -1004,26 +995,26 @@ public class ViewBookingSystem extends Composite {
 	CriteriaConfirmButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	CapacityCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblEstimatedCapacity.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	composite_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	compoInputCapacity.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblCapacityFrom.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	BookVenueButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	composite_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	compoSearchResultTable.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblSearchResult.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	ViewCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblVenueDetails.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	dt_SearchResult.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	dtSearchResult.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblSearchVenuesWith.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	ButtonComp.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	btnBackCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	btnNextCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	FindCriteriaButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	CostCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	composite_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	compoInputCost.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	lblCostFrom.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	label_5.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	ResultPageCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	dt_SearchCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+	dtSearchCriteria.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	
 	}	
 	
@@ -1033,7 +1024,7 @@ public class ViewBookingSystem extends Composite {
 	 */
 	private void readTimeSlotInput() throws Exception
 	{
-		timeSlotChoiceInput = dt_SearchCriteria.readInputFields();
+		timeSlotChoiceInput = dtSearchCriteria.readInputFields();
 	}
 	
 	/**
@@ -1264,16 +1255,16 @@ public class ViewBookingSystem extends Composite {
 	{
 		tableViewer.refresh();
 		VenueDetailTextbox.setText("");
-		dt_SearchResult.setEnabled(true);
+		dtSearchResult.setEnabled(true);
 		
 		if(chooseTimeSlotYet == false)
 		{
-			dt_SearchResult.reset();
+			dtSearchResult.reset();
 		}
 		else
 		{
 			// Time slot has been chosen
-			dt_SearchResult.displayInputTimeSlot(timeSlotChoiceInput);
+			dtSearchResult.displayInputTimeSlot(timeSlotChoiceInput);
 			hasTimeSlotChecked = true;
 		}
 	}
