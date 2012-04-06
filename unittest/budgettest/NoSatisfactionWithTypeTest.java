@@ -54,12 +54,7 @@ public class NoSatisfactionWithTypeTest {
 
 		cb.findOptimalShopList(1, 0);
 		
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 0) 
-			compareResult = false;
-
-		assertEquals(true, compareResult); //can't buy anything, budget is $0
-
+		assertEquals(0, cb.noOfCombination()); //can't buy anything, budget is $0
 	}
 
 	/**
@@ -82,13 +77,8 @@ public class NoSatisfactionWithTypeTest {
 
 		cb.findOptimalShopList(1, 0);
 		
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemCost() != 477137)
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+		assertEquals(1, cb.noOfCombination());
+		assertEquals(477137, cb.getAllItemCost());
 	}
 
 	/**
@@ -114,13 +104,8 @@ public class NoSatisfactionWithTypeTest {
 
 		cb.findOptimalShopList(1, 0);
 
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemCost() != 477137)
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+		assertEquals(1, cb.noOfCombination());
+		assertEquals(477137, cb.getAllItemCost());
 	}
 
 	/**
@@ -147,13 +132,8 @@ public class NoSatisfactionWithTypeTest {
 
 		cb.findOptimalShopList(1, 0);
 		
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getAllItemCost() != 477137)
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+		assertEquals(1, cb.noOfCombination());
+		assertEquals(477137, cb.getAllItemCost());
 	}
 
 	/**
@@ -178,11 +158,7 @@ public class NoSatisfactionWithTypeTest {
 
 		cb.findOptimalShopList(1, 0);
 		
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 0) 
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+		assertEquals(0, cb.noOfCombination());
 	}
 
 	/**
@@ -213,13 +189,8 @@ public class NoSatisfactionWithTypeTest {
 
 		cb.findOptimalShopList(1, 0);
 
-		boolean compareResult = true;
-		if(cb.noOfCombination() != 1) 
-			compareResult = false;
-		if(cb.getCompulsoryItemCost() != 115538)
-			compareResult = false;
-		
-		assertEquals(true, compareResult);
+		assertEquals(1, cb.noOfCombination());
+		assertEquals(115538, cb.getCompulsoryItemCost());
 	}
 	
 	/**
@@ -241,11 +212,7 @@ public class NoSatisfactionWithTypeTest {
 
 		cb.findOptimalShopList(1, 0);
 		
-		boolean compareResult = true;
-		if(cb.getSolutionSize() != 18) 
-			compareResult = false;
-
-		assertEquals(true, compareResult);
+		assertEquals(18, cb.getSolutionSize());
 	}
 	
 	/**
@@ -273,17 +240,10 @@ public class NoSatisfactionWithTypeTest {
 		cb.findOptimalShopList(1, 0);
 		
 		/*This portion of the test data do not consist of any compulsory item*/
-		boolean compareResult = true;
-		if(cb.getSolutionSize() != 3) //inclusive of empty set 
-			compareResult = false;
-		if(cb.getSolutionCost(0) != 0.0) //empty set
-			compareResult = false;
-		if(cb.getSolutionCost(1) != 64.7)
-			compareResult = false;
-		if(cb.getSolutionCost(2) != 49.99)
-			compareResult =false;
-
-		assertEquals(true, compareResult);
+		assertEquals(3, cb.getSolutionSize());//inclusive of empty set 
+		assertTrue(0.0 == cb.getSolutionCost(0));//empty set
+		assertTrue(64.7 == cb.getSolutionCost(1));
+		assertTrue(49.99 == cb.getSolutionCost(2));
 	}
 
 }

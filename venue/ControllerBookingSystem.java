@@ -48,20 +48,10 @@ public class ControllerBookingSystem {
 	 * 
 	 */
 	public boolean bookVenue(Eventitem event, int bookedVenueID, TimeSlot wantedTimeSlot)
-	{	
-		/* For testing purpose
-		System.out.println("Hi Inside BookVenue");
-		System.out.println("This is my EVENT: " + event);
-		System.out.println("This is my EVENT: " + listVenues);
-		System.out.println("This is my EVENT: " + listVenues.get(0)); */
-		
-		
+	{		
 		mbs.add_booking_to_db(event.getID(), bookedVenueID, wantedTimeSlot);
 		
 		int index = findIndex(currentSearchResult, bookedVenueID);
-	
-		/* For testing purpose 
-		System.out.println("Inside BookVenue" + index); */
 		
 		// index is in valid range!!
 		BookedVenueInfo newObj = new BookedVenueInfo(currentSearchResult.get(index), wantedTimeSlot);
@@ -73,7 +63,6 @@ public class ControllerBookingSystem {
 		// Actually, two elements in 2 two lists with the same ID will reference
 		// to the same objects
 		
-		// For testing purpose: System.out.println("Hi! THis is the end of bookVenue");
 		// If the booking is successful
 		return true;
 	}
@@ -129,16 +118,6 @@ public class ControllerBookingSystem {
 					firstRoundCapacity = mbs.get_venue_by_capacity(capacityRange[1], capacityRange[0]); 
 				else
 					firstRoundCapacity = shortListByCapacity(listAllVenue, capacityRange[0], capacityRange[1]);
-				
-				/* For debugging
-				System.out.println(firstRoundCapacity);
-				if(firstRoundCapacity == null)
-					System.out.println("null");
-				else
-					System.out.println("not null");
-				System.out.println(firstRoundCapacity.get(0).getName());
-				System.out.println(firstRoundCapacity.size());
-				System.out.println(firstRoundCapacity.get(0).get) */
 				
 				// Actual code
 				if(type == SearchCriteria.CAPACITY)
@@ -229,17 +208,10 @@ public class ControllerBookingSystem {
 	public boolean isAvailable(int venueID, TimeSlot preferredTime) throws Exception
 	{
 		int index = findIndex(currentSearchResult, venueID);
-		
-		/* For testing purpose:
-		System.out.println("I'm here. Venue ID: " + venueID + " Index: " + index + " Time: " + preferredTime);
-		*/
-		
+			
 		if(index < 0)		// A venue with venueID does not exist
 			throw new Exception("There is no venue with such an ID in the table above!");
-		
-		/* For testing purpose:
-		System.out.println(listVenue.get(index)); */
-		
+			
 		return currentSearchResult.get(index).isAvailable(preferredTime);
 	}
 	
@@ -306,23 +278,12 @@ public class ControllerBookingSystem {
 			// For debugging: System.out.println(index);
 			if(listVenue.get(index) == null)
 				System.out.println("null");
-			/* For debugging
-			else
-			{
-				System.out.println("not null");
-				System.out.println(listVenue.get(index).getName());
-			}
-			System.out.println("Venue ID: " + listVenue.get(index).getVenueID());
-			System.out.println("Venue Name: " + listVenue.get(index).getName()); */
+
 			if(listVenue.get(index).isAvailable(preferTime) == true)
 			{
 				// For debugging: System.out.println("Choose venue " + listVenue.get(index).getName());
 				returnList.add(listVenue.get(index));
 			}
-			/* For debugging 
-			else
-				System.out.println("NOT Choose venue " + listVenue.get(index).getName()); */
-			
 		}
 		
 		return returnList;

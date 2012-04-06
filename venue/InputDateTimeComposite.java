@@ -2,14 +2,12 @@ package venue;
 
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.DateTime;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -232,22 +230,4 @@ public class InputDateTimeComposite extends Composite {
 	{
 		return m_isEnabled;
 	}
-	
-	public static void main(String[] args){
-		Display display = new Display();
-		display = Display.getDefault();
-		Shell shell = new Shell();
-		shell.setLayout(new FillLayout());
-		shell.setText("Booking System");
-		shell.setSize(629, 606);
-		InputDateTimeComposite calc = new InputDateTimeComposite(shell, SWT.NONE);
-		calc.pack();
-		calc.setEnabled(true);
-		shell.pack();
-		shell.open();
-		while(!shell.isDisposed()){
-			if(!display.readAndDispatch()) display.sleep();
-		} 
-
-	} 
 }

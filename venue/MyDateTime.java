@@ -86,12 +86,6 @@ public class MyDateTime implements Comparable<MyDateTime> {
 	{
 		String[] arrString = dateTimeRepresentation.split("/");
 		
-		/* For testing purpose
-		System.out.println(arrString.length);
-		for(int i = 0; i < arrString.length; i++)
-			System.out.println(arrString[i]);
-		*/
-		
 		m_day = Integer.parseInt(arrString[0]);
 		m_month = Integer.parseInt(arrString[1]);
 		m_year = Integer.parseInt(arrString[2]);
@@ -375,17 +369,4 @@ public class MyDateTime implements Comparable<MyDateTime> {
 		return "MyDateTime [m_year=" + m_year + ", m_month=" + m_month
 				+ ", m_day=" + m_day + ", m_hour=" + m_hour + ", m_minute=" + m_minute + "]";
 	}
-	
-	/* For testing purpose
-	public static void main(String[] args)
-	{
-		MyDateTime myDate = new MyDateTime(850, 12, 1, 12);
-		String inputDate = myDate.getDateTimeRepresentation();
-		System.out.println(inputDate);
-		System.out.println(inputDate.length());
-		MyDateTime newObj = new MyDateTime(inputDate);
-		System.out.println(newObj.getDateTimeRepresentation());
-		System.out.println(newObj.toString());
-		
-	} */
 }

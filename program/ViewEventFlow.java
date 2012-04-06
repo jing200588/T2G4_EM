@@ -184,13 +184,13 @@ public class ViewEventFlow extends Composite {
 		tableViewEventFlow.setContentProvider(ArrayContentProvider.getInstance());
 		toolkit.paintBordersFor(tableEventFlow);
 		
-		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColStartDateTime = tableViewerColumn_4.getColumn();
+		TableViewerColumn tableViewerColumnStartDT = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
+		TableColumn ColStartDateTime = tableViewerColumnStartDT.getColumn();
 		ColStartDateTime.setAlignment(SWT.CENTER);
 		tcl_tableComposite.setColumnData(ColStartDateTime, new ColumnWeightData(15));
 		//ColStartDateTime.pack();
 		ColStartDateTime.setText(STARTDATETIME);
-		tableViewerColumn_4.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnStartDT.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
 				EventFlowEntry obj = (EventFlowEntry) element;
@@ -199,13 +199,13 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColEndDateTime = tableViewerColumn_3.getColumn();
+		TableViewerColumn tableViewerColumnEndDT = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
+		TableColumn ColEndDateTime = tableViewerColumnEndDT.getColumn();
 		ColEndDateTime.setAlignment(SWT.CENTER);
 		tcl_tableComposite.setColumnData(ColEndDateTime, new ColumnWeightData(15));
 		//ColEndDateTime.pack();
 		ColEndDateTime.setText(ENDDATETIME);
-		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnEndDT.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
 				EventFlowEntry obj = (EventFlowEntry) element;
@@ -214,11 +214,11 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColActivity = tableViewerColumn_2.getColumn();
+		TableViewerColumn tableViewerColumnActivity = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
+		TableColumn ColActivity = tableViewerColumnActivity.getColumn();
 		tcl_tableComposite.setColumnData(ColActivity, new ColumnWeightData(20));
 		ColActivity.setText(ACTIVITY);
-		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnActivity.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
 				EventFlowEntry obj = (EventFlowEntry) element;
@@ -226,11 +226,11 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColVenue = tableViewerColumn_1.getColumn();
+		TableViewerColumn tableViewerColumnVenue = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
+		TableColumn ColVenue = tableViewerColumnVenue.getColumn();
 		tcl_tableComposite.setColumnData(ColVenue, new ColumnWeightData(20));
 		ColVenue.setText(VENUE);
-		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnVenue.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
 				EventFlowEntry obj = (EventFlowEntry) element;
@@ -238,11 +238,11 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColNote = tableViewerColumn.getColumn();
+		TableViewerColumn tableViewerColumnNote = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
+		TableColumn ColNote = tableViewerColumnNote.getColumn();
 		tcl_tableComposite.setColumnData(ColNote, new ColumnWeightData(20));
 		ColNote.setText(NOTE);
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnNote.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
 				EventFlowEntry obj = (EventFlowEntry) element;
@@ -807,27 +807,4 @@ public class ViewEventFlow extends Composite {
 		
 		return -1;
 	}
-	/*
-	public static void main(String[] args)
-	{
-		Display display = new Display();
-		display = Display.getDefault();
-		Shell shell = new Shell();
-		
-		Eventitem event = new Eventitem("Fundraising", 2012, 3, 20, 9, 17, 2012, 4, 19, 5, 25, "Fundraising Event");
-		event.addBVI(new BookedVenueInfo("SoC", 15, "NUS", "Cool", 100, 10, 
-				new TimeSlot(new MyDateTime(2012, 5, 15, 7, 0), new MyDateTime(2012, 5, 15, 9, 0))));
-		event.addBVI(new BookedVenueInfo("Biz", 19, "NUS", "Cool", 100, 10, 
-				new TimeSlot(new MyDateTime(2012, 5, 15, 7, 0), new MyDateTime(2012, 5, 15, 9, 0))));
-		event.addBVI(new BookedVenueInfo("The Deck", 25, "NUS", "Cool", 100, 10, 
-				new TimeSlot(new MyDateTime(2012, 5, 15, 7, 0), new MyDateTime(2012, 5, 15, 9, 0))));
-		
-		ViewEventFlow viewFlow = new ViewEventFlow(shell, SWT.NONE, event);
-		viewFlow.pack();
-		shell.open();
-		while (!shell.isDisposed()) { 
-		if (!display.readAndDispatch()) display.sleep(); 
-		} 
-	}
-	*/
 }

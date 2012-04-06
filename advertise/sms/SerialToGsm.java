@@ -68,6 +68,7 @@ public class SerialToGsm {
 		}
 		catch (Exception e) {
 			throw new Exception("Port error, close the system to relaunch port.");
+
 		}
 	}
 
@@ -140,8 +141,16 @@ public class SerialToGsm {
 		}
 	}
 
+	public boolean getSuccessfulPort() {
+		return successfulPort;
+	}
+
+	/**
+	 * Below are all the unused method.
+	 */
+
 	// used to reset message data
-	private void resetGsmObj() {
+	/*	private void resetGsmObj() {
 		lastIndexRead = null;
 		senderNum = null;
 		smsMsg = null;
@@ -217,8 +226,6 @@ public class SerialToGsm {
 		}
 		return ("ERROR");
 	}
-	
-	public boolean getSuccessfulPort() {
-		return successfulPort;
-	}
+	 */
 }
+
