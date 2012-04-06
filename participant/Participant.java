@@ -1,16 +1,16 @@
 package participant;
 
 public class Participant {
-	private String _name, _contact, _email, _address, _matric, _remark;
+	private String name, contact, email, address, matric, remark;
 	private int id;
 	
-	public Participant(String name, String matric, String contact, String emailadd, String homeadd, String remarks) {
-		_name = name;
-		_contact = contact;
-		_email = emailadd;
-		_address = homeadd;
-		_matric = matric;
-		_remark = remarks;
+	public Participant(String inputName, String inputMatric, String inputContact, String inputEmailAdd, String inputHomeAdd, String inputRemarks) {
+		name = inputName;
+		contact = inputContact;
+		email = inputEmailAdd;
+		address = inputHomeAdd;
+		matric = inputMatric;
+		remark = inputRemarks;
 	}
 
 	public int getID(){
@@ -18,56 +18,56 @@ public class Participant {
 	}
 
 
-	public void setID(int id){
-		this.id = id;
+	public void setID(int inputId){
+		id = inputId;
 	}
 	
 	public String getName() {
-		return _name;
+		return name;
 	}
 
-	public void setName(String name) {
-		this._name = name;
+	public void setName(String inputName) {
+		name = inputName;
 	}
 
 	public String getContact() {
-		return _contact;
+		return contact;
 	}
 	
-	public void setContact(String contact) {
-		this._contact = contact;
+	public void setContact(String inputContact) {
+		contact = inputContact;
 	}
 
 	public String getEmail() {
-		return _email;
+		return email;
 	}
 
-	public void setEmail(String email) {
-		this._email = email;
+	public void setEmail(String inputEmail) {
+		email = inputEmail;
 	}
 
 	public String getAddress() {
-		return _address;
+		return address;
 	}
 
-	public void setAddress(String address) {
-		this._address = address;
+	public void setAddress(String inputAddress) {
+		address = inputAddress;
 	}
 
 	public String getMatric() {
-		return _matric;
+		return matric;
 	}
 
-	public void setMatric(String matric) {
-		this._matric = matric;
+	public void setMatric(String inputMatric) {
+		matric = inputMatric;
 	}
 
 	public String getRemark() {
-		return _remark;
+		return remark;
 	}
 
-	public void setRemark(String remark) {
-		this._remark = remark;
+	public void setRemark(String inputRemark) {
+		remark = inputRemark;
 	}
 	
 }

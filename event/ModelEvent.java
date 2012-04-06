@@ -25,7 +25,7 @@ public class ModelEvent {
 		expired = new Vector<Eventitem>();
 		
 		db = new EMDBII(test);
-		
+		db.systemCheck();
 	};
 	/************************************************************
 	 * CREATE EVENT //Passes event to DB and local list.
@@ -182,5 +182,9 @@ public class ModelEvent {
 		System.out.println("size of new" + newlyexpired.size());
 		db.eventDB().addArchiveEventList(newlyexpired);
 		System.out.println("RAN!!");
+	}
+	
+	public static void DestroyDB() {
+		db.destroy();
 	}
 }

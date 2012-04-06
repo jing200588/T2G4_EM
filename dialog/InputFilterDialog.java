@@ -19,7 +19,6 @@ import program.FilterComposite;
 
 import venue.BookedVenueInfo;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 
 public class InputFilterDialog extends Dialog {

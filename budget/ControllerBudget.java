@@ -30,6 +30,7 @@ public class ControllerBudget {
 
 
 	private ModelBudget bm = new ModelBudget();
+	ModelBudget mb = new ModelBudget("unit.sqlite"); // unit testing
 
 	public ControllerBudget() {
 
@@ -600,9 +601,7 @@ public class ControllerBudget {
 				}
 			}
 		}
-		
-		
-		ModelBudget mb = new ModelBudget("unit.sqlite");
+
 		mb.saveOptimizedList(currentEvent.getID(), databaseList);
 
 		currentEvent.setItemList(mb.getOptimizeItemList(currentEvent.getID()));
@@ -626,7 +625,6 @@ public class ControllerBudget {
 	public Vector<Item> getOptimizeItemList(int eventId) {
 		return bm.getOptimizeItemList(eventId);
 	}
-
 
 	/* The codes below are all use for Junit Test purpose*/
 	public int getSolutionSize() {
@@ -656,5 +654,9 @@ public class ControllerBudget {
 
 	public int getCompulsoryItemCost() {
 		return compulsoryCost;
+	}
+	
+	public Vector<Item> getOptimizeItemListTest(int eventId) {
+		return mb.getOptimizeItemList(eventId);
 	}
 }

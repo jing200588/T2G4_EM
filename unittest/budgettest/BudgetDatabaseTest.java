@@ -51,6 +51,8 @@ public class BudgetDatabaseTest {
 		Vector<Item> actualItemList = runPackage2(0);
 
 		boolean sameResult = true;
+		
+		System.out.println(expectedItemList.size() + " " + actualItemList.size());
 
 		for(int i=0; i<expectedItemList.size(); i++) {
 			if(expectedItemList.get(i).getItem().equals(actualItemList.get(i).getItem()) == false)
@@ -212,7 +214,7 @@ public class BudgetDatabaseTest {
 
 		cb.saveOptimizeOptionTest(selectionIndex);
 
-		return cb.getOptimizeItemList(currentEvent.getID());
+		return cb.getOptimizeItemListTest(currentEvent.getID());
 	}
 
 }

@@ -52,8 +52,5 @@ public class ModelEventFlow {
 		// DATABASE: you should return a string
 		// Replace the instruction below
 		return db.eventDB().getEvent(eventID).getEventFlow();
-		
-		
-		//return EventFlowEntry.constructEventFlowEntryList(stringData);
 	}
 }

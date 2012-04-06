@@ -17,8 +17,6 @@ import venue.*;
 import com.ibm.icu.text.Collator;
 
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
 import org.eclipse.jetty.server.Handler;
@@ -58,7 +56,6 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.TabFolder;
@@ -67,9 +64,9 @@ import org.eclipse.swt.widgets.TabItem;
 
 
 public class ViewMain extends ApplicationWindow {
-	private Action exitaction;
+	private Action exitAction;
 	private Action serverControl;
-	private Composite maincomposite;
+	private Composite mainComposite;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Composite c1;
 	private static Table EventListTable;
@@ -77,9 +74,6 @@ public class ViewMain extends ApplicationWindow {
 	private static Vector<Eventitem> eventlist;
 	private static StackLayout layout = new StackLayout();
 	private ModelEvent mm = new ModelEvent();
-	private static Display display = new Display();
-    private static Color red = display.getSystemColor(SWT.COLOR_RED);
-    private static Color blue = display.getSystemColor(SWT.COLOR_BLUE);
     private static ViewEvent view;
     private static ViewHomepage hp;
     private static EMDBII db;
@@ -469,12 +463,12 @@ public class ViewMain extends ApplicationWindow {
 		container.setEnabled(true);
 		container.setLayout(null);
 		{
-			maincomposite = new Composite(container, SWT.NONE);
-			maincomposite.setBounds(0, 0, 400, 415);
-			maincomposite.setSize(container.getSize());
-			maincomposite.setLayout(new GridLayout(3, false));
+			mainComposite = new Composite(container, SWT.NONE);
+			mainComposite.setBounds(0, 0, 400, 415);
+			mainComposite.setSize(container.getSize());
+			mainComposite.setLayout(new GridLayout(3, false));
 			
-			c1 = new Composite(maincomposite, SWT.NONE);
+			c1 = new Composite(mainComposite, SWT.NONE);
 			c1.setLayout(new GridLayout(1, false));
 			GridData gd_c1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 			gd_c1.heightHint = 415;
@@ -534,7 +528,6 @@ public class ViewMain extends ApplicationWindow {
 				        Point vBarSize = EventListTable.getVerticalBar().getSize();
 				        width -= vBarSize.x;
 				      }
-				      Point oldSize = c1.getSize();
 				      tc1.setWidth(width/3*2);
 				      tc2.setWidth((width - tc1.getWidth()) -24);        
 				      etc1.setWidth(width/3*2);
@@ -776,7 +769,7 @@ public class ViewMain extends ApplicationWindow {
 			formToolkit.paintBordersFor(Calender);
 			
 			
-			Label Vseparator = new Label(maincomposite, SWT.SEPARATOR | SWT.VERTICAL);
+			Label Vseparator = new Label(mainComposite, SWT.SEPARATOR | SWT.VERTICAL);
 			GridData gd_Vseparator = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 			gd_Vseparator.heightHint = 415;
 			gd_Vseparator.verticalAlignment = SWT.FILL;
@@ -785,7 +778,7 @@ public class ViewMain extends ApplicationWindow {
 			
 			formToolkit.adapt(Vseparator, true, true);
 			{
-				c2 = new Composite(maincomposite, SWT.NONE);
+				c2 = new Composite(mainComposite, SWT.NONE);
 				c2.setLayout(layout);
 				GridData gd_c2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_c2.heightHint = 415;
@@ -847,8 +840,8 @@ public class ViewMain extends ApplicationWindow {
 		      }
 		   }).start();
 	*/
-		container.setContent(maincomposite);
-		container.setMinSize(maincomposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		container.setContent(mainComposite);
+		container.setMinSize(mainComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		return container;
 	}
 
@@ -859,13 +852,13 @@ public class ViewMain extends ApplicationWindow {
 		
 		//exit action
 		{
-			exitaction = new Action("Exit") {					public void run() {
+			exitAction = new Action("Exit") {					public void run() {
 						System.exit(0);
 					}
 			};
-			exitaction.setAccelerator(SWT.ALT | SWT.F4);
-			exitaction.setToolTipText("Exits E-MAN");
-			exitaction.addPropertyChangeListener(new IPropertyChangeListener() {
+			exitAction.setAccelerator(SWT.ALT | SWT.F4);
+			exitAction.setToolTipText("Exits E-MAN");
+			exitAction.addPropertyChangeListener(new IPropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
 					System.exit(0);
 				}
@@ -896,7 +889,7 @@ public class ViewMain extends ApplicationWindow {
 		{
 			MenuManager FileMenu = new MenuManager("File");
 			menuManager.add(FileMenu);
-			FileMenu.add(exitaction);
+			FileMenu.add(exitAction);
 			
 			
 			MenuManager ServerMenu = new MenuManager("Server");
