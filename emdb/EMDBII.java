@@ -1,6 +1,7 @@
 package emdb;
 
 
+import java.io.File;
 import java.util.Vector;
 
 public class EMDBII{
@@ -69,7 +70,7 @@ public class EMDBII{
 	 */
 	private void start(){
 		if (this.debugState){
-			System.out.println("EMDB - STARTING UP");
+			EMDBSettings.dMsg("EMDB - STARTING UP");
 		}
 		
 		this.event			=	new EMDBEvent(dbName, this.debugState);
@@ -91,7 +92,7 @@ public class EMDBII{
 	 */
 	public void truncate(){
 		if (this.debugState){
-			System.out.println("EMDB - Clearing Tables");
+			EMDBSettings.dMsg("EMDB - Clearing Tables");
 		}
 		
 		this.event.truncate();
@@ -101,6 +102,32 @@ public class EMDBII{
 		
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Load up / Set up the DB System.
+	 */
+	public void init(){
+		if (this.debugState){
+			EMDBSettings.dMsg("EMDB - INITIALIZING DATABASE");
+		}
+		this.event.setup();
+		this.budget.setup();
+		this.venue.setup();
+		this.participant.setup();
+		
+		this.clearConnections();
+		
+	}
+	
+	
+	
+	
 	
 	
 	
@@ -135,9 +162,9 @@ public class EMDBII{
 	/**
 	 * Destroys the database system
 	 */
-	public void destroy(){
+	public void deinit(){
 		if (this.debugState){
-			System.out.println("EMDB - Destructing Tables");
+			EMDBSettings.dMsg("EMDB - Destructing Tables");
 		}
 		
 		
@@ -146,7 +173,7 @@ public class EMDBII{
 		 */
 		this.event.drop();
 		if(this.event.verify() && this.debugState){
-			System.out.println("EMDB - EVENT TABLE CLEARED");
+			EMDBSettings.dMsg("EMDB - EVENT TABLE CLEARED");
 		}
 		
 		
@@ -155,7 +182,7 @@ public class EMDBII{
 		 */
 		this.budget.drop();
 		if(this.budget.verify() && this.debugState){
-			System.out.println("EMDB - BUDGET TABLE CLEARED");
+			EMDBSettings.dMsg("EMDB - BUDGET TABLE CLEARED");
 		}
 		
 		/*
@@ -163,7 +190,7 @@ public class EMDBII{
 		 */
 		this.venue.drop();
 		if(this.venue.verify() && this.debugState){
-			System.out.println("EMDB - VENUE TABLE CLEARED");
+			EMDBSettings.dMsg("EMDB - VENUE TABLE CLEARED");
 		}
 		
 		/*
@@ -171,7 +198,7 @@ public class EMDBII{
 		 */
 		this.participant.drop();
 		if(this.participant.verify() && this.debugState){
-			System.out.println("EMDB - PARTICIPANT TABLE CLEARED");
+			EMDBSettings.dMsg("EMDB - PARTICIPANT TABLE CLEARED");
 		}
 		
 		
@@ -226,24 +253,34 @@ public class EMDBII{
 	
 	
 	
+
+
 	/**
-	 * Load up / Set up the DB System.
+	 * Remove Database completely
 	 */
-	public void init(){
-		if (this.debugState){
-			System.out.println("EMDB - INITIALIZING DATABASE");
-		}
-		this.event.setup();
-		this.budget.setup();
-		this.venue.setup();
-		this.participant.setup();
+	public boolean destroy(boolean force){
+		File dbFile= new File(this.dbName);
+
 		
-		this.clearConnections();
+		if (!dbFile.exists() && this.debugState){
+			EMDBSettings.dMsg("EMDB -DATBASE DOES NOT EXIST - " + this.dbName);
+			return false;
+		}
+		 if (!dbFile.canWrite()){
+			EMDBSettings.dMsg("EMDB -DATBASE LOCKED - " + this.dbName);
+			return false;
+		 }
+	
+		 if(force){
+			 dbFile.deleteOnExit();
+			 return true;
+		 }else{
+			 return dbFile.delete();
+		 }
+		
 		
 	}
 	
-	
-
 	
 	/**
 	 * Check for Database File
@@ -261,7 +298,7 @@ public class EMDBII{
 			
 			
 			if (this.debugState){
-				System.out.println("EMDB - SYSTEM CHECK - OK");
+				EMDBSettings.dMsg("EMDB - SYSTEM CHECK - OK");
 			}
 			
 			
@@ -269,7 +306,7 @@ public class EMDBII{
 			
 			
 			if (this.debugState){
-				System.out.println("EMDB - SYSTEM CHECK - FAILED");
+				EMDBSettings.dMsg("EMDB - SYSTEM CHECK - FAILED");
 			}
 			
 			
@@ -278,7 +315,7 @@ public class EMDBII{
 			
 			
 			if (this.debugState){
-				System.out.println("EMDB - POPULATING HARD CODED VENUE DETAILS");
+				EMDBSettings.dMsg("EMDB - POPULATING HARD CODED VENUE DETAILS");
 			}
 			
 			//Use the tool 
@@ -287,11 +324,17 @@ public class EMDBII{
 		}
 		
 		if (this.debugState){
-			System.out.println("EMDB - SYSTEM CHECK - END");
+			EMDBSettings.dMsg("EMDB - SYSTEM CHECK - END");
 		}
 	}
 	
 
+
+	
+	
+	
+	
+	
 	public static void main(String[] args){
 		/*EMDBII test = new EMDBII();
 		test.systemCheck();*/

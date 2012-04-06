@@ -61,8 +61,30 @@ public class EMDBIITest {
 
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section A
+	 * 
+	 * *******************************
+	 */
+	
+	
+	
 	@Test
-	public void setVerifyDatabase() throws Exception{
+	public void aSetVerifyDatabase() throws Exception{
 	
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SET AND VERIFY DB");
 		
@@ -83,8 +105,32 @@ public class EMDBIITest {
 	
 
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section B
+	 * 
+	 * *******************************
+	 */
+	
+	
+	
+	
 	@Test
-	public void addAndRetrieveEvent() throws Exception {
+	public void bAddAndRetrieveEvent() throws Exception {
 		
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SAVE AND RETRIEVE EVENT");
 		
@@ -146,11 +192,11 @@ public class EMDBIITest {
 		
 	}
 
-	
+
 	
 	
 	@Test
-	public void addVenue(){
+	public void bAddVenue(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> ADD VENUE FROM LOCAL LIST OF SIZE " + venueList.size());
 
 		int oldDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
@@ -169,41 +215,47 @@ public class EMDBIITest {
 	}
 	
 	
-	@Test
-	public void deleteVenue(){
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE VENUE");
-		
-		int id = this.db.venueDB().addVenue(this.venueList.get(0));
 	
-		int oldDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
-		EMDBSettings.dMsg("<EMDB TEST> OLD DB VENUE SIZE " + oldDbVenueSize);
-		
-		this.db.venueDB().deleteVenue(id);
-		
-		int newDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
-		EMDBSettings.dMsg("<EMDB TEST> NEW DB VENUE SIZE " + newDbVenueSize);
-		
-		assertEquals( 1, Math.abs(newDbVenueSize-oldDbVenueSize) );
-		
-		
-		Venue test = this.db.venueDB().getVenue(id);
-		assertTrue( test.getName() == null || test.getName().isEmpty() );
-		
-		
-	}
 	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section C
+	 * 
+	 * *******************************
+	 */
+
 	
 	@Test
-	public void deleteVenueNone(){
-		assertEquals(0,this.db.venueDB().deleteVenue(0));
-	}
-	
-	
-	
-	
-	@Test
-	public void updateEvent(){
+	public void cUpdateEvent(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> UPDATE EVENT");
+		
 		
 		int id = this.db.eventDB().addEvent(this.eventList.get(1));
 		
@@ -261,6 +313,103 @@ public class EMDBIITest {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section D
+	 * 
+	 * *******************************
+	 */
+	
+
+	@Test
+	public void dDeleteVenue(){
+
+		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE VENUE");
+		
+		int id = this.db.venueDB().addVenue(this.venueList.get(0));
+	
+		int oldDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		EMDBSettings.dMsg("<EMDB TEST> OLD DB VENUE SIZE " + oldDbVenueSize);
+		
+		this.db.venueDB().deleteVenue(id);
+		
+		int newDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
+		EMDBSettings.dMsg("<EMDB TEST> NEW DB VENUE SIZE " + newDbVenueSize);
+		
+		assertEquals( 1, Math.abs(newDbVenueSize-oldDbVenueSize) );
+		
+		
+		Venue test = this.db.venueDB().getVenue(id);
+		assertTrue( test.getName() == null || test.getName().isEmpty() );
+		
+		
+	}
+	
+	
+	
+	@Test
+	public void dDeleteEventNone(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE NON-EXISTANT EVENT");
+		
+		assertEquals(0, this.db.eventDB().deleteEvent(0));
+	}
+	
+	
+	@Test
+	public void dDeleteVenueNone(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE NON-EXISTANT VENUE");
+		
+		assertEquals(0,this.db.venueDB().deleteVenue(0));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section Y
+	 * Cleanup
+	 * 
+	 * *******************************
+	 */
 
 	/*
 	
@@ -281,6 +430,34 @@ public class EMDBIITest {
 		this.db.participantDB().drop();
 		assertFalse(this.db.participantDB().verify());
 	}*/
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section Z
+	 * END
+	 * 
+	 * *******************************
+	 */
+	
+	
+	@Test
+	public void zDeleteDB(){
+		EMDBSettings.dMsg("\n\n<EMDB TEST> DESTROY DATABASE FILE");
+		assertTrue(this.db.destroy(false));
+	} 
 	
 	
 }

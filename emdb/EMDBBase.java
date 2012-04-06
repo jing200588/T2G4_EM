@@ -426,8 +426,8 @@ public class EMDBBase{
 			this.dMsg("CREATE/CHECK FILE");
 		}
 		
-		File findFile = new File(this.dbName);
-		return findFile.isFile();
+		File dbFile = new File(this.dbName);
+		return dbFile.isFile();
 	}
 	
 
