@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.Vector;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import program.EventFlowEntry;
@@ -14,10 +16,11 @@ import emdb.EMDBII;
 import emdb.EMDBSettings;
 import event.Eventitem;
 
+
 public class EMDBIITest {
 	
 	
-	private EMDBII 				db	= new EMDBII("unit.sqlite", true);; 				
+	private EMDBII 				db	= new EMDBII("unit.sqlite", true); 				
 	
 	private Eventitem			event;
 	private Vector<Eventitem>	eventList		=	new Vector<Eventitem>();
@@ -77,13 +80,14 @@ public class EMDBIITest {
 	 * ******************************* 
 	 * 
 	 * Test Section A
+	 * START / END
 	 * 
 	 * *******************************
 	 */
 	
 	
 	
-	@Test
+	@Before
 	public void aSetVerifyDatabase() throws Exception{
 	
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SET AND VERIFY DB");
@@ -103,7 +107,14 @@ public class EMDBIITest {
 	}
 	
 	
-
+	
+	@After
+	public void aDeleteDB(){
+		
+		EMDBSettings.dMsg("\n<EMDB TEST> DESTROY DATABASE FILE\n");
+		
+		assertTrue(this.db.destroy(false));
+	} 
 	
 	
 	
@@ -133,7 +144,6 @@ public class EMDBIITest {
 	public void bAddAndRetrieveEvent() throws Exception {
 		
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SAVE AND RETRIEVE EVENT");
-		
 		
 		Eventitem itemResult	=	null;
 		
@@ -260,8 +270,7 @@ public class EMDBIITest {
 		Eventitem eEvent = this.eventList.get(3);
 		
 		int id = this.db.eventDB().addEvent(eEvent);
-		
-		
+
 		eEvent.setID(id);
 		eEvent.setName("Getting a new name");
 		
@@ -394,30 +403,17 @@ public class EMDBIITest {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
 	/*
 	 * ******************************* 
 	 * 
 	 * Test Section Y
-	 * Cleanup
 	 * 
 	 * *******************************
 	 */
-
-	/*
+	
 	
 	@Test
-	public void deleteTables() throws Exception {
-		
+	public void yDeleteTables(){
 		EMDBSettings.dMsg("<EMDB TEST> DELETE / DROP TABLES");
 		
 		this.db.eventDB().drop();
@@ -431,35 +427,23 @@ public class EMDBIITest {
 		
 		this.db.participantDB().drop();
 		assertFalse(this.db.participantDB().verify());
-	}*/
+		
+	}
+	
+	
+
 	
 
 
+
 	
 	
 	
 	
 	
+
 	
+
 	
-	
-	
-	
-	/*
-	 * ******************************* 
-	 * 
-	 * Test Section Z
-	 * END
-	 * 
-	 * *******************************
-	 */
-	/*
-	
-	@Test
-	public void zDeleteDB(){
-		EMDBSettings.dMsg("\n\n<EMDB TEST> DESTROY DATABASE FILE");
-		assertTrue(this.db.destroy(false));
-	} 
-	*/
 	
 }

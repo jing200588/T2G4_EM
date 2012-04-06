@@ -743,7 +743,7 @@ public class EMDBEvent extends EMDBBase{
 	 * @param aNewlyExpired
 	 * @return
 	 */
-	public int addAchiveEventList(List<Eventitem> aNewlyExpired){
+	public int addArchiveEventList(List<Eventitem> aNewlyExpired){
 		
 		int size = aNewlyExpired.size();
 		
