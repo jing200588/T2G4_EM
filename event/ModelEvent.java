@@ -20,6 +20,13 @@ public class ModelEvent {
 		
 	};
 	
+	public ModelEvent(String test) {
+		list = new Vector<Eventitem>();
+		expired = new Vector<Eventitem>();
+		
+		db = new EMDBII(test);
+		
+	};
 	/************************************************************
 	 * CREATE EVENT //Passes event to DB and local list.
 	 ***********************************************************/

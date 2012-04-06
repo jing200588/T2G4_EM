@@ -3,10 +3,9 @@ package unittest.eventtest;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.junit.Test;
 
 import event.*;
@@ -17,8 +16,6 @@ public class CreateEventDatabaseTest {
 	private Eventitem[] currentEvents;
 	private ModelEvent model;
 	private static final int TOTAL = 5;
-//	private Vector<Eventitem> eventList;
-//	private ViewMain eMan;
 
 	public CreateEventDatabaseTest() {
 		String inputName = "School Orientation Camp";
@@ -53,7 +50,8 @@ public class CreateEventDatabaseTest {
 					inputStartHour, inputStartMinute, inputEndHour, inputEndMinute, inputDescription);
 		}
 		
-		model = new ModelEvent();
+		//model = new ModelEvent();
+		model = new ModelEvent("unit.sqlite");
 		}
 	
 	/**
@@ -69,25 +67,55 @@ public class CreateEventDatabaseTest {
 		
 		expectedEventList.add(currentEvent);
 		
-		boolean sameResult = true;
-		System.out.println(expectedEventList.size());
-		System.out.println(actualEventList.size());
-		if (expectedEventList.size() != actualEventList.size())
-			sameResult = false;
-		else { 
-			for (int i=0; i<expectedEventList.size(); i++) {
-				if (actualEventList.get(i).getName().compareTo(expectedEventList.get(i).getName()) != 0)
-					sameResult = false;
-			}
-		}
-	
-	/*	boolean sameResult = true;
-		if (!actualEventList.get(0).equals(currentEvent))
-			sameResult = false;*/
-		assertEquals(true, sameResult);
-			
+		
+		assertEquals(expectedEventList.size(), actualEventList.size());
+		
+		for (int i=0; i<expectedEventList.size(); i++) {
+			assertEquals(expectedEventList.get(i).getName(), actualEventList.get(i).getName());
+			assertEquals(expectedEventList.get(i).getStartDateTime().getTimeRepresentation(), actualEventList.get(i).getStartDateTime().getTimeRepresentation());
+			assertEquals(expectedEventList.get(i).getStartDateTime().getDateRepresentation(), actualEventList.get(i).getStartDateTime().getDateRepresentation());
+			assertEquals(expectedEventList.get(i).getEndDateTime().getTimeRepresentation(), actualEventList.get(i).getEndDateTime().getTimeRepresentation());
+			assertEquals(expectedEventList.get(i).getEndDateTime().getDateRepresentation(), actualEventList.get(i).getEndDateTime().getDateRepresentation());
+			assertEquals(expectedEventList.get(i).getDescription(), actualEventList.get(i).getDescription());
+			assertEquals(false, actualEventList.get(i).isExpired());
+		}			
 	}
 
+	/**
+	 * Description: This function will test the editing of particulars of event items that have already existed in the database. 
+	 */
+	@Test
+	public void EditEventDatabaseTest() {
+		
+		ModelEvent.CreateEvent(currentEvent);
+		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());
+
+		
+		Eventitem tempEvent = expectedEventList.get(expectedEventList.size()-1);
+		tempEvent.setName("Test Edit Name");
+		tempEvent.setStartDate(2012, 5, 1);
+		tempEvent.setEndDate(2012, 5, 20);
+		tempEvent.setStartTime(9, 30);
+		tempEvent.setEndTime(22, 30);
+		tempEvent.setDescription("This is a edit description test!");
+
+		ModelEvent.UpdateParticulars(tempEvent);
+		Vector<Eventitem> actualEventList = ModelEvent.PullList();
+		
+		assertEquals(expectedEventList.size(), actualEventList.size());
+		
+		for (int i=0; i<expectedEventList.size(); i++) {
+			assertEquals(expectedEventList.get(i).getName(), actualEventList.get(i).getName());
+			assertEquals(expectedEventList.get(i).getStartDateTime().getTimeRepresentation(), actualEventList.get(i).getStartDateTime().getTimeRepresentation());
+			assertEquals(expectedEventList.get(i).getStartDateTime().getDateRepresentation(), actualEventList.get(i).getStartDateTime().getDateRepresentation());
+			assertEquals(expectedEventList.get(i).getEndDateTime().getTimeRepresentation(), actualEventList.get(i).getEndDateTime().getTimeRepresentation());
+			assertEquals(expectedEventList.get(i).getEndDateTime().getDateRepresentation(), actualEventList.get(i).getEndDateTime().getDateRepresentation());
+			assertEquals(expectedEventList.get(i).getDescription(), actualEventList.get(i).getDescription());
+			assertEquals(expectedEventList.get(i).getID(), actualEventList.get(i).getID());
+		}
+
+	}
+	
 	/**
 	 * Description: This function will test the deletion of event items in the database.
 	 * This test makes the following assumptions: The program stores event items into the database correctly. 
@@ -96,18 +124,26 @@ public class CreateEventDatabaseTest {
 	public void DeleteEventDatabaseTest() {
 		ModelEvent.CreateEvent(currentEvent);	//adds current event into database
 		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());	//retreives the list of events from database
+		currentEvent.setID(expectedEventList.get(expectedEventList.size()-1).getID());	//store the ID into current event
+		
 		ModelEvent.DeleteEvent(currentEvent);	//deletes event from database
 		Vector<Eventitem> actualEventList = ModelEvent.PullList();	//retreives the list of events from database
 		
-		expectedEventList.remove(currentEvent);	//remove event from list
+		expectedEventList.remove(expectedEventList.size()-1);	//remove event from local list
 		
-		boolean sameResult = true;
+		assertEquals(expectedEventList.size(), actualEventList.size());
+		
 		for (int i=0; i<expectedEventList.size(); i++) {
-			if (!actualEventList.get(i).equals(expectedEventList.get(i)))
-				sameResult = false;
+			assertEquals(expectedEventList.get(i).getName(), actualEventList.get(i).getName());
+			assertEquals(expectedEventList.get(i).getStartDateTime().getTimeRepresentation(), actualEventList.get(i).getStartDateTime().getTimeRepresentation());
+			assertEquals(expectedEventList.get(i).getStartDateTime().getDateRepresentation(), actualEventList.get(i).getStartDateTime().getDateRepresentation());
+			assertEquals(expectedEventList.get(i).getEndDateTime().getTimeRepresentation(), actualEventList.get(i).getEndDateTime().getTimeRepresentation());
+			assertEquals(expectedEventList.get(i).getEndDateTime().getDateRepresentation(), actualEventList.get(i).getEndDateTime().getDateRepresentation());
+			assertEquals(expectedEventList.get(i).getDescription(), actualEventList.get(i).getDescription());
+			assertEquals(expectedEventList.get(i).getID(), actualEventList.get(i).getID());
+			assertEquals(false, actualEventList.get(i).isExpired());
 		}
-		assertEquals(true, sameResult);
-			
+
 	}
 	
 	/**
@@ -123,80 +159,131 @@ public class CreateEventDatabaseTest {
 		currentEvent.setIsExpired(true);
 		
 		Vector<Eventitem> expectedEventList =  new Vector<Eventitem>(ModelEvent.PullList());	//retreives the list of events from database
-		Vector<Eventitem> expectedExpiredEventList =  new Vector<Eventitem>(ModelEvent.PullList());	//retreives the list of expired events from database
+		Vector<Eventitem> expectedExpiredEventList =  new Vector<Eventitem>(ModelEvent.PullExpiredList());	//retreives the list of expired events from database
 		ModelEvent.CreateEvent(currentEvent);	//adds current event into database
-		List<Eventitem> expiredSubList = new Vector<Eventitem>();	//creates an expired sublist to pass into UpdateExpiredList function
+		Vector<Eventitem> eventList = new Vector<Eventitem>(ModelEvent.PullList());
+		currentEvent = eventList.get(eventList.size()-1);
+		
+		//creates an expired sublist to pass into UpdateExpiredList function
+		List<Eventitem> expiredSubList = new Vector<Eventitem>();
 		expiredSubList.add(currentEvent);
+		
+		expectedExpiredEventList.add(currentEvent);		//adds the current event into the expected expired list
 		ModelEvent.UpdateExpiredList(expiredSubList);	//prompts the database to remove expired event from database event list to database expired event list
 		
 		Vector<Eventitem> actualEventList = ModelEvent.PullList();	//retreives the list of events from database
-		Vector<Eventitem> actualExpiredEventList = ModelEvent.PullList();	//retreives the list of events from database
+		Vector<Eventitem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
 		
-		boolean sameResult = true;
-
+		
+		assertEquals(expectedEventList.size(), actualEventList.size());
+		
 		for (int i=0; i<expectedEventList.size(); i++) {
-			if (actualEventList.get(i).getName().compareTo(expectedEventList.get(i).getName()) !=0 ||
-					actualEventList.get(i).getStartDateTime().compareTo(expectedEventList.get(i).getStartDateTime()) != 0 ||
-					actualEventList.get(i).getEndDateTime().compareTo(expectedEventList.get(i).getEndDateTime()) != 0 ||
-					actualEventList.get(i).getDescription().compareTo(expectedEventList.get(i).getDescription()) != 0 )
-
-				sameResult = false;
-		}
+			assertEquals(expectedEventList.get(i).getName(), actualEventList.get(i).getName());
+			assertEquals(expectedEventList.get(i).getStartDateTime().getTimeRepresentation(), actualEventList.get(i).getStartDateTime().getTimeRepresentation());
+			assertEquals(expectedEventList.get(i).getStartDateTime().getDateRepresentation(), actualEventList.get(i).getStartDateTime().getDateRepresentation());
+			assertEquals(expectedEventList.get(i).getEndDateTime().getTimeRepresentation(), actualEventList.get(i).getEndDateTime().getTimeRepresentation());
+			assertEquals(expectedEventList.get(i).getEndDateTime().getDateRepresentation(), actualEventList.get(i).getEndDateTime().getDateRepresentation());
+			assertEquals(expectedEventList.get(i).getDescription(), actualEventList.get(i).getDescription());
+			assertEquals(expectedEventList.get(i).getID(), actualEventList.get(i).getID());
+			assertEquals(false, actualEventList.get(i).isExpired());
+		}		
 		
-		if (sameResult) {
-			for (int i=0; i<expectedExpiredEventList.size(); i++) {
-				if (actualExpiredEventList.get(i).getName().compareTo(expectedExpiredEventList.get(i).getName()) !=0 ||
-						actualExpiredEventList.get(i).getStartDateTime().compareTo(expectedExpiredEventList.get(i).getStartDateTime()) != 0 ||
-						actualExpiredEventList.get(i).getEndDateTime().compareTo(expectedExpiredEventList.get(i).getEndDateTime()) != 0 ||
-						actualExpiredEventList.get(i).getDescription().compareTo(expectedExpiredEventList.get(i).getDescription()) != 0 )
-
-					sameResult = false;
-			}
-		}
+		assertEquals(expectedExpiredEventList.size(), actualExpiredEventList.size());
 		
-		assertEquals(true, sameResult);
-			
+		for (int i=0; i<expectedExpiredEventList.size(); i++) {
+			assertEquals(expectedExpiredEventList.get(i).getName(), actualExpiredEventList.get(i).getName());
+			assertEquals(expectedExpiredEventList.get(i).getStartDateTime().getTimeRepresentation(), actualExpiredEventList.get(i).getStartDateTime().getTimeRepresentation());
+			assertEquals(expectedExpiredEventList.get(i).getStartDateTime().getDateRepresentation(), actualExpiredEventList.get(i).getStartDateTime().getDateRepresentation());
+			assertEquals(expectedExpiredEventList.get(i).getEndDateTime().getTimeRepresentation(), actualExpiredEventList.get(i).getEndDateTime().getTimeRepresentation());
+			assertEquals(expectedExpiredEventList.get(i).getEndDateTime().getDateRepresentation(), actualExpiredEventList.get(i).getEndDateTime().getDateRepresentation());
+			assertEquals(expectedExpiredEventList.get(i).getDescription(), actualExpiredEventList.get(i).getDescription());
+			assertEquals(expectedExpiredEventList.get(i).getID(), actualExpiredEventList.get(i).getID());
+			assertEquals(true, actualExpiredEventList.get(i).isExpired());
+		}
 	}
 	
 	/**
-	 * Description: This function will test the 
+	 * Description: This function will test the deletion of any expired event in the expired list on the database.
 	 */
 	@Test
 	public void DeleteExpiredEventDatabaseTest() {
 		
-		//Setting the date values to the past
-		for (int i=0; i<TOTAL; i++) {
-			currentEvents[i].setStartDate(2011, currentEvents[i].getStartDateTime().getMonth(), currentEvents[i].getStartDateTime().getDay());
-			currentEvent.setEndDate(2011, 12, 15);
-			currentEvents[i].setIsExpired(true);
-		}
-		Vector<Eventitem> expectedExpiredEventList =  new Vector<Eventitem>(ModelEvent.PullList());	//retreives the list of expired events from database
-		ModelEvent.CreateEvent(currentEvent);	//adds current event into database
+		Random random = new Random();
+		int randNo = random.nextInt(TOTAL);
+		Vector<Eventitem> expectedExpiredEventList =  new Vector<Eventitem>(ModelEvent.PullExpiredList());	//retreives the list of expired events from database
 		List<Eventitem> expiredSubList = new Vector<Eventitem>();	//creates an expired sublist to pass into UpdateExpiredList function
-		expiredSubList.add(currentEvent);
+		
+		for (int i=0; i<TOTAL; i++) {
+			//Setting the date values to the past
+			currentEvents[i].setStartDate(2011, currentEvents[i].getStartDateTime().getMonth(), currentEvents[i].getStartDateTime().getDay());
+			currentEvents[i].setEndDate(2011, currentEvents[i].getEndDateTime().getMonth(), currentEvents[i].getEndDateTime().getDay());
+			
+			currentEvents[i].setIsExpired(true);
+			
+			ModelEvent.CreateEvent(currentEvents[i]);	//adds events into database
+		}
+		
+		Vector<Eventitem> eventList = new Vector<Eventitem>(ModelEvent.PullList());
+		expiredSubList = eventList.subList(eventList.size() - TOTAL, eventList.size());
+		
+		for (int i=0; i<TOTAL; i++) {
+			currentEvents[i].setID(expiredSubList.get(i).getID());
+			expectedExpiredEventList.add(currentEvents[i]);	//adds events into expected list
+		}
+		
+		ModelEvent.UpdateExpiredList(expiredSubList);	//prompts the database to remove expired event from database event list to database expired event list
+		
+		expectedExpiredEventList.remove(currentEvents[randNo]);	//removes the randomly chosen event from the expected list
+		ModelEvent.DeleteExpiredEvent(currentEvents[randNo]);	//removes the randomly chosen event from the database expired list
+		Vector<Eventitem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
+
+		assertEquals(expectedExpiredEventList.size(), actualExpiredEventList.size());
+		
+		for (int i=0; i<expectedExpiredEventList.size(); i++) {
+			assertEquals(expectedExpiredEventList.get(i).getName(), actualExpiredEventList.get(i).getName());
+			assertEquals(expectedExpiredEventList.get(i).getStartDateTime().getTimeRepresentation(), actualExpiredEventList.get(i).getStartDateTime().getTimeRepresentation());
+			assertEquals(expectedExpiredEventList.get(i).getStartDateTime().getDateRepresentation(), actualExpiredEventList.get(i).getStartDateTime().getDateRepresentation());
+			assertEquals(expectedExpiredEventList.get(i).getEndDateTime().getTimeRepresentation(), actualExpiredEventList.get(i).getEndDateTime().getTimeRepresentation());
+			assertEquals(expectedExpiredEventList.get(i).getEndDateTime().getDateRepresentation(), actualExpiredEventList.get(i).getEndDateTime().getDateRepresentation());
+			assertEquals(expectedExpiredEventList.get(i).getDescription(), actualExpiredEventList.get(i).getDescription());
+			assertEquals(expectedExpiredEventList.get(i).getID(), actualExpiredEventList.get(i).getID());
+			assertEquals(true, actualExpiredEventList.get(i).isExpired());
+		}
+			
+	}	
+	
+	
+	/**
+	 * Description: This function will test the deletion of all the expired events in the expired list on the database. 
+	 */
+	@Test
+	public void DeleteAllExpiredEventDatabaseTest() {
+		
+		for (int i=0; i<TOTAL; i++) {
+			//Setting the date values to the past
+			currentEvents[i].setStartDate(2011, currentEvents[i].getStartDateTime().getMonth(), currentEvents[i].getStartDateTime().getDay());
+			currentEvents[i].setEndDate(2011, currentEvents[i].getEndDateTime().getMonth(), currentEvents[i].getEndDateTime().getDay());
+			
+			currentEvents[i].setIsExpired(true);
+			
+			ModelEvent.CreateEvent(currentEvents[i]);	//adds events into database
+		}
+		
+		//Sets up the scenerio where all the created expired events are now in the expired list of the database
+		Vector<Eventitem> eventList = new Vector<Eventitem>(ModelEvent.PullList());		//pull event list from database
+		List<Eventitem> expiredSubList = eventList.subList(eventList.size() - TOTAL, eventList.size());	//obtain sublist to pass into UpdateExpiredList
 		ModelEvent.UpdateExpiredList(expiredSubList);	//prompts the database to remove expired event from database event list to database expired event list
 		
 		
-		ModelEvent.DeleteEvent(currentEvent);
-		Vector<Eventitem> actualExpiredEventList = ModelEvent.PullList();	//retreives the list of events from database
+		ModelEvent.DeleteAllExpiredEvents();	//prompts the database to delete the entire list of expired events
+		Vector<Eventitem> actualExpiredEventList = ModelEvent.PullExpiredList();	//retreives the list of events from database
+
+		assertEquals(0, actualExpiredEventList.size());
 		
-		boolean sameResult = true;
-		if (actualExpiredEventList.size() != expectedExpiredEventList.size())
-			sameResult = false;
-		
-		else { 
-			
-			for (int i=0; i<expectedExpiredEventList.size(); i++) {
-				if (actualExpiredEventList.get(i).getName().compareTo(expectedExpiredEventList.get(i).getName()) !=0 ||
-						actualExpiredEventList.get(i).getStartDateTime().compareTo(expectedExpiredEventList.get(i).getStartDateTime()) != 0 ||
-						actualExpiredEventList.get(i).getEndDateTime().compareTo(expectedExpiredEventList.get(i).getEndDateTime()) != 0 ||
-						actualExpiredEventList.get(i).getDescription().compareTo(expectedExpiredEventList.get(i).getDescription()) != 0 )
-	
-					sameResult = false;
-			}
-		}
-		
-		assertEquals(true, sameResult);
-			
 	}	
+
+
+
+
+
 }
