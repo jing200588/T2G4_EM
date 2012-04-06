@@ -41,8 +41,8 @@ public class CreateEventDatabaseTest {
 					inputStartHour, inputStartMinute, inputEndHour, inputEndMinute, inputDescription);
 		}
 		
-		model = new ModelEvent();
-		//model = new ModelEvent("unit.sqlite");
+		//model = new ModelEvent();
+		model = new ModelEvent("unit.sqlite");
 		}
 	
 	/**

@@ -6,15 +6,16 @@ import emdb.*;
 
 public class ModelParticipantList {
 	
-	private static EMDBII db = new EMDBII();
+	private static EMDBII db;
 	
 	public ModelParticipantList() {
-		
+		db = new EMDBII();
 	}
 	
-	public static void startTestDatabase(String test) {
+	public ModelParticipantList(String test) {
 		
 		db = new EMDBII(test);
+		db.systemCheck();
 	}
 	
 	public static void UpdateDB (EventItem eitem) {

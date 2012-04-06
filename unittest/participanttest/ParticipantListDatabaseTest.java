@@ -23,8 +23,8 @@ public class ParticipantListDatabaseTest {
 	
 	public ParticipantListDatabaseTest() {
 		model = new ModelEvent();
-		modelPL = new ModelParticipantList();
-		//ModelParticipantList.startTestDatabase("unit.sqlite");
+		//modelPL = new ModelParticipantList();
+		modelPL = new ModelParticipantList("unit.sqlite");
 		currentEvent = CreateCurrentEvent();
 	}
 	
