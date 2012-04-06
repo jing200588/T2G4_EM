@@ -324,68 +324,7 @@ public class EMDBEvent extends EMDBBase{
 
 	}
 	
-	
-	/**
-	 * Creates an Event in Bulk.
-	 * @param aName
-	 * @param aDescription
-	 * @param aBudget
-	 * @param aStartDate
-	 * @param aEndDate
-	 * @param aStartTime
-	 * @param aEndTime
-	 * @return
-	 */
-	public int addEventList(Vector<Eventitem> item){
-		
-		int size = item.size();
-		
-		if (this.dbDebug){
-			this.dMsg("STARTING PROCESS TO ADD LIST OF SIZE " + size);
-		}	
-		
-		
-		if (!item.isEmpty()){
-			for (int i=0; i<size; i++){
-				Eventitem current = item.get(i);
-				String sql	=	new InsertQuery(this.eventsTable)
-							      		.addColumn(this.eventsName, current.getName().replaceAll("[\']", ""))
-							      		.addColumn(this.eventsDescription, current.getDescription().replaceAll("[\']", ""))
-							      		.addColumn(this.eventsBudget, current.getBudget())
-							      		.addColumn(this.eventsStartDate, current.getStartDateTime().getDateRepresentation())
-							      		.addColumn(this.eventsEndDate, current.getEndDateTime().getDateRepresentation())
-							      		.addColumn(this.eventsStartTime, current.getStartDateTime().getTimeRepresentation())
-							      		.addColumn(this.eventsEndTime, current.getEndDateTime().getTimeRepresentation())
-							      		.addColumn(this.eventsSchedule, EventFlowEntry.getStringRepresentation(current.getEventFlow()).replaceAll("[\']", ""))
-							      		.validate().toString();
-				this.queue(sql);
-				if (this.dbDebug){
-					this.dMsg("ADD TO EVENT ITEM LIST QUEUE");
-				}	
-			}
-			
-			if (this.dbDebug){
-				this.dMsg("ADD TO EVENT ITEM LIST");
-			}	
-			
-			this.connect();
-			int result = this.commit();
-			this.disconnect();
-			
-			return result;
-			
-		}else{
-			return 0;
-		}
-		
 
-	}
-	
-	
-	
-	
-	
-	
 	
 	
 	

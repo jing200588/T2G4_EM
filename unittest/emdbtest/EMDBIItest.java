@@ -150,22 +150,7 @@ public class EMDBIITest {
 		
 	}
 	
-	@Test
-	public void saveBulkEvents(){
-		
-		
-		int sizeBefore = this.db.eventDB().getEventList().size();
-		EMDBSettings.dMsg(""+this.db.eventDB().getEventList().size());
-		
-		this.db.eventDB().addEventList(this.eventList);
-		
-		int sizeAfter = this.db.eventDB().getEventList().size();
-		EMDBSettings.dMsg(""+this.db.eventDB().getEventList().size());
-		
-		assertEquals((sizeAfter-sizeBefore), 5);
-		
-		
-	}
+
 
 	
 
