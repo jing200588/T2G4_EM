@@ -65,7 +65,10 @@ public class ViewEvent extends Composite {
 	private static int budgetItemCounter;
 	protected LoginEmailDialog loginDialog; 
 
-
+	// These two variables are for implementing column sort.
+	private static List<Participant> participantList;
+	private static TableViewer tableViewerParticipant;
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -692,7 +695,7 @@ public class ViewEvent extends Composite {
 	 * @return Table containing participant details or null if ParticipantList is empty 
 	 */
 	public static Table ParticipantJfaceTable() {
-		List<Participant> participantList = currentEvent.getParticipantList();
+		participantList = currentEvent.getParticipantList();
 
 		//Checks if there is any entry before creating the table
 		if (participantList.isEmpty()) {
@@ -709,7 +712,7 @@ public class ViewEvent extends Composite {
 		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
 		tableComposite.setLayout(tcl_tableComposite);
 
-		TableViewer tableViewerParticipant = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewerParticipant = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableParticipant = tableViewerParticipant.getTable();
 		tableParticipant.setHeaderVisible(true);
 		tableParticipant.getVerticalBar().setEnabled(true);
@@ -761,6 +764,65 @@ public class ViewEvent extends Composite {
 				}
 			});
 		}
+		
+		//////////////////////////////////////////////////////////////////////////////
+		// Add listeners for table columns
+		/////////////////////////////////////////////////////////////////////////////
+
+		// Column 0: Name
+		tvc[0].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(participantList, Participant.COLUMNSORTCRITERIA.NAME);
+				tableViewerParticipant.refresh();
+			}
+		});
+
+		// Column 1: Matric
+		tvc[1].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(participantList, Participant.COLUMNSORTCRITERIA.MATRIC);
+				tableViewerParticipant.refresh();
+			}
+		});
+
+		// Column 2: Contact
+		tvc[2].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(participantList, Participant.COLUMNSORTCRITERIA.CONTACT);
+				tableViewerParticipant.refresh();
+			}
+		});
+
+		// Column 3: Email
+		tvc[3].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(participantList, Participant.COLUMNSORTCRITERIA.EMAIL);
+				tableViewerParticipant.refresh();
+			}
+		});
+
+		// Column 4: Address
+		tvc[4].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(participantList, Participant.COLUMNSORTCRITERIA.ADDRESS);
+				tableViewerParticipant.refresh();
+			}
+		});
+
+		// Column 5: Remark
+		tvc[5].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Participant.columnSort(participantList, Participant.COLUMNSORTCRITERIA.REMARK);
+				tableViewerParticipant.refresh();
+			}
+		});
+
 		tableViewerParticipant.setInput(participantList);
 		tvc[1].getColumn().pack();
 		tvc[2].getColumn().pack();
