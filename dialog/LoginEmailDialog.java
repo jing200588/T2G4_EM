@@ -188,8 +188,8 @@ public class LoginEmailDialog extends Dialog {
 						throw new Exception("Incorrect Username/Password.");
 					}
 				
-				} catch (Exception e) {
-					errordiag = new ErrorMessageDialog(new Shell(), e.getMessage());
+				} catch (Exception ex) {
+					errordiag = new ErrorMessageDialog(new Shell(), ex.getMessage());
 					errordiag.open();
 				}
 				

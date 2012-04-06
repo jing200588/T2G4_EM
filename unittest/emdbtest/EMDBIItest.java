@@ -88,7 +88,7 @@ public class EMDBIITest {
 	
 	
 	@Before
-	public void aSetVerifyDatabase() throws Exception{
+	public void setVerifyDatabase() throws Exception{
 	
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SET AND VERIFY DB");
 		
@@ -109,7 +109,7 @@ public class EMDBIITest {
 	
 	
 	@After
-	public void aDeleteDB(){
+	public void deleteDB(){
 		
 		EMDBSettings.dMsg("\n<EMDB TEST> DESTROY DATABASE FILE\n");
 		
@@ -141,7 +141,7 @@ public class EMDBIITest {
 	
 	
 	@Test
-	public void bAddAndRetrieveEvent() throws Exception {
+	public void addAndRetrieveEvent() throws Exception {
 		
 		EMDBSettings.dMsg("\n\n<EMDB TEST> SAVE AND RETRIEVE EVENT");
 		
@@ -206,7 +206,7 @@ public class EMDBIITest {
 	
 	
 	@Test
-	public void bAddVenue(){
+	public void addVenue(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> ADD VENUE FROM LOCAL LIST OF SIZE " + venueList.size());
 
 		int oldDbVenueSize = this.db.venueDB().getVenueList(null, 0, 0).size();
@@ -263,7 +263,7 @@ public class EMDBIITest {
 
 	
 	@Test
-	public void cUpdateEvent(){
+	public void updateEvent(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> UPDATE EVENT");
 		
 		
@@ -324,6 +324,14 @@ public class EMDBIITest {
 	
 	
 	
+	public void addPartipicant(){
+		
+	}
+	
+	public void addBudget(){
+		
+	}
+	
 	
 	
 	
@@ -348,7 +356,7 @@ public class EMDBIITest {
 	
 
 	@Test
-	public void dDeleteVenue(){
+	public void deleteVenue(){
 
 		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE VENUE");
 		
@@ -374,7 +382,7 @@ public class EMDBIITest {
 	
 	
 	@Test
-	public void dDeleteEventNone(){
+	public void deleteEventNone(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE NON-EXISTANT EVENT");
 		
 		assertEquals(0, this.db.eventDB().deleteEvent(0));
@@ -382,7 +390,7 @@ public class EMDBIITest {
 	
 	
 	@Test
-	public void dDeleteVenueNone(){
+	public void deleteVenueNone(){
 		EMDBSettings.dMsg("\n\n<EMDB TEST> DELETE NON-EXISTANT VENUE");
 		
 		assertEquals(0,this.db.venueDB().deleteVenue(0));
@@ -413,7 +421,7 @@ public class EMDBIITest {
 	
 	
 	@Test
-	public void yDeleteTables(){
+	public void deleteTables(){
 		EMDBSettings.dMsg("<EMDB TEST> DELETE / DROP TABLES");
 		
 		this.db.eventDB().drop();
