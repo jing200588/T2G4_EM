@@ -63,8 +63,6 @@ public class ViewEvent extends Composite {
 	private static int indexParticipant =0;
 	private static int indexVenue =0;
 	private static int indexEventFlow =0;
-	private static int count=0;
-	private static int budgetItemCounter;
 	protected LoginEmailDialog loginDialog; 
 
 	// These two variables are for implementing column sort.
@@ -853,7 +851,7 @@ public class ViewEvent extends Composite {
 	 * @return A table is returned if there are entries in the list, else null is returned
 	 */
 	public static Table VenueTable() {
-		Vector<BookedVenueInfo> venueList = currentEvent.getBviList();
+		Vector<BookedVenueInfo> venueList = currentEvent.getBVIList();
 
 		//Checks if there is any entry before creating the table
 		if (venueList.isEmpty()) {
@@ -1080,7 +1078,7 @@ public class ViewEvent extends Composite {
 	 * @return  
 	 */
 	public static Table VenueJfaceTable() {
-		Vector<BookedVenueInfo> venueList = currentEvent.getBviList();
+		Vector<BookedVenueInfo> venueList = currentEvent.getBVIList();
 
 		//Checks if there is any entry before creating the table
 		if (venueList.isEmpty()) {
@@ -1322,50 +1320,7 @@ public class ViewEvent extends Composite {
 		tcl_tableComposite.setColumnData(tvc[3].getColumn(), new ColumnWeightData(10));
 		tcl_tableComposite.setColumnData(tvc[4].getColumn(), new ColumnWeightData(10));
 		tcl_tableComposite.setColumnData(tvc[5].getColumn(), new ColumnWeightData(10));
-		/*
-		//Populating the table.
-		budgetItemCounter = 0;
-		tableViewerBudget.setContentProvider(ArrayContentProvider.getInstance());
-		for (int i=0; i<columnName.length; i++) {
-			tvc[i].setLabelProvider(new ColumnLabelProvider() {
-				public String getText(Object element)
-				{
-					if (index == columnName.length)
-						index = 0;						
-					Item item = (Item) element;
-					switch (index)	{
-						case 0:
-							index++;
-							return "Item " + (budgetItemCounter++);
-						case 1:
-							index++;
-							return item.getItem();
-						case 2:
-							index++;
-							return "$" + ((double) item.getPrice()/100);
-						case 3:
-							index++;
-							if(item.getSatisfactionValue() == -1)
-								return "";
-							else
-								return "" + item.getSatisfactionValue();
-						case 4:
-							index++;
-							if(item.getType() == null)
-								return "";
-							else
-								return "" + item.getType();
-						case 5:
-							index++;					
-							return "" + item.getQuantity();
-						default:
-							return null;
-					}
-				}
-			});
-			}
-			tableViewerBudget.setInput(itemList);
-		 */
+
 		refreshBudgetTable(itemList);
 		tvc[0].getColumn().pack();
 		tvc[2].getColumn().pack();
@@ -1410,19 +1365,8 @@ public class ViewEvent extends Composite {
 			}
 		});
 
-		/*
-			//Sorting.
-			count = 0;
-			for (int i=0; i<6; i++) {
-				tvc[i].getColumn().addListener(SWT.Selection, new Listener() {
-					public void handleEvent(Event e) {
-						sortColumn(count, itemList);
-					}
-				});
-				count++;
-			}*/
-
 		mouseOverPackage(tableBudget, data);
+	
 		//Dictates when vertical scrollbar appears
 		setTableRowDisplayed(tableBudget, data, 15);
 
@@ -1464,6 +1408,11 @@ public class ViewEvent extends Composite {
 		refreshBudgetTable(itemList);
 	}
 
+	/**
+	 * Description: Sorts the columns for the Budget Table
+	 * @param columnNo - Column number
+	 * @param itemList - Vector list of items
+	 */
 	public static void sortColumn(int columnNo, Vector<Item> itemList) {
 
 		TableItem[] items = tableBudget.getItems();
@@ -1535,6 +1484,10 @@ public class ViewEvent extends Composite {
 		refreshBudgetTable(itemList);
 	}
 
+	/**
+	 * Description: Refreshes the budget table by re-populating the table
+	 * @param itemList - Vector list of items
+	 */
 	public static void refreshBudgetTable(Vector<Item> itemList) {
 
 		tableBudget.removeAll();
@@ -1555,6 +1508,13 @@ public class ViewEvent extends Composite {
 		}
 	}
 
+	/**
+	 * Description: Method to generate tables
+	 * @param inputComposite - Composite for the table to reside in
+	 * @param data - Layout data of the composite
+	 * @param inputColumnName - Column names of the table columns
+	 * @return - Returns the table object
+	 */
 	public static Table createTableMethod(Composite inputComposite, GridData data, String[] inputColumnName) {
 		tableTemp = new Table(inputComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);
 
@@ -1570,6 +1530,12 @@ public class ViewEvent extends Composite {
 		return tableTemp;
 	}
 
+	/**
+	 * Description: Exports a table in ViewEvent into a CSV file
+	 * @param filepath - location where the exported CSV file is stored
+	 * @param inputTable - Table to be exported
+	 * @param writer - CSVWriter
+	 */
 	public void ExportCSV (String filepath, Table inputTable, CSVWriter writer) {
 		Table processingTable = inputTable;
 
@@ -1601,7 +1567,12 @@ public class ViewEvent extends Composite {
 			width -= vBarSize.x;
 		}
 	}
-
+	/**
+	 * Description: Method that sets the mouseover properties of the table to display the values of the individual cell the 
+	 * mouse is currently hovering on
+	 * @param inputTable - Table to be affected
+	 * @param data - layout data of the composite where the table is residing in
+	 */
 	public static void mouseOverPackage(final Table inputTable, GridData data) {
 		//Table Tooltip
 		inputTable.addMouseTrackListener(new MouseTrackAdapter() {
@@ -1623,12 +1594,19 @@ public class ViewEvent extends Composite {
 		});
 	}
 
+	/**
+	 * Description: Limits the maximum number of rows the table can display at a single time before the vertical scrollbar appears
+	 * @param inputTable - Table to be affected
+	 * @param data - Layout data of the composite the table is residing in
+	 * @param value - The maximum number of rows to be displayed at a time
+	 */
 	public static void setTableRowDisplayed (Table inputTable, GridData data, int value) {
 		if (inputTable.getItemCount() > value) {
 			data.heightHint = (value + 2) * inputTable.getItemHeight();
 			inputTable.getVerticalBar().setEnabled(true);
 		}
 	}
+	
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}

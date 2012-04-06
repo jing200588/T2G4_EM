@@ -28,26 +28,6 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 		 ***********************************************************/
 		btnConfirm.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				//Exception handling for event name
-				/*
-				//Exception handling for date/time difference from booked venue.
-				Vector<Date> venueStartdate = new Vector<Date>();
-				Vector<Date> venueEnddate = new Vector<Date>();
-				Vector<Time> venueStarttime = new Vector<Time>();
-				Vector<Time> venueEndtime = new Vector<Time>();
-				
-				for (int i=0; i<curevent.getBVI_list().size(); i++) {
-					venueStartdate.add(new Date(curevent.getBVI_list().get(i).getStartDateString()));
-					venueEnddate.add(new Date(curevent.getBVI_list().get(i).getEndDateString()));
-					venueStarttime.add(new Time(curevent.getBVI_list().get(i).getStartHourString()));
-					venueEndtime.add(new Time(curevent.getBVI_list().get(i).getEndHourString()));
-				}
-				
-				for (int i=0; i<venueStartdate.size(); i++) {
-				//	if (venueStartdate.get(i).get_year())
-					
-				}*/
-				
 				try
 				{
 					

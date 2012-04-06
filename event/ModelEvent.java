@@ -12,6 +12,9 @@ public class ModelEvent {
 	private static Vector<EventItem> expired;
 	private static EMDBII db;
 
+	/**
+	 * Description: Constructor for ModelEvent which initializes the default database
+	 */
 	public ModelEvent() {
 		list = new Vector<EventItem>();
 		expired = new Vector<EventItem>();
@@ -20,6 +23,10 @@ public class ModelEvent {
 		
 	};
 	
+	/**
+	 * Description:  Constructor for ModelEvent which initializes the test database
+	 * @param test - Name for the test database
+	 */
 	public ModelEvent(String test) {
 		list = new Vector<EventItem>();
 		expired = new Vector<EventItem>();
@@ -27,12 +34,13 @@ public class ModelEvent {
 		db = new EMDBII(test);
 		db.systemCheck();
 	};
+	
 	/************************************************************
-	 * CREATE EVENT //Passes event to DB and local list.
+	 * CREATE EVENT
 	 ***********************************************************/
 	/**
 	 * Description: Passes event into database and local list.
-	 * @param eitem Event Item
+	 * @param eitem - Event Item
 	 */
 	public static void CreateEvent(EventItem eitem) {
 		
@@ -53,11 +61,11 @@ public class ModelEvent {
 	}
 	
 	/************************************************************
-	 * PULL LIST //Returns local list.
+	 * PULL LIST
 	 ***********************************************************/
 	/**
 	 * Description: Returns the local list of event items
-	 * @return
+	 * @return - Vector list of event items
 	 */
 	public static Vector<EventItem> PullList() {
 		
@@ -74,11 +82,11 @@ public class ModelEvent {
 	}
 
 	/************************************************************
-	 * PULL EXPIRED LIST //Returns local expired list.
+	 * PULL EXPIRED LIST
 	 ***********************************************************/
 	/**
 	 * Description: Returns the local expired list of event items
-	 * @return
+	 * @return - Vector list of expired event items
 	 */
 	public static Vector<EventItem> PullExpiredList() {
 
@@ -96,38 +104,38 @@ public class ModelEvent {
 	}
 	
 	/************************************************************
-	 * DELETE EVENT	//Deletes event from DB and local list.
+	 * DELETE EVENT	
 	 ***********************************************************/
 	/**
 	 * Description: Deletes the event from the database and local list
-	 * @param eitem Event Item
+	 * @param eItem - Event Item
 	 */
-	public static void DeleteEvent(EventItem eitem) {
+	public static void DeleteEvent(EventItem eItem) {
 
-		db.eventDB().deleteEvent(eitem.getID());
-		db.venueDB().deleteBookingAll(eitem.getID());
-		db.budgetDB().deleteBudgetList(eitem.getID());
-		db.budgetDB().deleteBudgetListOptimized(eitem.getID());
-		db.participantDB().deleteParticipantList(eitem.getID());
-		list.remove(eitem);
+		db.eventDB().deleteEvent(eItem.getID());
+		db.venueDB().deleteBookingAll(eItem.getID());
+		db.budgetDB().deleteBudgetList(eItem.getID());
+		db.budgetDB().deleteBudgetListOptimized(eItem.getID());
+		db.participantDB().deleteParticipantList(eItem.getID());
+		list.remove(eItem);
 	}
 	
 	/************************************************************
-	 * DELETE EVENT	//Deletes expired event from DB and expired list.
+	 * DELETE EXPIRED EVENT	
 	 ***********************************************************/
 	/**
 	 * Description: Deletes the expired event from the database and expired list
-	 * @param eitem Event Item
+	 * @param eItem - Event Item
 	 */
-	public static void DeleteExpiredEvent(EventItem eitem) {
+	public static void DeleteExpiredEvent(EventItem eItem) {
 
 		//TODO Remove the expired item from archive DB
-		db.eventDB().deleteArchiveEvent(eitem.getID());
-		db.venueDB().deleteBookingAll(eitem.getID());
-		db.budgetDB().deleteBudgetList(eitem.getID());
-		db.budgetDB().deleteBudgetListOptimized(eitem.getID());
-		db.participantDB().deleteParticipantList(eitem.getID());
-		expired.remove(eitem);
+		db.eventDB().deleteArchiveEvent(eItem.getID());
+		db.venueDB().deleteBookingAll(eItem.getID());
+		db.budgetDB().deleteBudgetList(eItem.getID());
+		db.budgetDB().deleteBudgetListOptimized(eItem.getID());
+		db.participantDB().deleteParticipantList(eItem.getID());
+		expired.remove(eItem);
 	}
 	
 	/************************************************************
@@ -152,38 +160,41 @@ public class ModelEvent {
 	}
 	
 	/**********************************************************************
-	 * UPDATE PARTICULARS //Updates event particulars on DB and local list.
+	 * UPDATE PARTICULARS 
 	 **********************************************************************/
 	/**
 	 * Description: Updates event particulars in the database and local list
-	 * @param eitem Event Item
-	 * @param index 
+	 * @param eItem - Event Item
 	 */
-	public static void 	UpdateParticulars(EventItem eitem) {
+	public static void 	UpdateParticulars(EventItem eItem) {
 
 
 		
 		db.eventDB().updateEvent(
-				eitem.getID(), 
-				eitem.getName(), 
-				eitem.getDescription(), 
-				eitem.getBudget(),
-				eitem.getStartDateTime().getDateRepresentation(),
-				eitem.getEndDateTime().getDateRepresentation(), 
-				eitem.getStartDateTime().getTimeRepresentation(), 
-				eitem.getEndDateTime().getTimeRepresentation(),
-				EventFlowEntry.getStringRepresentation(eitem.getEventFlow())
+				eItem.getID(), 
+				eItem.getName(), 
+				eItem.getDescription(), 
+				eItem.getBudget(),
+				eItem.getStartDateTime().getDateRepresentation(),
+				eItem.getEndDateTime().getDateRepresentation(), 
+				eItem.getStartDateTime().getTimeRepresentation(), 
+				eItem.getEndDateTime().getTimeRepresentation(),
+				EventFlowEntry.getStringRepresentation(eItem.getEventFlow())
 				);
 		
 	}
 	
+	/**
+	 * Description: Updates the expired list in the database
+	 * @param newlyexpired - list of recently expired event items
+	 */
 	public static void UpdateExpiredList(List<EventItem> newlyexpired) {
-		System.out.println("RAN!!");
-		System.out.println("size of new" + newlyexpired.size());
-		db.eventDB().addArchiveEventList(newlyexpired);
-		System.out.println("RAN!!");
+		db.eventDB().addArchiveEventList(newlyexpired);		
 	}
 	
+	/**
+	 * Description: Destroys the database (used for testing purposes)
+	 */
 	public static void DestroyDB() {
 		db.destroy(true);
 	}

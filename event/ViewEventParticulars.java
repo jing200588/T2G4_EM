@@ -55,7 +55,6 @@ public class ViewEventParticulars extends Composite {
 		EventParticularsForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		EventParticularsForm.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
 		formToolkit.paintBordersFor(EventParticularsForm);
-//		CreateEventForm.setText("Create Event");
 		EventParticularsForm.getBody().setLayout(new FormLayout());
 		
 		//Body Composite

@@ -76,9 +76,7 @@ public class ViewMain extends ApplicationWindow {
     private static ViewEvent viewPage;
     private static ViewHomepage homePage;
     private static EMDBII db;
-    
- 
-
+   
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
     private final EMSService server;
     
@@ -232,6 +230,27 @@ public class ViewMain extends ApplicationWindow {
 	}
 	
 	/************************************************************
+	 * CHECK EXPIRY
+	 ***********************************************************/
+	/**
+	 * Description: Checks the individual events in the eventList if it is past the current time (expired). If it is, it will call
+	 * the ShiftExpired() function.
+	 */
+	public static void CheckExpiry() {
+
+    	MyDateTime currentDT = MyDateTime.getCurrentDateTime();
+    	boolean flag = false;
+    	for (int i=0; i<eventList.size(); i++) {
+    		if (eventList.get(i).getEndDateTime().compareTo(currentDT) <= 0) {
+    			eventList.get(i).setIsExpired(true);
+    			flag = true;
+    		}
+    	}
+    	if (flag)
+    		ShiftExpired();
+	}
+	
+	/************************************************************
 	 * HOMEPAGE
 	 ***********************************************************/
 	/**
@@ -308,9 +327,9 @@ public class ViewMain extends ApplicationWindow {
 	 ***********************************************************/
 	/**
 	 * Description: Initialize ViewEmailAds and set the page of rightComp to ViewEmailAds
-	 * @param aName Username
-	 * @param aDomain NUSSTU or NUSSTF 
-	 * @param aPass Password
+	 * @param aName - Username
+	 * @param aDomain - NUSSTU or NUSSTF 
+	 * @param aPass - Password
 	 */
 	public static void EmailAds(String aName, String aDomain, String aPass) {
 		ViewEmailAds ea = new ViewEmailAds(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()), aName, aDomain, aPass);
@@ -353,27 +372,6 @@ public class ViewMain extends ApplicationWindow {
 		layout.topControl = viewPage;
 		rightComp.layout(true);
 		
-	}
-	
-	/************************************************************
-	 * RETURN VIEW
-	 ***********************************************************/
-	/**
-	 * Description: Checks the individual events in the eventList if it is past the current time (expired). If it is, i will call
-	 * the ShiftExpired() function.
-	 */
-	public static void CheckExpiry() {
-
-    	MyDateTime currentDT = MyDateTime.getCurrentDateTime();
-    	boolean flag = false;
-    	for (int i=0; i<eventList.size(); i++) {
-    		if (eventList.get(i).getEndDateTime().compareTo(currentDT) <= 0) {
-    			eventList.get(i).setIsExpired(true);
-    			flag = true;
-    		}
-    	}
-    	if (flag)
-    		ShiftExpired();
 	}
 	
 	/**
