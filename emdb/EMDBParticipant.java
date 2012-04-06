@@ -101,7 +101,7 @@ public class EMDBParticipant extends EMDBBase{
 	/**
 	 * DROP the database tables
 	 */
-	public void cleanup(){
+	public void drop(){
 		String sql 	=	DropQuery.dropTable(this.participantTable)
 							.validate().toString();
 
@@ -119,7 +119,7 @@ public class EMDBParticipant extends EMDBBase{
 	 * DROP a specific database table
 	 * @param aType
 	 */
-	public void cleanup(String aType){
+	public void drop(String aType){
 		String sql 	= "";
 		
 		

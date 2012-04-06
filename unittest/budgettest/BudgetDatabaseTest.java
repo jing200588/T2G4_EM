@@ -48,7 +48,7 @@ public class BudgetDatabaseTest {
 
 		Vector<Item> expectedItemList = cb.getItemList();
 
-		Vector<Item> actualItemList = runPackage2();
+		Vector<Item> actualItemList = runPackage2(0);
 
 		boolean sameResult = true;
 
@@ -86,7 +86,7 @@ public class BudgetDatabaseTest {
 		expectedItemList.add(inputItemList.get(4)); //OCZ_120GB_SSD
 		expectedItemList.add(inputItemList.get(2)); //Nikon_Cam
 
-		Vector<Item> actualItemList = runPackage2();
+		Vector<Item> actualItemList = runPackage2(0);
 
 		boolean sameResult = true;
 
@@ -129,7 +129,7 @@ public class BudgetDatabaseTest {
 		expectedItemList.add(inputItemList.get(4)); //OCZ_120GB_SSD
 		expectedItemList.add(inputItemList.get(2)); //Nikon_Cam
 
-		Vector<Item> actualItemList = runPackage2();
+		Vector<Item> actualItemList = runPackage2(0);
 
 		boolean sameResult = true;
 		
@@ -162,30 +162,36 @@ public class BudgetDatabaseTest {
 		runPackage();
 		
 		Vector<Item> inputItemList = cb.getItemList();
-		Vector<Item> expectedItemList = new Vector<Item>();
+		Vector<Item> expectedItemList1 = new Vector<Item>();
+		Vector<Item> expectedItemList2 = new Vector<Item>();
 
-		/*Item is added in reverse added due to differentiateCompulsory method reverse the order 
+ 		/*Item is added in reverse added due to differentiateCompulsory method reverse the order 
 		 * when adding item into compulsory list */
-		expectedItemList.add(inputItemList.get(7)); //Windows_7_Basic
-		expectedItemList.add(inputItemList.get(4)); //OCZ_120GB_SSD
-		expectedItemList.add(inputItemList.get(2)); //Nikon_Cam
-		
+		expectedItemList1.add(inputItemList.get(7)); //Windows_7_Basic
+		expectedItemList1.add(inputItemList.get(4)); //OCZ_120GB_SSD
+		expectedItemList1.add(inputItemList.get(2)); //Nikon_Cam
+				
 		/*Add the expected computed item*/
-		expectedItemList.add(inputItemList.get(9)); //Software_Engineering_For_Dummies
-		expectedItemList.add(inputItemList.get(6)); //Western_Digital_HD_50GB
-		expectedItemList.add(inputItemList.get(3)); //Monster_Earpiece
-		expectedItemList.add(inputItemList.get(8)); //World_of_Warcraft
+		expectedItemList1.add(inputItemList.get(0)); //Apple_Ipad
+		expectedItemList1.add(inputItemList.get(3)); //Monster_Earpiece
+		
+		/*This is the expected combination list if the second combination was choosen.*/
+		expectedItemList2.add(inputItemList.get(7)); //Windows_7_Basic
+		expectedItemList2.add(inputItemList.get(4)); //OCZ_120GB_SSD
+		expectedItemList2.add(inputItemList.get(2)); //Nikon_Cam
+		expectedItemList2.add(inputItemList.get(9)); //Software_Engineering_For_Dummies
+		expectedItemList2.add(inputItemList.get(3)); //Monster_Earpiece
 
-		Vector<Item> actualItemList = runPackage2();
+		Vector<Item> actualItemList = runPackage2(0); //Simply change this to 1 if wishes to test for second combination.
 
 		boolean sameResult = true;
 				
-		if(expectedItemList.size() != actualItemList.size()) //if the size is different, obviously there are not the same
+		if(expectedItemList1.size() != actualItemList.size()) //if the size is different, obviously there are not the same
 			sameResult = false;
 		
 		if(sameResult == true) { //we only run this test if the lists have the same size. We will check the item one by one.
-			for(int i=0; i<expectedItemList.size(); i++) {
-				if(expectedItemList.get(i).getItem().equals(actualItemList.get(i).getItem()) == false)
+			for(int i=0; i<expectedItemList1.size(); i++) {
+				if(expectedItemList1.get(i).getItem().equals(actualItemList.get(i).getItem()) == false)
 					sameResult = false;	
 			}
 		}
@@ -201,10 +207,10 @@ public class BudgetDatabaseTest {
 		cb.differentiateCompulsory(compulsoryList, 1); // compulsory list is not empty
 	}
 	
-	public Vector<Item> runPackage2() {
+	public Vector<Item> runPackage2(int selectionIndex) {
 		cb.findOptimalShopList(1, 1);
 
-		cb.saveOptimizeOption(0);
+		cb.saveOptimizeOption(selectionIndex);
 
 		return cb.getOptimizeItemList(currentEvent.getID());
 	}

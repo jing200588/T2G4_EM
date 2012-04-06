@@ -161,7 +161,10 @@ public class Eventitem {
 
 	public Vector<EventFlowEntry> getEventFlow()
 	{
-		return eventFlow;
+		Vector<EventFlowEntry> returnList = new Vector<EventFlowEntry>();
+		for(int index = 0; index < eventFlow.size(); index++)
+			returnList.add(new EventFlowEntry(eventFlow.get(index)));
+		return returnList;
 	}
 
 	public void setItemList(Vector<Item> inputItemList) {

@@ -8,6 +8,7 @@ import java.util.Vector;
 /**
  * The instance of this class represents an activity in an event. It consists of start and end date time (time slot),
  * 		name of the activity, the venue, and user's notes. 
+ * This object is mutable.
  */
 
 /**
@@ -43,6 +44,20 @@ public class EventFlowEntry implements Comparable<EventFlowEntry> {
 		m_userNote = note;
 	}
 
+	/**
+	 * Copy Constructor:
+	 * 
+	 * @param anotherObj - EventFlowEntry
+	 */
+	public EventFlowEntry(EventFlowEntry anotherObj)
+	{
+		m_duration = anotherObj.getDuration();
+		m_activityName = anotherObj.getActivityName();
+		m_venueName = anotherObj.getVenueName();
+		m_venueID = anotherObj.getVenueID();
+		m_userNote = anotherObj.getUserNote();
+	}
+	
 	/****************************************************************************************************
 	 * Group of methods that retrives information.
 	 ***************************************************************************************************/
@@ -186,7 +201,7 @@ public class EventFlowEntry implements Comparable<EventFlowEntry> {
 	 * 		- If this.activityName '<' comparedObj.activityname, then this '<' comparedObj
 	 * 		- If this.activityName '=' comparedObj.activityname, then this '=' comparedObj
 	 */
-//	@Override
+	@Override
 	public int compareTo(EventFlowEntry comparedObj) {
 		// TODO Auto-generated method stub
 		if(m_duration.compareTo(comparedObj.getDuration()) > 0)
@@ -195,10 +210,10 @@ public class EventFlowEntry implements Comparable<EventFlowEntry> {
 		if(m_duration.compareTo(comparedObj.getDuration()) < 0)
 			return -1;
 		
-		if(m_activityName.compareTo(comparedObj.getActivityName()) > 0)
+		if(m_activityName.compareToIgnoreCase(comparedObj.getActivityName()) > 0)
 			return 1;
 		
-		if(m_activityName.compareTo(comparedObj.getActivityName()) < 0)
+		if(m_activityName.compareToIgnoreCase(comparedObj.getActivityName()) < 0)
 			return -1;
 		
 		return 0;

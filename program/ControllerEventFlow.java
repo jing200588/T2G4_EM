@@ -125,7 +125,7 @@ public class ControllerEventFlow {
 		
 		Vector<Integer> resultListIndex = new Vector<Integer>();
 		
-		for(int index = 0; index < entireList.size(); index++)
+		for(int index = 0; index < indexList.size(); index++)
 			if(indexList.get(index) >= 0 && indexList.get(index) < entireList.size() &&
 					entireList.get(indexList.get(index)).getDuration().isContained(inputTimeSlot) == true)
 				resultListIndex.add(indexList.get(index));
@@ -175,7 +175,7 @@ public class ControllerEventFlow {
 		
 		Vector<Integer> resultListIndex = new Vector<Integer>();
 		
-		for(int index = 0; index < entireList.size(); index++)
+		for(int index = 0; index < indexList.size(); index++)
 			if(indexList.get(index) >= 0 && indexList.get(index) < entireList.size() &&
 					entireList.get(indexList.get(index)).getVenueID() == venueID)
 				resultListIndex.add(indexList.get(index));

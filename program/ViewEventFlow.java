@@ -89,6 +89,7 @@ public class ViewEventFlow extends Composite {
 		
 		// Initialize some variables 
 		eventObj = event;
+		// Note that listEventFlow and eventObj.eventFlow are different lists
 		listEventFlow = eventObj.getEventFlow();
 		isEntireListShowed = true;
 		
@@ -257,9 +258,17 @@ public class ViewEventFlow extends Composite {
 		btnBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				// Ask user whether you want to save data or not
+				TwoChoiceDialog saveDialog = new TwoChoiceDialog(new Shell(), "Message", 
+						"Do you want to save your table of event flow entries?", "Yes", "No");
+				String choice = (String) saveDialog.open();
+				
 				// Update the event flow in the database as well as in the event itself
-				ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
-				eventObj.setEventFlow(listEventFlow);
+				if(choice.equals("Yes") == true)
+				{
+					ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
+					eventObj.setEventFlow(listEventFlow);
+				}
 				
 				// Return to the main GUI
 				ViewMain.ReturnView();
@@ -482,6 +491,7 @@ public class ViewEventFlow extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				// Update in the database
 				ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
+				eventObj.setEventFlow(listEventFlow);
 				
 				showSaveStatus();
 			}
@@ -703,7 +713,7 @@ public class ViewEventFlow extends Composite {
 			{
 				// Read the start date time
 				String [] startDateTimeArr = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[0]).split(delimiter);
+						HelperFunctions.replaceNewLine(allRows.get(index)[0])).split(delimiter);
 				if(startDateTimeArr.length != 5)
 					throw new Exception("The starting date time of entry at row " + (index + 1) +
 							"is not in the correct format. It should be '<day>/<month>/<year> <hour>:<minute>'");
@@ -719,7 +729,7 @@ public class ViewEventFlow extends Composite {
 				
 				// Read the end date time
 				String [] endDateTimeArr = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[1]).split(delimiter);
+						HelperFunctions.replaceNewLine(allRows.get(index)[1])).split(delimiter);
 				if(endDateTimeArr.length != 5)
 					throw new Exception("The endinging date time of entry at row " + (index + 1) +
 							"is not in the correct format. It should be '<day>/<month>/<year> <hour>:<minute>'");
@@ -735,20 +745,21 @@ public class ViewEventFlow extends Composite {
 				
 				// Read the activity name
 				String activityName = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[2]);
+						HelperFunctions.replaceNewLine(allRows.get(index)[2]));
 				
 				// Read the user's note
 				String note = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[4]);
+						HelperFunctions.replaceNewLine(allRows.get(index)[4]));
 				
 				// Read the venue
 				String venueName = HelperFunctions.removeRedundantWhiteSpace(
-						allRows.get(index)[3]);
+						HelperFunctions.replaceNewLine(allRows.get(index)[3]));
 				int venueIndex = getVenueID(eventObj.getBviList(), venueName);
 				int venueID = 0;		// Dummny value
 				if(venueIndex < 0)
 				{
-					note = "Note on venue: " + venueName + "\n" + note; 
+					if(venueName.equalsIgnoreCase(InputEventFlowEntry.OTHERVENUE) == false)
+						note = "Note on venue: " + venueName + ". " + note; 
 					venueName = InputEventFlowEntry.OTHERVENUE;
 					venueID = -1;
 				}

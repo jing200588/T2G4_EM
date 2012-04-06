@@ -169,7 +169,9 @@ public class MyDateTime implements Comparable<MyDateTime> {
 	}
 	
 	/**
-	 * Returns a String object that represents the MyDateTime object. The string is dd/mm/yyyy/hh/mm
+	 * Returns a String object that represents the MyDateTime object. The string is dd/mm/yyyy/hh/mm.
+	 * This string is used mainly to be stored in the database. From this string, a MyDateTime object
+	 * can be reconstructed.
 	 * 
 	 * @return dateTimeRepresentation - String
 	 */
@@ -280,6 +282,7 @@ public class MyDateTime implements Comparable<MyDateTime> {
 	 * @param month - int
 	 * @param day - int
 	 * @param hour - int
+	 * @param minute - int
 	 * @return true if the given parameters are of a valid date and hour.
 	 * @return false otherwise
 	 */

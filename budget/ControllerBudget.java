@@ -34,7 +34,7 @@ public class ControllerBudget {
 	public ControllerBudget() {
 
 	}
-	
+
 	/**
 	 * Description: Create a constructor that take in the input and process them into item list.
 	 * @param input
@@ -225,7 +225,7 @@ public class ControllerBudget {
 		resultText = displayResultNoSolutionSet(satisfactionChoice, typeOfResult, noOfCombination); 
 		return resultText;
 	}
-	
+
 	/**
 	 * Description: Format the result to be printed.
 	 * @param satisfactionChoice
@@ -302,7 +302,7 @@ public class ControllerBudget {
 		text+="\n\n";
 		return text;
 	}
-	
+
 	/**
 	 * Description: Concatenate the details of each item to be printed.
 	 * @param index
@@ -369,7 +369,7 @@ public class ControllerBudget {
 				recurseNoSatisfaction(i, bitmask2 , subbudget);
 		}
 
-		if (DupCheck(bitmask2) == 0) {
+		if (dupCheck(bitmask2) == 0) {
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 	}
@@ -400,7 +400,7 @@ public class ControllerBudget {
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 
-		else if (max == soln.getSatisfactionvalue() && DupCheck(bitmask2) == 0) {
+		else if (max == soln.getSatisfactionvalue() && dupCheck(bitmask2) == 0) {
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
 	}
@@ -410,7 +410,7 @@ public class ControllerBudget {
 	 * @param bitmask
 	 * @return
 	 */
-	public  int DupCheck(BitSet bitmask) {
+	public  int dupCheck(BitSet bitmask) {
 		for (int i=0; i<soln.getSolnSetSize(); i++) {
 			if (soln.getSolnSet().get(i).hashCode() == bitmask.hashCode())
 				return 1;
@@ -446,13 +446,16 @@ public class ControllerBudget {
 	public  void recurseTypeNoSatisfaction (int cur, BitSet bitmask, double subbudget) {
 
 		BitSet bitmask2 = (BitSet) bitmask.clone();
-		if (((double) computeList.get(cur).getPrice())/100 <= subbudget && TypeChecker(bitmask2, cur) == 0) {
-			subbudget -= ((double) computeList.get(cur).getPrice())/100;
-			bitmask2.set(cur);
-			for (int i=cur+1 ; i<number; i++)
-				recurseTypeNoSatisfaction(i, bitmask2 , subbudget);
+		if (preTypeChecker(cur) == 0) {
+			if (((double) computeList.get(cur).getPrice())/100 <= subbudget && typeChecker(bitmask2, cur) == 0) {
+				subbudget -= ((double) computeList.get(cur).getPrice())/100;
+				bitmask2.set(cur);
+				for (int i=cur+1 ; i<number; i++)
+					recurseTypeNoSatisfaction(i, bitmask2 , subbudget);
+			}
 		}
-		if (DupCheck(bitmask2) == 0)
+
+		if (dupCheck(bitmask2) == 0)
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 	}
 
@@ -467,12 +470,14 @@ public class ControllerBudget {
 	public  void recurseType (int cur, BitSet bitmask, double subbudget, int max) {
 
 		BitSet bitmask2 = (BitSet) bitmask.clone();
-		if (((double) computeList.get(cur).getPrice())/100 <= subbudget && TypeChecker(bitmask2, cur) == 0) {
-			max += computeList.get(cur).getSatisfactionValue();
-			subbudget -= ((double) computeList.get(cur).getPrice())/100;
-			bitmask2.set(cur);
-			for (int i=cur+1 ; i<number; i++)
-				recurseType(i, bitmask2 , subbudget, max);
+		if (preTypeChecker(cur) == 0) {
+			if (((double) computeList.get(cur).getPrice())/100 <= subbudget && typeChecker(bitmask2, cur) == 0) {
+				max += computeList.get(cur).getSatisfactionValue();
+				subbudget -= ((double) computeList.get(cur).getPrice())/100;
+				bitmask2.set(cur);
+				for (int i=cur+1 ; i<number; i++)
+					recurseType(i, bitmask2 , subbudget, max);
+			}
 		}
 
 		//by right only the deepest level will perform this
@@ -481,7 +486,7 @@ public class ControllerBudget {
 			soln.clearAll();
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 		}
-		else if (max == soln.getSatisfactionvalue() && DupCheck(bitmask2) == 0)
+		else if (max == soln.getSatisfactionvalue() && dupCheck(bitmask2) == 0)
 			soln.addSet(bitmask2, recursiveFunctionBudget - subbudget);
 	}
 
@@ -492,12 +497,20 @@ public class ControllerBudget {
 	 * @return
 	 */
 
-	public  int TypeChecker (BitSet bitmask, int cur) {
+	public  int typeChecker (BitSet bitmask, int cur) {
 		for (int i=0; i<number; i++) {
 			if (bitmask.get(i)) {
 				if (computeList.get(i).getType().compareTo(computeList.get(cur).getType()) == 0) 
 					return 1;
 			}
+		}
+		return 0;
+	}
+
+	public  int preTypeChecker (int cur) {
+		for (int i=0; i<compulsoryList.size(); i++) {
+			if (compulsoryList.get(i).getType().compareTo(computeList.get(cur).getType()) == 0) 
+				return 1;
 		}
 		return 0;
 	}
@@ -518,7 +531,7 @@ public class ControllerBudget {
 
 	public void saveOptimizeOption(int select) {
 		Vector<Item> databaseList = new Vector<Item>();//store the list to be send to database
-		
+
 		if(typeOfResult == 1) { //take all item. Budget is enough to buy everything.
 			for(int i=0; i<itemList.size(); i++) {
 				databaseList.add(itemList.get(i));
@@ -551,7 +564,7 @@ public class ControllerBudget {
 
 		currentEvent.setItemList(bm.getOptimizeItemList(currentEvent.getID()));
 	}
-	
+
 	/**
 	 * Description: Remove a single item that was deleted by the user from database.
 	 * @param eventId
@@ -570,34 +583,34 @@ public class ControllerBudget {
 	public Vector<Item> getOptimizeItemList(int eventId) {
 		return bm.getOptimizeItemList(eventId);
 	}
-	
-	
+
+
 	/* The codes below are all use for Junit Test purpose*/
 	public int getSolutionSize() {
 		return soln.getSolnSetSize();
 	}
-	
+
 	public int getSolutionSatisfaction() {
 		return soln.getSatisfactionvalue();
 	}
-	
+
 	public double getSolutionCost(int inputNum) {
 		DecimalFormat myFormatter = new DecimalFormat("##.##");
 		return (Double.parseDouble(myFormatter.format(soln.getSolnCostSet().get(inputNum))));
 	}
-	
+
 	public int getAllItemSatisfaction() {
 		return compulsorySatisfaction + nonCompulsorySatisfaction;
 	}
-	
+
 	public int getAllItemCost() {
 		return compulsoryCost + nonCompulsoryCost ;
 	}
-	
+
 	public int getCompulsoryItemSatisfaction() {
 		return compulsorySatisfaction;
 	}
-	
+
 	public int getCompulsoryItemCost() {
 		return compulsoryCost;
 	}

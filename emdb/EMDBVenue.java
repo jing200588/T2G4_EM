@@ -131,7 +131,7 @@ public class EMDBVenue extends EMDBBase{
 	/**
 	 * DROP the database tables
 	 */
-	public void cleanup(){
+	public void drop(){
 		String 	sql =	DropQuery.dropTable(this.venueTable)
 							.validate().toString();
 		String sql2 =	DropQuery.dropTable(this.bookingTable)
@@ -153,7 +153,7 @@ public class EMDBVenue extends EMDBBase{
 	 * DROP the database, some tables
 	 * @param aType
 	 */
-	public void cleanup(String aType){
+	public void drop(String aType){
 		String sql = "";
 		
 		if (aType.compareTo("venue") == 0){
@@ -302,24 +302,39 @@ public class EMDBVenue extends EMDBBase{
 		
 		this.connect();	
 		
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int id = 0;
-		
-		
-		if (result.size() > 0){
-			id = new Integer(result.get(0)[0].toString());
-			
-			
-			if (this.dbDebug){
-				this.dMsg("NEW VENUE ID #" + id);
-			}
+		int id = this.runQueryKey(sql);
+	
+		if (this.dbDebug){
+			this.dMsg("NEW VENUE ID #" + id);
 		}
+		
 		
 		this.disconnect();
 		
 		return id;
 
 	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * Add a Venue.
+	 * @param aItem
+	 * @return
+	 */
+	public int addVenue(Venue aItem){
+		return this.addVenue(
+						aItem.getName(), 
+						aItem.getAddress(), 
+						aItem.getDescription(), 
+						aItem.getMaxCapacity(), 
+						aItem.getCost()
+					);
+	}
+	
 	
 	
 	
@@ -357,11 +372,10 @@ public class EMDBVenue extends EMDBBase{
 		
 		this.connect();
 	
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int id = 0;	
+		int id = this.runQueryKey(sql);
 		
-		if (result.size() > 0){
-			id = new Integer(result.get(0)[0].toString());
+		if (this.dbDebug){
+			this.dMsg("NEW BOOKING ID #" + id);
 		}
 		
 		this.disconnect();

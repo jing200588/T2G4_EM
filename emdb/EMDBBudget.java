@@ -148,7 +148,7 @@ public class EMDBBudget extends EMDBBase{
 	/**
 	 * DROP the database tables.
 	 */
-	public void cleanup(){
+	public void drop(){
 		String sql 	=	DropQuery.dropTable(this.budgetTable)
 						.validate().toString();
 		String sql2 =	DropQuery.dropTable(this.optBudgetTable)
@@ -170,7 +170,7 @@ public class EMDBBudget extends EMDBBase{
 	 * DROP a specific database table
 	 * @param aType
 	 */
-	public void cleanup(String aType){
+	public void drop(String aType){
 		String sql = "";
 		
 		if (aType.compareTo("budget") == 0){
@@ -364,12 +364,14 @@ public class EMDBBudget extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int id = 0;
+		this.connect();
+		int id = this.runQueryKey(sql);
 		
-		if (result.size() > 0){
-			id = Integer.parseInt(result.get(0)[0].toString());
+		if (this.dbDebug){
+			this.dMsg("NEW BUDGET ID #" + id);
 		}
+		
+		this.disconnect();
 		
 		return id;
 		

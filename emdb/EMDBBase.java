@@ -246,10 +246,46 @@ public class EMDBBase{
 	}
 	
 
-
+	/**
+	 * Generic Query with Key. 
+	 * Accepts a string, connect to DB, execute, and disconnect.
+	 * @param sql
+	 * @return
+	 */
+	protected int runQueryKey(String aSql){
+		
+		if (this.dbDebug){
+			this.dMsg("RUNNING QUERY (NORMAL)");
+			try {
+				if(this.dbCon.isReadOnly()){
+					this.dMsg("Database LOCKED");
+				}
+			} catch (SQLException e) {}
+		}
+		
+		try {	
+			
+			PreparedStatement query = this.dbCon.prepareStatement(aSql, Statement.RETURN_GENERATED_KEYS);
+			query.execute();
+			ResultSet rs = query.getGeneratedKeys();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}else{
+				return 0;
+			}
+			
+		} catch (SQLException e) {
+			return 0;
+		}
+	}
 	
 	
-	
+	/**
+	 * Generic Query with Value Returned
+	 * Accepts a string, connect to DB, execute, and disconnect, but with results of query
+	 * @param aSql
+	 * @return
+	 */
 	protected Vector<Object[]> runQueryResults(String aSql){
 		
 		
@@ -263,6 +299,8 @@ public class EMDBBase{
 		}
 		
 		try {	
+			//Statement query = this.dbCon.createStatement();
+			//ResultSet rs = query.executeQuery(aSql);
 			
 			PreparedStatement query = this.dbCon.prepareStatement(aSql, Statement.RETURN_GENERATED_KEYS);
 			query.execute();
@@ -322,11 +360,6 @@ public class EMDBBase{
 		
 		if (this.dbDebug){
 			this.dMsg("COMMIT ALL QUERIES");
-			try {
-				if(this.dbCon.isReadOnly()){
-					this.dMsg("Database LOCKED");
-				}
-			} catch (SQLException e) {}
 		}
 		
 		
@@ -393,8 +426,8 @@ public class EMDBBase{
 			this.dMsg("CREATE/CHECK FILE");
 		}
 		
-		File findFile = new File(this.dbName);
-		return findFile.isFile();
+		File dbFile = new File(this.dbName);
+		return dbFile.isFile();
 	}
 	
 

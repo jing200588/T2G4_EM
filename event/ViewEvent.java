@@ -64,7 +64,7 @@ public class ViewEvent extends Composite {
 	private static int count=0;
 	private static int budgetItemCounter;
 	protected LoginEmailDialog loginDialog; 
-	
+
 
 	/**
 	 * Create the composite.
@@ -189,7 +189,7 @@ public class ViewEvent extends Composite {
 		lblEdescription.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEdescription.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		lblEdescription.setText("Description:");
-		
+
 		lblDynamicDescription = new Label(compEventParticulars, SWT.WRAP | SWT.SHADOW_NONE);
 		lblDynamicDescription.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		GridData gdDynamicDescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
@@ -604,7 +604,7 @@ public class ViewEvent extends Composite {
 		if (participantFlag)
 			tableParticipant.dispose();
 		//tableParticipant = ParticipantTable();
-	    tableParticipant =  ParticipantJfaceTable();
+		tableParticipant =  ParticipantJfaceTable();
 	}
 
 	/**********************************************************************************************
@@ -658,7 +658,7 @@ public class ViewEvent extends Composite {
 				Rectangle area = compParticipant.getClientArea();
 				int width = area.width - 2*tableParticipant.getBorderWidth();
 
-	//			controlResizePackage(compParticipant, tableParticipant, width, area);
+				//			controlResizePackage(compParticipant, tableParticipant, width, area);
 				Point preferredSize = tableParticipant.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 				if (preferredSize.y > area.height + tableParticipant.getHeaderHeight()) {
 					// Subtract the scrollbar width from the total column width
@@ -708,7 +708,7 @@ public class ViewEvent extends Composite {
 		tableComposite.setLayoutData(data);
 		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
 		tableComposite.setLayout(tcl_tableComposite);
-		
+
 		TableViewer tableViewerParticipant = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableParticipant = tableViewerParticipant.getTable();
 		tableParticipant.setHeaderVisible(true);
@@ -718,7 +718,7 @@ public class ViewEvent extends Composite {
 			tvc[i] = new TableViewerColumn (tableViewerParticipant, SWT.NONE);
 			tvc[i].getColumn().setText(columnName[i]);
 		}
-		
+
 		//Setting column width.
 		tcl_tableComposite.setColumnData(tvc[0].getColumn(), new ColumnWeightData(20));
 		tcl_tableComposite.setColumnData(tvc[1].getColumn(), new ColumnWeightData(20));
@@ -726,7 +726,7 @@ public class ViewEvent extends Composite {
 		tcl_tableComposite.setColumnData(tvc[3].getColumn(), new ColumnWeightData(20));
 		tcl_tableComposite.setColumnData(tvc[4].getColumn(), new ColumnWeightData(30));
 		tcl_tableComposite.setColumnData(tvc[5].getColumn(), new ColumnWeightData(10));
-		
+
 		//Populating the table.
 		tableViewerParticipant.setContentProvider(ArrayContentProvider.getInstance());
 		for (int i=0; i<columnName.length; i++) {
@@ -737,39 +737,39 @@ public class ViewEvent extends Composite {
 						index = 0;						
 					Participant parti = (Participant) element;
 					switch (index)	{
-						case 0:
-							index++;
-							return parti.getName();
-						case 1:
-							index++;
-							return parti.getMatric();
-						case 2:
-							index++;
-							return parti.getContact();
-						case 3:
-							index++;
-							return parti.getEmail();
-						case 4:
-							index++;
-							return parti.getAddress();
-						case 5:
-							index++;
-							return parti.getRemark();
-						default:
-							return null;
+					case 0:
+						index++;
+						return parti.getName();
+					case 1:
+						index++;
+						return parti.getMatric();
+					case 2:
+						index++;
+						return parti.getContact();
+					case 3:
+						index++;
+						return parti.getEmail();
+					case 4:
+						index++;
+						return parti.getAddress();
+					case 5:
+						index++;
+						return parti.getRemark();
+					default:
+						return null;
 					}
 				}
 			});
-			}
-			tableViewerParticipant.setInput(participantList);
-			tvc[1].getColumn().pack();
-			tvc[2].getColumn().pack();
+		}
+		tableViewerParticipant.setInput(participantList);
+		tvc[1].getColumn().pack();
+		tvc[2].getColumn().pack();
 
-		
-			mouseOverPackage(tableParticipant, data);
-			//Dictates when vertical scrollbar appears
-			setTableRowDisplayed(tableParticipant, data, 15);
-			
+
+		mouseOverPackage(tableParticipant, data);
+		//Dictates when vertical scrollbar appears
+		setTableRowDisplayed(tableParticipant, data, 15);
+
 
 		participantFlag = true;
 		return tableParticipant;
@@ -800,7 +800,7 @@ public class ViewEvent extends Composite {
 		final TableColumn col6 = tableVenue.getColumn(6);
 		tableVenue.getColumn(0).setAlignment(16384);
 
-//		tableVenue.removeAll();
+		//		tableVenue.removeAll();
 		for (int loopIndex = 0; loopIndex < venueList.size(); loopIndex++) {
 			TableItem item = new TableItem(tableVenue, SWT.NULL);
 			item.setText(0, venueList.get(loopIndex).getName());
@@ -994,7 +994,7 @@ public class ViewEvent extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				TableItem tb = tableBudget.getItem(tableBudget.getSelectionIndex());
 				int itemToDelete = Integer.parseInt(tb.getText(0).substring(5, tb.getText(0).length()));
-			DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(1));
+				DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(1));
 				if ((Integer) confirm.open() == 1) {
 					deleteBudgetItem(itemList, itemToDelete);
 				}
@@ -1009,14 +1009,14 @@ public class ViewEvent extends Composite {
 		budgetFlag = true;
 		return tableBudget;
 	}
-	
+
 	/**
 	 * Description: Creates a sortable table that is populated with items of the event's optimized item list
 	 * @return A table is returned if there are entries in the list, else null is returned
 	 */
 	public static Table BudgetJfaceTable() {
 		final Vector<Item> itemList = currentEvent.getItemList();
-		
+
 		//Checks if there is any entry before creating the table
 		if (itemList.isEmpty()) {
 			budgetFlag = false;	
@@ -1031,17 +1031,17 @@ public class ViewEvent extends Composite {
 		tableComposite.setLayoutData(data);
 		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
 		tableComposite.setLayout(tcl_tableComposite);
-		
+
 		TableViewer tableViewerBudget = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableBudget = tableViewerBudget.getTable();
 		tableBudget.setHeaderVisible(true);
-		
+
 		//setting the column headers
 		for (int i=0; i<tvc.length; i++) {
 			tvc[i] = new TableViewerColumn (tableViewerBudget, SWT.NONE);
 			tvc[i].getColumn().setText(columnName[i]);
 		}
-		
+
 		//Setting column width.
 		tcl_tableComposite.setColumnData(tvc[0].getColumn(), new ColumnWeightData(10));
 		tcl_tableComposite.setColumnData(tvc[1].getColumn(), new ColumnWeightData(30));
@@ -1092,90 +1092,90 @@ public class ViewEvent extends Composite {
 			});
 			}
 			tableViewerBudget.setInput(itemList);
-			*/
-			refreshBudgetTable(itemList);
-			tvc[0].getColumn().pack();
-			tvc[2].getColumn().pack();
-			tvc[3].getColumn().pack();
-			tvc[4].getColumn().pack();
-			tvc[5].getColumn().pack();
+		 */
+		refreshBudgetTable(itemList);
+		tvc[0].getColumn().pack();
+		tvc[2].getColumn().pack();
+		tvc[3].getColumn().pack();
+		tvc[4].getColumn().pack();
+		tvc[5].getColumn().pack();
 
-	/*		
-			tvc[0].getColumn().addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event e) {
-					sortColumn(0, itemList);
-				}
-			});
 
-			tvc[1].getColumn().addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event e) {
-					sortColumn(1, itemList);
-				}
-			});
+		tvc[0].getColumn().addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				sortColumn(0, itemList);
+			}
+		});
 
-			tvc[2].getColumn().addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event e) {
-					sortColumn(2, itemList);
-				}
-			});
+		tvc[1].getColumn().addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				sortColumn(1, itemList);
+			}
+		});
 
-			tvc[3].getColumn().addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event e) {
-					sortColumn(3, itemList);
-				}
-			});
+		tvc[2].getColumn().addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				sortColumn(2, itemList);
+			}
+		});
 
-			tvc[4].getColumn().addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event e) {
-					sortColumn(4, itemList);
-				}
-			});
+		tvc[3].getColumn().addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				sortColumn(3, itemList);
+			}
+		});
 
-			tvc[5].getColumn().addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event e) {
-					sortColumn(5, itemList);
-				}
-			});
-			
-*/
+		tvc[4].getColumn().addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				sortColumn(4, itemList);
+			}
+		});
+
+		tvc[5].getColumn().addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				sortColumn(5, itemList);
+			}
+		});
+
+		/*
 			//Sorting.
-			for (int i=0; i<tvc.length; i++) {
-				if (count == tvc.length)
-					count = 0;
+			count = 0;
+			for (int i=0; i<6; i++) {
 				tvc[i].getColumn().addListener(SWT.Selection, new Listener() {
 					public void handleEvent(Event e) {
-						sortColumn(count++, itemList);
+						sortColumn(count, itemList);
 					}
 				});
-			}
-		
-			mouseOverPackage(tableBudget, data);
-			//Dictates when vertical scrollbar appears
-			setTableRowDisplayed(tableBudget, data, 15);
-			
-			Menu menu = new Menu(tableBudget);
-			tableBudget.setMenu(menu);
+				count++;
+			}*/
 
-			/************************************************************
-			 * DELETE ITEM
-			 ***********************************************************/
-			MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
-			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					TableItem tb = tableBudget.getItem(tableBudget.getSelectionIndex());
-					int itemToDelete = Integer.parseInt(tb.getText(0).substring(5, tb.getText(0).length()));
+		mouseOverPackage(tableBudget, data);
+		//Dictates when vertical scrollbar appears
+		setTableRowDisplayed(tableBudget, data, 15);
+
+		Menu menu = new Menu(tableBudget);
+		tableBudget.setMenu(menu);
+
+		/************************************************************
+		 * DELETE ITEM
+		 ***********************************************************/
+		MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
+		mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TableItem tb = tableBudget.getItem(tableBudget.getSelectionIndex());
+				int itemToDelete = Integer.parseInt(tb.getText(0).substring(5, tb.getText(0).length()));
 				DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(1));
-					if ((Integer) confirm.open() == 1) {
-						deleteBudgetItem(itemList, itemToDelete);
-					}
+				if ((Integer) confirm.open() == 1) {
+					deleteBudgetItem(itemList, itemToDelete);
 				}
-			});
-			mntmDeleteEvent.setText("Delete Item");
-
-			if (currentEvent.isExpired()) {
-				mntmDeleteEvent.setEnabled(false);
 			}
+		});
+		mntmDeleteEvent.setText("Delete Item");
+
+		if (currentEvent.isExpired()) {
+			mntmDeleteEvent.setEnabled(false);
+		}
 
 
 		budgetFlag = true;
@@ -1185,7 +1185,7 @@ public class ViewEvent extends Composite {
 
 		bc = new ControllerBudget();
 		bc.deleteBudgetItem(currentEvent.getID(), itemList.get(itemToDelete-1).getID());
-		
+
 		itemList.remove(itemToDelete-1);
 		currentEvent.setItemList(itemList);
 		refreshBudgetTable(itemList);

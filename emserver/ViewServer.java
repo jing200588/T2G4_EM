@@ -90,7 +90,7 @@ public class ViewServer extends Composite {
 		fd_txtServerPort.right = new FormAttachment(80);
 		fd_txtServerPort.left = new FormAttachment(20);
 		txtServerPort.setLayoutData(fd_txtServerPort);
-		txtServerPort.setText("Default Server port is 8080. \n\nNavigate to http://localhost:8080 in your preferred browser");
+		txtServerPort.setText("Default Server port is 3662. \n\nNavigate to http://localhost:3662 in your preferred browser");
 		txtServerPort.setEditable(false);
 		formToolkit.adapt(txtServerPort, true, true);
 

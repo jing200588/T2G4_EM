@@ -3,7 +3,6 @@
  */
 package venue;
 
-import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -51,6 +50,11 @@ public class HelperFunctions {
 		return new String(arr);
 	} 
 	
+	/**
+	 * Removes all white space characters from the input string
+	 * @param text - String
+	 * @return resultStr - String
+	 */
 	public static String removeAllWhiteSpace(String text)
 	{
 		Vector<Character> buffer = new Vector<Character>();
@@ -69,13 +73,23 @@ public class HelperFunctions {
 		return new String(arr);
 	} 
 	
-	public static void main(String[] args)
-	{
-		Scanner scan = new Scanner(System.in);
-		
-		String string = scan.nextLine();
-		System.out.println(string);
-		System.out.println(removeAllWhiteSpace(string));
-		System.out.println(removeRedundantWhiteSpace(string));
+	/**
+	 * Replaces all new line character by a white space ' ' character.
+	 * @param text - String
+	 * @return resultStr - String
+	 */
+	public static String replaceNewLine(String text)
+	{		
+		// Convert the character vector into a character array
+		char[] arr = new char[text.length()];
+		for(int index = 0; index < arr.length; index++)
+		{
+			if(text.charAt(index) == '\n')
+				arr[index] = ' ';
+			else
+				arr[index] = text.charAt(index);
+		}	
+		return new String(arr);
 	}
+
 }

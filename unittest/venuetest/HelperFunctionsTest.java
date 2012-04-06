@@ -79,4 +79,17 @@ public class HelperFunctionsTest {
 		assertEquals("maxCapacity", HelperFunctions.removeRedundantWhiteSpace(testObj));
 		assertEquals("maxCapacity", HelperFunctions.removeAllWhiteSpace(testObj));
 	}
+	
+	/*
+	 * Test replaceNewLine method
+	 */
+	@Test
+	public void testSeven()
+	{
+		String testObj = "\n\n\nThis is \n\n a test\n";
+		
+		assertEquals("   This is    a test ", HelperFunctions.replaceNewLine(testObj));
+		assertEquals("This is a test", HelperFunctions.removeRedundantWhiteSpace(
+				HelperFunctions.replaceNewLine(testObj)));
+	}
 }
