@@ -7,8 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 import org.eclipse.swt.SWT;
@@ -49,7 +47,7 @@ public class ViewParticipantList extends Composite {
 	private static List<Participant> tempEntries;
 
 	private static final String[] HEADERS = {"Name", "Matric No.", "Contact", "Email Address", "Home Address", "Remarks"};
-	private static enum COLUMNSORTCRITERIA {NAME, MATRIC, CONTACT, EMAIL, ADDRESS, REMARK}
+	
 	private static final int TOTAL = 6;
 	
 	/**
@@ -153,7 +151,7 @@ public class ViewParticipantList extends Composite {
 		tvc[0].getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				columnSort(tempEntries, COLUMNSORTCRITERIA.NAME);
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.NAME);
 				tableParticipantViewer.refresh();
 			}
 		});
@@ -162,7 +160,7 @@ public class ViewParticipantList extends Composite {
 		tvc[1].getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				columnSort(tempEntries, COLUMNSORTCRITERIA.MATRIC);
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.MATRIC);
 				tableParticipantViewer.refresh();
 			}
 		});
@@ -171,7 +169,7 @@ public class ViewParticipantList extends Composite {
 		tvc[2].getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				columnSort(tempEntries, COLUMNSORTCRITERIA.CONTACT);
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.CONTACT);
 				tableParticipantViewer.refresh();
 			}
 		});
@@ -180,7 +178,7 @@ public class ViewParticipantList extends Composite {
 		tvc[3].getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				columnSort(tempEntries, COLUMNSORTCRITERIA.EMAIL);
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.EMAIL);
 				tableParticipantViewer.refresh();
 			}
 		});
@@ -189,7 +187,7 @@ public class ViewParticipantList extends Composite {
 		tvc[4].getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				columnSort(tempEntries, COLUMNSORTCRITERIA.ADDRESS);
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.ADDRESS);
 				tableParticipantViewer.refresh();
 			}
 		});
@@ -198,7 +196,7 @@ public class ViewParticipantList extends Composite {
 		tvc[5].getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				columnSort(tempEntries, COLUMNSORTCRITERIA.REMARK);
+				Participant.columnSort(tempEntries, Participant.COLUMNSORTCRITERIA.REMARK);
 				tableParticipantViewer.refresh();
 			}
 		});
@@ -517,44 +515,5 @@ public void ImportCSV (String filepath) throws Exception {
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
-	}
-	
-	/**
-	 * Sorts Participant objects in the table based on the given criteria
-	 * 
-	 * @param inputList - List<Participant>
-	 * @param type - COLUMNSORTCRITERIA
-	 */
-	private void columnSort(List<Participant> inputList, COLUMNSORTCRITERIA type)
-	{
-		if(inputList == null)
-			return;
-		
-		Comparator<Participant> comparator = null;		// Dummy value
-		switch(type)
-		{
-			case NAME:
-				comparator = new ParticipantNameComparator();
-				break;
-			case MATRIC:
-				comparator = new ParticipantMatricComparator();
-				break;
-			case CONTACT:
-				comparator = new ParticipantContactComparator();
-				break;
-			case EMAIL:
-				comparator = new ParticipantEmailComparator();
-				break;
-			case ADDRESS:
-				comparator = new ParticipantAddressComparator();
-				break;
-			case REMARK:
-				comparator = new ParticipantRemarkComparator();
-		}
-		
-		if(comparator != null)
-		{
-			Collections.sort(inputList, comparator);
-		}
 	}
 }

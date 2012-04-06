@@ -1,6 +1,12 @@
 package participant;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class Participant {
+	public static enum COLUMNSORTCRITERIA {NAME, MATRIC, CONTACT, EMAIL, ADDRESS, REMARK}
+	
 	private String name, contact, email, address, matric, remark;
 	private int id;
 	
@@ -70,5 +76,43 @@ public class Participant {
 		remark = inputRemark;
 	}
 	
+	/**
+	 * Sorts Participant objects in the table based on the given criteria
+	 * 
+	 * @param inputList - List<Participant>
+	 * @param type - COLUMNSORTCRITERIA
+	 */
+	public static void columnSort(List<Participant> inputList, COLUMNSORTCRITERIA type)
+	{
+		if(inputList == null)
+			return;
+		
+		Comparator<Participant> comparator = null;		// Dummy value
+		switch(type)
+		{
+			case NAME:
+				comparator = new ParticipantNameComparator();
+				break;
+			case MATRIC:
+				comparator = new ParticipantMatricComparator();
+				break;
+			case CONTACT:
+				comparator = new ParticipantContactComparator();
+				break;
+			case EMAIL:
+				comparator = new ParticipantEmailComparator();
+				break;
+			case ADDRESS:
+				comparator = new ParticipantAddressComparator();
+				break;
+			case REMARK:
+				comparator = new ParticipantRemarkComparator();
+		}
+		
+		if(comparator != null)
+		{
+			Collections.sort(inputList, comparator);
+		}
+	}
 }
 
