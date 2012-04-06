@@ -364,12 +364,14 @@ public class EMDBBudget extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int id = 0;
+		this.connect();
+		int id = this.runQueryKey(sql);
 		
-		if (result.size() > 0){
-			id = Integer.parseInt(result.get(0)[0].toString());
+		if (this.dbDebug){
+			this.dMsg("NEW BUDGET ID #" + id);
 		}
+		
+		this.disconnect();
 		
 		return id;
 		

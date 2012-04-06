@@ -302,18 +302,12 @@ public class EMDBVenue extends EMDBBase{
 		
 		this.connect();	
 		
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int id = 0;
-		
-		
-		if (result.size() > 0){
-			id = new Integer(result.get(0)[0].toString());
-			
-			
-			if (this.dbDebug){
-				this.dMsg("NEW VENUE ID #" + id);
-			}
+		int id = this.runQueryKey(sql);
+	
+		if (this.dbDebug){
+			this.dMsg("NEW VENUE ID #" + id);
 		}
+		
 		
 		this.disconnect();
 		
@@ -357,11 +351,10 @@ public class EMDBVenue extends EMDBBase{
 		
 		this.connect();
 	
-		Vector<Object[]> result = this.runQueryResults(sql);
-		int id = 0;	
+		int id = this.runQueryKey(sql);
 		
-		if (result.size() > 0){
-			id = new Integer(result.get(0)[0].toString());
+		if (this.dbDebug){
+			this.dMsg("NEW BOOKING ID #" + id);
 		}
 		
 		this.disconnect();

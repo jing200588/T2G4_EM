@@ -326,6 +326,38 @@ public class EMDBEvent extends EMDBBase{
 	
 
 	
+	/**
+	 * Creates an Event.
+	 * @param aName
+	 * @param aDescription
+	 * @param aBudget
+	 * @param aStartDate
+	 * @param aEndDate
+	 * @param aStartTime
+	 * @param aEndTime
+	 * @return
+	 */
+	public int addEvent(Eventitem aItem){
+		return this.addEvent(
+						aItem.getName(), 
+						aItem.getDescription(),  
+						aItem.getBudget(), 
+						aItem.getStartDateTime().getDateRepresentation(), 
+						aItem.getEndDateTime().getDateRepresentation(), 
+						aItem.getStartDateTime().getTimeRepresentation(), 
+						aItem.getEndDateTime().getTimeRepresentation(), 
+						EventFlowEntry.getStringRepresentation(aItem.getEventFlow())
+					);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	/**
@@ -528,7 +560,31 @@ public class EMDBEvent extends EMDBBase{
 	
 	
 	
-	
+	/**
+	 * Modifies details of an event.
+	 * @param aEventID
+	 * @param aName
+	 * @param aDescription
+	 * @param aBudget
+	 * @param aStartDate
+	 * @param aEndDate
+	 * @param aStartTime
+	 * @param aEndTime
+	 * @return
+	 */
+	public int updateEvent(Eventitem aItem){
+		return this.updateEvent(
+							aItem.getID(), 
+							aItem.getName(), 
+							aItem.getDescription(), 
+							aItem.getBudget(), 
+							aItem.getStartDateTime().getDateRepresentation(), 
+							aItem.getEndDateTime().getDateRepresentation(), 
+							aItem.getStartDateTime().getTimeRepresentation(), 
+							aItem.getEndDateTime().getTimeRepresentation(), 
+							EventFlowEntry.getStringRepresentation(aItem.getEventFlow())
+						);
+	}
 	
 	
 	
@@ -638,20 +694,20 @@ public class EMDBEvent extends EMDBBase{
 	
 	/**
 	 * Generate the event query
-	 * @param item
+	 * @param aItem
 	 * @return
 	 */
-	private String generateArchiveQuery(Eventitem item){
+	private String generateArchiveQuery(Eventitem aItem){
 		String sql	=	new InsertQuery(this.archiveTable)
-								.addColumn(this.archiveEventID, item.getID())
-					      		.addColumn(this.archiveName, item.getName().replaceAll("[\']", ""))
-					      		.addColumn(this.archiveDescription, item.getDescription().replaceAll("[\']", ""))
-					      		.addColumn(this.archiveBudget, item.getBudget())
-					      		.addColumn(this.archiveStartDate, item.getStartDateTime().getDateRepresentation())
-					      		.addColumn(this.archiveEndDate, item.getEndDateTime().getDateRepresentation())
-					      		.addColumn(this.archiveStartTime, item.getStartDateTime().getTimeRepresentation())
-					      		.addColumn(this.archiveEndTime, item.getEndDateTime().getTimeRepresentation())
-					      		.addColumn(this.archiveSchedule, EventFlowEntry.getStringRepresentation( item.getEventFlow() ).replaceAll("[\']", ""))
+								.addColumn(this.archiveEventID, aItem.getID())
+					      		.addColumn(this.archiveName, aItem.getName().replaceAll("[\']", ""))
+					      		.addColumn(this.archiveDescription, aItem.getDescription().replaceAll("[\']", ""))
+					      		.addColumn(this.archiveBudget, aItem.getBudget())
+					      		.addColumn(this.archiveStartDate, aItem.getStartDateTime().getDateRepresentation())
+					      		.addColumn(this.archiveEndDate, aItem.getEndDateTime().getDateRepresentation())
+					      		.addColumn(this.archiveStartTime, aItem.getStartDateTime().getTimeRepresentation())
+					      		.addColumn(this.archiveEndTime, aItem.getEndDateTime().getTimeRepresentation())
+					      		.addColumn(this.archiveSchedule, EventFlowEntry.getStringRepresentation( aItem.getEventFlow() ).replaceAll("[\']", ""))
 					      		.validate().toString();
 		
 		return sql;
@@ -697,27 +753,28 @@ public class EMDBEvent extends EMDBBase{
 	
 	/**
 	 * Transfer a list of events to archive.
-	 * @param newlyexpired
+	 * @param aNewlyExpired
 	 * @return
 	 */
-	public int addAchiveEventList(List<Eventitem> newlyexpired){
+	public int addAchiveEventList(List<Eventitem> aNewlyExpired){
 		
-		int size = newlyexpired.size();
+		int size = aNewlyExpired.size();
 		
 		if (this.dbDebug){
 			this.dMsg("STARTING PROCESS TO ARCHIVE LIST OF SIZE " + size);
 		}	
 		
 		
-		if (!newlyexpired.isEmpty()){
+		if (!aNewlyExpired.isEmpty()){
 			for (int i=0; i<size; i++){
-				Eventitem current = newlyexpired.get(i);
+				Eventitem current = aNewlyExpired.get(i);
 				this.deleteEvent(current.getID());
 				
 				String sql = this.generateArchiveQuery(current);
 				this.queue(sql);
 				if (this.dbDebug){
 					this.dMsg("ADD TO ARCHIVE LIST QUEUE");
+					this.dMsg(sql);
 				}	
 			}
 			

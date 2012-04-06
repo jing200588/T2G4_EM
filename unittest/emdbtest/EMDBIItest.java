@@ -20,6 +20,7 @@ public class EMDBIITest {
 	private EMDBII 				db	= new EMDBII("unit.sqlite", true);; 				
 	
 	private int 				eventID			= 	0;
+	private int[]				eventIDSet		=	new int[5];
 	
 	private Eventitem			event;
 	private Vector<Eventitem>	eventList		=	new Vector<Eventitem>();
@@ -39,12 +40,15 @@ public class EMDBIITest {
 		this.event.setDescription("Just another event");
 		
 		this.eventList.add(new Eventitem("My Event", "19/12/2014", "20/12/2014", "14:00", "18:00"));
-	
 		this.eventList.add(new Eventitem("This Event", "19/10/2014", "20/10/2014", "14:00", "18:00"));
-		
 		this.eventList.add(new Eventitem("That Event", "20/10/2014", "20/11/2014", "11:56", "14:23"));
 		this.eventList.add(new Eventitem("Your Event", "19/01/2014", "20/05/2014", "17:34", "23:56"));
 		this.eventList.add(new Eventitem("The NUSSU Stuff", "06/10/2013", "12/12/2014", "01:00", "13:00"));
+		
+		for (int i=0; i<5; i++)
+			this.eventIDSet[i] = this.db.eventDB().addEvent(this.eventList.get(i));
+		
+		
 		
 
 		//Add 5 Venues	
@@ -149,12 +153,10 @@ public class EMDBIITest {
 				);
 		
 	}
-	
-
 
 	
 
-
+	/*
 	
 	@Test
 	public void deleteTables() throws Exception {
@@ -172,7 +174,7 @@ public class EMDBIITest {
 		
 		this.db.participantDB().drop();
 		assertFalse(this.db.participantDB().verify());
-	}
+	}*/
 	
 	
 }
