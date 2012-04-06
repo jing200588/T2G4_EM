@@ -328,13 +328,7 @@ public class EMDBEvent extends EMDBBase{
 	
 	/**
 	 * Creates an Event.
-	 * @param aName
-	 * @param aDescription
-	 * @param aBudget
-	 * @param aStartDate
-	 * @param aEndDate
-	 * @param aStartTime
-	 * @param aEndTime
+	 * @param aItem
 	 * @return
 	 */
 	public int addEvent(Eventitem aItem){
@@ -562,14 +556,7 @@ public class EMDBEvent extends EMDBBase{
 	
 	/**
 	 * Modifies details of an event.
-	 * @param aEventID
-	 * @param aName
-	 * @param aDescription
-	 * @param aBudget
-	 * @param aStartDate
-	 * @param aEndDate
-	 * @param aStartTime
-	 * @param aEndTime
+	 * @param aItem
 	 * @return
 	 */
 	public int updateEvent(Eventitem aItem){
