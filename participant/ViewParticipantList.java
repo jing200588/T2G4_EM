@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 import org.eclipse.swt.SWT;
@@ -47,6 +49,7 @@ public class ViewParticipantList extends Composite {
 	private static List<Participant> tempEntries;
 
 	private static final String[] HEADERS = {"Name", "Matric No.", "Contact", "Email Address", "Home Address", "Remarks"};
+	private static enum COLUMNSORTCRITERIA {NAME, MATRIC, CONTACT, EMAIL, ADDRESS, REMARK}
 	private static final int TOTAL = 6;
 	
 	/**
@@ -100,7 +103,7 @@ public class ViewParticipantList extends Composite {
 			tvc[i].getColumn().setText(HEADERS[i]);
 		}
 		
-
+		
 		tcl_TableViewerComp.setColumnData(tvc[0].getColumn(), new ColumnWeightData(20));
 		tcl_TableViewerComp.setColumnData(tvc[1].getColumn(), new ColumnWeightData(20));
 		tcl_TableViewerComp.setColumnData(tvc[2].getColumn(), new ColumnWeightData(20));
@@ -108,7 +111,6 @@ public class ViewParticipantList extends Composite {
 		tcl_TableViewerComp.setColumnData(tvc[4].getColumn(), new ColumnWeightData(30));
 		tcl_TableViewerComp.setColumnData(tvc[5].getColumn(), new ColumnWeightData(10));
 		
-	
 		tableParticipantViewer.setContentProvider(ArrayContentProvider.getInstance());
 		for (int i=0; i<HEADERS.length; i++) {
 			tvc[i].setLabelProvider(new ColumnLabelProvider() {
@@ -143,6 +145,64 @@ public class ViewParticipantList extends Composite {
 			});
 			}
 
+		//////////////////////////////////////////////////////////////////////////////
+		// Add listeners for table columns
+		/////////////////////////////////////////////////////////////////////////////
+		
+		// Column 0: Name
+		tvc[0].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				columnSort(tempEntries, COLUMNSORTCRITERIA.NAME);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 1: Matric
+		tvc[1].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				columnSort(tempEntries, COLUMNSORTCRITERIA.MATRIC);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 2: Contact
+		tvc[2].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				columnSort(tempEntries, COLUMNSORTCRITERIA.CONTACT);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 3: Email
+		tvc[3].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				columnSort(tempEntries, COLUMNSORTCRITERIA.EMAIL);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 4: Address
+		tvc[4].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				columnSort(tempEntries, COLUMNSORTCRITERIA.ADDRESS);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
+		// Column 5: Remark
+		tvc[5].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				columnSort(tempEntries, COLUMNSORTCRITERIA.REMARK);
+				tableParticipantViewer.refresh();
+			}
+		});
+		
 			tableParticipantViewer.setInput(tempEntries);
 			tvc[1].getColumn().pack();
 			tvc[2].getColumn().pack();
@@ -457,5 +517,44 @@ public void ImportCSV (String filepath) throws Exception {
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
+	}
+	
+	/**
+	 * Sorts Participant objects in the table based on the given criteria
+	 * 
+	 * @param inputList - List<Participant>
+	 * @param type - COLUMNSORTCRITERIA
+	 */
+	private void columnSort(List<Participant> inputList, COLUMNSORTCRITERIA type)
+	{
+		if(inputList == null)
+			return;
+		
+		Comparator<Participant> comparator = null;		// Dummy value
+		switch(type)
+		{
+			case NAME:
+				comparator = new ParticipantNameComparator();
+				break;
+			case MATRIC:
+				comparator = new ParticipantMatricComparator();
+				break;
+			case CONTACT:
+				comparator = new ParticipantContactComparator();
+				break;
+			case EMAIL:
+				comparator = new ParticipantEmailComparator();
+				break;
+			case ADDRESS:
+				comparator = new ParticipantAddressComparator();
+				break;
+			case REMARK:
+				comparator = new ParticipantRemarkComparator();
+		}
+		
+		if(comparator != null)
+		{
+			Collections.sort(inputList, comparator);
+		}
 	}
 }
