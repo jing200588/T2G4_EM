@@ -580,8 +580,8 @@ public class ViewEvent extends Composite {
 	public static void RefreshBudget() {
 		if (budgetFlag)
 			tableBudget.dispose();
-	//	tableBudget = BudgetJfaceTable();
-		tableBudget = BudgetTable();
+		tableBudget = BudgetJfaceTable();
+	//	tableBudget = BudgetTable();
 	}
 
 	/**
@@ -1100,7 +1100,7 @@ public class ViewEvent extends Composite {
 			tvc[4].getColumn().pack();
 			tvc[5].getColumn().pack();
 
-		/*	
+	/*		
 			tvc[0].getColumn().addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
 					sortColumn(0, itemList);
@@ -1136,8 +1136,8 @@ public class ViewEvent extends Composite {
 					sortColumn(5, itemList);
 				}
 			});
-			*/
-/*
+			
+*/
 			//Sorting.
 			for (int i=0; i<tvc.length; i++) {
 				if (count == tvc.length)
@@ -1148,7 +1148,7 @@ public class ViewEvent extends Composite {
 					}
 				});
 			}
-	*/	
+		
 			mouseOverPackage(tableBudget, data);
 			//Dictates when vertical scrollbar appears
 			setTableRowDisplayed(tableBudget, data, 15);
