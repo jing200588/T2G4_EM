@@ -108,6 +108,7 @@ public class ViewParticipantList extends Composite {
 		tcl_TableViewerComp.setColumnData(tvc[4].getColumn(), new ColumnWeightData(30));
 		tcl_TableViewerComp.setColumnData(tvc[5].getColumn(), new ColumnWeightData(10));
 		
+	
 		tableParticipantViewer.setContentProvider(ArrayContentProvider.getInstance());
 		for (int i=0; i<HEADERS.length; i++) {
 			tvc[i].setLabelProvider(new ColumnLabelProvider() {
