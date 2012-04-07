@@ -65,9 +65,11 @@ public class ViewEvent extends Composite {
 	private static int indexEventFlow =0;
 	protected LoginEmailDialog loginDialog; 
 
-	// These two variables are for implementing column sort.
+	// These variables are for implementing column sort.
 	private static List<Participant> participantList;
 	private static TableViewer tableViewerParticipant;
+	private static TableViewer tableViewerVenue;
+	private static Vector<BookedVenueInfo> venueList;
 	
 	/**
 	 * Create the composite.
@@ -1081,7 +1083,7 @@ public class ViewEvent extends Composite {
 	 * @return  
 	 */
 	public static Table VenueJfaceTable() {
-		Vector<BookedVenueInfo> venueList = currentEvent.getBVIList();
+		venueList = currentEvent.getBVIList();
 
 		//Checks if there is any entry before creating the table
 		if (venueList.isEmpty()) {
@@ -1099,7 +1101,7 @@ public class ViewEvent extends Composite {
 		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
 		tableComposite.setLayout(tcl_tableComposite);
 
-		TableViewer tableViewerVenue = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewerVenue = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableVenue = tableViewerVenue.getTable();
 		tableVenue.setHeaderVisible(true);
 		tableVenue.getVerticalBar().setEnabled(true);
@@ -1163,6 +1165,76 @@ public class ViewEvent extends Composite {
 				}
 			});
 		}
+		
+		//////////////////////////////////////////////////////////////////////////////
+		// Add listeners for table columns
+		/////////////////////////////////////////////////////////////////////////////
+
+		// Column 0: Name
+		tvc[0].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookedVenueInfo.sortByCriteria(venueList, BookedVenueInfo.BVI_SORT_CRITERIA.NAME);
+				tableViewerVenue.refresh();
+			}
+		});
+
+		// Column 1: Capacity
+		tvc[1].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookedVenueInfo.sortByCriteria(venueList, BookedVenueInfo.BVI_SORT_CRITERIA.CAPACITY);
+				tableViewerVenue.refresh();
+			}
+		});
+
+		// Column 2: Cost
+		tvc[2].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookedVenueInfo.sortByCriteria(venueList, BookedVenueInfo.BVI_SORT_CRITERIA.COST);
+				tableViewerVenue.refresh();
+			}
+		});
+
+		// Column 3: Start Date
+		tvc[3].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookedVenueInfo.sortByCriteria(venueList, BookedVenueInfo.BVI_SORT_CRITERIA.STARTDATETIME);
+				tableViewerVenue.refresh();
+			}
+		});
+
+		// Column 4: Start Time. Note that when a user chooses either start date or start time,
+		// 				we will sort in the increasing order of start date time.
+		tvc[4].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookedVenueInfo.sortByCriteria(venueList, BookedVenueInfo.BVI_SORT_CRITERIA.STARTDATETIME);
+				tableViewerVenue.refresh();
+			}
+		});
+
+		// Column 5: End Date
+		tvc[5].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookedVenueInfo.sortByCriteria(venueList, BookedVenueInfo.BVI_SORT_CRITERIA.ENDDATETIME);
+				tableViewerVenue.refresh();
+			}
+		});
+
+		// Column 6: End Time. Note that when a user chooses either end date or end time,
+		// 				we will sort in the increasing order of end date time.
+		tvc[6].getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookedVenueInfo.sortByCriteria(venueList, BookedVenueInfo.BVI_SORT_CRITERIA.ENDDATETIME);
+				tableViewerVenue.refresh();
+			}
+		});
+
 		tableViewerVenue.setInput(venueList);
 
 		mouseOverPackage(tableVenue, data);

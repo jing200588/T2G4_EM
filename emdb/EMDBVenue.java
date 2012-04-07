@@ -2,8 +2,6 @@ package emdb;
 
 import venue.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Vector;
 
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
@@ -362,13 +360,17 @@ public class EMDBVenue extends EMDBBase{
 						  		.addColumn(this.bookingTimeEnd, aTimeEnd)
 						  		.validate().toString();	
 			
-		
-		
+
 		
 		if (this.dbDebug){
 			this.dMsg("BOOK A VENUE");
 			this.dMsg(sql);
 		}
+		
+		
+		//Constraints
+		if (aEventID < 1 || aVenueID < 1)
+			return 0;
 		
 		this.connect();
 	

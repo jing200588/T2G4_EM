@@ -26,12 +26,12 @@ public class WithSatisfactionNoTypeTest {
 				"ACER_NETBOOK 1300.8 10\n" +
 				"Nikon_Cam 634.5 9\n" +
 				"Monster_Earpiece 64.7 7\n" +
-				"OCZ_120GB_SSD 320.88 8 Harddisk\n" +
-				"Canon_DSLR 1000.5 11 Camera\n" +
-				"Western_Digital_HD_50GB 180.6 4 Harddisk\n" +
-				"Windows_7_Basic 200 8 Software\n" +
-				"World_of_Warcraft 49.99 4 Software\n" +
-				"Software_Engineering_For_Dummies 419.4 7 Book\n";	
+				"OCZ_120GB_SSD 320.88 8\n" +
+				"Canon_DSLR 1000.5 11\n" +
+				"Western_Digital_HD_50GB 180.6 4\n" +
+				"Windows_7_Basic 200 8\n" +
+				"World_of_Warcraft 49.99 4\n" +
+				"Software_Engineering_For_Dummies 419.4 7\n";	
 	}
 	/**
 	 * This test case will cover the budget is zero dollar and no compulsory item are checked.

@@ -72,8 +72,9 @@ public class ViewSmsAds extends Composite {
 		formToolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		Form formViewSmsAds = formToolkit.createForm(this);
+		formViewSmsAds.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		formViewSmsAds.setBounds(0, 0, 700, 400);
-		formViewSmsAds.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		formViewSmsAds.getHead().setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		formToolkit.paintBordersFor(formViewSmsAds);
 		formViewSmsAds.setText("SMS Advertising");
 
@@ -87,6 +88,7 @@ public class ViewSmsAds extends Composite {
 		formToolkit.paintBordersFor(compSmsMain);
 
 		lblTo = new Label(compSmsMain, SWT.NONE);
+		lblTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		FormData fd_lblTo = new FormData();
 		fd_lblTo.right = new FormAttachment(0, 65);
 		fd_lblTo.top = new FormAttachment(5, 2);
@@ -96,6 +98,7 @@ public class ViewSmsAds extends Composite {
 		lblTo.setText("To:");
 
 		txtToInputBox = new Text(compSmsMain, SWT.BORDER);
+		txtToInputBox.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		FormData fd_txtToInputBox = new FormData();
 		fd_txtToInputBox.right = new FormAttachment(95);
 		fd_txtToInputBox.top = new FormAttachment(5);
@@ -104,6 +107,7 @@ public class ViewSmsAds extends Composite {
 		formToolkit.adapt(txtToInputBox, true, true);
 
 		lblMessage = new Label(compSmsMain, SWT.NONE);
+		lblMessage.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		FormData fd_lblMessage = new FormData();
 
 		fd_lblMessage.right = new FormAttachment(txtMessageInputBox, 65);
@@ -113,6 +117,7 @@ public class ViewSmsAds extends Composite {
 		lblMessage.setText("Message:");
 
 		txtMessageInputBox = new Text(compSmsMain, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+		txtMessageInputBox.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		FormData fd_txtMessageInputBox = new FormData();
 		fd_txtMessageInputBox.bottom = new FormAttachment(90, -54);
 		fd_txtMessageInputBox.right = new FormAttachment(95);
@@ -123,6 +128,7 @@ public class ViewSmsAds extends Composite {
 		String end = currentEvent.getEndDateTime().getDateRepresentation() + " - " + currentEvent.getEndDateTime().getTimeRepresentation();
 		txtMessageInputBox.setText("Upcoming event: " + currentEvent.getName()+".\nStart date: " + start + ".\nEnd date: " + end +".");
 		btnSend = new Button(compSmsMain, SWT.NONE);
+		btnSend.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		FormData fd_btnSend = new FormData();
 		fd_btnSend.width = 100;
 		fd_btnSend.top = new FormAttachment(txtMessageInputBox, 19);
@@ -132,57 +138,65 @@ public class ViewSmsAds extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					if (txtToInputBox.getText().length() == 0)  throw new IOException("No number entered detected.");
+					if (txtToInputBox.getText().length() == 0)  throw new IOException("No number entered detected.");		
 
-					if (txtToInputBox.getText().length() < 8)  throw new IOException("Number entered is invalid");
+					String[] inputNum = txtToInputBox.getText().split(" ");
+					System.out.println(inputNum.length);
+					String message = txtMessageInputBox.getText();
+					
+					for(int i=0; i<inputNum.length; i++) {
+						if (inputNum[i].length() < 11)  throw new IOException("Number entered is too short");
+						char[] temp = inputNum[i].toCharArray();
+						if(temp[0] != '+') throw new Exception("Wrong format. Please use international format.");
+						for(int j=1; j<temp.length; j++) 
+							if (Character.isDigit(temp[j]) == false) throw new Exception("Handphone number should be digit only.");
+					}
+					
+					Enumeration ports = CommPortIdentifier.getPortIdentifiers();  
+
+					String defaultPort="";
+					while(ports.hasMoreElements()){  
+						CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
+						System.out.println(port.getName());
+						defaultPort = port.getName();
+						break;
+					}
+					
+					/* to be use IFF required!*/
+					try {	
+
+						SerialToGsm stg = new SerialToGsm(defaultPort);
+						if(stg.getSuccessfulPort() == false) throw new Exception("Port was faulty. Please try again.");
+						for(int i=0; i<inputNum.length; i++)
+							//stg.sendSms(inputNum[i],message);
+
+						errordiag = new ErrorMessageDialog(new Shell(),
+									"Your SMS has been sent!",
+									"Sent!");
+						errordiag.open();
+						ViewMain.ReturnView();
+					} catch (Exception ex) {
+						if(ex.getMessage().equals("Port was faulty. Please try again.")) {
+							errordiag = new ErrorMessageDialog(new Shell(), "Port was faulty. Please try again.");
+						}		
+						else if(ex.getMessage().equals("Port error, close the system to relaunch port.")) {
+							errordiag = new ErrorMessageDialog(new Shell(), "Port error, close the system to relaunch port.");
+						}	
+						errordiag.open();
+					}
 				} catch (Exception ex) {
 					if(ex.getMessage().equals("No number entered detected.")) 
 						errordiag = new ErrorMessageDialog(new Shell(), "No number entered detected.");	
-					else if(ex.getMessage().equals("Number entered is invalid")) 
-						errordiag = new ErrorMessageDialog(new Shell(), "Number entered is invalid");	
-
-					errordiag.open();
-
-
-				}
-				Enumeration ports = CommPortIdentifier.getPortIdentifiers();  
-
-				String defaultPort="";
-				while(ports.hasMoreElements()){  
-					CommPortIdentifier port = (CommPortIdentifier) ports.nextElement();
-					System.out.println(port.getName());
-					defaultPort = port.getName();
-					break;
-				}
-
-				String[] inputNum = txtToInputBox.getText().split(" ");
-				System.out.println(inputNum.length);
-				String message = txtMessageInputBox.getText();
-
-				/* to be use IFF required!*/
-				try {	
-
-					SerialToGsm stg = new SerialToGsm(defaultPort);
-					if(stg.getSuccessfulPort() == false) throw new Exception("Port was faulty. Please try again.");
-					for(int i=0; i<inputNum.length; i++)
-						//stg.sendSms(inputNum[i],message);
-
-					errordiag = new ErrorMessageDialog(new Shell(),
-								"Your SMS has been sent!",
-								"Sent!");
-					errordiag.open();
-					ViewMain.ReturnView();
-				} catch (Exception ex) {
-					if(ex.getMessage().equals("Check your GSM modem or handphone number entered."))
-						errordiag = new ErrorMessageDialog(new Shell(), "Check your GSM modem or handphone number entered.");
-					else if(ex.getMessage().equals("Port was faulty. Please try again.")) {
-						errordiag = new ErrorMessageDialog(new Shell(), "Port was faulty. Please try again.");
-					}		
-					else if(ex.getMessage().equals("Port error, close the system to relaunch port.")) {
-						errordiag = new ErrorMessageDialog(new Shell(), "Port error, close the system to relaunch port.");
-					}	
+					else if(ex.getMessage().equals("Number entered is too short")) 
+						errordiag = new ErrorMessageDialog(new Shell(), "Number entered is too short");	
+					else if(ex.getMessage().equals("Wrong format. Please use international format.")) 
+						errordiag = new ErrorMessageDialog(new Shell(), "Wrong format. Please use international format.");	
+					else if(ex.getMessage().equals("Handphone number should be digit only.")) 
+						errordiag = new ErrorMessageDialog(new Shell(), "Handphone number should be digit only.");	
+					
 					errordiag.open();
 				}
+				
 
 
 			}
@@ -191,6 +205,7 @@ public class ViewSmsAds extends Composite {
 		btnSend.setText("Send");
 
 		Button btnImportNumber = new Button(compSmsMain, SWT.NONE);
+		btnImportNumber.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		fd_lblMessage.top = new FormAttachment(btnImportNumber, 10);
 		fd_txtMessageInputBox.top = new FormAttachment(btnImportNumber, 10);
 		FormData fd_btnImportNumber = new FormData();
@@ -210,6 +225,7 @@ public class ViewSmsAds extends Composite {
 		btnImportNumber.setText("Import Number");
 
 		Button btnNotifyParticipants = new Button(compSmsMain, SWT.NONE);
+		btnNotifyParticipants.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		fd_btnImportNumber.right = new FormAttachment(btnNotifyParticipants, -10);
 		FormData fd_btnNotifyParticipants = new FormData();
 		fd_btnNotifyParticipants.width = 110;

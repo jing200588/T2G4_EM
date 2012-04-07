@@ -229,7 +229,7 @@ public class ViewBookingSystem extends Composite {
 		lblSearchVenueBy.setLayoutData(fd_lblSearchVenueBy);
 		lblSearchVenueBy.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.BOLD));
 		toolkit.adapt(lblSearchVenueBy, true, true);
-		lblSearchVenueBy.setText("Search venue by name: ");
+		lblSearchVenueBy.setText("Search venue by name / address: ");
 		
 		Composite nameCompo = new Composite(searchNameCompo, SWT.NONE);
 		FormData fd_nameCompo = new FormData();
@@ -260,7 +260,7 @@ public class ViewBookingSystem extends Composite {
 				nameToSearchText.setText(venueName);
 				if(venueName == null || venueName.equals("") == true)
 				{
-					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), "You have not entered a venue name to search yet!");
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), "You have not entered a venue name or address to search yet!");
 					errorBoard.open();
 				}
 				else
@@ -396,6 +396,10 @@ public class ViewBookingSystem extends Composite {
 															CostChoiceButton.setEnabled(false);
 															TimeChoiceButton.setEnabled(false);
 															CapacityChoiceButton.setEnabled(false);
+															
+															// Set enabled for capacityCompo and costCompo
+															setEnabledCapacityCompo(true);
+															setEnabledCostCompo(true);
 															
 															// Display the following composites in order if they are chosen by the user
 															if(flagTimeSlotChoice == true)
@@ -852,6 +856,10 @@ public class ViewBookingSystem extends Composite {
 										btnBackCriteria.addSelectionListener(new SelectionAdapter() {
 											@Override
 											public void widgetSelected(SelectionEvent e) {
+												// Set enabled for the capacityCompo and costCompo
+												setEnabledCapacityCompo(true);
+												setEnabledCostCompo(true);
+												
 												int previousCompo = hasPreviousCriteria();
 												if(previousCompo >= 0)
 													currentCompo = previousCompo;
@@ -867,7 +875,7 @@ public class ViewBookingSystem extends Composite {
 												compoCriteriaFilled.layout();
 												btnNextCriteria.setText("Next");
 												btnNextCriteria.setEnabled(true);
-												if(hasNextCriteria() < 0)
+												if(hasPreviousCriteria() < 0)
 													btnBackCriteria.setEnabled(false);
 												
 												btnFindCriteria.setEnabled(false);
@@ -888,6 +896,25 @@ public class ViewBookingSystem extends Composite {
 									public void widgetSelected(SelectionEvent e) {
 										try
 										{
+											if(btnNextCriteria.getText().equals("Edit") == true)
+											{
+												// This is the last composite the user has to type in
+												btnFindCriteria.setEnabled(false);
+												btnNextCriteria.setText("Confirm");
+												switch(currentCompo)
+												{
+													case 0:
+														dtSearchCriteria.setEnabled(true);
+														break;
+													case 1:
+														setEnabledCapacityCompo(true);
+														break;
+													case 2:
+														setEnabledCostCompo(true);
+												}
+												return;
+											}
+											
 											// First read input from the user
 											switch(currentCompo)
 											{
@@ -906,7 +933,19 @@ public class ViewBookingSystem extends Composite {
 											{
 												// This is the last composite the user has to type in
 												btnFindCriteria.setEnabled(true);
-												btnNextCriteria.setEnabled(false);
+												btnNextCriteria.setText("Edit");
+												switch(currentCompo)
+												{
+													case 0:
+														dtSearchCriteria.setEnabled(false);
+														break;
+													case 1:
+														setEnabledCapacityCompo(false);
+														break;
+													case 2:
+														setEnabledCostCompo(false);
+												}
+												return;
 											}
 											
 											int nextCompo = hasNextCriteria();
@@ -1173,7 +1212,7 @@ public class ViewBookingSystem extends Composite {
 
 		if(decimalPointIndex < 0)
 			return true;
-		if(money.length() - decimalPointIndex == 1 || money.length() - decimalPointIndex > 2)
+		if(money.length() - decimalPointIndex == 1 || money.length() - decimalPointIndex > 3)
 			return false;
 		return true;
 	}
@@ -1297,5 +1336,25 @@ public class ViewBookingSystem extends Composite {
 			dtSearchResult.displayInputTimeSlot(timeSlotChoiceInput);
 			hasTimeSlotChecked = true;
 		}
+	}
+	
+	/**
+	 * Enable / disable components in the capacityCompo
+	 * @param isEnabled
+	 */
+	private void setEnabledCapacityCompo(boolean isEnabled)
+	{
+		lowerBoundCapacityText.setEnabled(isEnabled);
+		upperBoundCapacityText.setEnabled(isEnabled);
+	}
+	
+	/**
+	 * Enable / disable components in the costCompo
+	 * @param isEnabled
+	 */
+	private void setEnabledCostCompo(boolean isEnabled)
+	{
+		lowerBoundCostText.setEnabled(isEnabled);
+		upperBoundCostText.setEnabled(isEnabled);
 	}
 }

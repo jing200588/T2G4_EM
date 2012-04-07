@@ -3,8 +3,6 @@ package emdb;
 import event.*;
 import program.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 
@@ -312,6 +310,10 @@ public class EMDBEvent extends EMDBBase{
 			this.dMsg("ADD AN EVENT");
 			this.dMsg(sql);
 		}
+		
+		//Constraints
+		if (aName.isEmpty())
+			return 0;
 		
 		this.connect();
 		
@@ -769,9 +771,9 @@ public class EMDBEvent extends EMDBBase{
 				this.dMsg("ADD TO ARCHIVE LIST");
 			}	
 			
-			this.connect();
+			
 			int result = this.commit();
-			this.disconnect();
+		
 			
 			return result;
 		}else{

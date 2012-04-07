@@ -38,7 +38,7 @@ public class ViewEmailAds extends Composite {
 	private Label lblSubject;
 	private Label lblMessage;
 	private Text txtMessageInputBox;
-	private Label lblError;
+	//private Label lblError;
 
 
 	
@@ -65,7 +65,7 @@ public class ViewEmailAds extends Composite {
 		formViewEmailAds.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		formViewEmailAds.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		formViewEmailAds.setBounds(0, 0, 700, 400);
-		formViewEmailAds.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		formViewEmailAds.getHead().setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		formToolkit.paintBordersFor(formViewEmailAds);
 		formViewEmailAds.setText("Email Advertising");
 		formViewEmailAds.getBody().setLayout(new FormLayout());
@@ -86,19 +86,21 @@ public class ViewEmailAds extends Composite {
 		formToolkit.adapt(compMain);
 		formToolkit.paintBordersFor(compMain);
 
+		/*
 		new Label(compMain, SWT.NONE);
 		new Label(compMain, SWT.NONE);
 		lblError  = new Label(compMain, SWT.None);
 		lblError.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		formToolkit.adapt(lblError, true, true);
-		
+		formToolkit.adapt(lblError, true, true);*/
 		
 		lblTo = new Label(compMain, SWT.NONE);
+		lblTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblTo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(lblTo, true, true);
 		lblTo.setText("To:");
 		
 		txtToInputBox = new Text(compMain, SWT.BORDER);
+		txtToInputBox.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtToInputBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		formToolkit.adapt(txtToInputBox, true, true);
 		
@@ -106,11 +108,13 @@ public class ViewEmailAds extends Composite {
 		new Label(compMain, SWT.NONE);
 		
 		lblSubject = new Label(compMain, SWT.NONE);
+		lblSubject.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblSubject.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(lblSubject, true, true);
 		lblSubject.setText("Subject:");
 		
 		txtSubjectInputBox = new Text(compMain, SWT.BORDER);
+		txtSubjectInputBox.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtSubjectInputBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		formToolkit.adapt(txtSubjectInputBox, true, true);
 		
@@ -125,6 +129,7 @@ public class ViewEmailAds extends Composite {
 		lblMessage.setText("Message:");
 		
 		txtMessageInputBox = new Text(compMain, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+		txtMessageInputBox.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtMessageInputBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		formToolkit.adapt(txtMessageInputBox, true, true);
 		//Label label = new Label(compMain, SWT.NONE);
@@ -134,6 +139,7 @@ public class ViewEmailAds extends Composite {
 		new Label(compMain, SWT.NONE);
 		
 		Button btnSend = new Button(compMain, SWT.NONE);
+		btnSend.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnSend = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		gd_btnSend.widthHint = 100;
 		btnSend.setLayoutData(gd_btnSend);
@@ -259,7 +265,7 @@ public class ViewEmailAds extends Composite {
 
 				if (!allOK){
 					ErrorMessageDialog messageBoard = new ErrorMessageDialog(new Shell(),
-							"An Error has occurred in sending your email",
+							"An Error has occurred in sending your email" + errorMsg,
 							"Error");
 					messageBoard.open();
 				}else{
@@ -272,7 +278,7 @@ public class ViewEmailAds extends Composite {
 					
 				}
 				
-				lblError.setText(errorMsg);
+		
 			}
 		});
 
@@ -283,7 +289,7 @@ public class ViewEmailAds extends Composite {
 		lblTo.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblSubject.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblMessage.setBackground(SWTResourceManager.getColor(240,240,240));
-		lblError.setBackground(SWTResourceManager.getColor(240,240,240));
+		//lblError.setBackground(SWTResourceManager.getColor(240,240,240));
 	}
 	
 	

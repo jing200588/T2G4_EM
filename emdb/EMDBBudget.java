@@ -2,8 +2,6 @@ package emdb;
 
 import budget.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Vector;
 
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
@@ -364,6 +362,10 @@ public class EMDBBudget extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
+		if (aEventID < 1)
+			return 0;
+		
+		
 		this.connect();
 		int id = this.runQueryKey(sql);
 		
@@ -455,9 +457,8 @@ public class EMDBBudget extends EMDBBase{
 			this.queue(sql);
 		}
 		
-		this.connect();
 		int result = this.commit();
-		this.disconnect();
+
 		
 		return result;
 	}

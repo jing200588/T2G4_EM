@@ -14,6 +14,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 
 public class TwoChoiceDialog extends Dialog {
@@ -74,6 +75,7 @@ public class TwoChoiceDialog extends Dialog {
 		
 		//Prompt label
 		messageBox = new Label(composite, SWT.WRAP | SWT.CENTER);
+		messageBox.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		FormData fd_Prompt = new FormData();
 		fd_Prompt.top = new FormAttachment(30, 0);
 		fd_Prompt.left = new FormAttachment(20, 0);
@@ -83,6 +85,7 @@ public class TwoChoiceDialog extends Dialog {
 		
 		//warning sign label
 		warningSign = new Label(composite, SWT.NONE);
+		warningSign.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		warningSign.setImage(Display.getDefault().getSystemImage(SWT.ICON_WARNING));
 		FormData fd_warningsign = new FormData();
 		fd_warningsign.top = new FormAttachment(25, 0);
@@ -92,6 +95,7 @@ public class TwoChoiceDialog extends Dialog {
 		 * FIRST BUTTON arrangement
 		 ***********************************************************/
 		btnOne = new Button(composite, SWT.NONE);
+		btnOne.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnOne.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -111,6 +115,7 @@ public class TwoChoiceDialog extends Dialog {
 		 * SECOND BUTTON EVENT LISTENER
 		 ***********************************************************/
 		btnTwo = new Button(composite, SWT.NONE);
+		btnTwo.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnTwo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
