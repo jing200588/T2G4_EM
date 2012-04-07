@@ -81,7 +81,7 @@ public class HelperFunctionsTest {
 	}
 	
 	/*
-	 * Test replaceNewLine method
+	 * Test convertMultiToSingleLine method
 	 */
 	@Test
 	public void testSeven()
@@ -89,5 +89,17 @@ public class HelperFunctionsTest {
 		String testObj = "\n\n\nThis is \n\n a test\n";
 		
 		assertEquals("This is a test", HelperFunctions.convertMultiToSingleLine(testObj));
+		
+		testObj = "abcd";
+		assertEquals("abcd", HelperFunctions.convertMultiToSingleLine(testObj));
+		
+		testObj = "a";
+		assertEquals("a", HelperFunctions.convertMultiToSingleLine(testObj));
+		
+		testObj = "  ";
+		assertEquals("", HelperFunctions.convertMultiToSingleLine(testObj));
+		
+		testObj = "";
+		assertEquals("", HelperFunctions.convertMultiToSingleLine(testObj));
 	}
 }

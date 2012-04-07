@@ -83,6 +83,9 @@ public class HelperFunctions {
 	 */
 	public static String convertMultiToSingleLine(String text)
 	{
+		if(text.equals("") == true)
+			return "";
+		
 		Scanner scan = new Scanner(text);
 		String resultStr = scan.nextLine();
 		while(scan.hasNextLine())
