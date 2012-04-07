@@ -67,7 +67,7 @@ public class ErrorMessageDialog extends Dialog {
 	 */
 	protected void createContents() {
 		shell = new Shell(getParent(), getStyle());
-		shell.setSize(450, 280);
+		shell.setSize(450, 200);
 		shell.setText(getText());
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
