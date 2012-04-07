@@ -79,13 +79,13 @@ public class AddParticipantDialog extends Dialog {
 		composite.setLayoutData(fd_composite);
 		
 		Label lblName = new Label(composite, SWT.NONE);
-		lblName.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+		lblName.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.BOLD));
 		lblName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblName.setText("Name*:");
 		
 		txtName = new Text(composite, SWT.BORDER);
 		txtName.setMessage("eg. John Goh");
-		txtName.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		txtName.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		GridData gd_txtName = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
 		gd_txtName.widthHint = 188;
 		txtName.setLayoutData(gd_txtName);
@@ -94,13 +94,13 @@ public class AddParticipantDialog extends Dialog {
 		new Label(composite, SWT.NONE);
 		
 		Label lblMatricNo = new Label(composite, SWT.NONE);
-		lblMatricNo.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+		lblMatricNo.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.BOLD));
 		lblMatricNo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblMatricNo.setText("Matric No.:");
 		
 		txtMatricNo = new Text(composite, SWT.BORDER);
 		txtMatricNo.setMessage("eg. A0012334X");
-		txtMatricNo.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		txtMatricNo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		GridData gd_txtMatricNo = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtMatricNo.widthHint = 188;
 		txtMatricNo.setLayoutData(gd_txtMatricNo);
@@ -109,13 +109,13 @@ public class AddParticipantDialog extends Dialog {
 		new Label(composite, SWT.NONE);
 		
 		Label lblContact = new Label(composite, SWT.NONE);
-		lblContact.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+		lblContact.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.BOLD));
 		lblContact.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblContact.setText("Contact*:");
 		
 		txtContact = new Text(composite, SWT.BORDER);
 		txtContact.setMessage("House or Handphone number");
-		txtContact.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		txtContact.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		GridData gd_txtContact = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
 		gd_txtContact.widthHint = 188;
 		txtContact.setLayoutData(gd_txtContact);
@@ -124,13 +124,13 @@ public class AddParticipantDialog extends Dialog {
 		new Label(composite, SWT.NONE);
 		
 		Label lblEmailAddress = new Label(composite, SWT.NONE);
-		lblEmailAddress.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+		lblEmailAddress.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.BOLD));
 		lblEmailAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEmailAddress.setText("Email Address*:");
 		
 		txtEmailAddress = new Text(composite, SWT.BORDER);
 		txtEmailAddress.setMessage("eg. johnjohn89@gmail.com");
-		txtEmailAddress.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		txtEmailAddress.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		GridData gd_txtEmailAddress = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtEmailAddress.widthHint = 188;
 		txtEmailAddress.setLayoutData(gd_txtEmailAddress);
@@ -139,12 +139,12 @@ public class AddParticipantDialog extends Dialog {
 		new Label(composite, SWT.NONE);
 		
 		Label lblHomeAddress = new Label(composite, SWT.NONE);
-		lblHomeAddress.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+		lblHomeAddress.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.BOLD));
 		lblHomeAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblHomeAddress.setText("Home Address:");
 		
 		txtHomeAddress = new Text(composite, SWT.BORDER);
-		txtHomeAddress.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		txtHomeAddress.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		GridData gd_txtHomeAddress = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtHomeAddress.widthHint = 188;
 		txtHomeAddress.setLayoutData(gd_txtHomeAddress);
@@ -153,12 +153,12 @@ public class AddParticipantDialog extends Dialog {
 		new Label(composite, SWT.NONE);
 		
 		Label lblRemarks = new Label(composite, SWT.NONE);
-		lblRemarks.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+		lblRemarks.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.BOLD));
 		lblRemarks.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblRemarks.setText("Remarks:");
 		
 		txtRemarks = new Text(composite, SWT.BORDER | SWT.MULTI);
-		txtRemarks.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		txtRemarks.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		GridData gd_txtRemarks = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtRemarks.heightHint = 63;
 		gd_txtRemarks.widthHint = 188;
@@ -166,12 +166,14 @@ public class AddParticipantDialog extends Dialog {
 		new Label(composite, SWT.NONE);
 		
 		Label lblRequiredFields = new Label(composite, SWT.NONE);
+		lblRequiredFields.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblRequiredFields.setText("(* required fields)");
 		
 		/************************************************************
 		 * CREATE BUTTON EVENT LISTENER
 		 ***********************************************************/
 		btnCreate = new Button(shlAddParticipant, SWT.NONE);
+		btnCreate.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -198,6 +200,7 @@ public class AddParticipantDialog extends Dialog {
 		 * CANCEL BUTTON LISTENER
 		 ***********************************************************/
 		btnCancel = new Button(shlAddParticipant, SWT.NONE);
+		btnCancel.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

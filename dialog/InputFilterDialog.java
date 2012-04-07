@@ -20,6 +20,7 @@ import program.FilterComposite;
 import venue.BookedVenueInfo;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Label;
 
 public class InputFilterDialog extends Dialog {
 	
@@ -93,6 +94,7 @@ public class InputFilterDialog extends Dialog {
 		
 		// Create the OK button and add a handler
 		Button ok = new Button(composite, SWT.PUSH);
+		ok.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_ok = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
 		gd_ok.widthHint = 80;
 		ok.setLayoutData(gd_ok);
@@ -132,6 +134,7 @@ public class InputFilterDialog extends Dialog {
 		
 		// Create the cancel button and add a handler
 		Button cancel = new Button(composite, SWT.PUSH);
+		cancel.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_cancel = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
 		gd_cancel.widthHint = 80;
 		cancel.setLayoutData(gd_cancel);
@@ -151,6 +154,7 @@ public class InputFilterDialog extends Dialog {
 		ok.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		cancel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		filterCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		new Label(filterCompo, SWT.NONE);
 
 	}
 }

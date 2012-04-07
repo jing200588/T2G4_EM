@@ -64,7 +64,7 @@ public class ViewParticipantList extends Composite {
 		
 		//Event Particulars label
 		Label lblEventParticulars = new Label(this, SWT.NONE);
-		lblEventParticulars.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
+		lblEventParticulars.setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		FormData fd_lblEventParticulars = new FormData();
 		fd_lblEventParticulars.top = new FormAttachment(0, 10);
 		fd_lblEventParticulars.left = new FormAttachment(0, 10);
@@ -90,6 +90,7 @@ public class ViewParticipantList extends Composite {
 
 		tableParticipantViewer = new TableViewer(TableViewerComp, SWT.BORDER | SWT.FULL_SELECTION);
 		tableParticipant = tableParticipantViewer.getTable();
+		tableParticipant.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		TableViewerColumn[] tvc= new TableViewerColumn[TOTAL];
 		
 		//clone the list
@@ -233,6 +234,7 @@ public class ViewParticipantList extends Composite {
 		
 		//Bottom composite
 		Composite compositebottom = new Composite(composite, SWT.NONE);
+		compositebottom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		fd_TableViewerComp.left = new FormAttachment(compositebottom, 0, SWT.LEFT);
 		FormData fd_compositebottom = new FormData();
 		fd_compositebottom.top = new FormAttachment(TableViewerComp, 8);
@@ -247,6 +249,7 @@ public class ViewParticipantList extends Composite {
 		lblInputFile.setText("Input File:");
 		
 		txtImportFile = new Text(compositebottom, SWT.BORDER);
+		txtImportFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtImportFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtImportFile.setText("/temp/myfile.csv");
 
@@ -331,6 +334,7 @@ public class ViewParticipantList extends Composite {
 		lblOutputFile.setText("Output File:");
 		
 		txtExportFile = new Text(compositebottom, SWT.BORDER);
+		txtExportFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtExportFile.setMessage("/temp/myfile.csv");
 		txtExportFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
