@@ -5,9 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Vector;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import program.EventFlowEntry;
@@ -28,8 +26,7 @@ public class EMDBIITest {
 	private EventItem			event;
 	private Vector<EventItem>	eventList		=	new Vector<EventItem>();
 	private Vector<Venue>		venueList		=	new Vector<Venue>();
-	private Vector<Item> 		itemList		=	new Vector<Item>();
-	
+
 
 	
 	
@@ -83,33 +80,6 @@ public class EMDBIITest {
 	 */
 	
 	
-	/*
-	@BeforeClass
-	public static void oneTimeSetUp(){
-	
-		db.eventDB().setup();
-		assertTrue(db.eventDB().verify());
-		
-		db.venueDB().setup();
-		assertTrue(db.venueDB().verify());
-		
-		db.budgetDB().setup();
-		assertTrue(db.budgetDB().verify());
-		
-		db.participantDB().setup();
-		assertTrue(db.participantDB().verify());
-		
-	}
-	
-	
-
-	
-	/*
-	@AfterClass
-	public static void oneTimeTearDown(){
-		db.destroy(false);
-	} */
-	
 	
 	@Before
 	public void setUp(){
@@ -130,13 +100,7 @@ public class EMDBIITest {
 	
 	@After
 	public void tearDown(){
-		
 		assertTrue(db.destroy(false));
-		
-		/*db.eventDB().drop();
-		db.venueDB().drop();
-		db.budgetDB().drop();
-		db.participantDB().drop();*/
 	}
 	
 
@@ -162,8 +126,6 @@ public class EMDBIITest {
 	
 	@Test
 	public void addAndRetrieveEvent() throws Exception {
-		
-		EMDBSettings.dMsg("\n\n<EMDB TEST> SAVE AND RETRIEVE EVENT");
 		
 		EventItem itemResult	=	null;
 		
@@ -227,8 +189,7 @@ public class EMDBIITest {
 	
 	@Test
 	public void addVenue(){
-		EMDBSettings.dMsg("\n\n<EMDB TEST> ADD VENUE FROM LOCAL LIST OF SIZE " + venueList.size());
-
+		
 		int oldDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
 		EMDBSettings.dMsg("<EMDB TEST> OLD DB VENUE SIZE " + oldDbVenueSize);
 		
@@ -443,7 +404,12 @@ public class EMDBIITest {
 	
 	
 	
-	
+	@Test
+	public void deleteParticipantsNone(){
+		
+		assertEquals(0, db.participantDB().deleteParticipantList(0));
+
+	}
 	
 	
 	
