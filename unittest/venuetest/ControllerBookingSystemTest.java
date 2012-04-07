@@ -104,13 +104,54 @@ public class ControllerBookingSystemTest {
 		Vector<Venue> searchResult = testObj.findVenueByName("icube");
 		
 		assertEquals(4, searchResult.size());
-		testObj.isInTheList(6);
-		testObj.isInTheList(19);
-		testObj.isInTheList(20);
-		testObj.isInTheList(21);
+		assertEquals(true, testObj.isInTheList(5));
+		assertEquals(true, testObj.isInTheList(19));
+		assertEquals(true, testObj.isInTheList(20));
+		assertEquals(true, testObj.isInTheList(21));
+		
+		modelTest.deleteDatabase();
 	}
 	
 	/*
-	 *  
+	 * Test searching (by capacity, cost, time slot) method and isInTheList method
 	 */
+	@Test
+	public void testSix()
+	{
+		ModelBookingSystem modelTest = new ModelBookingSystem("unit.sqlite");
+		
+		ControllerBookingSystem testObj = new ControllerBookingSystem();
+		
+		int[] capacityRange = {25, 30};
+		Vector<Venue> searchResult = testObj.findVenueByCriteria(null, capacityRange, null, 
+				ControllerBookingSystem.SearchCriteria.CAPACITY);
+		
+		assertEquals(2, searchResult.size());
+		assertEquals(true, testObj.isInTheList(12));
+		assertEquals(true, testObj.isInTheList(22));
+		assertEquals(false, testObj.isInTheList(5));
+		modelTest.deleteDatabase();
+	}
+	
+	/*
+	 * Test searching (by capacity, cost, time slot) method and isInTheList method
+	 */
+	@Test
+	public void testSeven()
+	{
+		ModelBookingSystem modelTest = new ModelBookingSystem("unit.sqlite");
+		
+		ControllerBookingSystem testObj = new ControllerBookingSystem();
+		
+		int[] costRange = {1000, 1200};
+		Vector<Venue> searchResult = testObj.findVenueByCriteria(costRange, null, null, 
+				ControllerBookingSystem.SearchCriteria.COST);
+		
+		assertEquals(3, searchResult.size());
+		assertEquals(true, testObj.isInTheList(1));
+		assertEquals(true, testObj.isInTheList(3));
+		assertEquals(true, testObj.isInTheList(2));
+		
+		modelTest.deleteDatabase();
+	}
 }
