@@ -623,7 +623,7 @@ public class ViewBudget extends Composite {
 							"Do you wish to export the choosen combination list?",
 							"Yes", "No");
 					String choice = (String) exportFile.open();
-					if(choice.equals("Yes") == false) {
+					if(choice == null || choice.equals("Yes") == false) {
 						ViewMain.ReturnView();
 					}
 					else {
