@@ -118,7 +118,7 @@ public class ViewBudget extends Composite {
 		ViewBudgetForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 
 		ViewBudgetForm.setBounds(0, 0, 700, 400);
-		ViewBudgetForm.getHead().setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
+		ViewBudgetForm.getHead().setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		formToolkit.paintBordersFor(ViewBudgetForm);
 		ViewBudgetForm.setText("Budget Optimization");
 		ViewBudgetForm.getBody().setLayout(new FormLayout());
@@ -155,6 +155,7 @@ public class ViewBudget extends Composite {
 		formToolkit.paintBordersFor(compButtonComposite);
 
 		btnStepInputDetails = new Button(compButtonComposite, SWT.NONE);
+		btnStepInputDetails.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnStepInputDetails.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = compStep1;
@@ -170,6 +171,7 @@ public class ViewBudget extends Composite {
 		btnStepInputDetails.setText("Step1: Input Details");
 
 		btnStepSelectCompulsoy = new Button(compButtonComposite, SWT.NONE);
+		btnStepSelectCompulsoy.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnStepSelectCompulsoy.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = compStep2;
@@ -185,6 +187,7 @@ public class ViewBudget extends Composite {
 		btnStepSelectCompulsoy.setText("Step2: Select Compulsoy");
 
 		btnStepConfirmResult = new Button(compButtonComposite, SWT.NONE);
+		btnStepConfirmResult.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnStepConfirmResult.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				stackLayout.topControl = compStep3;
@@ -209,37 +212,42 @@ public class ViewBudget extends Composite {
 		formToolkit.paintBordersFor(compStep1);
 
 		Label lblEventBudget = new Label(compStep1, SWT.NONE);
-		lblEventBudget.setBounds(10, 10, 82, 15);
+		lblEventBudget.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
+		lblEventBudget.setBounds(10, 10, 82, 25);
 		formToolkit.adapt(lblEventBudget, true, true);
 		lblEventBudget.setText("Event Budget: $");
 
 		compSatisfactionOption = new Composite(compStep1, SWT.NONE);
-		compSatisfactionOption.setBounds(10, 103, 148, 59);
+		compSatisfactionOption.setBounds(10, 113, 148, 59);
 		formToolkit.adapt(compSatisfactionOption);
 		formToolkit.paintBordersFor(compSatisfactionOption);
 
 		btnWithSatisfaction = new Button(compSatisfactionOption, SWT.RADIO);
+		btnWithSatisfaction.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		btnWithSatisfaction.setBounds(10, 38, 115, 16);
 		formToolkit.adapt(btnWithSatisfaction, true, true);
 		btnWithSatisfaction.setText("With Satisfaction");
 
 		btnWithoutSatisfaction = new Button(compSatisfactionOption, SWT.RADIO);
+		btnWithoutSatisfaction.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		btnWithoutSatisfaction.setSelection(true);
 		btnWithoutSatisfaction.setBounds(10, 16, 128, 16);
 		formToolkit.adapt(btnWithoutSatisfaction, true, true);
 		btnWithoutSatisfaction.setText("Without Satisfaction");
 
 		Label lblSelectSatisfactionOption = new Label(compSatisfactionOption, SWT.NONE);
+		lblSelectSatisfactionOption.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblSelectSatisfactionOption.setSize(148, 15);
 		formToolkit.adapt(lblSelectSatisfactionOption, true, true);
 		lblSelectSatisfactionOption.setText("Select Satisfaction Option:");
 
 		compTypeOption = new Composite(compStep1, SWT.NONE);
-		compTypeOption.setBounds(10, 31, 148, 66);
+		compTypeOption.setBounds(10, 41, 148, 66);
 		formToolkit.adapt(compTypeOption);
 		formToolkit.paintBordersFor(compTypeOption);
 
 		btnWithoutType = new Button(compTypeOption, SWT.RADIO);
+		btnWithoutType.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		btnWithoutType.setLocation(10, 20);
 		btnWithoutType.setSize(90, 16);
 		btnWithoutType.setSelection(true);
@@ -247,30 +255,36 @@ public class ViewBudget extends Composite {
 		btnWithoutType.setText("Without Type");
 
 		btnWithType = new Button(compTypeOption, SWT.RADIO);
+		btnWithType.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		btnWithType.setLocation(10, 43);
 		btnWithType.setSize(90, 16);
 		formToolkit.adapt(btnWithType, true, true);
 		btnWithType.setText("With Type");
 
 		Label lblSelectTypeOption = new Label(compTypeOption, SWT.NONE);
+		lblSelectTypeOption.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		lblSelectTypeOption.setSize(128, 15);
 		formToolkit.adapt(lblSelectTypeOption, true, true);
 		lblSelectTypeOption.setText("Select Type Option:");
 
 		txtBudget = new Text(compStep1, SWT.BORDER);
+		txtBudget.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtBudget.setBounds(96, 4, 76, 21);
 		formToolkit.adapt(txtBudget, true, true);
 
 		txtInputList = new Text(compStep1, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		txtInputList.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtInputList.setBounds(229, 55, 441, 129);
 		formToolkit.adapt(txtInputList, true, true);
 
 		Label lblInputList = new Label(compStep1, SWT.NONE);
-		lblInputList.setBounds(229, 34, 441, 15);
+		lblInputList.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		lblInputList.setBounds(229, 24, 441, 25);
 		formToolkit.adapt(lblInputList, true, true);
 		lblInputList.setText("Input format: [itemname] [price] [satisfaction] [type]");
 
 		btnResetInputList = new Button(compStep1, SWT.NONE);
+		btnResetInputList.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnResetInputList.setBounds(355, 229, 128, 25);
 		btnResetInputList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -281,6 +295,7 @@ public class ViewBudget extends Composite {
 		btnResetInputList.setText("Reset Input List");
 
 		btnConfirm = new Button(compStep1, SWT.NONE);
+		btnConfirm.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnConfirm.setBounds(512,  229, 75, 25);
 		btnConfirm.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -341,6 +356,7 @@ public class ViewBudget extends Composite {
 		btnConfirm.setText("Confirm");
 
 		btnImport = new Button(compStep1, SWT.NONE);
+		btnImport.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnImport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {				
 				FileDialog fsd = new FileDialog(new Shell());
@@ -358,12 +374,14 @@ public class ViewBudget extends Composite {
 		btnImport.setText("Import");
 
 		txtDirectory = new Text(compStep1, SWT.BORDER);
+		txtDirectory.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtDirectory.setEnabled(false);
 		txtDirectory.setEditable(false);
 		txtDirectory.setBounds(303, 190, 286, 21);
 		formToolkit.adapt(txtDirectory, true, true);
 
 		Button btnBack = new Button(compStep1, SWT.NONE);
+		btnBack.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnBack.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.ReturnView();
@@ -381,6 +399,7 @@ public class ViewBudget extends Composite {
 		formToolkit.paintBordersFor(compStep2);
 
 		tableListItem = new Table(compStep2, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);			
+		tableListItem.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		tableListItem.setHeaderVisible(true);
 
 		final TableEditor editor = new TableEditor(tableListItem);
@@ -505,11 +524,13 @@ public class ViewBudget extends Composite {
 		});
 
 		lblListOfItems = new Label(compStep2, SWT.NONE);
+		lblListOfItems.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblListOfItems.setBounds(25, 4, 234, 15);
 		formToolkit.adapt(lblListOfItems, true, true);
 		lblListOfItems.setText("Check the compulsory item(s):");
 
 		btnNext = new Button(compStep2, SWT.NONE);
+		btnNext.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnNext.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 
@@ -565,7 +586,8 @@ public class ViewBudget extends Composite {
 		btnNext.setText("Next");
 
 		lblNoteAllChanges = new Label(compStep2, SWT.NONE);
-		lblNoteAllChanges.setBounds(25, 213, 404, 15);
+		lblNoteAllChanges.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.BOLD));
+		lblNoteAllChanges.setBounds(25, 213, 478, 25);
 		formToolkit.adapt(lblNoteAllChanges, true, true);
 		lblNoteAllChanges.setText("Note: All changes to item quantity will be lost if you click back to Step 1!");
 
@@ -578,16 +600,19 @@ public class ViewBudget extends Composite {
 		formToolkit.paintBordersFor(compStep3);
 
 		txtResult = new Text(compStep3, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		txtResult.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtResult.setEditable(false);
 		txtResult.setBounds(10, 32, 664, 182);
 		formToolkit.adapt(txtResult, true, true);
 
 		dropdownSelection = new Combo(compStep3, SWT.READ_ONLY);
-		dropdownSelection.setBounds(377, 236, 126, 23);
+		dropdownSelection.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		dropdownSelection.setBounds(377, 220, 126, 23);
 		formToolkit.adapt(dropdownSelection);
 		formToolkit.paintBordersFor(dropdownSelection);
 
 		btnFinish = new Button(compStep3, SWT.NONE);
+		btnFinish.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnFinish.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				int option = dropdownSelection.getSelectionIndex();
@@ -618,16 +643,18 @@ public class ViewBudget extends Composite {
 				}
 			}
 		});
-		btnFinish.setBounds(530, 234, 140, 25);
+		btnFinish.setBounds(534, 220, 140, 25);
 		formToolkit.adapt(btnFinish, true, true);
 		btnFinish.setText("Finish and Export");
 
 		Label lblSelectAnCombination = new Label(compStep3, SWT.NONE);
-		lblSelectAnCombination.setBounds(250, 239, 121, 15);
+		lblSelectAnCombination.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		lblSelectAnCombination.setBounds(250, 223, 121, 15);
 		formToolkit.adapt(lblSelectAnCombination, true, true);
 		lblSelectAnCombination.setText("Select an combination:");
 
 		Label lblListOfAll = new Label(compStep3, SWT.NONE);
+		lblListOfAll.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblListOfAll.setBounds(10, 10, 249, 15);
 		formToolkit.adapt(lblListOfAll, true, true);
 		lblListOfAll.setText("List of all possible combination:");

@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 
 public class ErrorMessageDialog extends Dialog {
@@ -75,6 +76,7 @@ public class ErrorMessageDialog extends Dialog {
 		
 		//Prompt label
 		lblPrompt = new Label(mainComp, SWT.WRAP | SWT.CENTER);
+		lblPrompt.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		FormData fd_Prompt = new FormData();
 		fd_Prompt.top = new FormAttachment(30, 0);
 		fd_Prompt.left = new FormAttachment(20, 0);
@@ -86,6 +88,7 @@ public class ErrorMessageDialog extends Dialog {
 		 * 'OK' BUTTON EVENT LISTENER
 		 ***********************************************************/
 		btnOne = new Button(mainComp, SWT.NONE);
+		btnOne.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnOne.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -101,6 +104,7 @@ public class ErrorMessageDialog extends Dialog {
 		
 		//warning sign label
 		warningSign = new Label(mainComp, SWT.NONE);
+		warningSign.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		warningSign.setImage(Display.getDefault().getSystemImage(SWT.ICON_WARNING));
 		FormData fd_warningsign = new FormData();
 		fd_warningsign.top = new FormAttachment(25, 0);

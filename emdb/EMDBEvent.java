@@ -771,9 +771,9 @@ public class EMDBEvent extends EMDBBase{
 				this.dMsg("ADD TO ARCHIVE LIST");
 			}	
 			
-			this.connect();
+			
 			int result = this.commit();
-			this.disconnect();
+		
 			
 			return result;
 		}else{

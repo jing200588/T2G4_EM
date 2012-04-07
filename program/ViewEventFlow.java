@@ -68,10 +68,10 @@ public class ViewEventFlow extends Composite {
 	private Vector<EventFlowEntry> listEventFlow;
 	private Vector<EventFlowEntry> filterList;
 	private Vector<Integer> filterIndices;
-	private Text textFilePath;
-	private Text importTextFilePath;
+	private Text txtOuputTextFilePath;
+	private Text txtImportTextFilePath;
 	private Button btnFilter;
-	private Label textSave;
+	private Label txtSave;
 	private boolean isEntireListShowed;		// True if the table displays the whole list. False otherwise.
 	
 	/**
@@ -101,33 +101,33 @@ public class ViewEventFlow extends Composite {
 		Form VenueViewForm = toolkit.createForm(this);
 		VenueViewForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		VenueViewForm.setBounds(0, 0, 700, 400);
-		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
+		VenueViewForm.getHead().setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		toolkit.paintBordersFor(VenueViewForm);
 		VenueViewForm.setText("Event Flow");
 
 		VenueViewForm.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		Composite mainComposite = new Composite(VenueViewForm.getBody(), SWT.NONE);
+		Composite compMain = new Composite(VenueViewForm.getBody(), SWT.NONE);
 		
-		toolkit.adapt(mainComposite);
-		toolkit.paintBordersFor(mainComposite);
-		mainComposite.setLayout(new FormLayout());
+		toolkit.adapt(compMain);
+		toolkit.paintBordersFor(compMain);
+		compMain.setLayout(new FormLayout());
 		
-		Composite tableComposite = new Composite(mainComposite, SWT.NONE);
-		TableColumnLayout tcl_tableComposite = new TableColumnLayout();
-		tableComposite.setLayout(tcl_tableComposite);
-		FormData fd_tableComposite = new FormData();
-		fd_tableComposite.bottom = new FormAttachment(80, -13);
-		fd_tableComposite.right = new FormAttachment(80);
-		fd_tableComposite.top = new FormAttachment(0, 10);
-		fd_tableComposite.left = new FormAttachment(5);
-		tableComposite.setLayoutData(fd_tableComposite);
-		toolkit.adapt(tableComposite);
-		toolkit.paintBordersFor(tableComposite);
+		Composite compTableComposite = new Composite(compMain, SWT.NONE);
+		TableColumnLayout tcl_compTableComposite = new TableColumnLayout();
+		compTableComposite.setLayout(tcl_compTableComposite);
+		FormData fd_compTableComposite = new FormData();
+		fd_compTableComposite.bottom = new FormAttachment(80, -13);
+		fd_compTableComposite.right = new FormAttachment(80);
+		fd_compTableComposite.top = new FormAttachment(0, 10);
+		fd_compTableComposite.left = new FormAttachment(5);
+		compTableComposite.setLayoutData(fd_compTableComposite);
+		toolkit.adapt(compTableComposite);
+		toolkit.paintBordersFor(compTableComposite);
 		
-		tableViewEventFlow = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewEventFlow = new TableViewer(compTableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableEventFlow = tableViewEventFlow.getTable();
-		tableEventFlow.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		tableEventFlow.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
 		tableEventFlow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -186,11 +186,11 @@ public class ViewEventFlow extends Composite {
 		toolkit.paintBordersFor(tableEventFlow);
 		
 		TableViewerColumn tableViewerColumnStartDT = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColStartDateTime = tableViewerColumnStartDT.getColumn();
-		ColStartDateTime.setAlignment(SWT.CENTER);
-		tcl_tableComposite.setColumnData(ColStartDateTime, new ColumnWeightData(15));
+		TableColumn tableColumnStartDateTime = tableViewerColumnStartDT.getColumn();
+		tableColumnStartDateTime.setAlignment(SWT.CENTER);
+		tcl_compTableComposite.setColumnData(tableColumnStartDateTime, new ColumnWeightData(15));
 		//ColStartDateTime.pack();
-		ColStartDateTime.setText(STARTDATETIME);
+		tableColumnStartDateTime.setText(STARTDATETIME);
 		tableViewerColumnStartDT.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -201,11 +201,11 @@ public class ViewEventFlow extends Composite {
 		});
 		
 		TableViewerColumn tableViewerColumnEndDT = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColEndDateTime = tableViewerColumnEndDT.getColumn();
-		ColEndDateTime.setAlignment(SWT.CENTER);
-		tcl_tableComposite.setColumnData(ColEndDateTime, new ColumnWeightData(15));
+		TableColumn tableColumnEndDateTime = tableViewerColumnEndDT.getColumn();
+		tableColumnEndDateTime.setAlignment(SWT.CENTER);
+		tcl_compTableComposite.setColumnData(tableColumnEndDateTime, new ColumnWeightData(15));
 		//ColEndDateTime.pack();
-		ColEndDateTime.setText(ENDDATETIME);
+		tableColumnEndDateTime.setText(ENDDATETIME);
 		tableViewerColumnEndDT.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -216,9 +216,9 @@ public class ViewEventFlow extends Composite {
 		});
 		
 		TableViewerColumn tableViewerColumnActivity = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColActivity = tableViewerColumnActivity.getColumn();
-		tcl_tableComposite.setColumnData(ColActivity, new ColumnWeightData(20));
-		ColActivity.setText(ACTIVITY);
+		TableColumn tableColumnActivity = tableViewerColumnActivity.getColumn();
+		tcl_compTableComposite.setColumnData(tableColumnActivity, new ColumnWeightData(20));
+		tableColumnActivity.setText(ACTIVITY);
 		tableViewerColumnActivity.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -228,9 +228,9 @@ public class ViewEventFlow extends Composite {
 		});
 		
 		TableViewerColumn tableViewerColumnVenue = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColVenue = tableViewerColumnVenue.getColumn();
-		tcl_tableComposite.setColumnData(ColVenue, new ColumnWeightData(20));
-		ColVenue.setText(VENUE);
+		TableColumn tableColumnVenue = tableViewerColumnVenue.getColumn();
+		tcl_compTableComposite.setColumnData(tableColumnVenue, new ColumnWeightData(20));
+		tableColumnVenue.setText(VENUE);
 		tableViewerColumnVenue.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -240,9 +240,9 @@ public class ViewEventFlow extends Composite {
 		});
 		
 		TableViewerColumn tableViewerColumnNote = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
-		TableColumn ColNote = tableViewerColumnNote.getColumn();
-		tcl_tableComposite.setColumnData(ColNote, new ColumnWeightData(20));
-		ColNote.setText(NOTE);
+		TableColumn tableColumnNote = tableViewerColumnNote.getColumn();
+		tcl_compTableComposite.setColumnData(tableColumnNote, new ColumnWeightData(20));
+		tableColumnNote.setText(NOTE);
 		tableViewerColumnNote.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -251,7 +251,7 @@ public class ViewEventFlow extends Composite {
 			}
 		});
 		
-		Button btnBack = new Button(mainComposite, SWT.NONE);
+		Button btnBack = new Button(compMain, SWT.NONE);
 		btnBack.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		FormData fd_btnBack = new FormData();
 		fd_btnBack.width = 100;
@@ -282,13 +282,13 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(btnBack, true, true);
 		btnBack.setText("Back");
 		
-		Button btnAdd = new Button(mainComposite, SWT.NONE);
+		Button btnAdd = new Button(compMain, SWT.NONE);
 		btnAdd.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		fd_btnBack.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
 		fd_btnBack.right = new FormAttachment(btnAdd, 0, SWT.RIGHT);
 		FormData fd_btnAdd = new FormData();
 		fd_btnAdd.right = new FormAttachment(95);
-		fd_btnAdd.left = new FormAttachment(tableComposite, 10);
+		fd_btnAdd.left = new FormAttachment(compTableComposite, 10);
 		fd_btnAdd.width = 100;
 		fd_btnAdd.top = new FormAttachment(0, 10);
 //		fd_btnAdd.left = new FormAttachment(0, 571);
@@ -317,34 +317,36 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(btnAdd, true, true);
 		btnAdd.setText("Add");
 		
-		Composite composite = new Composite(mainComposite, SWT.NONE);
-		FormData fd_composite = new FormData();
-		fd_composite.top = new FormAttachment(tableComposite);
-		fd_composite.bottom = new FormAttachment(100);
-		fd_composite.left = new FormAttachment(tableComposite, 0, SWT.LEFT);
-		fd_composite.right = new FormAttachment(80, 10);
-		composite.setLayoutData(fd_composite);
-		toolkit.adapt(composite);
-		toolkit.paintBordersFor(composite);
-		composite.setLayout(new GridLayout(4, false));
+		Composite compBelow = new Composite(compMain, SWT.NONE);
+		FormData fd_compBelow = new FormData();
+		fd_compBelow.top = new FormAttachment(compTableComposite);
+		fd_compBelow.bottom = new FormAttachment(100);
+		fd_compBelow.left = new FormAttachment(compTableComposite, 0, SWT.LEFT);
+		fd_compBelow.right = new FormAttachment(80, 10);
+		compBelow.setLayoutData(fd_compBelow);
+		toolkit.adapt(compBelow);
+		toolkit.paintBordersFor(compBelow);
+		compBelow.setLayout(new GridLayout(4, false));
 		
-		textSave = new Label(composite, SWT.NONE);
-		textSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 4, 1));
-		textSave.setText("The list is not saved.");
+		txtSave = new Label(compBelow, SWT.NONE);
+		txtSave.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		txtSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 4, 1));
+		txtSave.setText("The list is not saved.");
 		
-		Label lblInput = new Label(composite, SWT.NONE);
-		lblInput.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		Label lblInput = new Label(compBelow, SWT.NONE);
+		lblInput.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
 		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblInput.setText("Input file:");
 		toolkit.adapt(lblInput, true, true);
 		
-		importTextFilePath = new Text(composite, SWT.BORDER);
-		importTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		toolkit.adapt(importTextFilePath, true, true);
+		txtImportTextFilePath = new Text(compBelow, SWT.BORDER);
+		txtImportTextFilePath.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		txtImportTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		toolkit.adapt(txtImportTextFilePath, true, true);
 		
-		Button button = new Button(composite, SWT.NONE);
-		button.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
-		button.addSelectionListener(new SelectionAdapter() {
+		Button btnBrowseTop = new Button(compBelow, SWT.NONE);
+		btnBrowseTop.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
+		btnBrowseTop.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fileDialog = new FileDialog(new Shell());
@@ -353,23 +355,23 @@ public class ViewEventFlow extends Composite {
 				
 				String filePath = fileDialog.open();
 				if(filePath != null)
-					importTextFilePath.setText(filePath);
+					txtImportTextFilePath.setText(filePath);
 			}
 		});
-		GridData gd_button = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_button.widthHint = 60;
-		button.setLayoutData(gd_button);
-		button.setText("Browse");
-		toolkit.adapt(button, true, true);
+		GridData gd_btnBrowseTop = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnBrowseTop.widthHint = 60;
+		btnBrowseTop.setLayoutData(gd_btnBrowseTop);
+		btnBrowseTop.setText("Browse");
+		toolkit.adapt(btnBrowseTop, true, true);
 		
-		Button btnImport = new Button(composite, SWT.NONE);
-		btnImport.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
-		btnImport.addSelectionListener(new SelectionAdapter() {
+		Button btnImportTop = new Button(compBelow, SWT.NONE);
+		btnImportTop.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
+		btnImportTop.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try
 				{
-					if(importTextFilePath.getText().equals("") == true)
+					if(txtImportTextFilePath.getText().equals("") == true)
 						throw new Exception("You have not specified the path of the imported file");
 					
 					boolean overwrite = false;
@@ -390,7 +392,7 @@ public class ViewEventFlow extends Composite {
 							overwrite = true;
 					}
 					
-					Vector<EventFlowEntry> newList = importCSVFile(importTextFilePath.getText());
+					Vector<EventFlowEntry> newList = importCSVFile(txtImportTextFilePath.getText());
 					
 					if(overwrite == true)
 					{
@@ -415,27 +417,28 @@ public class ViewEventFlow extends Composite {
 				}
 			}
 		});
-		GridData gd_btnImport = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnImport.widthHint = 60;
-		btnImport.setLayoutData(gd_btnImport);
-		btnImport.setText("Import");
-		toolkit.adapt(btnImport, true, true);	
+		GridData gd_btnImportTop = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnImportTop.widthHint = 60;
+		btnImportTop.setLayoutData(gd_btnImportTop);
+		btnImportTop.setText("Import");
+		toolkit.adapt(btnImportTop, true, true);	
 		
-		Label lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		toolkit.adapt(lblNewLabel, true, true);
-		lblNewLabel.setText("Output file:");
+		Label lblOutputfile = new Label(compBelow, SWT.NONE);
+		lblOutputfile.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		toolkit.adapt(lblOutputfile, true, true);
+		lblOutputfile.setText("Output file:");
 		
-		textFilePath = new Text(composite, SWT.BORDER);
-		textFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		toolkit.adapt(textFilePath, true, true);
+		txtOuputTextFilePath = new Text(compBelow, SWT.BORDER);
+		txtOuputTextFilePath.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		txtOuputTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		toolkit.adapt(txtOuputTextFilePath, true, true);
 
-		Button btnNewButton_1 = new Button(composite, SWT.NONE);
-		btnNewButton_1.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
-		GridData gd_btnNewButton_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnNewButton_1.widthHint = 60;
-		btnNewButton_1.setLayoutData(gd_btnNewButton_1);
-		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+		Button btnBrowseBottom = new Button(compBelow, SWT.NONE);
+		btnBrowseBottom.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
+		GridData gd_btnBrowseBottom = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnBrowseBottom.widthHint = 60;
+		btnBrowseBottom.setLayoutData(gd_btnBrowseBottom);
+		btnBrowseBottom.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fileDialog = new FileDialog(new Shell());
@@ -447,24 +450,24 @@ public class ViewEventFlow extends Composite {
 				{
 					if (filePath.toLowerCase().endsWith(".csv") == false)
 						filePath += ".csv";
-					textFilePath.setText(filePath);
+					txtOuputTextFilePath.setText(filePath);
 				}
 			}
 		});
-		toolkit.adapt(btnNewButton_1, true, true);
-		btnNewButton_1.setText("Browse");
+		toolkit.adapt(btnBrowseBottom, true, true);
+		btnBrowseBottom.setText("Browse");
 		
-		Button btnExport = new Button(composite, SWT.NONE);
-		btnExport.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
-		GridData gd_btnExport = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnExport.widthHint = 60;
-		btnExport.setLayoutData(gd_btnExport);
-		btnExport.addSelectionListener(new SelectionAdapter() {
+		Button btnExportBottom = new Button(compBelow, SWT.NONE);
+		btnExportBottom.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
+		GridData gd_btnExportBottom = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnExportBottom.widthHint = 60;
+		btnExportBottom.setLayoutData(gd_btnExportBottom);
+		btnExportBottom.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try 
 				{
-					if(textFilePath.getText().equals("") == true)
+					if(txtOuputTextFilePath.getText().equals("") == true)
 						throw new Exception("You have not specified the path of the exported file");
 					
 					Vector<EventFlowEntry> exportList = listEventFlow;
@@ -482,7 +485,7 @@ public class ViewEventFlow extends Composite {
 							exportList = filterList;
 					}
 					
-					CSVWriter writer = new CSVWriter(new FileWriter(textFilePath.getText()));
+					CSVWriter writer = new CSVWriter(new FileWriter(txtOuputTextFilePath.getText()));
 					
 					writer.writeNext(COLUMN_PROPS);
 					
@@ -516,14 +519,14 @@ public class ViewEventFlow extends Composite {
 				}
 			}
 		});
-		toolkit.adapt(btnExport, true, true);
-		btnExport.setText("Export");
+		toolkit.adapt(btnExportBottom, true, true);
+		btnExportBottom.setText("Export");
 		
 		// Set input for table viewer at the beginning
 		tableViewEventFlow.setInput(listEventFlow);
 		toolkit.paintBordersFor(tableEventFlow);	
 		
-		Button btnSave = new Button(mainComposite, SWT.NONE);
+		Button btnSave = new Button(compMain, SWT.NONE);
 		btnSave.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		fd_btnBack.top = new FormAttachment(btnSave, 10);
 		
@@ -545,13 +548,13 @@ public class ViewEventFlow extends Composite {
 		btnSave.setLayoutData(fd_btnSave);
 		toolkit.adapt(btnSave, true, true);
 		btnSave.setText("Save");
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
+		new Label(compBelow, SWT.NONE);
+		new Label(compBelow, SWT.NONE);
+		new Label(compBelow, SWT.NONE);
+		new Label(compBelow, SWT.NONE);
 		
 		
-		btnFilter = new Button(mainComposite, SWT.NONE);
+		btnFilter = new Button(compMain, SWT.NONE);
 		btnFilter.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnFilter.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -657,15 +660,15 @@ public class ViewEventFlow extends Composite {
 		VenueViewForm.getHead().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		VenueViewForm.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		lblInput.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		button.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnImport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		mainComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnBrowseTop.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnImportTop.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		compMain.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnBack.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		compBelow.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnAdd.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnNewButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		btnExport.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnBrowseBottom.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		btnExportBottom.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblOutputfile.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnFilter.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 			
@@ -725,7 +728,7 @@ public class ViewEventFlow extends Composite {
 	{
 		MyDateTime currentTime = MyDateTime.getCurrentDateTime();
 		
-		textSave.setText("Last saved by " + currentTime.getDateRepresentation() + " " + 
+		txtSave.setText("Last saved by " + currentTime.getDateRepresentation() + " " + 
 				currentTime.getTimeRepresentation());
 	}
 	

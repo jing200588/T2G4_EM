@@ -47,7 +47,7 @@ public class LoginEmailDialog extends Dialog {
 	 */
 	public LoginEmailDialog(Shell parent, EventItem item) {
 		super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		setText("SWT Dialog");
+		setText("Login to NUSNET");
 		currentEvent = item;
 	}
 
@@ -89,7 +89,7 @@ public class LoginEmailDialog extends Dialog {
 		GridData gd_lblHeader = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_lblHeader.widthHint = 140;
 		lblHeader.setLayoutData(gd_lblHeader);
-		lblHeader.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.BOLD));
+		lblHeader.setFont(SWTResourceManager.getFont("Maiandra GD", 11, SWT.BOLD));
 		lblHeader.setText("Login to NUSNET");
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
@@ -97,39 +97,43 @@ public class LoginEmailDialog extends Dialog {
 	    
 	    
 	    Label lblDomains = new Label(composite, SWT.NONE);
-	    lblDomains.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+	    lblDomains.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 	    lblDomains.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 	    lblDomains.setText("Domain:");   
 	    
 	    String[] domains = new String[]{"NUSSTU", "NUSSTF"};
 	    final Combo comboDomain = new Combo(composite, SWT.VERTICAL| SWT.BORDER  |SWT.READ_ONLY);
+	    comboDomain.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 	    comboDomain.setItems(domains);
 	    GridData gd_comboDomain = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 	    gd_comboDomain.widthHint = 188;
 	    comboDomain.setLayoutData(gd_comboDomain);
 	    
 	    Label lblUsername = new Label(composite, SWT.NONE);
-	    lblUsername.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+	    lblUsername.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 	    lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 	    lblUsername.setText("Username:");
 	    
 	    txtUsername = new Text(composite, SWT.BORDER);
+	    txtUsername.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 	    GridData gd_txtUsername = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 	    gd_txtUsername.widthHint = 188;
 	    txtUsername.setLayoutData(gd_txtUsername);
 		
 		lblPassword = new Label(composite, SWT.NONE);
-	    lblPassword.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+	    lblPassword.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblPassword.setText("Password");
 		
 		txtPassword = new Text(composite, SWT.BORDER);
+		txtPassword.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtPassword.setEchoChar('*');
 		GridData gd_txtPassword = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtPassword.widthHint = 188;
 		txtPassword.setLayoutData(gd_txtPassword);
 		
 		btnLogin = new Button(shellMain, SWT.NONE);
+		btnLogin.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnLogin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				loginSuccessful = false; //alway reset to false
@@ -205,6 +209,7 @@ public class LoginEmailDialog extends Dialog {
 		btnLogin.setText("Login");
 		
 		btnCancel = new Button(shellMain, SWT.NONE);
+		btnCancel.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				shellMain.close();
