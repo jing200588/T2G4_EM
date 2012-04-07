@@ -406,7 +406,9 @@ public class EMDBIITest {
 	
 	@Test
 	public void deleteParticipantsNone(){
+		
 		assertEquals(0, db.participantDB().deleteParticipantList(0));
+
 	}
 	
 	
