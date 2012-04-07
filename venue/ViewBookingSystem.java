@@ -386,6 +386,10 @@ public class ViewBookingSystem extends Composite {
 															TimeChoiceButton.setEnabled(false);
 															CapacityChoiceButton.setEnabled(false);
 															
+															// Set enabled for capacityCompo and costCompo
+															setEnabledCapacityCompo(true);
+															setEnabledCostCompo(true);
+															
 															// Display the following composites in order if they are chosen by the user
 															if(flagTimeSlotChoice == true)
 															{
@@ -827,6 +831,10 @@ public class ViewBookingSystem extends Composite {
 										btnBackCriteria.addSelectionListener(new SelectionAdapter() {
 											@Override
 											public void widgetSelected(SelectionEvent e) {
+												// Set enabled for the capacityCompo and costCompo
+												setEnabledCapacityCompo(true);
+												setEnabledCostCompo(true);
+												
 												int previousCompo = hasPreviousCriteria();
 												if(previousCompo >= 0)
 													currentCompo = previousCompo;
@@ -842,7 +850,7 @@ public class ViewBookingSystem extends Composite {
 												compoCriteriaFilled.layout();
 												btnNextCriteria.setText("Next");
 												btnNextCriteria.setEnabled(true);
-												if(hasNextCriteria() < 0)
+												if(hasPreviousCriteria() < 0)
 													btnBackCriteria.setEnabled(false);
 												
 												btnFindCriteria.setEnabled(false);
@@ -862,6 +870,25 @@ public class ViewBookingSystem extends Composite {
 									public void widgetSelected(SelectionEvent e) {
 										try
 										{
+											if(btnNextCriteria.getText().equals("Edit") == true)
+											{
+												// This is the last composite the user has to type in
+												btnFindCriteria.setEnabled(false);
+												btnNextCriteria.setText("Confirm");
+												switch(currentCompo)
+												{
+													case 0:
+														dtSearchCriteria.setEnabled(true);
+														break;
+													case 1:
+														setEnabledCapacityCompo(true);
+														break;
+													case 2:
+														setEnabledCostCompo(true);
+												}
+												return;
+											}
+											
 											// First read input from the user
 											switch(currentCompo)
 											{
@@ -880,7 +907,19 @@ public class ViewBookingSystem extends Composite {
 											{
 												// This is the last composite the user has to type in
 												btnFindCriteria.setEnabled(true);
-												btnNextCriteria.setEnabled(false);
+												btnNextCriteria.setText("Edit");
+												switch(currentCompo)
+												{
+													case 0:
+														dtSearchCriteria.setEnabled(false);
+														break;
+													case 1:
+														setEnabledCapacityCompo(false);
+														break;
+													case 2:
+														setEnabledCostCompo(false);
+												}
+												return;
 											}
 											
 											int nextCompo = hasNextCriteria();
@@ -1269,5 +1308,25 @@ public class ViewBookingSystem extends Composite {
 			dtSearchResult.displayInputTimeSlot(timeSlotChoiceInput);
 			hasTimeSlotChecked = true;
 		}
+	}
+	
+	/**
+	 * Enable / disable components in the capacityCompo
+	 * @param isEnabled
+	 */
+	private void setEnabledCapacityCompo(boolean isEnabled)
+	{
+		lowerBoundCapacityText.setEnabled(isEnabled);
+		upperBoundCapacityText.setEnabled(isEnabled);
+	}
+	
+	/**
+	 * Enable / disable components in the costCompo
+	 * @param isEnabled
+	 */
+	private void setEnabledCostCompo(boolean isEnabled)
+	{
+		lowerBoundCostText.setEnabled(isEnabled);
+		upperBoundCostText.setEnabled(isEnabled);
 	}
 }
