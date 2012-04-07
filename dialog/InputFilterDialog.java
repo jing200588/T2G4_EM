@@ -116,7 +116,7 @@ public class InputFilterDialog extends Dialog {
 						TwoChoiceDialog warning = new TwoChoiceDialog(new Shell(), "Warning",
 								"You have not chosen any criterion yet! Do you want to continue?", "Yes", "No");
 						String choice = (String) warning.open();
-						if(choice.equals("Yes") == false)
+						if(choice == null || choice.equals("Yes") == false)
 							return;
 						else
 							output = null;
