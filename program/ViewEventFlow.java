@@ -506,7 +506,7 @@ public class ViewEventFlow extends Composite {
 					}
 
 					writer.close();
-					new ErrorMessageDialog(new Shell(), "The file was exported successfully!").open();  		
+					new ErrorMessageDialog(new Shell(), "The file was exported successfully!", "Success").open();  		
 				} 
 				catch (Exception exception) 
 				{
@@ -792,11 +792,9 @@ public class ViewEventFlow extends Composite {
 				// Read the activity name
 				String activityName = HelperFunctions.convertMultiToSingleLine(
 						allRows.get(index)[2]);
-
 				// Read the user's note
 				String note = HelperFunctions.convertMultiToSingleLine(
 						allRows.get(index)[4]);
-
 				// Read the venue
 				String venueName = HelperFunctions.convertMultiToSingleLine(
 						allRows.get(index)[3]);
