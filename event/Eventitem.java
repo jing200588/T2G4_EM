@@ -42,7 +42,7 @@ public class EventItem {
 		eventBviList = new Vector<BookedVenueInfo>();
 		expired = false;
 	//	_participant_list = new Vector<Participant>();
-		eventParticipantList.add(new Participant("Jonathan", "A1234567", "65554493", "chuichui@gmail.com", "Block 123 Tamp street 81", "-"));
+	//	eventParticipantList.add(new Participant("Jonathan", "A1234567", "65554493", "chuichui@gmail.com", "Block 123 Tamp street 81", "-"));
 		//System.out.println("hello " + _participant_list.size());
 	}
 	

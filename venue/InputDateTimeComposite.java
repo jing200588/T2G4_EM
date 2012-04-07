@@ -64,22 +64,26 @@ public class InputDateTimeComposite extends Composite {
 		composite.setLayout(new GridLayout(4, false));
 		
 		Label label_1 = new Label(composite, SWT.NONE);
+		label_1.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		label_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		label_1.setText("From:");
 		toolkit.adapt(label_1, true, true);
 		
 		dateTimeFrom = new DateTime(composite, SWT.DROP_DOWN);
+		dateTimeFrom.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
 		dateTimeFrom.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		dateTimeFrom.setEnabled(false);
 		toolkit.adapt(dateTimeFrom);
 		toolkit.paintBordersFor(dateTimeFrom);
 		
 		Label label_2 = new Label(composite, SWT.NONE);
+		label_2.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		label_2.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		label_2.setText("at");
 		toolkit.adapt(label_2, true, true);
 		
 		comboTimeFrom = new Combo(composite, SWT.READ_ONLY);
+		comboTimeFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		comboTimeFrom.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboTimeFrom.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -93,22 +97,26 @@ public class InputDateTimeComposite extends Composite {
 		toolkit.paintBordersFor(comboTimeFrom);
 		
 		Label label_3 = new Label(composite, SWT.NONE);
+		label_3.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		label_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		label_3.setText("To:");
 		toolkit.adapt(label_3, true, true);
 		
 		dateTimeTo = new DateTime(composite, SWT.DROP_DOWN);
+		dateTimeTo.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
 		dateTimeTo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		dateTimeTo.setEnabled(false);
 		toolkit.adapt(dateTimeTo);
 		toolkit.paintBordersFor(dateTimeTo);
 		
 		Label label_4 = new Label(composite, SWT.NONE);
+		label_4.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		label_4.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		label_4.setText("at");
 		toolkit.adapt(label_4, true, true);
 		
 		comboTimeTo = new Combo(composite, SWT.READ_ONLY);
+		comboTimeTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		comboTimeTo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboTimeTo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -122,6 +130,7 @@ public class InputDateTimeComposite extends Composite {
 		toolkit.paintBordersFor(comboTimeTo);
 		
 		Label label = new Label(this, SWT.NONE);
+		label.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		FormData fd_label = new FormData();
 		fd_label.top = new FormAttachment(0);
 		fd_label.left = new FormAttachment(0, 5);

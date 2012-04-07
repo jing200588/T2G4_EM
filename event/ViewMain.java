@@ -16,6 +16,7 @@ import venue.*;
 
 import com.ibm.icu.text.Collator;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -25,6 +26,11 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -39,6 +45,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.layout.GridLayout;
@@ -69,9 +76,12 @@ public class ViewMain extends ApplicationWindow {
 	private Action serverControl;
 	private static Composite mainComposite, leftComp, rightComp;
 	private static Table eventListTable, expiredTable;
-	private static Vector<EventItem> eventList, expiredEventlist;
+	private static Vector<EventItem> eventList, expiredEventList;
 	private static TableColumn eventTC1, eventTC2;
     private static TableColumn expiredEventTC1, expiredEventTC2;
+    private static TableViewerColumn eventTVC1, eventTVC2;
+    private static TableViewerColumn expiredEventTVC1, expiredEventTVC2;
+    private static TableViewer tableViewerEventList, tableViewerExpiredEventList;
 	private static StackLayout layout = new StackLayout();
     private static ViewEvent viewPage;
     private static ViewHomepage homePage;
@@ -79,6 +89,7 @@ public class ViewMain extends ApplicationWindow {
    
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
     private final EMSService server;
+    private Table table;
     
 	/**
 	 * Create the application window.
@@ -121,7 +132,8 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Deletes the selected item from the database and set the current page to homePage
 	 */
 	public static void DeleteItem() {
-		eventListTable.remove(eventListTable.getSelectionIndices());
+		//eventListTable.remove(eventListTable.getSelectionIndices());
+		tableViewerEventList.refresh();
 		Homepage();
 	}
 	
@@ -154,7 +166,7 @@ public class ViewMain extends ApplicationWindow {
 	 * Description: Pulls the list from ModelEvent and updates the eventListTable in leftComp
 	 */
 	public static void UpdateTable () {
-		eventList = ModelEvent.PullList();
+	/*	eventList = ModelEvent.PullList();
 
 		TableItem item;
 		int i;
@@ -175,7 +187,8 @@ public class ViewMain extends ApplicationWindow {
 			item = new TableItem(eventListTable,SWT.NONE);
 			item.setText(eventList.get(i).getName());
 			item.setText(1,eventList.get(i).getStartDateTime().getDateRepresentation());
-		}
+		}*/
+		tableViewerEventList.refresh();
 	}
 	
 	/************************************************************
@@ -184,8 +197,8 @@ public class ViewMain extends ApplicationWindow {
 	/**
 	 * Description: Pulls the expired list from ModelEvent and updates the expiredEventTable in leftComp
 	 */
-	public static void UpdateExpiredTable() {
-		expiredEventlist = ModelEvent.PullExpiredList();
+/*	public static void UpdateExpiredTable() {
+		expiredEventList = ModelEvent.PullExpiredList();
 
 		TableItem item;
 		int i;
@@ -195,13 +208,13 @@ public class ViewMain extends ApplicationWindow {
 		else
 			i = expiredTable.getItemCount() + 1;		//add the last item into table
 		
-		for (; i<expiredEventlist.size(); i++) {			
+		for (; i<expiredEventList.size(); i++) {			
 			item = new TableItem(expiredTable,SWT.NONE);
-			item.setText(expiredEventlist.get(i).getName());
-			item.setText(1,expiredEventlist.get(i).getEndDateTime().getDateRepresentation());
+			item.setText(expiredEventList.get(i).getName());
+			item.setText(1,expiredEventList.get(i).getEndDateTime().getDateRepresentation());
 		}
 	}
-	
+	*/
 	/************************************************************
 	 * SHIFT EXPIRED
 	 ***********************************************************/
@@ -210,23 +223,30 @@ public class ViewMain extends ApplicationWindow {
 	 * It will then update the eventListTable and expiredListTable by calling their respective update functions.
 	 */
 	public static void ShiftExpired() {
-		expiredEventlist = ModelEvent.PullExpiredList();
-		int prevExpIndex = expiredEventlist.size();
+	//	expiredEventlist = ModelEvent.PullExpiredList();
+		int prevExpIndex = expiredEventList.size();
 		
 		for (int i=0; i<eventList.size(); i++) {
 			if (eventList.get(i).isExpired()) {
-				expiredEventlist.add(eventList.get(i));
+				expiredEventList.add(eventList.get(i));
 			}
 		}
 		
-		ModelEvent.UpdateExpiredList(expiredEventlist.subList(prevExpIndex, expiredEventlist.size()));
+		List<EventItem> subList = new Vector<EventItem>(expiredEventList.subList(prevExpIndex, expiredEventList.size()));
+		ModelEvent.UpdateExpiredList(subList);
 
-		eventListTable.removeAll();
+	/*	eventListTable.removeAll();
 		expiredTable.removeAll();
 		UpdateTable();
 		UpdateExpiredTable();
 		System.out.println("RAN");
-		
+		*/
+		while (!subList.isEmpty()) {
+			eventList.remove(subList.get(0));
+			subList.remove(0);
+		}
+		tableViewerEventList.refresh();
+		tableViewerExpiredEventList.refresh();
 	}
 	
 	/************************************************************
@@ -436,7 +456,7 @@ public class ViewMain extends ApplicationWindow {
 			btnCreateEvent.setLayoutData(gd_btnCreateEvent);
 			
 			//Column Resize with table fix
-			 leftComp.addControlListener(new ControlAdapter() {
+/*			 leftComp.addControlListener(new ControlAdapter() {
 				    public void controlResized(ControlEvent e) {
 				      Rectangle area = leftComp.getClientArea();
 				      Point preferredSize = eventListTable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -457,7 +477,7 @@ public class ViewMain extends ApplicationWindow {
 				    
 			 });
 			
-			
+	*/		
 			TabFolder tabFolder = new TabFolder(leftComp, SWT.NONE);
 			tabFolder.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 			GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
@@ -469,11 +489,121 @@ public class ViewMain extends ApplicationWindow {
 			TabItem tbtmUpcomingEvents = new TabItem(tabFolder, SWT.NONE);
 			tbtmUpcomingEvents.setText("    Upcoming Events     ");
 			
+			//Event List Table
+			eventList = ModelEvent.PullList();
+			expiredEventList = ModelEvent.PullExpiredList();
+			
+			Composite tableComposite = new Composite(tabFolder, SWT.NONE);
+			TableColumnLayout tcl_tableComposite = new TableColumnLayout();
+			tableComposite.setLayout(tcl_tableComposite);
+			tbtmUpcomingEvents.setControl(tableComposite);
+			
+			tableViewerEventList = new TableViewer(tableComposite, SWT.BORDER | SWT.FULL_SELECTION);
+			eventListTable = tableViewerEventList.getTable();
+			eventListTable.setTouchEnabled(true);
+			eventListTable.getHorizontalBar().setVisible(true);
+			eventListTable.getHorizontalBar().setEnabled(false);
+			eventListTable.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+			
+			eventTVC1 = new TableViewerColumn(tableViewerEventList, SWT.LEFT);
+			eventTVC2 = new TableViewerColumn(tableViewerEventList,SWT.CENTER);
+			eventTVC1.getColumn().setText("Event Title");
+		    eventTVC2.getColumn().setText("Start Date");
+			
+		    tcl_tableComposite.setColumnData(eventTVC1.getColumn(), new ColumnWeightData(50));
+			tcl_tableComposite.setColumnData(eventTVC2.getColumn(), new ColumnWeightData(30));
 
-			//Event List Table tooltip
-			eventListTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			//Populating the table.
+			tableViewerEventList.setContentProvider(ArrayContentProvider.getInstance());
+			eventTVC1.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element)
+				{			
+					EventItem eItem = (EventItem) element;
+					return eItem.getName();
+				}
+				
+			});
+			
+			eventTVC2.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element)
+				{			
+					EventItem eItem = (EventItem) element;
+					return eItem.getStartDateTime().getDateRepresentation();
+				}
+				
+			});
+			
+			tableViewerEventList.setInput(eventList);
+	
+			//Event List Table MouseOver Tooltip
+			eventListTable.addMouseTrackListener(new MouseTrackAdapter() {
+				@Override
+				public void mouseHover(MouseEvent e) {
+					 TableItem item = eventListTable.getItem(new Point(e.x, e.y));
+					 if (item != null)
+						 eventListTable.setToolTipText(item.getText(0));
+				}
+			});
+			
+			
+			/************************************************************
+			 * EVENT LIST TABLE ITEM SELECTION EVENT LISTENER
+			 ***********************************************************/
+			eventListTable.addListener(SWT.Selection, new Listener() {
+		     public void handleEvent(Event event) {
+
+		      //dispose of all children that currently is in rightComp
+				if (rightComp != null && !rightComp.isDisposed()) {
+				Object[] children = rightComp.getChildren();
+				for (int i=0; i<children.length; i++)
+					((Composite)children[i]).dispose();
+				}
+			
+				viewPage = new ViewEvent(rightComp, SWT.NONE, eventList.get(eventListTable.getSelectionIndex()));
+		        layout.topControl = viewPage;
+				rightComp.layout(true);
+		     }
+			});
+			
+			Menu eventListTableMenu = new Menu(eventListTable);
+			eventListTable.setMenu(eventListTableMenu);
+			
+			/************************************************************
+			 * DELETE EVENT LISTENER (EVENT LIST TABLE)
+			 ***********************************************************/
+			
+			MenuItem mntmDeleteEvent = new MenuItem(eventListTableMenu, SWT.PUSH);
+			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+						TableItem tb = eventListTable.getItem(eventListTable.getSelectionIndex());
+						DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(0));
+						if ((Integer) confirm.open() == 1) {
+							ModelEvent.DeleteEvent(eventList.get(eventListTable.getSelectionIndex()));	//Finds the selected event and deletes it from vector
+							DeleteItem();
+						}
+					} catch (Exception ex) {
+						ErrorMessageDialog errormsg = new ErrorMessageDialog(new Shell(), "There was nothing selected!");
+						errormsg.open();
+					}
+				}
+				
+			});
+			mntmDeleteEvent.setText("Delete Event");
+		
+			formToolkit.adapt(tableComposite);
+			formToolkit.paintBordersFor(tableComposite);
+			eventListTable.setHeaderVisible(true);
+			eventListTable.setLinesVisible(false);
+		
+			//old table code
+/*			eventListTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
 			eventListTable.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 			tbtmUpcomingEvents.setControl(eventListTable);
+			//Event List Table tooltip
 			eventListTable.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override
 				public void mouseHover(MouseEvent e) {
@@ -488,7 +618,7 @@ public class ViewMain extends ApplicationWindow {
 			/************************************************************
 			 * EVENT LIST TABLE ITEM SELECTION EVENT LISTENER
 			 ***********************************************************/
-			eventListTable.addListener(SWT.Selection, new Listener() {
+/*			eventListTable.addListener(SWT.Selection, new Listener() {
 		     public void handleEvent(Event event) {
 
 		      //dispose of all children that currently is in rightComp
@@ -548,7 +678,7 @@ public class ViewMain extends ApplicationWindow {
 			/************************************************************
 			 * DELETE EVENT LISTENER (EVENT LIST TABLE)
 			 ***********************************************************/
-			
+	/*		
 			MenuItem mntmDeleteEvent = new MenuItem(eventListTableMenu, SWT.PUSH);
 			mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -568,14 +698,57 @@ public class ViewMain extends ApplicationWindow {
 				
 			});
 			mntmDeleteEvent.setText("Delete Event");
-
+*/
 			TabItem tbtmPastEvents = new TabItem(tabFolder, SWT.NONE);
 			tbtmPastEvents.setText("        Past Events        ");
 			
-			//Expired event list table tooltip
-			expiredTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			//Expired Event Table 
+			Composite expiredTableComposite = new Composite(tabFolder, SWT.NONE);
+			TableColumnLayout tcl_expiredTableComposite = new TableColumnLayout();
+			expiredTableComposite.setLayout(tcl_expiredTableComposite);
+			tbtmPastEvents.setControl(expiredTableComposite);
+			
+			tableViewerExpiredEventList = new TableViewer(expiredTableComposite, SWT.BORDER | SWT.FULL_SELECTION);
+			expiredTable = tableViewerExpiredEventList.getTable();
+			expiredTable.setHeaderVisible(true);
+			expiredTable.getHorizontalBar().setVisible(true);
+			expiredTable.getHorizontalBar().setEnabled(false);
+			expiredTable.setLinesVisible(false);
 			expiredTable.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-			tbtmPastEvents.setControl(expiredTable);			
+			
+			expiredEventTVC1 = new TableViewerColumn(tableViewerExpiredEventList, SWT.LEFT);
+			expiredEventTVC2 = new TableViewerColumn(tableViewerExpiredEventList,SWT.CENTER);
+			expiredEventTVC1.getColumn().setText("Event Title");
+		    expiredEventTVC2.getColumn().setText("End Date");
+			
+		    tcl_expiredTableComposite.setColumnData(expiredEventTVC1.getColumn(), new ColumnWeightData(50));
+			tcl_expiredTableComposite.setColumnData(expiredEventTVC2.getColumn(), new ColumnWeightData(30));
+
+			//Populating the table.
+			tableViewerExpiredEventList.setContentProvider(ArrayContentProvider.getInstance());
+			expiredEventTVC1.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element)
+				{			
+					EventItem eItem = (EventItem) element;
+					return eItem.getName();
+				}
+				
+			});
+			
+			expiredEventTVC2.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element)
+				{			
+					EventItem eItem = (EventItem) element;
+					return eItem.getEndDateTime().getDateRepresentation();
+				}
+				
+			});
+			
+			tableViewerExpiredEventList.setInput(expiredEventList);
+	
+			//Event List Table MouseOver Tooltip
 			expiredTable.addMouseTrackListener(new MouseTrackAdapter() {
 				@Override
 				public void mouseHover(MouseEvent e) {
@@ -584,8 +757,7 @@ public class ViewMain extends ApplicationWindow {
 						 expiredTable.setToolTipText(item.getText(0));
 				}
 			});
-			expiredTable.setToolTipText("");
-			expiredTable.setTouchEnabled(true);
+			
 			
 			/************************************************************
 			 * EXPIRED EVENT LIST TABLE ITEM SELECTION EVENT LISTENER
@@ -600,7 +772,94 @@ public class ViewMain extends ApplicationWindow {
 					((Composite)children[i]).dispose();
 				}
 			
-				viewPage = new ViewEvent(rightComp, SWT.NONE, expiredEventlist.get(expiredTable.getSelectionIndex()));
+				viewPage = new ViewEvent(rightComp, SWT.NONE, expiredEventList.get(expiredTable.getSelectionIndex()));
+		        layout.topControl = viewPage;
+				rightComp.layout(true);
+		     }
+			});
+			
+			Menu expiredEventListTableMenu = new Menu(expiredTable);
+			expiredTable.setMenu(expiredEventListTableMenu);
+			/************************************************************
+			 * DELETE EVENT LISTENER (EXPIRED EVENT LIST TABLE)
+			 ***********************************************************/
+			
+			MenuItem mntmDeletePastEvent = new MenuItem(expiredEventListTableMenu, SWT.PUSH);
+			mntmDeletePastEvent.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+					TableItem tb = expiredTable.getItem(expiredTable.getSelectionIndex());
+					DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(0));
+					if ((Integer) confirm.open() == 1) {
+						ModelEvent.DeleteExpiredEvent(expiredEventList.get(expiredTable.getSelectionIndex()));
+						DeleteExpiredItem();
+					}
+					} catch (Exception ex) {
+						ErrorMessageDialog errormsg = new ErrorMessageDialog(new Shell(), "There was nothing selected!");
+						errormsg.open();
+					}
+				}
+			});
+			mntmDeletePastEvent.setText("Delete Event");
+			
+			/************************************************************
+			 * DELETE ALL EVENT LISTENER (EXPIRED EVENT LIST TABLE)
+			 ***********************************************************/
+			MenuItem mntmDeleteAllPastEvent = new MenuItem(expiredEventListTableMenu, SWT.PUSH);
+			mntmDeleteAllPastEvent.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+					DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", "ALL past events");
+					if ((Integer) confirm.open() == 1) {
+						ModelEvent.DeleteAllExpiredEvents();
+						DeleteAllExpiredItems();
+					}
+					} catch (Exception ex) {
+						ErrorMessageDialog errormsg = new ErrorMessageDialog(new Shell(), "There was nothing selected!");
+						errormsg.open();
+					}
+				}
+			});
+			mntmDeleteAllPastEvent.setText("Delete All Past Events");
+			
+			//checks for expired events
+			CheckExpiry();
+			
+			
+			
+			
+			//old Expired event list table
+/*			expiredTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+			expiredTable.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+			tbtmPastEvents.setControl(expiredTable);			
+			//Expired event list table tooltip
+			expiredTable.addMouseTrackListener(new MouseTrackAdapter() {
+				@Override
+				public void mouseHover(MouseEvent e) {
+					 TableItem item = expiredTable.getItem(new Point(e.x, e.y));
+					 if (item != null)
+						 expiredTable.setToolTipText(item.getText(0));
+				}
+			});
+			expiredTable.setToolTipText("");
+			expiredTable.setTouchEnabled(true);
+			
+			/************************************************************
+			 * EXPIRED EVENT LIST TABLE ITEM SELECTION EVENT LISTENER
+			 ***********************************************************/
+/*			expiredTable.addListener(SWT.Selection, new Listener() {
+		     public void handleEvent(Event event) {
+
+		      //dispose of all children that currently is in c2
+				if (rightComp != null && !rightComp.isDisposed()) {
+				Object[] children = rightComp.getChildren();
+				for (int i=0; i<children.length; i++)
+					((Composite)children[i]).dispose();
+				}
+			
+				viewPage = new ViewEvent(rightComp, SWT.NONE, expiredEventList.get(expiredTable.getSelectionIndex()));
 		        layout.topControl = viewPage;
 				rightComp.layout(true);
 		     }
@@ -654,7 +913,7 @@ public class ViewMain extends ApplicationWindow {
 			/************************************************************
 			 * DELETE EVENT LISTENER (EXPIRED EVENT LIST TABLE)
 			 ***********************************************************/
-			
+/*			
 			MenuItem mntmDeletePastEvent = new MenuItem(expiredEventListTableMenu, SWT.PUSH);
 			mntmDeletePastEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -663,7 +922,7 @@ public class ViewMain extends ApplicationWindow {
 					TableItem tb = expiredTable.getItem(expiredTable.getSelectionIndex());
 					DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(0));
 					if ((Integer) confirm.open() == 1) {
-						ModelEvent.DeleteExpiredEvent(expiredEventlist.get(expiredTable.getSelectionIndex()));
+						ModelEvent.DeleteExpiredEvent(expiredEventList.get(expiredTable.getSelectionIndex()));
 						DeleteExpiredItem();
 					}
 					} catch (Exception ex) {
@@ -677,7 +936,7 @@ public class ViewMain extends ApplicationWindow {
 			/************************************************************
 			 * DELETE ALL EVENT LISTENER (EXPIRED EVENT LIST TABLE)
 			 ***********************************************************/
-			MenuItem mntmDeleteAllPastEvent = new MenuItem(expiredEventListTableMenu, SWT.PUSH);
+/*			MenuItem mntmDeleteAllPastEvent = new MenuItem(expiredEventListTableMenu, SWT.PUSH);
 			mntmDeleteAllPastEvent.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -694,7 +953,7 @@ public class ViewMain extends ApplicationWindow {
 				}
 			});
 			mntmDeleteAllPastEvent.setText("Delete All Past Events");
-			
+	*/		
 			//Calendar Widget
 			DateTime Calender = new DateTime(leftComp, SWT.CALENDAR | SWT.LONG);
 			Calender.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
@@ -868,6 +1127,4 @@ public class ViewMain extends ApplicationWindow {
 		}catch(Exception e){}
 		System.exit(0);
 	}
-	
-	
 }

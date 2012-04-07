@@ -420,6 +420,7 @@ public class ViewEvent extends Composite {
 		 * 
 		 *********************************************************************************************/
 		Button btnAdvertEmail = new Button(compAdvertise, SWT.NONE);
+		btnAdvertEmail.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnAdvertEmail.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				loginDialog = new LoginEmailDialog(new Shell(), currentEvent);
@@ -433,6 +434,7 @@ public class ViewEvent extends Composite {
 		btnAdvertEmail.setText("E-Mail");
 
 		Button btnAdvertFB = new Button(compAdvertise, SWT.NONE);
+		btnAdvertFB.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnAdvertFB.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.FaceBookAds();
@@ -444,6 +446,7 @@ public class ViewEvent extends Composite {
 		btnAdvertFB.setText("Facebook");
 
 		Button btnAdvertSMS = new Button(compAdvertise, SWT.NONE);
+		btnAdvertSMS.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnAdvertSMS.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ViewMain.SMSAds();
