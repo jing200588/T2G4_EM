@@ -16,6 +16,8 @@ import venue.*;
 
 import com.ibm.icu.text.Collator;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -71,6 +73,8 @@ import org.eclipse.swt.widgets.TabItem;
 
 
 public class ViewMain extends ApplicationWindow {
+	private static enum EVENT_ITEM_SORT_CRITERIA {NAME, STARTDATETIME}
+	
 	private ModelEvent mm = new ModelEvent();
 	private Action exitAction;
 	private Action serverControl;
@@ -535,6 +539,22 @@ public class ViewMain extends ApplicationWindow {
 				
 			});
 			
+			eventTVC1.getColumn().addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					sortEventItemList(eventList, EVENT_ITEM_SORT_CRITERIA.NAME);
+					tableViewerEventList.refresh();
+				}
+			});
+			
+			eventTVC2.getColumn().addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					sortEventItemList(eventList, EVENT_ITEM_SORT_CRITERIA.STARTDATETIME);
+					tableViewerEventList.refresh();
+				}
+			});
+			
 			tableViewerEventList.setInput(eventList);
 	
 			//Event List Table MouseOver Tooltip
@@ -744,6 +764,22 @@ public class ViewMain extends ApplicationWindow {
 					return eItem.getEndDateTime().getDateRepresentation();
 				}
 				
+			});
+			
+			expiredEventTVC1.getColumn().addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					sortEventItemList(expiredEventList, EVENT_ITEM_SORT_CRITERIA.NAME);
+					tableViewerExpiredEventList.refresh();
+				}
+			});
+			
+			expiredEventTVC2.getColumn().addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					sortEventItemList(expiredEventList, EVENT_ITEM_SORT_CRITERIA.STARTDATETIME);
+					tableViewerExpiredEventList.refresh();
+				}
 			});
 			
 			tableViewerExpiredEventList.setInput(expiredEventList);
@@ -1126,5 +1162,29 @@ public class ViewMain extends ApplicationWindow {
 			server.stop();
 		}catch(Exception e){}
 		System.exit(0);
+	}
+	
+	/**
+	 * Sort the list of EventItem objects base on the specified criterion.
+	 * @param inputList - List<EventItem>
+	 * @param type - EVENT_ITEM_SORT_CRITERIA
+	 */
+	private void sortEventItemList(List<EventItem> inputList, EVENT_ITEM_SORT_CRITERIA type)
+	{
+		if(inputList == null)
+			return;
+		
+		Comparator<EventItem> comparator = null;		// Dummy value
+		switch(type)
+		{
+			case NAME:
+				comparator = new EventItemNameComparator();
+				break;
+			case STARTDATETIME:
+				comparator = new EventItemStartDateComparator();
+		}
+		
+		if(comparator != null)
+			Collections.sort(inputList, comparator);
 	}
 }
