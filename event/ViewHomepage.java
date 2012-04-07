@@ -30,9 +30,8 @@ public class ViewHomepage extends Composite {
 		lblWelcomeToEman.setBackgroundImage(SWTResourceManager.getImage(ViewHomepage.class, "/Images/logo.jpg"));
 		lblWelcomeToEman.setForeground(SWTResourceManager.getColor(SWT.COLOR_TITLE_FOREGROUND));
 		lblWelcomeToEman.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-	//	lblWelcomeToEman.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Lacryia\\Pictures\\b34wl.jpg"));
 		lblWelcomeToEman.setFont(SWTResourceManager.getFont("Tekton Pro", 32, SWT.NORMAL));
-		lblWelcomeToEman.setText("\n\n\n\nWelcome to E-MAN!");
+		//lblWelcomeToEman.setText("\n\n\n\nWelcome to E-MAN!");
 
 		
 

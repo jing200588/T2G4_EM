@@ -316,7 +316,7 @@ public class ViewParticipantList extends Composite {
 				} catch (ArrayIndexOutOfBoundsException exception) {
 					new ErrorMessageDialog(new Shell(), "Invalid .csv file. Make sure the file follows the correct format.").open();
 				} catch (Exception exception) {
-					new ErrorMessageDialog(new Shell(), exception.getMessage()).open();
+					new ErrorMessageDialog(new Shell(), "There was an error importing the file").open();
 					exception.printStackTrace();
 				}
 				

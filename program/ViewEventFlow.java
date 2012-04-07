@@ -297,7 +297,7 @@ public class ViewEventFlow extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(), null,
-						eventObj.getBviList());
+						eventObj.getBVIList());
 				EventFlowEntry newEntry = inputDialog.open();
 				
 				// User might press 'Cancel' because they do not want to create a new entry anymore!
@@ -561,7 +561,7 @@ public class ViewEventFlow extends Composite {
 					if(btnFilter.getText().equals("Filter") == true)
 					{
 						InputFilterDialog filterDialog = new InputFilterDialog(new Shell(), SWT.NONE,
-								eventObj.getBviList());
+								eventObj.getBVIList());
 						String[] outputStr = (String []) filterDialog.open();
 						
 						if(outputStr == null)
@@ -686,7 +686,7 @@ public class ViewEventFlow extends Composite {
 				chosenEntry = filterList.get(chosenIndex);
 			
 			InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(),
-					chosenEntry, eventObj.getBviList());
+					chosenEntry, eventObj.getBVIList());
 			EventFlowEntry newEntry = inputDialog.open();
 			
 			// There may be modification in the chosen EventFlowEntry object
@@ -796,7 +796,7 @@ public class ViewEventFlow extends Composite {
 				// Read the venue
 				String venueName = HelperFunctions.removeRedundantWhiteSpace(
 						HelperFunctions.replaceNewLine(allRows.get(index)[3]));
-				int venueIndex = getVenueID(eventObj.getBviList(), venueName);
+				int venueIndex = getVenueID(eventObj.getBVIList(), venueName);
 				int venueID = 0;		// Dummny value
 				if(venueIndex < 0)
 				{
@@ -807,8 +807,8 @@ public class ViewEventFlow extends Composite {
 				}
 				else
 				{
-					venueName = eventObj.getBviList().get(venueIndex).getName();
-					venueID = eventObj.getBviList().get(venueIndex).getVenueID();
+					venueName = eventObj.getBVIList().get(venueIndex).getName();
+					venueID = eventObj.getBVIList().get(venueIndex).getVenueID();
 				}
 				
 				newList.add(new EventFlowEntry(new TimeSlot(startDateTime, endDateTime),

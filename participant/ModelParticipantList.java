@@ -17,7 +17,7 @@ public class ModelParticipantList {
 	
 	/**
 	 * Description: Construct the ModelParticipantList which initializes the test database
-	 * @param test	- Name for database
+	 * @param test	- Name for test database
 	 */
 	public ModelParticipantList(String test) {
 		

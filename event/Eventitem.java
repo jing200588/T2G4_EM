@@ -22,17 +22,17 @@ public class EventItem {
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters 
-	 * @param inputName Event Name 
-	 * @param inputStartYear Start Year
-	 * @param inputStartMonth Start Month
-	 * @param inputStartDay Start Day 
-	 * @param inputEndYear End Year
-	 * @param inputEndMonth End Month
-	 * @param inputEndDay End Day
- 	 * @param inputStartHour Start Hour 
-	 * @param inputStartMin Start Minute
-	 * @param inputEndHour End Hour
-	 * @param inputEndMin End Minute
+	 * @param inputName Event Name - The name/title of the event
+	 * @param inputStartYear Start Year - Starting year of the event
+	 * @param inputStartMonth Start Month - Starting month of the event
+	 * @param inputStartDay Start Day - Starting day of the event
+	 * @param inputEndYear End Year - Ending year of the event
+	 * @param inputEndMonth End Month - Ending month of the event
+	 * @param inputEndDay End Day - Ending day of the event
+ 	 * @param inputStartHour Start Hour - Starting hour of the event
+	 * @param inputStartMin Start Minute - Starting minute of the event
+	 * @param inputEndHour End Hour - Ending hour of the event
+	 * @param inputEndMin End Minute - Ending minute of the event
 	 */
 	public EventItem (String inputName, int inputStartYear, int inputStartMonth, int inputStartDay, int inputEndYear, int inputEndMonth, int inputEndDay, int inputStartHour, int inputStartMin, int inputEndHour, int inputEndMin, String inputDescription) {
 		eventName = inputName;
@@ -48,13 +48,13 @@ public class EventItem {
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters
-	 * @param name
-	 * @param startdate
-	 * @param enddate
-	 * @param starttime
-	 * @param endtime
+	 * @param name - The name/title of the event
+	 * @param startdate - Starting date of the event
+	 * @param enddate - Ending date of the event
+	 * @param starttime - Starting time of the event
+	 * @param endtime - Ending time of the event
 	 * @param item_list List of items according to budget
-	 * @param budget
+	 * @param budget - Budget allocated for the event
 	 * @param BVI_list List of booked venue information
 	 */
 	public EventItem (String name, String startdate, String enddate, String starttime, String endtime, Vector<Item> item_list, double budget, Vector<BookedVenueInfo> BVI_list){
@@ -68,11 +68,11 @@ public class EventItem {
 	
 	/**
 	 * Description: Constructs the Event item object with the respective parameters
-	 * @param name
-	 * @param startdate
-	 * @param enddate
-	 * @param starttime
-	 * @param endtime
+	 * @param name - The name/title of the event
+	 * @param startdate - Starting date of the event
+	 * @param enddate - Ending date of the event
+	 * @param starttime - Starting time of the event
+	 * @param endtime - Ending time of the event
 	 */
 	public EventItem (String name, String startdate, String enddate, String starttime, String endtime) {
 		eventName = name;
@@ -105,10 +105,6 @@ public class EventItem {
 		return eventName;
 	}
 	
-//	public void setStartDate (String start) {
-//		_startdate = new Date(start);
-//	}
-	
 	public void setStartDate (int y, int m, int d) {
 		eventStartDateTime = new MyDateTime(y, m, d, eventStartDateTime.getHour(), eventStartDateTime.getMinute());
 	}
@@ -118,10 +114,6 @@ public class EventItem {
 		return eventStartDateTime;
 	}
 	
-//	public void setEndDate (String end) {
-//		_enddate = new Date(end);
-//	}
-	
 	public void setEndDate (int y, int m, int d) {
 		eventEndDateTime = new MyDateTime(y, m, d, eventEndDateTime.getHour(), eventEndDateTime.getMinute());
 	}
@@ -130,20 +122,11 @@ public class EventItem {
 		return eventEndDateTime;
 	}	
 	
-//	public void setStartTime (String start) {
-//		_starttime = new Time(start);
-//	}
-	
 	public void setStartTime (int hr, int min) {
 		eventStartDateTime = new MyDateTime(eventStartDateTime.getYear(), eventStartDateTime.getMonth(),
 				eventStartDateTime.getDay(), hr, min);
 	}
-	
-	
-//	public void setEndTime (String end) {
-//		_endtime = new Time(end);
-//	}
-	
+
 	public void setEndTime (int hr, int min) {
 		eventEndDateTime = new MyDateTime(eventEndDateTime.getYear(), eventEndDateTime.getMonth(),
 				eventEndDateTime.getDay(), hr, min);
@@ -182,7 +165,7 @@ public class EventItem {
 	}
 
 
-	public Vector<BookedVenueInfo> getBviList() {
+	public Vector<BookedVenueInfo> getBVIList() {
 		return eventBviList;
 	}
 
@@ -204,13 +187,23 @@ public class EventItem {
 		return eventParticipantList;
 	}
 	
-	public void setIsExpired(boolean flag) {
-		expired = flag;
-	}
 	public void setEventFlow(Vector<EventFlowEntry> newEventFlow)
 	{
 		eventFlow = newEventFlow;
 	}
+	
+	/**
+	 * Description: Set the expired flag for the event
+	 * @param flag
+	 */
+	public void setIsExpired(boolean flag) {
+		expired = flag;
+	}
+	
+	/**
+	 * Description: returns a boolean indicating if the event has expired
+	 * @return
+	 */
 	public boolean isExpired() {
 		return expired;
 	}
