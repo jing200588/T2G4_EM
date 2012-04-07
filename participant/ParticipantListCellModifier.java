@@ -4,6 +4,7 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
+
 class ParticipantListCellModifier implements ICellModifier {
 	  private Viewer viewer;
 

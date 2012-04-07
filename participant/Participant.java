@@ -4,6 +4,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import emanComparator.ParticipantAddressComparator;
+import emanComparator.ParticipantContactComparator;
+import emanComparator.ParticipantEmailComparator;
+import emanComparator.ParticipantMatricComparator;
+import emanComparator.ParticipantNameComparator;
+import emanComparator.ParticipantRemarkComparator;
+
 public class Participant {
 	public static enum COLUMNSORTCRITERIA {NAME, MATRIC, CONTACT, EMAIL, ADDRESS, REMARK}
 	

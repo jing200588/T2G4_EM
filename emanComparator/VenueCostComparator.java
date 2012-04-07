@@ -1,8 +1,10 @@
-package venue;
+package emanComparator;
 
 import java.util.Comparator;
 
-public class CostComparator implements Comparator<Venue>
+import venue.Venue;
+
+public class VenueCostComparator implements Comparator<Venue>
 {
 
 //	@Override

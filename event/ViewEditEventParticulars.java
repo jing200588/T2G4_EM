@@ -37,9 +37,6 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 					if (eventname.equals("")) {
 						throw new Exception("Event name should not consist of only whitespaces. Please try again.");
 					}
-				
-				
-					eventname = eventname.replaceAll("  ", "");	//removes excess whitespaces between the names
 					
 					MyDateTime startDT = new MyDateTime(StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(), StartTime.getHours(), StartTime.getMinutes());
 					MyDateTime endDT = new MyDateTime(EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), EndTime.getHours(), EndTime.getMinutes());
