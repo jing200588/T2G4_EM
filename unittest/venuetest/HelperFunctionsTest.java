@@ -88,8 +88,6 @@ public class HelperFunctionsTest {
 	{
 		String testObj = "\n\n\nThis is \n\n a test\n";
 		
-		assertEquals("   This is    a test ", HelperFunctions.replaceNewLine(testObj));
-		assertEquals("This is a test", HelperFunctions.removeRedundantWhiteSpace(
-				HelperFunctions.replaceNewLine(testObj)));
+		assertEquals("This is a test", HelperFunctions.convertMultiToSingleLine(testObj));
 	}
 }
