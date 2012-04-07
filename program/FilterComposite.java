@@ -10,11 +10,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Text;
 
 import venue.HelperFunctions;
-import venue.InputDateTimeComposite;
 import venue.BookedVenueInfo;
+import venue.MyDateTime;
 import venue.TimeSlot;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
@@ -24,13 +25,16 @@ import org.eclipse.wb.swt.SWTResourceManager;
 public class FilterComposite extends Composite {
 
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
-	private InputDateTimeComposite compInputDateTime;
 	private Text txtActivity;
 	private Combo comboVenue;
 	private Button btnVenue;
 	private Button btnActivity;
 	private Button btnDuration;
 	private Vector<BookedVenueInfo> m_listBookedVenue;
+	private DateTime dateFrom;
+	private DateTime dateTo;
+	private DateTime timeFrom;
+	private DateTime timeTo;
 
 	/**
 	 * Create the composite.
@@ -63,12 +67,50 @@ public class FilterComposite extends Composite {
 		btnDuration.setText("Duration:");
 		new Label(this, SWT.NONE);
 		
-		compInputDateTime = new InputDateTimeComposite(this, SWT.NONE);
-		compInputDateTime.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		compInputDateTime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
-		toolkit.adapt(compInputDateTime);
-		toolkit.paintBordersFor(compInputDateTime);
-		compInputDateTime.setEnabled(true);
+		Composite composite = new Composite(this, SWT.NONE);
+		
+		composite.setLayout(new GridLayout(3, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
+		toolkit.adapt(composite);
+		toolkit.paintBordersFor(composite);
+		
+		
+		Label lblStartDateTime = new Label(composite, SWT.NONE);
+		lblStartDateTime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblStartDateTime.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		toolkit.adapt(lblStartDateTime, true, true);
+		lblStartDateTime.setText("Start Date Time:");
+		
+		dateFrom = new DateTime(composite, SWT.DROP_DOWN);
+		dateFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		dateFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		toolkit.adapt(dateFrom);
+		toolkit.paintBordersFor(dateFrom);
+		
+		timeFrom = new DateTime(composite, SWT.DROP_DOWN | SWT.TIME | SWT.SHORT);
+		timeFrom.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		timeFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		toolkit.adapt(timeFrom);
+		toolkit.paintBordersFor(timeFrom);
+		
+		Label lblEndDateTime = new Label(composite, SWT.NONE);
+		
+		lblEndDateTime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblEndDateTime.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		lblEndDateTime.setText("End Date Time:");
+		toolkit.adapt(lblEndDateTime, true, true);
+		
+		dateTo = new DateTime(composite, SWT.DROP_DOWN);
+		dateTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		dateTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		toolkit.adapt(dateTo);
+		toolkit.paintBordersFor(dateTo);
+		
+		timeTo = new DateTime(composite, SWT.DROP_DOWN | SWT.TIME | SWT.SHORT);
+		timeTo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		timeTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		toolkit.adapt(timeTo);
+		toolkit.paintBordersFor(timeTo);
 		
 		btnActivity = new Button(this, SWT.CHECK);
 		btnActivity.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
@@ -94,10 +136,12 @@ public class FilterComposite extends Composite {
 		
 
 		setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		compInputDateTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnActivity.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnVenue.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblEndDateTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblStartDateTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	}
 	
 	/**
@@ -117,7 +161,14 @@ public class FilterComposite extends Composite {
 		// Read duration
 		if(btnDuration.getSelection() == true)
 		{
-			TimeSlot inputTimeSlot = compInputDateTime.readInputFields();
+			MyDateTime dateTimeFrom = readDateTime(dateFrom, timeFrom);
+			MyDateTime dateTimeTo = readDateTime(dateTo, timeTo);
+			if(dateTimeFrom.compareTo(dateTimeTo) > 0)
+				throw new Exception("The starting date time and ending date time are not in chronological order!");
+			if(dateTimeFrom.compareTo(dateTimeTo) == 0)
+				throw new Exception("The starting date time and ending date time are the same!");
+			
+			TimeSlot inputTimeSlot = new TimeSlot(dateTimeFrom, dateTimeTo);
 			returnStrArr[0] = inputTimeSlot.getStartDateTime().getDateTimeRepresentation();
 			returnStrArr[1] = inputTimeSlot.getEndDateTime().getDateTimeRepresentation();
 		}
@@ -153,5 +204,21 @@ public class FilterComposite extends Composite {
 			returnStrArr[3] = null;
 		
 		return returnStrArr;
+	}
+	
+	/**
+	 * Returns a MyDateTime object based on the inputs given in two DateTime objects which are
+	 * dateCompo (of type DATE) and timeCompo (of type TIME).
+	 * 
+	 * @param dateCompo - DateTime
+	 * @param timeCompo - DateTime
+	 * @return dateTime - MyDateTime
+	 */
+	private MyDateTime readDateTime(DateTime dateCompo, DateTime timeCompo)
+	{
+		// Note that DateTime objects return month from 0 to 11 while in MyDateTime objects, month
+		// has value from 1 to 12!
+		return new MyDateTime(dateCompo.getYear(), dateCompo.getMonth() + 1,
+							dateCompo.getDay(), timeCompo.getHours(), timeCompo.getMinutes());
 	}
 }
