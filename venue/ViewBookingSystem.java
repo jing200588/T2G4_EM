@@ -226,7 +226,7 @@ public class ViewBookingSystem extends Composite {
 		lblSearchVenueBy.setLayoutData(fd_lblSearchVenueBy);
 		lblSearchVenueBy.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD));
 		toolkit.adapt(lblSearchVenueBy, true, true);
-		lblSearchVenueBy.setText("Search venue by name: ");
+		lblSearchVenueBy.setText("Search venue by name / address: ");
 		
 		Composite nameCompo = new Composite(searchNameCompo, SWT.NONE);
 		FormData fd_nameCompo = new FormData();
@@ -254,7 +254,7 @@ public class ViewBookingSystem extends Composite {
 				nameToSearchText.setText(venueName);
 				if(venueName == null || venueName.equals("") == true)
 				{
-					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), "You have not entered a venue name to search yet!");
+					ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(), "You have not entered a venue name or address to search yet!");
 					errorBoard.open();
 				}
 				else
@@ -1145,7 +1145,7 @@ public class ViewBookingSystem extends Composite {
 
 		if(decimalPointIndex < 0)
 			return true;
-		if(money.length() - decimalPointIndex == 1 || money.length() - decimalPointIndex > 2)
+		if(money.length() - decimalPointIndex == 1 || money.length() - decimalPointIndex > 3)
 			return false;
 		return true;
 	}
