@@ -32,19 +32,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -52,7 +48,7 @@ import com.ibm.icu.text.Collator;
 
 
 public class ViewEvent extends Composite {
-	private static Table tableBudget, tableVenue, tableEventFlow, tableParticipant, tableTemp;
+	private static Table tableBudget, tableVenue, tableEventFlow, tableParticipant;
 	private static boolean budgetFlag, venueFlag, eventFlowFlag, participantFlag;
 	private static EventItem currentEvent;
 	private static Composite compBudget, compVenue, compEventFlow, compParticipant;
