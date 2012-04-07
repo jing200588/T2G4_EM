@@ -313,6 +313,10 @@ public class EMDBEvent extends EMDBBase{
 			this.dMsg(sql);
 		}
 		
+		//Constraints
+		if (aName.isEmpty())
+			return 0;
+		
 		this.connect();
 		
 		int id = this.runQueryKey(sql);
