@@ -996,7 +996,7 @@ public class ViewEvent extends Composite {
 		}
 	
 
-		final String columnName[] = {"Start Date Time", "End Date Time", "Activity", "Venue", "Remark"};
+		final String columnName[] = {"Start Date","Start Time", "End Date", "End Time", "Activity", "Venue", "Remark"};
 		TableViewerColumn[] tvc = new TableViewerColumn[columnName.length];
 
 		Composite tableComposite = new Composite(compEventFlow, SWT.NONE);
@@ -1018,16 +1018,20 @@ public class ViewEvent extends Composite {
 
 		//Setting column width.
 		tcl_tableComposite.setColumnData(tvc[0].getColumn(), new ColumnWeightData(10));
-		tcl_tableComposite.setColumnData(tvc[1].getColumn(), new ColumnWeightData(10));
-		tcl_tableComposite.setColumnData(tvc[2].getColumn(), new ColumnWeightData(20));
-		tcl_tableComposite.setColumnData(tvc[3].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[1].getColumn(), new ColumnWeightData(9));
+		tcl_tableComposite.setColumnData(tvc[2].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[3].getColumn(), new ColumnWeightData(9));
 		tcl_tableComposite.setColumnData(tvc[4].getColumn(), new ColumnWeightData(20));
+		tcl_tableComposite.setColumnData(tvc[5].getColumn(), new ColumnWeightData(10));
+		tcl_tableComposite.setColumnData(tvc[6].getColumn(), new ColumnWeightData(20));
 	
 		tvc[0].getColumn().setAlignment(SWT.CENTER);
 		tvc[1].getColumn().setAlignment(SWT.CENTER);
 		tvc[2].getColumn().setAlignment(SWT.CENTER);
 		tvc[3].getColumn().setAlignment(SWT.CENTER);
 		tvc[4].getColumn().setAlignment(SWT.CENTER);
+		tvc[5].getColumn().setAlignment(SWT.CENTER);
+		tvc[6].getColumn().setAlignment(SWT.CENTER);
 		
 		//Populating the table.
 		tableViewerEventFlow.setContentProvider(ArrayContentProvider.getInstance());
@@ -1041,19 +1045,23 @@ public class ViewEvent extends Composite {
 					switch (indexEventFlow)	{
 					case 0:
 						indexEventFlow++;
-						return EFE.getDuration().getStartDateTime().getDateRepresentation() + " " +
-									EFE.getDuration().getStartDateTime().getTimeRepresentation();
+						return EFE.getDuration().getStartDateTime().getDateRepresentation();
 					case 1:
 						indexEventFlow++;
-						return EFE.getDuration().getEndDateTime().getDateRepresentation() + " " +
-								EFE.getDuration().getEndDateTime().getTimeRepresentation();
+						return EFE.getDuration().getStartDateTime().getTimeRepresentation();
 					case 2:
 						indexEventFlow++;
-						return EFE.getActivityName();
+						return EFE.getDuration().getEndDateTime().getDateRepresentation();
 					case 3:
 						indexEventFlow++;
-						return EFE.getVenueName();
+						return EFE.getDuration().getEndDateTime().getTimeRepresentation();
 					case 4:
+						indexEventFlow++;
+						return EFE.getActivityName();
+					case 5:
+						indexEventFlow++;
+						return EFE.getVenueName();
+					case 6:
 						indexEventFlow++;
 						return EFE.getUserNote();
 					default:
