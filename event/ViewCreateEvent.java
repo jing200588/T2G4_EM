@@ -56,7 +56,7 @@ public class ViewCreateEvent extends ViewEventParticulars {
 					EventItem newevent = new EventItem(eventname, StartDate.getYear(), StartDate.getMonth()+1, StartDate.getDay(),
 							EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay(), StartTime.getHours(), StartTime.getMinutes(), EndTime.getHours(), EndTime.getMinutes(), txtDescription.getText());
 					ModelEvent.CreateEvent(newevent);
-					ViewMain.UpdateTable();
+					ViewMain.RefreshEventListTable();
 				}
 				catch(Exception exception)
 				{

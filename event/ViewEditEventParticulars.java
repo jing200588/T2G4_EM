@@ -56,7 +56,7 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 					curevent.setEndDate(EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay());
 					
 					ModelEvent.UpdateParticulars(curevent);
-					ViewMain.UpdateTable();
+					ViewMain.RefreshEventListTable();
 					ViewMain.ReturnView();
 				}
 				catch(Exception exception)
