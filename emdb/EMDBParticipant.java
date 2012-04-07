@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
-import com.healthmarketscience.sqlbuilder.ComboCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.DeleteQuery;
 import com.healthmarketscience.sqlbuilder.DropQuery;
@@ -238,7 +237,7 @@ public class EMDBParticipant extends EMDBBase{
 		
 		if (!list.isEmpty()){
 			int size = list.size();
-			this.connect();
+
 			for (int i=0; i< size; i++){
 				
 				Participant row = list.get(i);
@@ -260,18 +259,20 @@ public class EMDBParticipant extends EMDBBase{
 					this.dMsg(sql);
 				}
 				
+				if (aEventID < 1)
+					return 0;
+				
 				this.queue(sql);
 				//this.runQuery(sql);
 				
 			}
-			this.disconnect();
 			if (this.dbDebug){
 				this.dMsg("COMMIT PARICIPANT IN QUEUE");
 			}
 			
-			
+
 			int result = this.commit();
-			//int result = 1;
+			
 		
 		
 			return result;

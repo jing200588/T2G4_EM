@@ -8,6 +8,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import budget.Item;
+
+import participant.Participant;
 import program.EventFlowEntry;
 
 import venue.TimeSlot;
@@ -30,7 +33,7 @@ public class EMDBIITest {
 	private EventItem			event;
 	private Vector<EventItem>	eventList		=	new Vector<EventItem>();
 	private Vector<Venue>		venueList		=	new Vector<Venue>();
-
+	private Vector<Item>		budgetList		= 	new Vector<Item>();
 
 	
 	
@@ -57,8 +60,12 @@ public class EMDBIITest {
 		this.venueList.add(new Venue("MR4", "COM1-B-06", "Meeting Room", 47, 2345));
 		this.venueList.add(new Venue("AS5", "ICUBE-03-18", "Arts Faculty Block 5", 3, 8));
 		
-
-		
+		//Add 5 Budget
+		this.budgetList.add(new Item("Windows 8", 80.00, 1, "OS"));
+		this.budgetList.add(new Item("Windows 7", 80.00, 2, "OS"));
+		this.budgetList.add(new Item("Linux", 0.00, 4, "OS"));
+		this.budgetList.add(new Item("Keyboard", 80.00, 2, "Hardware"));
+		this.budgetList.add(new Item("Books", 80.00, 2, "Books"));
 		
 	}
 
@@ -121,7 +128,7 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section 1
+	 * Test Section 1.1
 	 * Add and Retrieve
 	 * 
 	 * *******************************
@@ -227,20 +234,23 @@ public class EMDBIITest {
 	public void addBudget(){
 
 		db.budgetDB().addBudget(9, "Mandriva", 3000, 21, "Noth", 2);
-		db.budgetDB().addBudget(9, "Windows 7", 56200, 11, "Smth", 3);
-		
 		db.budgetDB().addBudget(8, "Symantec", 3000, 21, "Noth", 2);
-		db.budgetDB().addBudgetOptimized(6, "McAfee", 3000, 21, "Noth", 2);
-
-	
-
-		db.budgetDB().addBudgetOptimized(7, "Ubuntu", 3000, 21, "Noth", 2);
-		db.budgetDB().addBudgetOptimized(7, "Fedora", 3000, 21, "Noth", 2);
 		
-		assertEquals(2,db.budgetDB().getBudgetList(9).size());
-		assertEquals(1,db.budgetDB().getBudgetList(8).size());
-		assertEquals(2,db.budgetDB().getBudgetListOptimized(7).size());
-		assertEquals(1,db.budgetDB().getBudgetListOptimized(6).size());
+		
+		db.budgetDB().addBudgetOptimized(6, "McAfee", 3000, 21, "Noth", 2);
+		db.budgetDB().addBudgetOptimized(7, "McAfee", 3000, 21, "Noth", 2);
+		
+		assertEquals(1,db.budgetDB().getBudgetList(9).size());
+		assertEquals(1,db.budgetDB().getBudgetListOptimized(7).size());
+		
+		
+		int listSize = this.budgetList.size() + 1;
+		db.budgetDB().addBudgetList(this.budgetList, 8);
+		db.budgetDB().addBudgetListOptimized(this.budgetList, 6);
+		
+		
+		assertEquals(listSize, db.budgetDB().getBudgetList(8).size());
+		assertEquals(listSize, db.budgetDB().getBudgetListOptimized(6).size());
 		
 		
 
@@ -249,6 +259,26 @@ public class EMDBIITest {
 	
 	
 	
+	
+	
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section 1.2
+	 * Add Empty
+	 * 
+	 * *******************************
+	 */
+	
+	@Test
+	public void addParticipantEmpty(){
+		Vector<Participant> list = new Vector<Participant>();
+		assertTrue (0 == db.participantDB().addParticipantList(list, 1));
+		
+		list.add(new Participant("", "", "",  "", "", ""));
+		assertTrue (0 == db.participantDB().addParticipantList(list, 0));
+	}
 	
 	
 	
@@ -356,7 +386,7 @@ public class EMDBIITest {
 	 * ******************************* 
 	 * 
 	 * Test Section 3
-	 * Dekete
+	 * Delete and Get
 	 * 
 	 * *******************************
 	 */
@@ -511,5 +541,6 @@ public class EMDBIITest {
 		assertTrue( (id == 0) );
 	}
 	
+
 	
 }
