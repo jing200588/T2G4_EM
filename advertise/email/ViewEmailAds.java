@@ -38,7 +38,7 @@ public class ViewEmailAds extends Composite {
 	private Label lblSubject;
 	private Label lblMessage;
 	private Text txtMessageInputBox;
-	private Label lblError;
+	//private Label lblError;
 
 
 	
@@ -86,12 +86,12 @@ public class ViewEmailAds extends Composite {
 		formToolkit.adapt(compMain);
 		formToolkit.paintBordersFor(compMain);
 
+		/*
 		new Label(compMain, SWT.NONE);
 		new Label(compMain, SWT.NONE);
 		lblError  = new Label(compMain, SWT.None);
 		lblError.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		formToolkit.adapt(lblError, true, true);
-		
+		formToolkit.adapt(lblError, true, true);*/
 		
 		lblTo = new Label(compMain, SWT.NONE);
 		lblTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
@@ -265,7 +265,7 @@ public class ViewEmailAds extends Composite {
 
 				if (!allOK){
 					ErrorMessageDialog messageBoard = new ErrorMessageDialog(new Shell(),
-							"An Error has occurred in sending your email",
+							"An Error has occurred in sending your email" + errorMsg,
 							"Error");
 					messageBoard.open();
 				}else{
@@ -278,7 +278,7 @@ public class ViewEmailAds extends Composite {
 					
 				}
 				
-				lblError.setText(errorMsg);
+		
 			}
 		});
 
@@ -289,7 +289,7 @@ public class ViewEmailAds extends Composite {
 		lblTo.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblSubject.setBackground(SWTResourceManager.getColor(240,240,240));
 		lblMessage.setBackground(SWTResourceManager.getColor(240,240,240));
-		lblError.setBackground(SWTResourceManager.getColor(240,240,240));
+		//lblError.setBackground(SWTResourceManager.getColor(240,240,240));
 	}
 	
 	

@@ -7,7 +7,12 @@ import java.util.List;
 public class Participant {
 	public static enum COLUMNSORTCRITERIA {NAME, MATRIC, CONTACT, EMAIL, ADDRESS, REMARK}
 	
-	private String name, contact, email, address, matric, remark;
+	private String 	name = "", 
+					contact = "", 
+					email = "", 
+					address = "", 
+					matric = "", 
+					remark = "";
 	private int id;
 	
 	/**

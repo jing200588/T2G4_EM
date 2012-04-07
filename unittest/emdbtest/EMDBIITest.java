@@ -8,9 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import budget.Item;
+
+import participant.Participant;
 import program.EventFlowEntry;
 
-import budget.Item;
 import venue.TimeSlot;
 import venue.Venue;
 import emdb.EMDBII;
@@ -18,6 +20,11 @@ import emdb.EMDBSettings;
 import event.EventItem;
 
 
+/**
+ * JUnit Testing for EMDB Classes
+ * @author JunZhi
+ *
+ */
 public class EMDBIITest {
 	
 	
@@ -26,13 +33,15 @@ public class EMDBIITest {
 	private EventItem			event;
 	private Vector<EventItem>	eventList		=	new Vector<EventItem>();
 	private Vector<Venue>		venueList		=	new Vector<Venue>();
-
+	private Vector<Item>		budgetList		= 	new Vector<Item>();
 
 	
 	
 	
 	public EMDBIITest(){		
 
+		db.destroy(false);
+		
 		//Add 5 items to the list
 		this.event = new EventItem("The NUS Event", "01/12/2014", "12/12/2014", "01:00", "13:00");
 		this.event.setDescription("Just another event");
@@ -51,8 +60,12 @@ public class EMDBIITest {
 		this.venueList.add(new Venue("MR4", "COM1-B-06", "Meeting Room", 47, 2345));
 		this.venueList.add(new Venue("AS5", "ICUBE-03-18", "Arts Faculty Block 5", 3, 8));
 		
-
-		
+		//Add 5 Budget
+		this.budgetList.add(new Item("Windows 8", 80.00, 1, "OS"));
+		this.budgetList.add(new Item("Windows 7", 80.00, 2, "OS"));
+		this.budgetList.add(new Item("Linux", 0.00, 4, "OS"));
+		this.budgetList.add(new Item("Keyboard", 80.00, 2, "Hardware"));
+		this.budgetList.add(new Item("Books", 80.00, 2, "Books"));
 		
 	}
 
@@ -73,8 +86,7 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section A
-	 * START / END
+	 * START / END / Init Test
 	 * 
 	 * *******************************
 	 */
@@ -116,7 +128,8 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section B
+	 * Test Section 1.1
+	 * Add and Retrieve
 	 * 
 	 * *******************************
 	 */
@@ -221,20 +234,23 @@ public class EMDBIITest {
 	public void addBudget(){
 
 		db.budgetDB().addBudget(9, "Mandriva", 3000, 21, "Noth", 2);
-		db.budgetDB().addBudget(9, "Windows 7", 56200, 11, "Smth", 3);
-		
 		db.budgetDB().addBudget(8, "Symantec", 3000, 21, "Noth", 2);
-		db.budgetDB().addBudgetOptimized(6, "McAfee", 3000, 21, "Noth", 2);
-
-	
-
-		db.budgetDB().addBudgetOptimized(7, "Ubuntu", 3000, 21, "Noth", 2);
-		db.budgetDB().addBudgetOptimized(7, "Fedora", 3000, 21, "Noth", 2);
 		
-		assertEquals(2,db.budgetDB().getBudgetList(9).size());
-		assertEquals(1,db.budgetDB().getBudgetList(8).size());
-		assertEquals(2,db.budgetDB().getBudgetListOptimized(7).size());
-		assertEquals(1,db.budgetDB().getBudgetListOptimized(6).size());
+		
+		db.budgetDB().addBudgetOptimized(6, "McAfee", 3000, 21, "Noth", 2);
+		db.budgetDB().addBudgetOptimized(7, "McAfee", 3000, 21, "Noth", 2);
+		
+		assertEquals(1,db.budgetDB().getBudgetList(9).size());
+		assertEquals(1,db.budgetDB().getBudgetListOptimized(7).size());
+		
+		
+		int listSize = this.budgetList.size() + 1;
+		db.budgetDB().addBudgetList(this.budgetList, 8);
+		db.budgetDB().addBudgetListOptimized(this.budgetList, 6);
+		
+		
+		assertEquals(listSize, db.budgetDB().getBudgetList(8).size());
+		assertEquals(listSize, db.budgetDB().getBudgetListOptimized(6).size());
 		
 		
 
@@ -243,6 +259,26 @@ public class EMDBIITest {
 	
 	
 	
+	
+	
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section 1.2
+	 * Add Empty
+	 * 
+	 * *******************************
+	 */
+	
+	@Test
+	public void addParticipantEmpty(){
+		Vector<Participant> list = new Vector<Participant>();
+		assertTrue (0 == db.participantDB().addParticipantList(list, 1));
+		
+		list.add(new Participant("", "", "",  "", "", ""));
+		assertTrue (0 == db.participantDB().addParticipantList(list, 0));
+	}
 	
 	
 	
@@ -265,7 +301,8 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section C
+	 * Test Section 2
+	 * Modify
 	 * 
 	 * *******************************
 	 */
@@ -348,28 +385,71 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section D
+	 * Test Section 3
+	 * Delete and Get
 	 * 
 	 * *******************************
 	 */
 	
 
 	@Test
-	public void deleteVenue(){
+	public void deleteAndGetEvent(){
 
-		int id = db.venueDB().addVenue(this.venueList.get(0));
-		int oldDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
+		//Deleting
+		EventItem eEvent = this.eventList.get(3);
 		
-		db.venueDB().deleteVenue(id);
-		int newDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
-		
-		assertEquals( 1, Math.abs(newDbVenueSize-oldDbVenueSize) );
+		int id = db.eventDB().addEvent(eEvent);
+		eEvent.setID(id);
 
-		Venue test = db.venueDB().getVenue(id);
-		assertTrue( test.getName() == null || test.getName().isEmpty() );
+		int oldSize = db.eventDB().getEventList().size();
+		
+		db.eventDB().deleteEvent(id);
+		int newSize = db.eventDB().getEventList().size();
+		
+		assertEquals( 1, Math.abs(newSize-oldSize) );
+
+		
+		
+		
+		// Get Error
+		EventItem test = db.eventDB().getEvent(id);
+		assertTrue( test == null );
 
 	}
 	
+	
+	
+	
+	@Test
+	public void deleteAndGetVenue(){
+		
+		//Deleting
+		int id = db.venueDB().addVenue(this.venueList.get(0));
+		int oldSize = db.venueDB().getVenueList(null, 0, 0).size();
+		
+		db.venueDB().deleteVenue(id);
+		int newSize = db.venueDB().getVenueList(null, 0, 0).size();
+		
+		assertEquals( 1, Math.abs(newSize-oldSize) );
+
+		
+		
+		//Get Error
+		Venue test = db.venueDB().getVenue(id);
+		assertTrue( test.getName() == null || test.getName().isEmpty() );	
+	}
+	
+	
+	
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section 4.1
+	 * Delete Errors
+	 * 
+	 * *******************************
+	 */
 	
 	
 	@Test
@@ -420,12 +500,47 @@ public class EMDBIITest {
 
 	
 	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section 4.2
+	 * Add Errors
+	 * 
+	 * *******************************
+	 */
+	
+	@Test
+	public void addEventError(){
+		
+		int eventID = db.eventDB().addEvent(
+				"", 
+				this.event.getDescription(), 
+				this.event.getBudget(), 
+				this.event.getStartDateTime().getDateRepresentation(), 
+				this.event.getEndDateTime().getDateRepresentation(),
+				this.event.getStartDateTime().getTimeRepresentation(), 
+				this.event.getEndDateTime().getTimeRepresentation(), 
+				EventFlowEntry.getStringRepresentation(this.event.getEventFlow())
+				);
+	
+		
+		assertFalse( (eventID > 0) );
+	}
 	
 	
-	
+	@Test
+	public void addBookingError(){
+		int id = db.venueDB().addBooking(0, 0, "10/05/2012/15/00", "11/05/2012/16/00");
+		assertTrue( (id == 0) );
+	}
 
 	
-
+	@Test
+	public void addBudgetError(){
+		int id = db.budgetDB().addBudget(0, "Mandriva", 3000, 21, "Noth", 2);
+		assertTrue( (id == 0) );
+	}
 	
+
 	
 }
