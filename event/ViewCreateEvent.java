@@ -20,7 +20,7 @@ public class ViewCreateEvent extends ViewEventParticulars {
 	 */
 	public ViewCreateEvent(Composite parent, int style) {
 		super(parent, style);
-		EventParticularsForm.getHead().setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
+		EventParticularsForm.getHead().setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		EventParticularsForm.setText("Create Event");
