@@ -108,6 +108,7 @@ public class ViewEventFlow extends Composite {
 		VenueViewForm.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Composite compMain = new Composite(VenueViewForm.getBody(), SWT.NONE);
+		compMain.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		
 		toolkit.adapt(compMain);
 		toolkit.paintBordersFor(compMain);
@@ -127,7 +128,7 @@ public class ViewEventFlow extends Composite {
 		
 		tableViewEventFlow = new TableViewer(compTableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableEventFlow = tableViewEventFlow.getTable();
-		tableEventFlow.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		tableEventFlow.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		tableEventFlow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -329,18 +330,18 @@ public class ViewEventFlow extends Composite {
 		compBelow.setLayout(new GridLayout(4, false));
 		
 		txtSave = new Label(compBelow, SWT.NONE);
-		txtSave.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		txtSave.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 4, 1));
 		txtSave.setText("The list is not saved.");
 		
 		Label lblInput = new Label(compBelow, SWT.NONE);
-		lblInput.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		lblInput.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblInput.setText("Input file:");
 		toolkit.adapt(lblInput, true, true);
 		
 		txtImportTextFilePath = new Text(compBelow, SWT.BORDER);
-		txtImportTextFilePath.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		txtImportTextFilePath.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtImportTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(txtImportTextFilePath, true, true);
 		
@@ -424,12 +425,12 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(btnImportTop, true, true);	
 		
 		Label lblOutputfile = new Label(compBelow, SWT.NONE);
-		lblOutputfile.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		lblOutputfile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		toolkit.adapt(lblOutputfile, true, true);
 		lblOutputfile.setText("Output file:");
 		
 		txtOuputTextFilePath = new Text(compBelow, SWT.BORDER);
-		txtOuputTextFilePath.setFont(SWTResourceManager.getFont("Malgun Gothic", 9, SWT.NORMAL));
+		txtOuputTextFilePath.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtOuputTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(txtOuputTextFilePath, true, true);
 
