@@ -49,7 +49,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.jface.layout.TableColumnLayout;
 
 public class ViewEventFlow extends Composite {
-	
+
 	// Table column names/properties
 	public static final String STARTDATETIME = "Start Date Time";
 	public static final String ENDDATETIME = "End Date Time";
@@ -57,13 +57,13 @@ public class ViewEventFlow extends Composite {
 	public static final String VENUE = "Venue";
 	public static final String NOTE = "Further notes";
 	public static final String[] COLUMN_PROPS = {STARTDATETIME, ENDDATETIME, ACTIVITY, VENUE, NOTE};
-	  
+
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
-	
+
 
 	private Table tableEventFlow;
 	private TableViewer tableViewEventFlow;
-	
+
 	private EventItem eventObj;
 	private Vector<EventFlowEntry> listEventFlow;
 	private Vector<EventFlowEntry> filterList;
@@ -73,7 +73,7 @@ public class ViewEventFlow extends Composite {
 	private Button btnFilter;
 	private Label txtSave;
 	private boolean isEntireListShowed;		// True if the table displays the whole list. False otherwise.
-	
+
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -86,18 +86,18 @@ public class ViewEventFlow extends Composite {
 				toolkit.dispose();
 			}
 		});
-		
+
 		// Initialize some variables 
 		eventObj = event;
 		// Note that listEventFlow and eventObj.eventFlow are different lists
 		listEventFlow = eventObj.getEventFlow();
 		isEntireListShowed = true;
-		
+
 		// Continue with the GUI
 		toolkit.adapt(this);
 		toolkit.paintBordersFor(this);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
-				
+
 		Form VenueViewForm = toolkit.createForm(this);
 		VenueViewForm.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		VenueViewForm.setBounds(0, 0, 700, 400);
@@ -106,14 +106,14 @@ public class ViewEventFlow extends Composite {
 		VenueViewForm.setText("Event Flow");
 
 		VenueViewForm.getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
-		
+
 		Composite compMain = new Composite(VenueViewForm.getBody(), SWT.NONE);
 		compMain.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
-		
+
 		toolkit.adapt(compMain);
 		toolkit.paintBordersFor(compMain);
 		compMain.setLayout(new FormLayout());
-		
+
 		Composite compTableComposite = new Composite(compMain, SWT.NONE);
 		TableColumnLayout tcl_compTableComposite = new TableColumnLayout();
 		compTableComposite.setLayout(tcl_compTableComposite);
@@ -125,7 +125,7 @@ public class ViewEventFlow extends Composite {
 		compTableComposite.setLayoutData(fd_compTableComposite);
 		toolkit.adapt(compTableComposite);
 		toolkit.paintBordersFor(compTableComposite);
-		
+
 		tableViewEventFlow = new TableViewer(compTableComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		tableEventFlow = tableViewEventFlow.getTable();
 		tableEventFlow.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
@@ -154,7 +154,7 @@ public class ViewEventFlow extends Composite {
 							else
 							{
 								listEventFlow.remove((int) filterIndices.get(chosenIndex));
-								
+
 								// Delete in the filter list as well as update new indices
 								int wholeTableIndex = filterIndices.get(chosenIndex);
 								filterList.remove(chosenIndex);
@@ -164,7 +164,7 @@ public class ViewEventFlow extends Composite {
 									{
 										filterIndices.set(index, filterIndices.get(index) - 1);
 									}
-										
+
 							}
 							tableViewEventFlow.refresh();
 						}
@@ -179,13 +179,13 @@ public class ViewEventFlow extends Composite {
 				}
 			}
 		}); 
-		
+
 		tableEventFlow.setTouchEnabled(true);
 		tableEventFlow.setLinesVisible(true);
 		tableEventFlow.setHeaderVisible(true);
 		tableViewEventFlow.setContentProvider(ArrayContentProvider.getInstance());
 		toolkit.paintBordersFor(tableEventFlow);
-		
+
 		TableViewerColumn tableViewerColumnStartDT = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn tableColumnStartDateTime = tableViewerColumnStartDT.getColumn();
 		tableColumnStartDateTime.setAlignment(SWT.CENTER);
@@ -197,10 +197,10 @@ public class ViewEventFlow extends Composite {
 			public String getText(Object element) {
 				EventFlowEntry obj = (EventFlowEntry) element;
 				return obj.getDuration().getStartDateTime().getDateRepresentation() + " " +
-						obj.getDuration().getStartDateTime().getTimeRepresentation();
+				obj.getDuration().getStartDateTime().getTimeRepresentation();
 			}
 		});
-		
+
 		TableViewerColumn tableViewerColumnEndDT = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn tableColumnEndDateTime = tableViewerColumnEndDT.getColumn();
 		tableColumnEndDateTime.setAlignment(SWT.CENTER);
@@ -212,10 +212,10 @@ public class ViewEventFlow extends Composite {
 			public String getText(Object element) {
 				EventFlowEntry obj = (EventFlowEntry) element;
 				return obj.getDuration().getEndDateTime().getDateRepresentation() + " " + 
-						obj.getDuration().getEndDateTime().getTimeRepresentation();
+				obj.getDuration().getEndDateTime().getTimeRepresentation();
 			}
 		});
-		
+
 		TableViewerColumn tableViewerColumnActivity = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn tableColumnActivity = tableViewerColumnActivity.getColumn();
 		tcl_compTableComposite.setColumnData(tableColumnActivity, new ColumnWeightData(20));
@@ -227,7 +227,7 @@ public class ViewEventFlow extends Composite {
 				return obj.getActivityName();
 			}
 		});
-		
+
 		TableViewerColumn tableViewerColumnVenue = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn tableColumnVenue = tableViewerColumnVenue.getColumn();
 		tcl_compTableComposite.setColumnData(tableColumnVenue, new ColumnWeightData(20));
@@ -239,7 +239,7 @@ public class ViewEventFlow extends Composite {
 				return obj.getVenueName();
 			}
 		});
-		
+
 		TableViewerColumn tableViewerColumnNote = new TableViewerColumn(tableViewEventFlow, SWT.NONE);
 		TableColumn tableColumnNote = tableViewerColumnNote.getColumn();
 		tcl_compTableComposite.setColumnData(tableColumnNote, new ColumnWeightData(20));
@@ -251,12 +251,12 @@ public class ViewEventFlow extends Composite {
 				return obj.getUserNote();
 			}
 		});
-		
+
 		Button btnBack = new Button(compMain, SWT.NONE);
 		btnBack.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		FormData fd_btnBack = new FormData();
 		fd_btnBack.width = 100;
-	//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
+		//	fd_btnReturnToEvent.left = new FormAttachment(0, 545);
 		btnBack.setLayoutData(fd_btnBack);
 		btnBack.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -265,24 +265,24 @@ public class ViewEventFlow extends Composite {
 				TwoChoiceDialog saveDialog = new TwoChoiceDialog(new Shell(), "Message", 
 						"Do you want to save your table of event flow entries?", "Yes", "No");
 				String choice = (String) saveDialog.open();
-				
+
 				if(choice == null)
 					return;
-				
+
 				// Update the event flow in the database as well as in the event itself
 				if(choice.equals("Yes") == true)
 				{
 					ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
 					eventObj.setEventFlow(listEventFlow);
 				}
-				
+
 				// Return to the main GUI
 				ViewMain.ReturnView();
 			}
 		});
 		toolkit.adapt(btnBack, true, true);
 		btnBack.setText("Back");
-		
+
 		Button btnAdd = new Button(compMain, SWT.NONE);
 		btnAdd.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		fd_btnBack.left = new FormAttachment(btnAdd, 0, SWT.LEFT);
@@ -292,7 +292,7 @@ public class ViewEventFlow extends Composite {
 		fd_btnAdd.left = new FormAttachment(compTableComposite, 10);
 		fd_btnAdd.width = 100;
 		fd_btnAdd.top = new FormAttachment(0, 10);
-//		fd_btnAdd.left = new FormAttachment(0, 571);
+		//		fd_btnAdd.left = new FormAttachment(0, 571);
 		btnAdd.setLayoutData(fd_btnAdd);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -300,7 +300,7 @@ public class ViewEventFlow extends Composite {
 				InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(), null,
 						eventObj.getBVIList());
 				EventFlowEntry newEntry = inputDialog.open();
-				
+
 				// User might press 'Cancel' because they do not want to create a new entry anymore!
 				if(newEntry != null)
 				{
@@ -308,16 +308,16 @@ public class ViewEventFlow extends Composite {
 					// Show the whole list again.
 					tableViewEventFlow.setInput(listEventFlow);
 					tableViewEventFlow.refresh();
-					
+
 					btnFilter.setText("Filter");
-					
+
 					isEntireListShowed = true;
 				}
 			}
 		});
 		toolkit.adapt(btnAdd, true, true);
 		btnAdd.setText("Add");
-		
+
 		Composite compBelow = new Composite(compMain, SWT.NONE);
 		FormData fd_compBelow = new FormData();
 		fd_compBelow.top = new FormAttachment(compTableComposite);
@@ -328,23 +328,23 @@ public class ViewEventFlow extends Composite {
 		toolkit.adapt(compBelow);
 		toolkit.paintBordersFor(compBelow);
 		compBelow.setLayout(new GridLayout(4, false));
-		
+
 		txtSave = new Label(compBelow, SWT.NONE);
 		txtSave.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 4, 1));
 		txtSave.setText("The list is not saved.");
-		
+
 		Label lblInput = new Label(compBelow, SWT.NONE);
 		lblInput.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblInput.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblInput.setText("Input file:");
 		toolkit.adapt(lblInput, true, true);
-		
+
 		txtImportTextFilePath = new Text(compBelow, SWT.BORDER);
 		txtImportTextFilePath.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtImportTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(txtImportTextFilePath, true, true);
-		
+
 		Button btnBrowseTop = new Button(compBelow, SWT.NONE);
 		btnBrowseTop.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnBrowseTop.addSelectionListener(new SelectionAdapter() {
@@ -353,7 +353,7 @@ public class ViewEventFlow extends Composite {
 				FileDialog fileDialog = new FileDialog(new Shell());
 				String[] extension = {"*.csv"};
 				fileDialog.setFilterExtensions(extension);
-				
+
 				String filePath = fileDialog.open();
 				if(filePath != null)
 					txtImportTextFilePath.setText(filePath);
@@ -364,7 +364,7 @@ public class ViewEventFlow extends Composite {
 		btnBrowseTop.setLayoutData(gd_btnBrowseTop);
 		btnBrowseTop.setText("Browse");
 		toolkit.adapt(btnBrowseTop, true, true);
-		
+
 		Button btnImportTop = new Button(compBelow, SWT.NONE);
 		btnImportTop.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnImportTop.addSelectionListener(new SelectionAdapter() {
@@ -374,27 +374,27 @@ public class ViewEventFlow extends Composite {
 				{
 					if(txtImportTextFilePath.getText().equals("") == true)
 						throw new Exception("You have not specified the path of the imported file");
-					
+
 					boolean overwrite = false;
-					
+
 					if(listEventFlow.isEmpty() == false)
 					{
 						TwoChoiceDialog message = new TwoChoiceDialog(new Shell(), "Message",
 								"Do you want to append the existing list or overwrite it?", 
 								"Append", "Overwrite");
 						String decision = (String) message.open();
-						
+
 						if(decision == null)
 							return;
-						
+
 						if(decision.equals("Append") == true)
 							overwrite = false;
 						else
 							overwrite = true;
 					}
-					
+
 					Vector<EventFlowEntry> newList = importCSVFile(txtImportTextFilePath.getText());
-					
+
 					if(overwrite == true)
 					{
 						listEventFlow = newList;
@@ -404,9 +404,9 @@ public class ViewEventFlow extends Composite {
 					{
 						listEventFlow.addAll(newList);
 					}
-					
+
 					Collections.sort(listEventFlow);
-					
+
 					tableViewEventFlow.setInput(listEventFlow);
 					tableViewEventFlow.refresh();
 				}
@@ -423,12 +423,12 @@ public class ViewEventFlow extends Composite {
 		btnImportTop.setLayoutData(gd_btnImportTop);
 		btnImportTop.setText("Import");
 		toolkit.adapt(btnImportTop, true, true);	
-		
+
 		Label lblOutputfile = new Label(compBelow, SWT.NONE);
 		lblOutputfile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		toolkit.adapt(lblOutputfile, true, true);
 		lblOutputfile.setText("Output file:");
-		
+
 		txtOuputTextFilePath = new Text(compBelow, SWT.BORDER);
 		txtOuputTextFilePath.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtOuputTextFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -445,7 +445,7 @@ public class ViewEventFlow extends Composite {
 				FileDialog fileDialog = new FileDialog(new Shell());
 				String[] extension = {"*.csv"};
 				fileDialog.setFilterExtensions(extension);
-				
+
 				String filePath = fileDialog.open();
 				if (filePath != null) 
 				{
@@ -457,7 +457,7 @@ public class ViewEventFlow extends Composite {
 		});
 		toolkit.adapt(btnBrowseBottom, true, true);
 		btnBrowseBottom.setText("Browse");
-		
+
 		Button btnExportBottom = new Button(compBelow, SWT.NONE);
 		btnExportBottom.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		GridData gd_btnExportBottom = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -470,7 +470,7 @@ public class ViewEventFlow extends Composite {
 				{
 					if(txtOuputTextFilePath.getText().equals("") == true)
 						throw new Exception("You have not specified the path of the exported file");
-					
+
 					Vector<EventFlowEntry> exportList = listEventFlow;
 					if(isEntireListShowed == false)
 					{
@@ -478,20 +478,20 @@ public class ViewEventFlow extends Composite {
 								"Do you want to export the filtered list or the entire list?",
 								"Filtered List", "Entire List");
 						String choice = (String) message.open();
-						
+
 						if(choice == null)
 							return;
-						
+
 						if(choice.equals("Filtered List") == true)
 							exportList = filterList;
 					}
-					
+
 					CSVWriter writer = new CSVWriter(new FileWriter(txtOuputTextFilePath.getText()));
-					
+
 					writer.writeNext(COLUMN_PROPS);
-					
+
 					String[] line = new String[COLUMN_PROPS.length];
-					
+
 					for (int index = 0; index < exportList.size(); index++) 
 					{
 						line[0] = exportList.get(index).getDuration().getStartDateTime().getDateRepresentation()
@@ -501,10 +501,10 @@ public class ViewEventFlow extends Composite {
 						line[2] = exportList.get(index).getActivityName();
 						line[3] = exportList.get(index).getVenueName();
 						line[4] = exportList.get(index).getUserNote();
-						
+
 						writer.writeNext(line);
 					}
-					
+
 					writer.close();
 					new ErrorMessageDialog(new Shell(), "The file was exported successfully!").open();  		
 				} 
@@ -522,22 +522,22 @@ public class ViewEventFlow extends Composite {
 		});
 		toolkit.adapt(btnExportBottom, true, true);
 		btnExportBottom.setText("Export");
-		
+
 		// Set input for table viewer at the beginning
 		tableViewEventFlow.setInput(listEventFlow);
 		toolkit.paintBordersFor(tableEventFlow);	
-		
+
 		Button btnSave = new Button(compMain, SWT.NONE);
 		btnSave.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		fd_btnBack.top = new FormAttachment(btnSave, 10);
-		
+
 		btnSave.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// Update in the database
 				ModelEventFlow.saveEventFlow(eventObj.getID(), listEventFlow);
 				eventObj.setEventFlow(listEventFlow);
-				
+
 				showSaveStatus();
 			}
 		});
@@ -553,8 +553,8 @@ public class ViewEventFlow extends Composite {
 		new Label(compBelow, SWT.NONE);
 		new Label(compBelow, SWT.NONE);
 		new Label(compBelow, SWT.NONE);
-		
-		
+
+
 		btnFilter = new Button(compMain, SWT.NONE);
 		btnFilter.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnFilter.addSelectionListener(new SelectionAdapter() {
@@ -567,7 +567,7 @@ public class ViewEventFlow extends Composite {
 						InputFilterDialog filterDialog = new InputFilterDialog(new Shell(), SWT.NONE,
 								eventObj.getBVIList());
 						String[] outputStr = (String []) filterDialog.open();
-						
+
 						if(outputStr == null)
 							return;			// Nothing to do.
 						// Check if all elements in outputStr are null
@@ -580,7 +580,7 @@ public class ViewEventFlow extends Composite {
 							}
 						if(allNull == true)
 							return;
-						
+
 						// Filter by time slot first
 						Vector<Integer> indexVector = new Vector<Integer>();
 						if(outputStr[0] != null && outputStr[1] != null)
@@ -589,7 +589,7 @@ public class ViewEventFlow extends Composite {
 									new MyDateTime(outputStr[1]));
 							indexVector = ControllerEventFlow.filterByTimeSlot(listEventFlow, inputTimeSlot);
 						}
-						
+
 						// Next, filter by activity name
 						if(outputStr[2] != null)
 						{
@@ -601,7 +601,7 @@ public class ViewEventFlow extends Composite {
 								indexVector = ControllerEventFlow.filterByActivityName(listEventFlow, 
 										indexVector, outputStr[2]);
 						}
-						
+
 						// Finally, filter by venue ID.
 						if(outputStr[3] != null)
 						{
@@ -611,10 +611,10 @@ public class ViewEventFlow extends Composite {
 							else
 								indexVector = ControllerEventFlow.filterByVenue(listEventFlow, indexVector, venueID);
 						}
-						
+
 						filterIndices = indexVector;
 						filterList = ControllerEventFlow.selectEntry(listEventFlow, filterIndices);
-						
+
 						if(filterList.isEmpty() == true)
 						{
 							ErrorMessageDialog errorBoard = new ErrorMessageDialog(new Shell(),
@@ -627,7 +627,7 @@ public class ViewEventFlow extends Composite {
 							tableViewEventFlow.setInput(filterList);
 							tableViewEventFlow.refresh();
 							btnFilter.setText("Show All");
-							
+
 							isEntireListShowed = false;
 						}
 					}
@@ -637,7 +637,7 @@ public class ViewEventFlow extends Composite {
 						tableViewEventFlow.setInput(listEventFlow);
 						tableViewEventFlow.refresh();
 						btnFilter.setText("Filter");
-						
+
 						isEntireListShowed = true;
 					}
 				}
@@ -672,9 +672,9 @@ public class ViewEventFlow extends Composite {
 		lblOutputfile.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnFilter.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnSave.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-			
+
 	}
-	
+
 	/**
 	 * This is part of a listen when a user double-click or enter an entry
 	 */
@@ -688,11 +688,11 @@ public class ViewEventFlow extends Composite {
 				chosenEntry = listEventFlow.get(chosenIndex);
 			else
 				chosenEntry = filterList.get(chosenIndex);
-			
+
 			InputEventFlowDialog inputDialog = new InputEventFlowDialog(new Shell(),
 					chosenEntry, eventObj.getBVIList());
 			EventFlowEntry newEntry = inputDialog.open();
-			
+
 			// There may be modification in the chosen EventFlowEntry object
 			if(newEntry != null)
 			{
@@ -710,29 +710,29 @@ public class ViewEventFlow extends Composite {
 					System.out.println("delete at index = " + filterIndices.get(chosenIndex));
 				}
 				ControllerEventFlow.insertSortedList(listEventFlow, newEntry);
-				
+
 				// Show the whole list again
 				tableViewEventFlow.setInput(listEventFlow);
 				tableViewEventFlow.refresh();
-				
+
 				btnFilter.setText("Filter");
-				
+
 				isEntireListShowed = true;
 			}
 		}
 	}
-	
+
 	/**
 	 * This method is to update the last time the user saves his list.
 	 */
 	private void showSaveStatus()
 	{
 		MyDateTime currentTime = MyDateTime.getCurrentDateTime();
-		
+
 		txtSave.setText("Last saved by " + currentTime.getDateRepresentation() + " " + 
 				currentTime.getTimeRepresentation());
 	}
-	
+
 	/**
 	 * Imports a list of EventFlowEntry objects from a CSV file.
 	 * 
@@ -745,21 +745,21 @@ public class ViewEventFlow extends Composite {
 		try
 		{
 			CSVReader readerFile = new CSVReader(new FileReader(filePath));
-		
+
 			List<String[]> allRows = readerFile.readAll();
-			
+
 			if(allRows.get(0).length != COLUMN_PROPS.length)
 				throw new Exception("The number of columns in the CSV file does not match! It should have "
 						+ COLUMN_PROPS.length + " columns");
-			
+
 			Vector<EventFlowEntry> newList = new Vector<EventFlowEntry>();
 			String delimiter = "[ /:]+";
 			// allRows.get(0) is the headers
 			for(int index = 1; index < allRows.size(); index++)
 			{
 				// Read the start date time
-				String [] startDateTimeArr = HelperFunctions.removeRedundantWhiteSpace(
-						HelperFunctions.replaceNewLine(allRows.get(index)[0])).split(delimiter);
+				String [] startDateTimeArr = HelperFunctions.convertMultiToSingleLine(
+						allRows.get(index)[0]).split(delimiter);
 				if(startDateTimeArr.length != 5)
 					throw new Exception("The starting date time of entry at row " + (index + 1) +
 							"is not in the correct format. It should be '<day>/<month>/<year> <hour>:<minute>'");
@@ -772,10 +772,10 @@ public class ViewEventFlow extends Composite {
 					throw new Exception("The starting date time of entry at row " + (index + 1) +
 							"is not a valid date time");
 				MyDateTime startDateTime = new MyDateTime(year, month, day, hour, minute);
-				
+
 				// Read the end date time
-				String [] endDateTimeArr = HelperFunctions.removeRedundantWhiteSpace(
-						HelperFunctions.replaceNewLine(allRows.get(index)[1])).split(delimiter);
+				String [] endDateTimeArr = HelperFunctions.convertMultiToSingleLine(
+						allRows.get(index)[1]).split(delimiter);
 				if(endDateTimeArr.length != 5)
 					throw new Exception("The endinging date time of entry at row " + (index + 1) +
 							"is not in the correct format. It should be '<day>/<month>/<year> <hour>:<minute>'");
@@ -788,18 +788,18 @@ public class ViewEventFlow extends Composite {
 					throw new Exception("The ending date time of entry at row " + (index + 1) +
 							"is not a valid date time");
 				MyDateTime endDateTime = new MyDateTime(year, month, day, hour, minute);
-				
+
 				// Read the activity name
-				String activityName = HelperFunctions.removeRedundantWhiteSpace(
-						HelperFunctions.replaceNewLine(allRows.get(index)[2]));
-				
+				String activityName = HelperFunctions.convertMultiToSingleLine(
+						allRows.get(index)[2]);
+
 				// Read the user's note
-				String note = HelperFunctions.removeRedundantWhiteSpace(
-						HelperFunctions.replaceNewLine(allRows.get(index)[4]));
-				
+				String note = HelperFunctions.convertMultiToSingleLine(
+						allRows.get(index)[4]);
+
 				// Read the venue
-				String venueName = HelperFunctions.removeRedundantWhiteSpace(
-						HelperFunctions.replaceNewLine(allRows.get(index)[3]));
+				String venueName = HelperFunctions.convertMultiToSingleLine(
+						allRows.get(index)[3]);
 				int venueIndex = getVenueID(eventObj.getBVIList(), venueName);
 				int venueID = 0;		// Dummny value
 				if(venueIndex < 0)
@@ -814,11 +814,11 @@ public class ViewEventFlow extends Composite {
 					venueName = eventObj.getBVIList().get(venueIndex).getName();
 					venueID = eventObj.getBVIList().get(venueIndex).getVenueID();
 				}
-				
+
 				newList.add(new EventFlowEntry(new TimeSlot(startDateTime, endDateTime),
 						activityName, venueName, venueID, note));
 			}
-			
+
 			return newList;
 		}
 		catch(FileNotFoundException exception)
@@ -829,10 +829,10 @@ public class ViewEventFlow extends Composite {
 		{
 			throw exception;
 		}
-		
-		
+
+
 	}
-	
+
 	/**
 	 * Returns the index of the venue whose name is venueName in the list of BookedVenueInfo objects.
 	 * 
@@ -846,11 +846,11 @@ public class ViewEventFlow extends Composite {
 	private int getVenueID(Vector<BookedVenueInfo> listVenue, String venueName)
 	{
 		venueName = venueName.toUpperCase();
-		
+
 		for(int index = 0; index < listVenue.size(); index++)
 			if(listVenue.get(index).getName().toUpperCase().equals(venueName) == true)
 				return index;
-		
+
 		return -1;
 	}
 }

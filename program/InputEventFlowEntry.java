@@ -131,7 +131,7 @@ public class InputEventFlowEntry extends Composite {
 		
 		txtTextNote = new Text(this, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtTextNote.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		txtTextNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		txtTextNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
 		toolkit.adapt(txtTextNote, true, true);
 
 		
@@ -157,8 +157,7 @@ public class InputEventFlowEntry extends Composite {
 		if(isVenueChosen == false)
 			throw new Exception("You have not chosen venue of the activity!");
 		
-		String activityName = HelperFunctions.removeRedundantWhiteSpace(
-				HelperFunctions.replaceNewLine(txtTextActivity.getText()));
+		String activityName = HelperFunctions.convertMultiToSingleLine(txtTextActivity.getText());
 		txtTextActivity.setText(activityName);	
 		if(activityName == null || activityName.equals(""))
 			throw new Exception("You have not enter the name of the activity!");
@@ -180,8 +179,7 @@ public class InputEventFlowEntry extends Composite {
 		
 		// Return the EventFlowEntry object
 		return new EventFlowEntry(new TimeSlot(dateTimeFrom, dateTimeTo), activityName, chosenVenue,
-				chosenVenueID, HelperFunctions.removeRedundantWhiteSpace(
-						HelperFunctions.replaceNewLine(txtTextNote.getText())));
+				chosenVenueID, HelperFunctions.convertMultiToSingleLine(txtTextNote.getText()));
 	}
 	
 	/**
