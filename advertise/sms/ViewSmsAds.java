@@ -168,7 +168,7 @@ public class ViewSmsAds extends Composite {
 						SerialToGsm stg = new SerialToGsm(defaultPort);
 						if(stg.getSuccessfulPort() == false) throw new Exception("Port was faulty. Please try again.");
 						for(int i=0; i<inputNum.length; i++)
-							//stg.sendSms(inputNum[i],message);
+							stg.sendSms(inputNum[i],message);
 
 						errordiag = new ErrorMessageDialog(new Shell(),
 									"Your SMS has been sent!",
