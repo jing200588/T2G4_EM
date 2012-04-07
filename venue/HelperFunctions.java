@@ -3,6 +3,7 @@
  */
 package venue;
 
+import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -74,22 +75,23 @@ public class HelperFunctions {
 	} 
 	
 	/**
-	 * Replaces all new line character by a white space ' ' character.
+	 * Convert a multi-line string into a single-line one, each line is separated by white spaces.
+	 * Note that the input string may contain some control characters. The resulted string has no
+	 * redundant white space.
 	 * @param text - String
 	 * @return resultStr - String
 	 */
-	public static String replaceNewLine(String text)
-	{		
-		// Convert the character vector into a character array
-		char[] arr = new char[text.length()];
-		for(int index = 0; index < arr.length; index++)
+	public static String convertMultiToSingleLine(String text)
+	{
+		if(text.equals("") == true)
+			return "";
+		
+		Scanner scan = new Scanner(text);
+		String resultStr = scan.nextLine();
+		while(scan.hasNextLine())
 		{
-			if(text.charAt(index) == '\n')
-				arr[index] = ' ';
-			else
-				arr[index] = text.charAt(index);
-		}	
-		return new String(arr);
+			resultStr += " " + scan.nextLine();
+		}
+		return removeRedundantWhiteSpace(resultStr);
 	}
-
 }

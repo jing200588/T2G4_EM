@@ -2,6 +2,7 @@ package program;
 
 import venue.*;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.eclipse.swt.events.DisposeEvent;
@@ -19,7 +20,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.wb.swt.SWTResourceManager;
-
 
 public class InputEventFlowEntry extends Composite {
 	public static final String OTHERVENUE = "Other";
@@ -55,8 +55,25 @@ public class InputEventFlowEntry extends Composite {
 		
 		/* Initialize some variables */
 		isVenueChosen = false;
-		m_listBookedVenue = listBookedVenue;
-		m_venueName = new String[listBookedVenue.size() + 1];
+		
+		// Select distinct BookedVenueInfo objects (based on venueID)
+		HashMap<Integer, Integer> hashTable = new HashMap<Integer, Integer>();
+		m_listBookedVenue = new Vector<BookedVenueInfo>();
+		if(listBookedVenue.size() > 0)
+		{
+			m_listBookedVenue.add(listBookedVenue.get(0));
+			hashTable.put(listBookedVenue.get(0).getVenueID(), 0);
+			for(int index = 1; index < listBookedVenue.size(); index++)
+			{
+				if(hashTable.containsKey(listBookedVenue.get(index).getVenueID()) == false)
+				{
+					m_listBookedVenue.add(listBookedVenue.get(index));
+					hashTable.put(listBookedVenue.get(index).getVenueID(), 0);
+				}
+			}
+		}
+		
+		m_venueName = new String[m_listBookedVenue.size() + 1];
 		for(int index = 0; index < m_listBookedVenue.size(); index++)
 		{
 			m_venueName[index] = m_listBookedVenue.get(index).getName();
@@ -131,7 +148,7 @@ public class InputEventFlowEntry extends Composite {
 		
 		txtTextNote = new Text(this, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtTextNote.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		txtTextNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		txtTextNote.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
 		toolkit.adapt(txtTextNote, true, true);
 
 		
@@ -157,8 +174,7 @@ public class InputEventFlowEntry extends Composite {
 		if(isVenueChosen == false)
 			throw new Exception("You have not chosen venue of the activity!");
 		
-		String activityName = HelperFunctions.removeRedundantWhiteSpace(
-				HelperFunctions.replaceNewLine(txtTextActivity.getText()));
+		String activityName = HelperFunctions.convertMultiToSingleLine(txtTextActivity.getText());
 		txtTextActivity.setText(activityName);	
 		if(activityName == null || activityName.equals(""))
 			throw new Exception("You have not enter the name of the activity!");
@@ -176,12 +192,11 @@ public class InputEventFlowEntry extends Composite {
 		if(chosenVenue.equals(OTHERVENUE) == true)
 			chosenVenueID = -1;
 		else
-			chosenVenueID = comboVenue.indexOf(chosenVenue);
+			chosenVenueID = m_listBookedVenue.get(comboVenue.indexOf(chosenVenue)).getVenueID();
 		
 		// Return the EventFlowEntry object
 		return new EventFlowEntry(new TimeSlot(dateTimeFrom, dateTimeTo), activityName, chosenVenue,
-				chosenVenueID, HelperFunctions.removeRedundantWhiteSpace(
-						HelperFunctions.replaceNewLine(txtTextNote.getText())));
+				chosenVenueID, HelperFunctions.convertMultiToSingleLine(txtTextNote.getText()));
 	}
 	
 	/**
@@ -198,8 +213,8 @@ public class InputEventFlowEntry extends Composite {
 			return;
 		
 		// Check venue
-		int venueID = comboVenue.indexOf(obj.getVenueName());
-		if(venueID < 0)
+		int venueIndex = comboVenue.indexOf(obj.getVenueName());
+		if(venueIndex < 0)
 			comboVenue.setText(OTHERVENUE);
 		else
 			comboVenue.setText(obj.getVenueName());

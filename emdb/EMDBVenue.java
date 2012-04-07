@@ -424,6 +424,7 @@ public class EMDBVenue extends EMDBBase{
 		
 		if (result.size() > 0){
 			Object[] row = result.get(0);
+			place.updateID			( 	new Integer(row[0].toString()) 					);
 			place.updateName		( 	(row[1] == null) ? "" : row[1].toString()		);
 			place.updateAddress		( 	(row[2] == null) ? "" : row[2].toString()		);
 			place.updateDescription	(	(row[3] == null) ? "" : row[3].toString() 		);
@@ -493,7 +494,7 @@ public class EMDBVenue extends EMDBBase{
 				
 				Venue place = new Venue();
 				
-				place.updateID			( 	new Integer(row[0].toString())	);
+				place.updateID			( 	new Integer(row[0].toString())					);
 				place.updateName		( 	(row[1] == null) ? "" : row[1].toString()		);
 				place.updateAddress		( 	(row[2] == null) ? "" : row[2].toString()		);
 				place.updateDescription	(	(row[3] == null) ? "" : row[3].toString() 		);
@@ -670,6 +671,7 @@ public class EMDBVenue extends EMDBBase{
 			Object[] row = result.get(i);
 			
 			TimeSlot timing = new TimeSlot(
+									new Integer(row[0].toString()),
 									new MyDateTime( (row[3] == null) ? "" : row[3].toString() ),
 									new MyDateTime( (row[4] == null) ? "" : row[4].toString() )
 									);
@@ -732,7 +734,7 @@ public class EMDBVenue extends EMDBBase{
 			Object[] row = result.get(i);
 			Venue place = new Venue();
 
-			place.updateID			( 	new Integer(row[0].toString())	);
+			place.updateID			( 	new Integer(row[0].toString())					);
 			place.updateName		( 	(row[1] == null) ? "" : row[1].toString()		);
 			place.updateAddress		( 	(row[2] == null) ? "" : row[2].toString()		);
 			place.updateDescription	(	(row[3] == null) ? "" : row[3].toString() 		);

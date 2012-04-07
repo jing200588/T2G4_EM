@@ -149,9 +149,10 @@ public class ControllerEventFlow {
 		Vector<Integer> listIndex = new Vector<Integer>();
 		
 		for(int index = 0; index < entireList.size(); index++)
+		{
 			if(entireList.get(index).getVenueID() == venueID)
 				listIndex.add((Integer) index);
-		
+		}
 		return listIndex;
 	}
 	

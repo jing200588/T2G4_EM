@@ -1,5 +1,6 @@
 package program;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.eclipse.swt.events.DisposeEvent;
@@ -52,8 +53,25 @@ public class FilterComposite extends Composite {
 		toolkit.paintBordersFor(this);
 		
 		/* Initialize some variables */
-		m_listBookedVenue = listBookedVenue;
-		String[] m_venueName = new String[listBookedVenue.size() + 1];
+		
+		// Select distinct BookedVenueInfo objects (based on venueID)
+		HashMap<Integer, Integer> hashTable = new HashMap<Integer, Integer>();
+		m_listBookedVenue = new Vector<BookedVenueInfo>();
+		if(listBookedVenue.size() > 0)
+		{
+			m_listBookedVenue.add(listBookedVenue.get(0));
+			hashTable.put(listBookedVenue.get(0).getVenueID(), 0);
+			for(int index = 1; index < listBookedVenue.size(); index++)
+			{
+				if(hashTable.containsKey(listBookedVenue.get(index).getVenueID()) == false)
+				{
+					m_listBookedVenue.add(listBookedVenue.get(index));
+					hashTable.put(listBookedVenue.get(index).getVenueID(), 0);
+				}
+			}
+		}
+	
+		String[] m_venueName = new String[m_listBookedVenue.size() + 1];
 		for(int index = 0; index < m_listBookedVenue.size(); index++)
 		{
 			m_venueName[index] = m_listBookedVenue.get(index).getName();
