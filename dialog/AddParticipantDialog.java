@@ -194,7 +194,7 @@ public class AddParticipantDialog extends Dialog {
 		fd_btnCreate.width = 100;
 		fd_btnCreate.bottom = new FormAttachment(95, 0);
 		btnCreate.setLayoutData(fd_btnCreate);
-		btnCreate.setText("Create");
+		btnCreate.setText("Add");
 		
 		/************************************************************
 		 * CANCEL BUTTON LISTENER

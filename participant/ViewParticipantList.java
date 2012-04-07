@@ -439,6 +439,7 @@ public class ViewParticipantList extends Composite {
 				int currentindex = tableParticipant.getSelectionIndex();
 				tableParticipant.remove(currentindex);	
 				tempEntries.remove(currentindex);	
+				btnDelete.setEnabled(false);
 			}
 		});
 		btnDelete.setText("Delete");
@@ -509,7 +510,7 @@ public class ViewParticipantList extends Composite {
  */
 public void ExportCSV (String filepath) {
 	try {
-		if (txtImportFile.getText().isEmpty())
+		if (txtExportFile.getText().isEmpty())
 			throw new Exception("Path name is empty. Please input the path name of the .csv file u wish to export.");
 		
 		CSVWriter writer = new CSVWriter(new FileWriter(filepath));

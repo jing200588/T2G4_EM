@@ -103,12 +103,12 @@ public class ParticipantListDatabaseTest {
 			String name = "Test fellow" + i;
 			String matricNo = "A" + randSevenDigits + "Z";
 			String contactNo = "" + randEightDigits;
-			String emailAdd = "" + "@" + email;
+			String emailAdd = "TestMail" + "@" + email;
 			String homeAddress = "Block " + (randSevenDigits%4000) + " " + address + " " + (randEightDigits%600000) + " S(" + randSixDigits + ")";  
 			String remark = "This is a test remark" + i;
 			
 			Participant fellow = new Participant(name, matricNo, contactNo, emailAdd, homeAddress, remark);
-			
+
 			participantList.add(fellow);
 		}
 		
