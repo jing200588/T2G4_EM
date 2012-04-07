@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 
 public class ViewEditEventParticulars extends ViewEventParticulars {
@@ -19,6 +20,7 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 	 */
 	public ViewEditEventParticulars(Composite parent, int style, final EventItem curevent) {
 		super(parent, style);
+		EventParticularsForm.getHead().setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		EventParticularsForm.setText("Event Particulars");

@@ -311,7 +311,7 @@ public class ViewBookingSystem extends Composite {
 		toolkit.paintBordersFor(compoCriteria);
 		
 				Label lblPleaseChooseYour = new Label(compoCriteria, SWT.NONE);
-				lblPleaseChooseYour.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+				lblPleaseChooseYour.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 				lblPleaseChooseYour.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
 				toolkit.adapt(lblPleaseChooseYour, true, true);
 				lblPleaseChooseYour.setText("Please choose your preferred criteria:");
@@ -479,7 +479,7 @@ public class ViewBookingSystem extends Composite {
 		compCapacity.setLayout(new FormLayout());
 
 		Label lblEstimatedCapacity = new Label(compCapacity, SWT.NONE);
-		lblEstimatedCapacity.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		lblEstimatedCapacity.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		FormData fd_lblEstimatedCapacity = new FormData();
 		fd_lblEstimatedCapacity.top = new FormAttachment(0, 5);
 		fd_lblEstimatedCapacity.left = new FormAttachment(0, 5);
@@ -525,7 +525,7 @@ public class ViewBookingSystem extends Composite {
 		costCompo.setLayout(new FormLayout());
 
 		Label lblPreferredCost = new Label(costCompo, SWT.NONE);
-		lblPreferredCost.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		lblPreferredCost.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		FormData fd_lblPreferredCost = new FormData();
 		fd_lblPreferredCost.top = new FormAttachment(0, 5);
 		fd_lblPreferredCost.left = new FormAttachment(0, 5);
@@ -851,6 +851,7 @@ public class ViewBookingSystem extends Composite {
 				toolkit.paintBordersFor(compButton);
 								
 										btnBackCriteria = new Button(compButton, SWT.NONE);
+										btnBackCriteria.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 										GridData gd_btnBackCriteria = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 										gd_btnBackCriteria.widthHint = 80;
 										btnBackCriteria.setLayoutData(gd_btnBackCriteria);
@@ -887,6 +888,7 @@ public class ViewBookingSystem extends Composite {
 										btnBackCriteria.setText("Previous");
 						
 								btnNextCriteria = new Button(compButton, SWT.NONE);
+								btnNextCriteria.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 								GridData gd_btnNextCriteria = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 								gd_btnNextCriteria.widthHint = 80;
 								btnNextCriteria.setLayoutData(gd_btnNextCriteria);
@@ -977,6 +979,7 @@ public class ViewBookingSystem extends Composite {
 								btnNextCriteria.setText("Next");
 				
 						btnFindCriteria = new Button(compButton, SWT.NONE);
+						btnFindCriteria.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 						btnFindCriteria.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 						btnFindCriteria.setEnabled(false);
 						btnFindCriteria.addSelectionListener(new SelectionAdapter() {

@@ -65,7 +65,7 @@ public class ViewCreateEvent extends ViewEventParticulars {
 				}
 			}
 		});
-		btnConfirm.setText("Create !");
+		btnConfirm.setText("Create Event");
 
 		/************************************************************
 		 *
@@ -78,6 +78,6 @@ public class ViewCreateEvent extends ViewEventParticulars {
 				ViewMain.Homepage();
 			}
 		});
-		
+		btnBack.setText("Back to Home");
 	}
 }

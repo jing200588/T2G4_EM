@@ -79,7 +79,7 @@ public class ViewEvent extends Composite {
 	public ViewEvent(Composite parent, int style, EventItem curevent) {
 		super(parent, style);
 		setLayout(new FillLayout(SWT.HORIZONTAL));
-
+		
 		scrollCompositeMain = new ScrolledComposite(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrollCompositeMain.setExpandHorizontal(true);
 		scrollCompositeMain.setExpandVertical(true);
@@ -94,7 +94,7 @@ public class ViewEvent extends Composite {
 		//View Event title label
 		Label lblViewEvent = new Label(compMain, SWT.NONE);
 		lblViewEvent.setText("View Event:");
-		lblViewEvent.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
+		lblViewEvent.setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		FormData fdViewTitle = new FormData();
 		fdViewTitle.top = new FormAttachment(0, 10);
 		fdViewTitle.left = new FormAttachment(0, 10);
@@ -143,7 +143,7 @@ public class ViewEvent extends Composite {
 
 		Label lblEname = new Label(compEventParticulars, SWT.NONE);
 		lblEname.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEname.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
+		lblEname.setFont(SWTResourceManager.getFont("Showcard Gothic", 12, SWT.NORMAL));
 		lblEname.setText("Event Name:");
 
 		lblDynamicname = new Label(compEventParticulars, SWT.WRAP);
@@ -153,7 +153,7 @@ public class ViewEvent extends Composite {
 
 		Label lblStartDate = new Label(compEventParticulars, SWT.NONE);
 		lblStartDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblStartDate.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
+		lblStartDate.setFont(SWTResourceManager.getFont("Showcard Gothic", 12, SWT.NORMAL));
 		lblStartDate.setText("Start Date:");
 
 		lblDynamicStartDate = new Label(compEventParticulars, SWT.NONE);
@@ -163,7 +163,7 @@ public class ViewEvent extends Composite {
 
 		Label lblStartTime = new Label(compEventParticulars, SWT.NONE);
 		lblStartTime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		lblStartTime.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
+		lblStartTime.setFont(SWTResourceManager.getFont("Showcard Gothic", 12, SWT.NORMAL));
 		lblStartTime.setText("Start Time:");
 
 		lblDynamicStartTime = new Label(compEventParticulars, SWT.NONE);
@@ -173,7 +173,7 @@ public class ViewEvent extends Composite {
 
 		Label lblEndDate = new Label(compEventParticulars, SWT.NONE);
 		lblEndDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEndDate.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
+		lblEndDate.setFont(SWTResourceManager.getFont("Showcard Gothic", 12, SWT.NORMAL));
 		lblEndDate.setText("End Date:");
 
 		lblDynamicEndDate = new Label(compEventParticulars, SWT.NONE);
@@ -182,7 +182,7 @@ public class ViewEvent extends Composite {
 		lblDynamicEndDate.setText(currentEvent.getEndDateTime().getDateRepresentation());
 
 		Label lblEndTime = new Label(compEventParticulars, SWT.NONE);
-		lblEndTime.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
+		lblEndTime.setFont(SWTResourceManager.getFont("Showcard Gothic", 12, SWT.NORMAL));
 		lblEndTime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		lblEndTime.setText("End Time:");
 
@@ -193,7 +193,7 @@ public class ViewEvent extends Composite {
 
 		Label lblEdescription = new Label(compEventParticulars, SWT.NONE);
 		lblEdescription.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblEdescription.setFont(SWTResourceManager.getFont("Lithos Pro Regular", 12, SWT.BOLD));
+		lblEdescription.setFont(SWTResourceManager.getFont("Showcard Gothic", 12, SWT.NORMAL));
 		lblEdescription.setText("Description:");
 
 		lblDynamicDescription = new Label(compEventParticulars, SWT.WRAP | SWT.SHADOW_NONE);
