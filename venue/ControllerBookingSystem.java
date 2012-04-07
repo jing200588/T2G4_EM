@@ -1,5 +1,10 @@
 package venue;
 
+import emanComparator.VenueAddressComparator;
+import emanComparator.VenueCapacityComparator;
+import emanComparator.VenueCostComparator;
+import emanComparator.VenueNameComparator;
+import emanComparator.VenueIDComparator;
 import event.*;
 
 /**
@@ -373,16 +378,16 @@ public class ControllerBookingSystem {
 				compare = new VenueIDComparator();
 				break;
 			case NAME:
-				compare = new NameComparator();
+				compare = new VenueNameComparator();
 				break;
 			case ADDRESS:
-				compare = new AddressComparator();
+				compare = new VenueAddressComparator();
 				break;
 			case CAPACITY:
-				compare = new CapacityComparator();
+				compare = new VenueCapacityComparator();
 				break;
 			case COST:
-				compare = new CostComparator();
+				compare = new VenueCostComparator();
 		}
 		
 		if(compare != null)

@@ -1,6 +1,8 @@
-package venue;
+package emanComparator;
 
 import java.util.Comparator;
+
+import venue.BookedVenueInfo;
 
 public class BVICapacityComparator implements Comparator<BookedVenueInfo>{
 

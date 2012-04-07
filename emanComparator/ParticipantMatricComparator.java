@@ -1,6 +1,8 @@
-package participant;
+package emanComparator;
 
 import java.util.Comparator;
+
+import participant.Participant;
 
 public class ParticipantMatricComparator implements Comparator<Participant> {
 

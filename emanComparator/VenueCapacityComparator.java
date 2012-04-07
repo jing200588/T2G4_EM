@@ -1,8 +1,10 @@
-package venue;
+package emanComparator;
 
 import java.util.Comparator;
 
-public class CapacityComparator implements Comparator<Venue>
+import venue.Venue;
+
+public class VenueCapacityComparator implements Comparator<Venue>
 {
 
 //	@Override

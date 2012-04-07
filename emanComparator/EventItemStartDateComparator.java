@@ -1,6 +1,8 @@
-package event;
+package emanComparator;
 
 import java.util.Comparator;
+
+import event.EventItem;
 
 public class EventItemStartDateComparator implements Comparator<EventItem> {
 

@@ -1,6 +1,8 @@
-package venue;
+package emanComparator;
 
 import java.util.Comparator;
+
+import venue.Venue;
 
 public class VenueIDComparator implements Comparator<Venue>
 {

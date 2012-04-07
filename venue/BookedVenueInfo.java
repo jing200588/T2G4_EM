@@ -4,6 +4,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import emanComparator.BVICapacityComparator;
+import emanComparator.BVICostComparator;
+import emanComparator.BVIEndDateTimeComparator;
+import emanComparator.BVINameComparator;
+import emanComparator.BVIStartDateTimeComparator;
+
 /**
  * An object of type BookedVenueInfo contains all information of a venue (like name, address, etc.)
  * 		and a list of time slots that a particular event books for this venue.

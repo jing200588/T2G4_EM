@@ -2,6 +2,8 @@ package event;
 
 import budget.*;
 import participant.*;
+import emanComparator.EventItemNameComparator;
+import emanComparator.EventItemStartDateComparator;
 import emdb.*;
 import emserver.AppContextBuilder;
 import emserver.EMSService;
