@@ -291,6 +291,10 @@ public class ViewParticipantList extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
+					
+					if (txtImportFile.getText().isEmpty())
+						throw new Exception("Path name is empty. Please input the path name of the .csv file u wish to import.");
+					
 					if (!txtImportFile.getText().endsWith(".csv"))
 						throw new Exception("Import file must be in .csv format");
 					
@@ -319,7 +323,10 @@ public class ViewParticipantList extends Composite {
 				} catch (ArrayIndexOutOfBoundsException exception) {
 					new ErrorMessageDialog(new Shell(), "Invalid .csv file. Make sure the file follows the correct format.").open();
 				} catch (Exception exception) {
-					new ErrorMessageDialog(new Shell(), "There was an error importing the file").open();
+					if (exception.getMessage().compareTo("Path name is empty. Please input the path name of the .csv file u wish to import.") == 0)
+						new ErrorMessageDialog(new Shell(), exception.getMessage()).open();
+					else 
+						new ErrorMessageDialog(new Shell(), "There was an error importing the file").open();
 					exception.printStackTrace();
 				}
 				
@@ -479,6 +486,9 @@ public class ViewParticipantList extends Composite {
  */
 public void ExportCSV (String filepath) {
 	try {
+		if (txtImportFile.getText().isEmpty())
+			throw new Exception("Path name is empty. Please input the path name of the .csv file u wish to export.");
+		
 		CSVWriter writer = new CSVWriter(new FileWriter(filepath));
 		String[] headers = new String[tableParticipant.getColumnCount()];
 		for (int i=0; i<tableParticipant.getColumnCount(); i++) {
@@ -497,8 +507,10 @@ public void ExportCSV (String filepath) {
 		new ErrorMessageDialog(new Shell(), "The file was exported successfully!", "Success!").open();
 		         		
 	} catch (Exception e) {
-		System.out.println("Error exporting");
-		new ErrorMessageDialog(new Shell(), "There was an error exporting the file.").open();
+		if (e.getMessage().compareTo("Path name is empty. Please input the path name of the .csv file u wish to export.") == 0)
+			new ErrorMessageDialog(new Shell(), e.getMessage()).open();
+		else
+			new ErrorMessageDialog(new Shell(), "There was an error exporting the file.").open();
 		e.printStackTrace();
 	}
 }
