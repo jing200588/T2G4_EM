@@ -52,34 +52,38 @@ public class InputDateTimeComposite extends Composite {
 		m_isEnabled = false;
 		setLayout(new FormLayout());
 		
-		Composite composite = new Composite(this, SWT.NONE);
-		FormData fd_composite = new FormData();
-		fd_composite.bottom = new FormAttachment(100);
-		fd_composite.right = new FormAttachment(100);
-		fd_composite.top = new FormAttachment(20);
-		fd_composite.left = new FormAttachment(0);
-		composite.setLayoutData(fd_composite);
-		toolkit.adapt(composite);
-		toolkit.paintBordersFor(composite);
-		composite.setLayout(new GridLayout(4, false));
+		Composite compContent = new Composite(this, SWT.NONE);
+		FormData fd_compContent = new FormData();
+		fd_compContent.bottom = new FormAttachment(100);
+		fd_compContent.right = new FormAttachment(100);
+		fd_compContent.top = new FormAttachment(20);
+		fd_compContent.left = new FormAttachment(0);
+		compContent.setLayoutData(fd_compContent);
+		toolkit.adapt(compContent);
+		toolkit.paintBordersFor(compContent);
+		compContent.setLayout(new GridLayout(4, false));
 		
-		Label label_1 = new Label(composite, SWT.NONE);
-		label_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-		label_1.setText("From:");
-		toolkit.adapt(label_1, true, true);
+		Label labelFrom = new Label(compContent, SWT.NONE);
+		labelFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		labelFrom.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		labelFrom.setText("From:");
+		toolkit.adapt(labelFrom, true, true);
 		
-		dateTimeFrom = new DateTime(composite, SWT.DROP_DOWN);
+		dateTimeFrom = new DateTime(compContent, SWT.DROP_DOWN);
+		dateTimeFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		dateTimeFrom.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		dateTimeFrom.setEnabled(false);
 		toolkit.adapt(dateTimeFrom);
 		toolkit.paintBordersFor(dateTimeFrom);
 		
-		Label label_2 = new Label(composite, SWT.NONE);
-		label_2.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		label_2.setText("at");
-		toolkit.adapt(label_2, true, true);
+		Label labelAtTop = new Label(compContent, SWT.NONE);
+		labelAtTop.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		labelAtTop.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		labelAtTop.setText("at");
+		toolkit.adapt(labelAtTop, true, true);
 		
-		comboTimeFrom = new Combo(composite, SWT.READ_ONLY);
+		comboTimeFrom = new Combo(compContent, SWT.READ_ONLY);
+		comboTimeFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		comboTimeFrom.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboTimeFrom.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -92,23 +96,27 @@ public class InputDateTimeComposite extends Composite {
 		toolkit.adapt(comboTimeFrom);
 		toolkit.paintBordersFor(comboTimeFrom);
 		
-		Label label_3 = new Label(composite, SWT.NONE);
-		label_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
-		label_3.setText("To:");
-		toolkit.adapt(label_3, true, true);
+		Label labelTo = new Label(compContent, SWT.NONE);
+		labelTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		labelTo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		labelTo.setText("To:");
+		toolkit.adapt(labelTo, true, true);
 		
-		dateTimeTo = new DateTime(composite, SWT.DROP_DOWN);
+		dateTimeTo = new DateTime(compContent, SWT.DROP_DOWN);
+		dateTimeTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		dateTimeTo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		dateTimeTo.setEnabled(false);
 		toolkit.adapt(dateTimeTo);
 		toolkit.paintBordersFor(dateTimeTo);
 		
-		Label label_4 = new Label(composite, SWT.NONE);
-		label_4.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		label_4.setText("at");
-		toolkit.adapt(label_4, true, true);
+		Label labelAtBottom = new Label(compContent, SWT.NONE);
+		labelAtBottom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		labelAtBottom.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		labelAtBottom.setText("at");
+		toolkit.adapt(labelAtBottom, true, true);
 		
-		comboTimeTo = new Combo(composite, SWT.READ_ONLY);
+		comboTimeTo = new Combo(compContent, SWT.READ_ONLY);
+		comboTimeTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		comboTimeTo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboTimeTo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -121,22 +129,23 @@ public class InputDateTimeComposite extends Composite {
 		toolkit.adapt(comboTimeTo);
 		toolkit.paintBordersFor(comboTimeTo);
 		
-		Label label = new Label(this, SWT.NONE);
-		FormData fd_label = new FormData();
-		fd_label.top = new FormAttachment(0);
-		fd_label.left = new FormAttachment(0, 5);
-		label.setLayoutData(fd_label);
-		label.setText("Preferred Time Slot:");
-		toolkit.adapt(label, true, true);
+		Label lblPreferredTimeSlot = new Label(this, SWT.NONE);
+		lblPreferredTimeSlot.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		FormData fd_lblPreferredTimeSlot = new FormData();
+		fd_lblPreferredTimeSlot.top = new FormAttachment(0);
+		fd_lblPreferredTimeSlot.left = new FormAttachment(0, 5);
+		lblPreferredTimeSlot.setLayoutData(fd_lblPreferredTimeSlot);
+		lblPreferredTimeSlot.setText("Preferred Time Slot:");
+		toolkit.adapt(lblPreferredTimeSlot, true, true);
 		
 
 		setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		label_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		label_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		label_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		compContent.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		labelFrom.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		labelAtTop.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		labelTo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		labelAtBottom.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		lblPreferredTimeSlot.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	}
 	
 	/**

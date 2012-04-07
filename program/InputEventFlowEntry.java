@@ -31,10 +31,10 @@ public class InputEventFlowEntry extends Composite {
 	private String[] m_venueName;
 	private boolean isVenueChosen;
 	
-	private DateTime dropdownDateFrom;
-	private DateTime dropdownTimeFrom;
-	private DateTime dropdownDateTo;
-	private DateTime dropdownTimeTo;
+	private DateTime dateFrom;
+	private DateTime timeFrom;
+	private DateTime dateTo;
+	private DateTime timeTo;
 	private Combo comboVenue;
 	
 	/**
@@ -79,32 +79,32 @@ public class InputEventFlowEntry extends Composite {
 		toolkit.adapt(lblStartDateTime, true, true);
 		lblStartDateTime.setText("Start Date Time:");
 		
-		dropdownDateFrom = new DateTime(this, SWT.DROP_DOWN);
-		dropdownDateFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		toolkit.adapt(dropdownDateFrom);
-		toolkit.paintBordersFor(dropdownDateFrom);
+		dateFrom = new DateTime(this, SWT.DROP_DOWN);
+		dateFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		toolkit.adapt(dateFrom);
+		toolkit.paintBordersFor(dateFrom);
 		
-		dropdownTimeFrom = new DateTime(this, SWT.DROP_DOWN | SWT.TIME | SWT.SHORT);
-		dropdownTimeFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		dropdownTimeFrom.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		toolkit.adapt(dropdownTimeFrom);
-		toolkit.paintBordersFor(dropdownTimeFrom);
+		timeFrom = new DateTime(this, SWT.DROP_DOWN | SWT.TIME | SWT.SHORT);
+		timeFrom.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		timeFrom.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		toolkit.adapt(timeFrom);
+		toolkit.paintBordersFor(timeFrom);
 		
 		Label lblEndDateTime = new Label(this, SWT.NONE);
 		lblEndDateTime.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblEndDateTime.setText("End Date Time:");
 		toolkit.adapt(lblEndDateTime, true, true);
 		
-		dropdownDateTo = new DateTime(this, SWT.DROP_DOWN);
-		dropdownDateTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		toolkit.adapt(dropdownDateTo);
-		toolkit.paintBordersFor(dropdownDateTo);
+		dateTo = new DateTime(this, SWT.DROP_DOWN);
+		dateTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		toolkit.adapt(dateTo);
+		toolkit.paintBordersFor(dateTo);
 		
-		dropdownTimeTo = new DateTime(this, SWT.DROP_DOWN | SWT.TIME | SWT.SHORT);
-		dropdownTimeTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		dropdownTimeTo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		toolkit.adapt(dropdownTimeTo);
-		toolkit.paintBordersFor(dropdownTimeTo);
+		timeTo = new DateTime(this, SWT.DROP_DOWN | SWT.TIME | SWT.SHORT);
+		timeTo.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		timeTo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		toolkit.adapt(timeTo);
+		toolkit.paintBordersFor(timeTo);
 		
 		Label lblVenue = new Label(this, SWT.NONE);
 		lblVenue.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
@@ -163,8 +163,8 @@ public class InputEventFlowEntry extends Composite {
 		if(activityName == null || activityName.equals(""))
 			throw new Exception("You have not enter the name of the activity!");
 		
-		MyDateTime dateTimeFrom = readDateTime(dropdownDateFrom, dropdownTimeFrom);
-		MyDateTime dateTimeTo = readDateTime(dropdownDateTo, dropdownTimeTo);
+		MyDateTime dateTimeFrom = readDateTime(dateFrom, timeFrom);
+		MyDateTime dateTimeTo = readDateTime(dateTo, timeTo);
 		if(dateTimeFrom.compareTo(dateTimeTo) > 0)
 			throw new Exception("The starting date time and ending date time are not in chronological order!");
 		if(dateTimeFrom.compareTo(dateTimeTo) == 0)
@@ -208,8 +208,8 @@ public class InputEventFlowEntry extends Composite {
 		txtTextNote.setText(obj.getUserNote());
 		
 		// Set date time
-		setDateTime(dropdownDateFrom, dropdownTimeFrom, obj.getDuration().getStartDateTime());
-		setDateTime(dropdownDateTo, dropdownTimeTo, obj.getDuration().getEndDateTime());
+		setDateTime(dateFrom, timeFrom, obj.getDuration().getStartDateTime());
+		setDateTime(dateTo, timeTo, obj.getDuration().getEndDateTime());
 		
 		isVenueChosen = true;
 	}
