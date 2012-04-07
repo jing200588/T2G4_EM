@@ -51,7 +51,7 @@ public class ViewServer extends Composite {
 		formViewServer.getHead().setForeground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_FOREGROUND));
 		formViewServer.getBody().setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		formViewServer.setBounds(0, 0, 700, 400);
-		formViewServer.getHead().setFont(SWTResourceManager.getFont("Hobo Std", 20, SWT.BOLD));
+		formViewServer.getHead().setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		formToolkit.paintBordersFor(formViewServer);
 		formViewServer.setText("Server Controls");
 		formViewServer.getBody().setLayout(new FormLayout());
@@ -65,12 +65,14 @@ public class ViewServer extends Composite {
 		
 		
 		final Button btnStart = new Button(formViewServer.getBody(), SWT.NONE);
+		btnStart.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.NORMAL));
 		FormData fd_btnStart = new FormData();
 		fd_btnStart.height = 50;
 		fd_btnStart.right = new FormAttachment(45);
 		fd_btnStart.top = new FormAttachment(20);
 		btnStart.setLayoutData(fd_btnStart);
 		final Button btnStop = new Button(formViewServer.getBody(), SWT.NONE);
+		btnStop.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.NORMAL));
 		FormData fd_btnStop = new FormData();
 		fd_btnStop.height = 50;
 		fd_btnStop.top = new FormAttachment(20);
@@ -82,6 +84,7 @@ public class ViewServer extends Composite {
 		btnStop.setText("Stop Server");
 		
 		txtServerPort = new Text(formViewServer.getBody(), SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+		txtServerPort.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		fd_btnStop.right = new FormAttachment(txtServerPort, 0, SWT.RIGHT);
 		fd_btnStart.left = new FormAttachment(txtServerPort, 0, SWT.LEFT);
 		FormData fd_txtServerPort = new FormData();
