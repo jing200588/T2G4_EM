@@ -77,6 +77,7 @@ public class ViewEventParticulars extends Composite {
 		
 		//Event name textbox
 		txtEventTitle = formToolkit.createText(composite, "New Text", SWT.NONE);
+		txtEventTitle.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtEventTitle.setText("");
 		txtEventTitle.setMessage("eg. Fundraising Bazzar");
 		GridData gd_txtEventTitle = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
@@ -89,11 +90,13 @@ public class ViewEventParticulars extends Composite {
 		lblStartDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblStartDate.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.BOLD));
 		StartDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
+		StartDate.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		formToolkit.adapt(StartDate);
 		formToolkit.paintBordersFor(StartDate);
 		
 		//Start Time widget
 		StartTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);		
+		StartTime.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		StartTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		StartTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(StartTime);
@@ -105,11 +108,13 @@ public class ViewEventParticulars extends Composite {
 		lblEndDate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblEndDate.setFont(SWTResourceManager.getFont("Maiandra GD", 12, SWT.BOLD));
 		EndDate = new DateTime(composite, SWT.BORDER | SWT.DROP_DOWN);
+		EndDate.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		formToolkit.adapt(EndDate);
 		formToolkit.paintBordersFor(EndDate);
 		
 		//End Date widget
 		EndTime = new DateTime(composite, SWT.BORDER | SWT.TIME | SWT.SHORT);
+		EndTime.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		EndTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		formToolkit.adapt(EndTime);
 		formToolkit.paintBordersFor(EndTime);
@@ -122,6 +127,7 @@ public class ViewEventParticulars extends Composite {
 		
 		//Description textbox
 		txtDescription = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+		txtDescription.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		GridData gd_txtDescription = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		gd_txtDescription.heightHint = 79;
 		gd_txtDescription.widthHint = 250;

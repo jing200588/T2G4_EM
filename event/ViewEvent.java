@@ -32,19 +32,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -52,7 +48,7 @@ import com.ibm.icu.text.Collator;
 
 
 public class ViewEvent extends Composite {
-	private static Table tableBudget, tableVenue, tableEventFlow, tableParticipant, tableTemp;
+	private static Table tableBudget, tableVenue, tableEventFlow, tableParticipant;
 	private static boolean budgetFlag, venueFlag, eventFlowFlag, participantFlag;
 	private static EventItem currentEvent;
 	private static Composite compBudget, compVenue, compEventFlow, compParticipant;
@@ -594,8 +590,8 @@ public class ViewEvent extends Composite {
 	public static void RefreshBudget() {
 		if (budgetFlag)
 			tableBudget.dispose();
-		tableBudget = BudgetJfaceTable();
-	//	tableBudget = BudgetTable();
+		BudgetTable();
+
 	}
 
 	/**
@@ -605,109 +601,39 @@ public class ViewEvent extends Composite {
 	public static void RefreshVenue() {
 		if (venueFlag)
 			tableVenue.dispose();
-		//tableVenue = VenueTable();
-		tableVenue = VenueJfaceTable();
+		BookVenueTable();
 	}
 
+	/**
+	 * Description: Refreshes the event program flow table in the Event Flow section of View Event by disposing the current one (if any) and replacing with a new table.
+	 * Table will only be created if there is any entry.
+	 */
 	public static void RefreshFlow() {
 		if (eventFlowFlag)
 			tableEventFlow.dispose();
-		//tableEventFlow = FlowTable();
-		tableEventFlow = FlowJfaceTable();
+		EventFlowTable();
 	}
 
+	/**
+	 * Description: Refreshes the event participant list table in the Participant List section of View Event by disposing the current one (if any) and replacing with a new table.
+	 * Table will only be created if there is any entry.
+	 */
 	public static void RefreshParticipant() {
 		if (participantFlag)
 			tableParticipant.dispose();
-		//tableParticipant = ParticipantTable();
-		tableParticipant =  ParticipantJfaceTable();
+		ParticipantListTable();
 	}
 
 	/**********************************************************************************************
 	 * 
-	 * PARTICIPANTTABLE 
+	 * PARTICIPANT TABLE 
 	 * 
 	 *********************************************************************************************/
 	/**
 	 * Description: Creates a table of participant details in the ViewEvent page. 
 	 * @return Table containing participant details or null if ParticipantList is empty 
 	 */
-	public static Table ParticipantTable() {
-		List<Participant> participantList = currentEvent.getParticipantList();
-
-		//Checks if there is any entry before creating the table
-		if (participantList.isEmpty()) {
-			participantFlag = false;	
-			return null;
-		}
-
-		String columnName[] = {"Name","Matric No.","Contact","Email Address","Home Address","Remark"};
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
-
-		tableParticipant = createTableMethod(compParticipant, data, columnName);
-
-		final TableColumn col0 = tableParticipant.getColumn(0);
-		final TableColumn col1 = tableParticipant.getColumn(1);
-		final TableColumn col2 = tableParticipant.getColumn(2);
-		final TableColumn col3 = tableParticipant.getColumn(3);
-		final TableColumn col4 = tableParticipant.getColumn(4);
-		final TableColumn col5 = tableParticipant.getColumn(5);
-		tableParticipant.getColumn(0).setAlignment(16384);
-
-		tableParticipant.removeAll();
-		for (int loopIndex = 0; loopIndex < participantList.size(); loopIndex++) {
-			TableItem item = new TableItem(tableParticipant, SWT.NULL);
-			item.setText(0, participantList.get(loopIndex).getName());
-			item.setText(1, participantList.get(loopIndex).getMatric());
-			item.setText(2, participantList.get(loopIndex).getContact());
-			item.setText(3, participantList.get(loopIndex).getEmail());
-			item.setText(4, participantList.get(loopIndex).getAddress());
-			item.setText(5, participantList.get(loopIndex).getRemark());
-		}
-		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
-			tableParticipant.getColumn(loopIndex).pack();
-		}					
-
-		//Column Resize with table fix
-		compParticipant.addControlListener(new ControlAdapter() {
-			public void controlResized(ControlEvent e) {
-				Rectangle area = compParticipant.getClientArea();
-				int width = area.width - 2*tableParticipant.getBorderWidth();
-
-				//			controlResizePackage(compParticipant, tableParticipant, width, area);
-				Point preferredSize = tableParticipant.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				if (preferredSize.y > area.height + tableParticipant.getHeaderHeight()) {
-					// Subtract the scrollbar width from the total column width
-					// if a vertical scrollbar will be required
-					Point vBarSize = tableParticipant.getVerticalBar().getSize();
-					width -= vBarSize.x;
-				}
-
-				col1.pack();
-				col2.pack();
-				col4.setWidth((width - col1.getWidth() - col2.getWidth())/3);
-				col0.setWidth((width - col1.getWidth() - col2.getWidth() - col4.getWidth())*2/5);
-				col3.setWidth((width - col1.getWidth() - col2.getWidth() - col4.getWidth())*2/5-10);
-				col5.setWidth(width - col1.getWidth() - col2.getWidth() - col4.getWidth() - col3.getWidth() - col0.getWidth()-10);
-			}
-		});
-
-		mouseOverPackage(tableParticipant, data);
-		setTableRowDisplayed(tableParticipant, data, 15);
-		participantFlag = true;
-		return tableParticipant;
-	}
-
-	/**********************************************************************************************
-	 * 
-	 * PARTICIPANTTABLE 
-	 * 
-	 *********************************************************************************************/
-	/**
-	 * Description: Creates a table of participant details in the ViewEvent page. 
-	 * @return Table containing participant details or null if ParticipantList is empty 
-	 */
-	public static Table ParticipantJfaceTable() {
+	public static Table ParticipantListTable() {
 		participantList = currentEvent.getParticipantList();
 
 		//Checks if there is any entry before creating the table
@@ -851,142 +777,17 @@ public class ViewEvent extends Composite {
 		participantFlag = true;
 		return tableParticipant;
 	}
-	/**
-	 * Description: Creates a table that is populated with the details of the event's list of booked venues
-	 * @return A table is returned if there are entries in the list, else null is returned
-	 */
-	public static Table VenueTable() {
-		Vector<BookedVenueInfo> venueList = currentEvent.getBVIList();
 
-		//Checks if there is any entry before creating the table
-		if (venueList.isEmpty()) {
-			venueFlag = false;	
-			return null;
-		}
-		String columnName[] = {"Venue Name", "Capacity", "Cost", "Start Date", "Start Time","End Date","End Time"};
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
-
-		tableVenue = createTableMethod(compVenue, data, columnName);
-
-		final TableColumn col0 = tableVenue.getColumn(0);
-		final TableColumn col1 = tableVenue.getColumn(1);
-		final TableColumn col2 = tableVenue.getColumn(2);
-		final TableColumn col3 = tableVenue.getColumn(3);
-		final TableColumn col4 = tableVenue.getColumn(4);
-		final TableColumn col5 = tableVenue.getColumn(5);
-		final TableColumn col6 = tableVenue.getColumn(6);
-		tableVenue.getColumn(0).setAlignment(16384);
-
-		//		tableVenue.removeAll();
-		for (int loopIndex = 0; loopIndex < venueList.size(); loopIndex++) {
-			TableItem item = new TableItem(tableVenue, SWT.NULL);
-			item.setText(0, venueList.get(loopIndex).getName());
-			item.setText(1, venueList.get(loopIndex).getMaxCapacityString());
-			item.setText(2, "$" + venueList.get(loopIndex).getCostInDollarString());
-			item.setText(3, venueList.get(loopIndex).getStartDateString());
-			item.setText(4, venueList.get(loopIndex).getStartTimeString());
-			item.setText(5, venueList.get(loopIndex).getEndDateString());		
-			item.setText(6, venueList.get(loopIndex).getEndTimeString());		
-
-		}
-		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
-			tableVenue.getColumn(loopIndex).pack();
-		}					
-
-		//Column Resize with table fix
-		compVenue.addControlListener(new ControlAdapter() {
-			public void controlResized(ControlEvent e) {
-				Rectangle area = compVenue.getClientArea();
-				int width = area.width - 2*tableVenue.getBorderWidth();
-
-				controlResizePackage(compVenue, tableVenue, width, area);
-
-				col0.setWidth(width/5-10);
-				col1.setWidth((width - col0.getWidth())/6-10);
-				col3.setWidth((width - col0.getWidth())/6+4);
-				col4.setWidth((width - col0.getWidth())/6-4);
-				col5.setWidth((width - col0.getWidth())/6+4);
-				col6.setWidth((width - col0.getWidth())/6-4);
-				col2.setWidth(width - col0.getWidth() - col1.getWidth() - col3.getWidth() - col4.getWidth() -col5.getWidth() -col6.getWidth()-10);
-			}
-		});
-
-		mouseOverPackage(tableVenue, data);
-
-		venueFlag = true;
-		return tableVenue;
-	}
-
-	public static Table FlowTable() {
-		Vector<EventFlowEntry> flowList = currentEvent.getEventFlow();
-
-		//Checks if there is any entry before creating the table
-		if (flowList.isEmpty()) {
-			eventFlowFlag = false;	
-			return null;
-		}
-
-		String columnName[] = {"Start Date Time", "End Date Time", "Activity", "Venue", "Remark"};
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
-
-		tableEventFlow = createTableMethod(compEventFlow, data, columnName);
-
-		final TableColumn col0 = tableEventFlow.getColumn(0);
-		final TableColumn col1 = tableEventFlow.getColumn(1);
-		final TableColumn col2 = tableEventFlow.getColumn(2);
-		final TableColumn col3 = tableEventFlow.getColumn(3);
-		final TableColumn col4 = tableEventFlow.getColumn(4);
-		tableEventFlow.getColumn(0).setAlignment(16384);
-
-		tableEventFlow.removeAll();
-		for (int loopIndex = 0; loopIndex < flowList.size(); loopIndex++) {
-			TableItem item = new TableItem(tableEventFlow, SWT.NULL);
-			item.setText(0, flowList.get(loopIndex).getDuration().getStartDateTime().getDateRepresentation() + " " +
-					flowList.get(loopIndex).getDuration().getStartDateTime().getTimeRepresentation());
-			item.setText(1, flowList.get(loopIndex).getDuration().getEndDateTime().getDateRepresentation() + " " +
-					flowList.get(loopIndex).getDuration().getEndDateTime().getTimeRepresentation());
-			item.setText(2, flowList.get(loopIndex).getActivityName());
-			item.setText(3, flowList.get(loopIndex).getVenueName());
-			item.setText(4, flowList.get(loopIndex).getUserNote());
-
-
-		}
-		for (int loopIndex = 0; loopIndex < 5; loopIndex++) {
-			tableEventFlow.getColumn(loopIndex).pack();
-		}					
-
-		//Column Resize with table fix
-		compEventFlow.addControlListener(new ControlAdapter() {
-			public void controlResized(ControlEvent e) {
-				Rectangle area = compEventFlow.getClientArea();
-				int width = area.width - 2*tableEventFlow.getBorderWidth();
-
-				controlResizePackage(compEventFlow, tableEventFlow, width, area);
-
-				col0.pack();
-				col1.pack();
-				col2.setWidth((width - col0.getWidth() - col1.getWidth() - 10)/3);
-				col3.setWidth((width - col0.getWidth() - col1.getWidth() - 10)/3);
-				col4.setWidth((width - col0.getWidth() - col1.getWidth() - 10)/3);
-			}
-		});
-
-		mouseOverPackage(tableEventFlow, data);
-
-		eventFlowFlag = true;
-		return tableEventFlow;
-	}
-	
 	/**********************************************************************************************
 	 * 
 	 * EVENT FLOW TABLE 
 	 * 
 	 *********************************************************************************************/
 	/**
-	 * Description:  
-	 * @return  
+	 * Description: Creates a table that is populated with the details of the event's program flow
+	 * @return A table is returned if there are entries in the list, else null is returned
 	 */
-	public static Table FlowJfaceTable() {
+	public static Table EventFlowTable() {
 		Vector<EventFlowEntry> flowList = currentEvent.getEventFlow();
 
 		//Checks if there is any entry before creating the table
@@ -1087,10 +888,10 @@ public class ViewEvent extends Composite {
 	 * 
 	 *********************************************************************************************/
 	/**
-	 * Description:  
-	 * @return  
+	 * Description: Creates a table that is populated with the details of the event's list of booked venues
+	 * @return A table is returned if there are entries in the list, else null is returned
 	 */
-	public static Table VenueJfaceTable() {
+	public static Table BookVenueTable() {
 		venueList = currentEvent.getBVIList();
 
 		//Checks if there is any entry before creating the table
@@ -1253,121 +1054,12 @@ public class ViewEvent extends Composite {
 		venueFlag = true;
 		return tableVenue;
 	}
+
 	/**
 	 * Description: Creates a sortable table that is populated with items of the event's optimized item list
 	 * @return A table is returned if there are entries in the list, else null is returned
 	 */
 	public static Table BudgetTable() {
-		final Vector<Item> itemList = currentEvent.getItemList();
-
-		//Checks if there is any entry before creating the table
-		if (itemList.isEmpty()) {
-			budgetFlag = false;	
-			return null;
-		}
-
-		String columnName[] = {"No.", "Item Name", "Price", "Satisfaction", "Type","Quantity"};
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
-
-		tableBudget = createTableMethod(compBudget, data, columnName);
-
-		final TableColumn col0 = tableBudget.getColumn(0);
-		final TableColumn col1 = tableBudget.getColumn(1);
-		final TableColumn col2 = tableBudget.getColumn(2);
-		final TableColumn col3 = tableBudget.getColumn(3);
-		final TableColumn col4 = tableBudget.getColumn(4);
-		final TableColumn col5 = tableBudget.getColumn(5);
-		tableBudget.getColumn(1).setAlignment(16384);
-
-		col0.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				sortColumn(0, itemList);
-			}
-		});
-
-		col1.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				sortColumn(1, itemList);
-			}
-		});
-
-		col2.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				sortColumn(2, itemList);
-			}
-		});
-
-		col3.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				sortColumn(3, itemList);
-			}
-		});
-
-		col4.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				sortColumn(4, itemList);
-			}
-		});
-
-		col5.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				sortColumn(5, itemList);
-			}
-		});
-		refreshBudgetTable(itemList);
-
-		//Column Resize with table fix
-		compBudget.addControlListener(new ControlAdapter() {
-			public void controlResized(ControlEvent e) {
-				Rectangle area = compBudget.getClientArea();
-				int width = area.width - 2*tableBudget.getBorderWidth();
-
-				controlResizePackage(compBudget, tableBudget, width, area);
-
-				col0.pack();
-				col2.pack();
-				col3.pack();
-				col4.pack();
-				col5.pack();
-				col1.setWidth(width - col0.getWidth() - col2.getWidth() - col3.getWidth() - col4.getWidth() - col5.getWidth() -10);
-			}
-		});
-
-		mouseOverPackage(tableBudget, data);
-
-		Menu menu = new Menu(tableBudget);
-		tableBudget.setMenu(menu);
-
-		/************************************************************
-		 * DELETE ITEM
-		 ***********************************************************/
-		MenuItem mntmDeleteEvent = new MenuItem(menu, SWT.PUSH);
-		mntmDeleteEvent.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem tb = tableBudget.getItem(tableBudget.getSelectionIndex());
-				int itemToDelete = Integer.parseInt(tb.getText(0).substring(5, tb.getText(0).length()));
-				DeleteConfirmDialog confirm = new DeleteConfirmDialog(new Shell(), "delconfirm", tb.getText(1));
-				if ((Integer) confirm.open() == 1) {
-					deleteBudgetItem(itemList, itemToDelete);
-				}
-			}
-		});
-		mntmDeleteEvent.setText("Delete Item");
-
-		if (currentEvent.isExpired()) {
-			mntmDeleteEvent.setEnabled(false);
-		}
-
-		budgetFlag = true;
-		return tableBudget;
-	}
-
-	/**
-	 * Description: Creates a sortable table that is populated with items of the event's optimized item list
-	 * @return A table is returned if there are entries in the list, else null is returned
-	 */
-	public static Table BudgetJfaceTable() {
 		final Vector<Item> itemList = currentEvent.getItemList();
 
 		//Checks if there is any entry before creating the table
@@ -1481,6 +1173,11 @@ public class ViewEvent extends Composite {
 		budgetFlag = true;
 		return tableBudget;
 	}
+	/**
+	 * Description: Removes the selected items from the list and database.
+	 * @param itemList - List of items of the event 
+	 * @param itemToDelete - items to remove from the list
+	 */
 	public static void deleteBudgetItem(Vector<Item> itemList, int itemToDelete) {
 
 		bc = new ControllerBudget();
@@ -1592,28 +1289,6 @@ public class ViewEvent extends Composite {
 	}
 
 	/**
-	 * Description: Method to generate tables
-	 * @param inputComposite - Composite for the table to reside in
-	 * @param data - Layout data of the composite
-	 * @param inputColumnName - Column names of the table columns
-	 * @return - Returns the table object
-	 */
-	public static Table createTableMethod(Composite inputComposite, GridData data, String[] inputColumnName) {
-		tableTemp = new Table(inputComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL);
-
-		tableTemp.setLayoutData(data);
-		tableTemp.setHeaderVisible(true);
-		tableTemp.getVerticalBar().setEnabled(false);
-
-		for(int i=0; i<inputColumnName.length; i++) {
-			final TableColumn tempColumn = new TableColumn(tableTemp, SWT.CENTER);
-			tempColumn.setText(inputColumnName[i]);
-		}
-
-		return tableTemp;
-	}
-
-	/**
 	 * Description: Exports a table in ViewEvent into a CSV file
 	 * @param filepath - location where the exported CSV file is stored
 	 * @param inputTable - Table to be exported
@@ -1640,16 +1315,6 @@ public class ViewEvent extends Composite {
 		writer.writeNext(emptyLine);
 	}
 
-	public static void controlResizePackage(Composite inputComposite, Table inputTable, int width, Rectangle area) {
-
-		Point preferredSize = inputTable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-		if (preferredSize.y > area.height + inputTable.getHeaderHeight()) {
-			// Subtract the scrollbar width from the total column width
-			// if a vertical scrollbar will be required
-			Point vBarSize = inputTable.getVerticalBar().getSize();
-			width -= vBarSize.x;
-		}
-	}
 	/**
 	 * Description: Method that sets the mouseover properties of the table to display the values of the individual cell the 
 	 * mouse is currently hovering on

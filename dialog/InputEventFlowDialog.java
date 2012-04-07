@@ -165,5 +165,9 @@ public class InputEventFlowDialog extends Dialog {
 		shell.setDefaultButton(ok);
 		
 		inputEventFlowBox.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+
+		ok.setBackground(SWTResourceManager.getColor(240, 240, 240));
+		cancel.setBackground(SWTResourceManager.getColor(240, 240, 240));
+
 	}
 }

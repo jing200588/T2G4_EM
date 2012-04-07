@@ -20,7 +20,7 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 	 */
 	public ViewEditEventParticulars(Composite parent, int style, final EventItem curevent) {
 		super(parent, style);
-		EventParticularsForm.getHead().setFont(SWTResourceManager.getFont("Lithos Pro Regular", 20, SWT.BOLD));
+		EventParticularsForm.getHead().setFont(SWTResourceManager.getFont("Showcard Gothic", 20, SWT.NORMAL));
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		EventParticularsForm.setText("Event Particulars");
@@ -56,7 +56,7 @@ public class ViewEditEventParticulars extends ViewEventParticulars {
 					curevent.setEndDate(EndDate.getYear(), EndDate.getMonth()+1, EndDate.getDay());
 					
 					ModelEvent.UpdateParticulars(curevent);
-					ViewMain.UpdateTable();
+					ViewMain.RefreshEventListTable();
 					ViewMain.ReturnView();
 				}
 				catch(Exception exception)
