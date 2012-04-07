@@ -251,7 +251,7 @@ public class ViewParticipantList extends Composite {
 		txtImportFile = new Text(compositebottom, SWT.BORDER);
 		txtImportFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtImportFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtImportFile.setText("/temp/myfile.csv");
+		txtImportFile.setMessage("C:/");
 
 		/************************************************************
 		 * 
@@ -335,7 +335,7 @@ public class ViewParticipantList extends Composite {
 		
 		txtExportFile = new Text(compositebottom, SWT.BORDER);
 		txtExportFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		txtExportFile.setMessage("/temp/myfile.csv");
+		txtExportFile.setMessage("C:/");
 		txtExportFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		/************************************************************
