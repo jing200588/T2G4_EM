@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import program.EventFlowEntry;
 
-import budget.Item;
 import venue.TimeSlot;
 import venue.Venue;
 import emdb.EMDBII;
@@ -33,6 +32,8 @@ public class EMDBIITest {
 	
 	public EMDBIITest(){		
 
+		db.destroy(false);
+		
 		//Add 5 items to the list
 		this.event = new EventItem("The NUS Event", "01/12/2014", "12/12/2014", "01:00", "13:00");
 		this.event.setDescription("Just another event");
@@ -420,7 +421,31 @@ public class EMDBIITest {
 
 	
 	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section E
+	 * 
+	 * *******************************
+	 */
 	
+	@Test
+	public void addEventError(){
+		
+		int eventID = db.eventDB().addEvent(
+				"", 
+				this.event.getDescription(), 
+				this.event.getBudget(), 
+				this.event.getStartDateTime().getDateRepresentation(), 
+				this.event.getEndDateTime().getDateRepresentation(),
+				this.event.getStartDateTime().getTimeRepresentation(), 
+				this.event.getEndDateTime().getTimeRepresentation(), 
+				EventFlowEntry.getStringRepresentation(this.event.getEventFlow())
+				);
+	
+		
+		assertFalse( (eventID > 0) );
+	}
 	
 	
 
