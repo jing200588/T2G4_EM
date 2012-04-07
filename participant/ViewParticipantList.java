@@ -36,12 +36,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
 
+import venue.MyDateTime;
+
 public class ViewParticipantList extends Composite {
 	private EventItem currentEvent;
 	private Table tableParticipant;
 	private TableViewer tableParticipantViewer;
 	private Text txtImportFile;
 	private Text txtExportFile;
+	private Label lblSave;
 	private Button btnDelete;
 	private int index = 0;
 	private static ModelParticipantList modelPL = new ModelParticipantList();
@@ -243,6 +246,11 @@ public class ViewParticipantList extends Composite {
 		compositebottom.setLayoutData(fd_compositebottom);
 		compositebottom.setLayout(new GridLayout(4, false));
 		
+		lblSave = new Label(compositebottom, SWT.NONE);
+		lblSave.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		lblSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 4, 1));
+		lblSave.setText("The list is not saved.");
+		
 		Label lblInputFile = new Label(compositebottom, SWT.NONE);
 		lblInputFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		lblInputFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -251,7 +259,7 @@ public class ViewParticipantList extends Composite {
 		txtImportFile = new Text(compositebottom, SWT.BORDER);
 		txtImportFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		txtImportFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtImportFile.setMessage("C:/");
+		txtImportFile.setMessage("C:\\");
 
 		/************************************************************
 		 * 
@@ -296,7 +304,7 @@ public class ViewParticipantList extends Composite {
 						throw new Exception("Path name is empty. Please input the path name of the .csv file u wish to import.");
 					
 					if (!txtImportFile.getText().endsWith(".csv"))
-						throw new Exception("Import file must be in .csv format");
+						txtImportFile.append(".csv");
 					
 					if (tableParticipant.getItemCount() != 0) {
 						DeleteConfirmDialog dialog = new DeleteConfirmDialog(new Shell(), "confirm",
@@ -342,7 +350,7 @@ public class ViewParticipantList extends Composite {
 		
 		txtExportFile = new Text(compositebottom, SWT.BORDER);
 		txtExportFile.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
-		txtExportFile.setMessage("C:/");
+		txtExportFile.setMessage("C:\\");
 		txtExportFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		/************************************************************
@@ -436,12 +444,43 @@ public class ViewParticipantList extends Composite {
 		btnDelete.setText("Delete");
 		btnDelete.setEnabled(false);
 		
+		Button btnSaveList = new Button(compositeside, SWT.NONE);
+		btnSaveList.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
+		GridData gd_btnSaveList = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_btnSaveList.widthHint = 100;
+		btnSaveList.setLayoutData(gd_btnSaveList);
+		btnSaveList.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//save list into DB and event item
+				currentEvent.setParticipantList(tempEntries);
+				ModelParticipantList.UpdateDB(currentEvent);
+				showSaveStatus();
+			}
+		});
+		btnSaveList.setText("Save List");
+		
 		//Go Back button
 		Button btnGoBack = new Button(compositeside, SWT.NONE);
 		btnGoBack.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
 		btnGoBack.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				TwoChoiceDialog saveDialog = new TwoChoiceDialog(new Shell(), "Message", 
+						"Do you want to save your table of participant list?", "Yes", "No");
+				String choice = (String) saveDialog.open();
+				
+				if(choice == null)
+					return;
+				
+				// Update the event flow in the database as well as in the event itself
+				if(choice.equals("Yes") == true)
+				{
+					currentEvent.setParticipantList(tempEntries);
+					ModelParticipantList.UpdateDB(currentEvent);
+				}
+				
+				// Return to the main GUI
 				ModelParticipantList.PullParticipantList(currentEvent);
 				ViewMain.ReturnView();
 			}
@@ -449,7 +488,7 @@ public class ViewParticipantList extends Composite {
 		GridData gd_btnGoBack = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
 		gd_btnGoBack.widthHint = 100;
 		btnGoBack.setLayoutData(gd_btnGoBack);
-		btnGoBack.setText("Go Back");
+		btnGoBack.setText("Back");
 		
 		Label lbldummy = new Label(compositeside, SWT.NONE);
 		lbldummy.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 6));
@@ -460,22 +499,6 @@ public class ViewParticipantList extends Composite {
 		 * SAVE LIST EVENT LISTENER
 		 * 
 		 ***********************************************************/
-		
-		Button btnSaveList = new Button(compositeside, SWT.NONE);
-		btnSaveList.setFont(SWTResourceManager.getFont("Maiandra GD", 10, SWT.NORMAL));
-		GridData gd_btnSaveList = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_btnSaveList.heightHint = 45;
-		gd_btnSaveList.widthHint = 100;
-		btnSaveList.setLayoutData(gd_btnSaveList);
-		btnSaveList.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				//save list into DB and event item
-				currentEvent.setParticipantList(tempEntries);
-				ModelParticipantList.UpdateDB(currentEvent);
-			}
-		});
-		btnSaveList.setText("Save List");
 			
 		
 	}
@@ -540,6 +563,17 @@ public void ImportCSV (String filepath) throws Exception {
 		throw e;
 	}
 
+}
+
+/**
+ * This method is to update the last time the user saves his list.
+ */
+private void showSaveStatus()
+{
+	MyDateTime currentTime = MyDateTime.getCurrentDateTime();
+	
+	lblSave.setText("Last saved by " + currentTime.getDateRepresentation() + " " + 
+			currentTime.getTimeRepresentation());
 }
 	/**
 	 * Description: Adds a new participant object into the local list of participants.
