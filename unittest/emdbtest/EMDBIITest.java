@@ -17,6 +17,11 @@ import emdb.EMDBSettings;
 import event.EventItem;
 
 
+/**
+ * JUnit Testing for EMDB Classes
+ * @author JunZhi
+ *
+ */
 public class EMDBIITest {
 	
 	
@@ -74,8 +79,7 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section A
-	 * START / END
+	 * START / END / Init Test
 	 * 
 	 * *******************************
 	 */
@@ -117,7 +121,8 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section B
+	 * Test Section 1
+	 * Add and Retrieve
 	 * 
 	 * *******************************
 	 */
@@ -266,7 +271,8 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section C
+	 * Test Section 2
+	 * Modify
 	 * 
 	 * *******************************
 	 */
@@ -349,28 +355,71 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section D
+	 * Test Section 3
+	 * Dekete
 	 * 
 	 * *******************************
 	 */
 	
 
 	@Test
-	public void deleteVenue(){
+	public void deleteAndGetEvent(){
 
-		int id = db.venueDB().addVenue(this.venueList.get(0));
-		int oldDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
+		//Deleting
+		EventItem eEvent = this.eventList.get(3);
 		
-		db.venueDB().deleteVenue(id);
-		int newDbVenueSize = db.venueDB().getVenueList(null, 0, 0).size();
-		
-		assertEquals( 1, Math.abs(newDbVenueSize-oldDbVenueSize) );
+		int id = db.eventDB().addEvent(eEvent);
+		eEvent.setID(id);
 
-		Venue test = db.venueDB().getVenue(id);
-		assertTrue( test.getName() == null || test.getName().isEmpty() );
+		int oldSize = db.eventDB().getEventList().size();
+		
+		db.eventDB().deleteEvent(id);
+		int newSize = db.eventDB().getEventList().size();
+		
+		assertEquals( 1, Math.abs(newSize-oldSize) );
+
+		
+		
+		
+		// Get Error
+		EventItem test = db.eventDB().getEvent(id);
+		assertTrue( test == null );
 
 	}
 	
+	
+	
+	
+	@Test
+	public void deleteAndGetVenue(){
+		
+		//Deleting
+		int id = db.venueDB().addVenue(this.venueList.get(0));
+		int oldSize = db.venueDB().getVenueList(null, 0, 0).size();
+		
+		db.venueDB().deleteVenue(id);
+		int newSize = db.venueDB().getVenueList(null, 0, 0).size();
+		
+		assertEquals( 1, Math.abs(newSize-oldSize) );
+
+		
+		
+		//Get Error
+		Venue test = db.venueDB().getVenue(id);
+		assertTrue( test.getName() == null || test.getName().isEmpty() );	
+	}
+	
+	
+	
+	
+	/*
+	 * ******************************* 
+	 * 
+	 * Test Section 4.1
+	 * Delete Errors
+	 * 
+	 * *******************************
+	 */
 	
 	
 	@Test
@@ -424,7 +473,8 @@ public class EMDBIITest {
 	/*
 	 * ******************************* 
 	 * 
-	 * Test Section E
+	 * Test Section 4.2
+	 * Add Errors
 	 * 
 	 * *******************************
 	 */
@@ -448,9 +498,18 @@ public class EMDBIITest {
 	}
 	
 	
+	@Test
+	public void addBookingError(){
+		int id = db.venueDB().addBooking(0, 0, "10/05/2012/15/00", "11/05/2012/16/00");
+		assertTrue( (id == 0) );
+	}
 
 	
-
+	@Test
+	public void addBudgetError(){
+		int id = db.budgetDB().addBudget(0, "Mandriva", 3000, 21, "Noth", 2);
+		assertTrue( (id == 0) );
+	}
 	
 	
 }
