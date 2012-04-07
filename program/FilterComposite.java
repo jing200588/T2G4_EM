@@ -24,8 +24,8 @@ import org.eclipse.wb.swt.SWTResourceManager;
 public class FilterComposite extends Composite {
 
 	private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());
-	private InputDateTimeComposite inputDateTimeCompo;
-	private Text textActivity;
+	private InputDateTimeComposite compInputDateTime;
+	private Text txtActivity;
 	private Combo comboVenue;
 	private Button btnVenue;
 	private Button btnActivity;
@@ -58,29 +58,35 @@ public class FilterComposite extends Composite {
 		setLayout(new GridLayout(2, false));
 		
 		btnDuration = new Button(this, SWT.CHECK);
+		btnDuration.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		toolkit.adapt(btnDuration, true, true);
 		btnDuration.setText("Duration:");
 		new Label(this, SWT.NONE);
 		
-		inputDateTimeCompo = new InputDateTimeComposite(this, SWT.NONE);
-		inputDateTimeCompo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
-		toolkit.adapt(inputDateTimeCompo);
-		toolkit.paintBordersFor(inputDateTimeCompo);
-		inputDateTimeCompo.setEnabled(true);
+		compInputDateTime = new InputDateTimeComposite(this, SWT.NONE);
+		compInputDateTime.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		compInputDateTime.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
+		toolkit.adapt(compInputDateTime);
+		toolkit.paintBordersFor(compInputDateTime);
+		compInputDateTime.setEnabled(true);
 		
 		btnActivity = new Button(this, SWT.CHECK);
+		btnActivity.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		toolkit.adapt(btnActivity, true, true);
 		btnActivity.setText("Activity name:");
 		
-		textActivity = new Text(this, SWT.BORDER | SWT.MULTI);
-		textActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		toolkit.adapt(textActivity, true, true);
+		txtActivity = new Text(this, SWT.BORDER | SWT.MULTI);
+		txtActivity.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
+		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		toolkit.adapt(txtActivity, true, true);
 		
 		btnVenue = new Button(this, SWT.CHECK);
+		btnVenue.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		toolkit.adapt(btnVenue, true, true);
 		btnVenue.setText("Venue:");
 		
 		comboVenue = new Combo(this, SWT.READ_ONLY);
+		comboVenue.setFont(SWTResourceManager.getFont("Maiandra GD", 9, SWT.NORMAL));
 		comboVenue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboVenue.setItems(m_venueName);
 		toolkit.adapt(comboVenue);
@@ -88,7 +94,7 @@ public class FilterComposite extends Composite {
 		
 
 		setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		inputDateTimeCompo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		compInputDateTime.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnDuration.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnActivity.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		btnVenue.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
@@ -111,7 +117,7 @@ public class FilterComposite extends Composite {
 		// Read duration
 		if(btnDuration.getSelection() == true)
 		{
-			TimeSlot inputTimeSlot = inputDateTimeCompo.readInputFields();
+			TimeSlot inputTimeSlot = compInputDateTime.readInputFields();
 			returnStrArr[0] = inputTimeSlot.getStartDateTime().getDateTimeRepresentation();
 			returnStrArr[1] = inputTimeSlot.getEndDateTime().getDateTimeRepresentation();
 		}
@@ -124,7 +130,7 @@ public class FilterComposite extends Composite {
 		// Read activity name
 		if(btnActivity.getSelection() == true)
 		{
-			String activityStr = HelperFunctions.removeRedundantWhiteSpace(textActivity.getText());
+			String activityStr = HelperFunctions.removeRedundantWhiteSpace(txtActivity.getText());
 			if(activityStr == null || activityStr.equals("") == true)
 				throw new Exception("You have not entered the activity name!");
 			returnStrArr[2] = activityStr;
