@@ -486,7 +486,8 @@ public class EMDBVenue extends EMDBBase{
 			int capacity = Integer.parseInt(row[4].toString());
 			
 			
-			if ( (aSearchType.compareTo("all") == 0) || (aSearchType.compareTo("cost") == 0 && cost <= aUpperLimit && cost >= aLowerLimit)
+			if ( 	(aSearchType.compareTo("all") == 0) 
+					|| (aSearchType.compareTo("cost") == 0 && cost <= aUpperLimit && cost >= aLowerLimit)
 					|| (aSearchType.compareTo("capacity") == 0 && capacity <= aUpperLimit && capacity >= aLowerLimit )
 					)
 			{	
