@@ -106,11 +106,6 @@ public class ControllerBookingSystem {
 	{
 		Vector<Venue> returnList = new Vector<Venue>();
 		
-		if(listAllVenue.isEmpty() == true)
-			System.out.println("Search in database");
-		else
-			System.out.println("Cache");
-		
 		switch(type)
 		{
 			case CAPACITY:
